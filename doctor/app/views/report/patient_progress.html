@@ -1,0 +1,211 @@
+<div class="">
+    <div class="common_hr clearfix  ">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{app.all_clinic_label}}</span>
+                </button>
+                <!-- <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinic(clinic)" ><a href="" >{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="second_width common_heading_height ">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
+                <h3 class="m_top_22 page_title pull-left">Practice Reports | Patients Progress</h3>
+                <ul class="pull-right m_bottom_0 m_top_10">
+                    <li class="navigation_li">
+                        <a class="btnfc reports-fullscreen-icon" href="javascript:void(0);" onclick="setFullScreenMode('reports-fullscreen-mode',this);">
+                            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>               
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div> 
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-if="current_clinic">
+        <div ng-include="'app/views/report/report_sidebar.html?'+getVer(2)"></div>
+        <div ng-if="checkPermission(DOCTOR_WEB_REPORTS, VIEW)" class="col-lg-10 col-lg-10 col-md-10 col-sm-10 col-xs-12" ng-init="getClinicDetailForEdit(current_clinic.clinic_id)">
+            <!-- <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Patients Progress</h3>           -->
+            <!-- <div class="common_hr"></div> -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 no_padding">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12" style="width: 11%;margin-top: 10px;">
+                        Report From:
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <div class="form-group selection_bx m_bottom_0">
+                             <select name='report_from' id="report_from" chosen allow-single-deselect="true" ng-model="report_filters.report_from" ng-change="changeReport()" placeholder_text_single="Type">
+                                <option value="1">K/C/O</option>
+                                <option value="2">Diagnosis</option>
+                            </select>
+                            <span class="row-drowp-icon"><i class="fa fa-angle-down fa-2x"></i></span>
+                        </div>
+                    </div>
+                    <div ng-show="report_filters.report_from==1" class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-init="getKCO()">
+                        <select name='disease_id' id="disease_id" chosen multiple="" allow-single-deselect="true" placeholder_text_multiple="'Select K/C/O'" ng-options="value.disease_id as value.disease_name for value in kco_data" style="width:100% !important;" ng-model="report_filters.disease_id" class="common_input form-control"><option value=""></option></select>
+                    </div>
+                    <div ng-show="report_filters.report_from==2" class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-init="getDiagnoses()">
+                        <select name='clinical_notes_catalog_id' id="clinical_notes_catalog_id" chosen multiple="" allow-single-deselect="true" placeholder_text_multiple="'Select Diagnoses'" ng-options="value.disease_id as value.disease_name for value in diagnoses_data" style="width:100% !important;" ng-model="report_filters.clinical_notes_catalog_id" class="common_input form-control"><option value=""></option></select>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 custom_add_doctor_btn">
+                        <input type="button" value="Next" name="Next" class="filter-btn filter-active" ng-click="patientProgressNextStep()">
+                    </div>
+                </div>
+                <div ng-show="report_filters.is_show_table" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 no_padding">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <p class="date-wrap input-group login_input">
+                            <input type="text"
+                                   class="form-control login_input"  
+                                   datetime-picker="dd/MM/yyyy"
+                                   datepicker-options="from_date.datepickerOptions"
+                                   enable-time="false"
+                                   ng-model="report_filters.from_date" 
+                                   is-open="from_date.open"
+                                   placeholder="From Date"
+                                   name="from_date"  
+                                   readonly=""
+                                   />
+                            <span class="input-group-btn login_input">
+                                <button type="button" class="btn btn-default login_input" 
+                                        ng-click="from_date.open = true"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <p class="date-wrap input-group login_input">
+                            <input type="text"
+                                   class="form-control login_input"  
+                                   datetime-picker="dd/MM/yyyy"
+                                   datepicker-options="to_date.datepickerOptions"
+                                   enable-time="false"
+                                   ng-model="report_filters.to_date" 
+                                   is-open="to_date.open"
+                                   placeholder="To Date"
+                                   name="to_date"  
+                                   readonly=""
+                                   />
+                            <span class="input-group-btn login_input">
+                                <button type="button" class="btn btn-default login_input" 
+                                        ng-click="to_date.open = true"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <select name='search_clinic_id' id="search_clinic_id" chosen multiple="" allow-single-deselect="true" placeholder_text_multiple="'Clinic'" ng-options="value.clinic_id as value.clinic_name for value in clinic_data" style="width:100% !important;" ng-model="report_filters.search_clinic_id" class="common_input form-control"><option value=""></option></select>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-init="getDrugGeneric()">
+                        <select ng-change="getDrugs()" name='drug_generic_id' id="drug_generic_id" chosen multiple="" allow-single-deselect="true" placeholder_text_multiple="'Molecules'" ng-options="value.drug_generic_id as value.drug_generic_title for value in drug_generic" style="width:100% !important;" ng-model="report_filters.drug_generic_id" class="common_input form-control"><option value=""></option></select>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-init="getDrug()">
+                        <select name='drug_id' id="drug_id" chosen multiple="" allow-single-deselect="true" placeholder_text_multiple="'Drug'" ng-options="value.drug_id as value.drug_name for value in drug_data" style="width:100% !important;" ng-model="report_filters.drug_id" class="common_input form-control"><option value=""></option></select>
+                    </div>
+                </div>
+                <div ng-show="report_filters.is_show_table" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10">
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a href="javascript:void(0);" data-toggle="collapse" data-target="#collapse1" class="panel-link nav-link" aria-expanded="true">{{report_filters.report_from==1 ? 'K/C/O' : 'Diagnosis'}}</a>
+                            </h4>
+                            </div>
+                            <div id="collapse1" class="panel-collapse collapse in" aria-expanded="true" style="">
+                                <ul class="list-group">
+                                    <li class="list-group-item" ng-repeat="diseaseObj in disease_list track by $index">
+                                        <div class="col-sm-3">
+                                            {{diseaseObj.disease_name}}
+                                        </div>
+                                        <div class="input-group col-sm-6">
+                                            <div class="col-sm-6 selection_bx m_bottom_0">
+                                                <select class="search_analytics_id" name="search_analytics_id" ng-model="report_filters.search_analytics_id[$index]" chosen allow-single-deselect="true" placeholder_text_single="Type">
+                                                    <option value="">Select option</option>
+                                                    <optgroup ng-repeat="analyticsObj in patient_analytics" label="{{analyticsObj.profile_name}}">
+                                                    <option ng-repeat="analyticsNameObj in analyticsObj.analytics_name" value="{{analyticsNameObj.patient_analytics_analytics_id}}">{{analyticsNameObj.patient_analytics_name}}</option>
+                                                    </<optgroup>
+                                                </select>
+                                                <span class="row-drowp-icon"><i class="fa fa-angle-down fa-2x"></i></span>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <p class="error hide error_{{diseaseObj.disease_id}}" ng-bind-html="patient_health_analytic_parameter_required"></p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="report_filters.is_show_table" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 no_padding">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 custom_add_doctor_btn">
+                        <div class="show-text col-lg-1">Show</div>
+                        <div class="row-drowp col-lg-1 form-group selection_bx m_bottom_0">
+                             <select tabindex="1" name='duration' id="duration" chosen allow-single-deselect="true" ng-model="report_filters.per_page" ng-options="duration.value as duration.value for duration in filterRows" ng-change="getPatientProgress(1)">
+                            </select>
+                            <span class="row-drowp-icon"><i class="fa fa-angle-down fa-2x"></i></span>
+                        </div>
+                    <div class="show-text col-lg-1">Entries</div>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12 custom_add_doctor_btn align-right">
+                        <input type="button" value="Filter" name="Filter" class="filter-btn filter-active" ng-click="getPatientProgress(1)">
+                        <input type="button" value="Reset" name="Reset" class="filter-btn" ng-click="patientProgressFilterReset()">
+                        <input type="button" ng-click="patientProgressExport()" value="Export" name="export" class="filter-btn filter-active">
+                    </div>
+                </div>
+                <div ng-if="report_filters.is_show_table && patients_progress.length > 0" class="table-responsive col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10">
+                    <table class="table min_width_767 table-hover">
+                        <thead class="row font_color_3 gotham_light report_tb_border font_size_18 common_p_b">
+                            <tr>                                
+                                <th width="10%">{{report_filters.report_from==1 ? 'K/C/O' : 'Diagnosis'}}</th>
+                                <th class="text-center">Total Number Of Patients</th>
+                                <th class="text-center">Number Of Patients Improving</th>         
+                                <th class="text-center">Improving Percentage (%)</th>                                  
+                                <th class="text-center">Number Of Patients Deteriorating</th>
+                                <th class="text-center">Deteriorating Percentage (%)</th>
+                                <th class="text-center">Number Of Patients Maintained</th>
+                                <th class="text-center">Maintained Percentage (%)</th>
+                                <th class="text-center">Number Of Patients Not Tracked</th>           
+                                <th class="text-center">Not Tracked Percentage (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="font_size_14 common_p_b report_tb_border">
+                            <tr ng-repeat="patientProgressObj in patients_progress">
+                                <td>{{patientProgressObj.disease_name}}</td>
+                                <td class="text-center">{{patientProgressObj.total}}</td>
+                                <td class="text-center">{{patientProgressObj.improving}}</td>
+                                <td class="text-center">{{patientProgressObj.improving_percent}}</td>
+                                <td class="text-center">{{patientProgressObj.deteriorating}}</td>
+                                <td class="text-center">{{patientProgressObj.deteriorating_percent}}</td>
+                                <td class="text-center">{{patientProgressObj.maintained}}</td>
+                                <td class="text-center">{{patientProgressObj.maintained_percent}}</td>
+                                <td class="text-center">{{patientProgressObj.not_tracked}}</td>
+                                <td class="text-center">{{patientProgressObj.not_tracked_percent}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div ng-if="report_filters.is_show_table && report_filters.is_no_data" class="col-lg-12 unauthorised-css text-center" ng-bind-html="no_data_found"></div>
+            </div>
+            <div ng-if="report_filters.is_show_table && patients_progress.length > 0" class="row pagi-wrap">
+                <div class="col-lg-3 totals-rows">
+                    Showing {{((currentPage-1)*report_filters.per_page) + 1}} to {{last_rows}} of {{total_rows}} entries
+                </div>
+                <div class="pagination-wrap col-lg-9">
+                    <a href="" ng-click="getNextPrev('prev',4)"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                    <input ng-repeat="n in [] | range:total_page" type="button" ng-value="n" ng-click="getPatientProgress(n)" ng-disabled="currentPage == n" ng-class="currentPage == n ? 'page-active' : ''" class="pagi-btn">
+                    <a href="" ng-click="getNextPrev('next',4)"><img alt="previous" src="app/images/next_arrow.png"></a>
+                </div>
+            </div>
+            <div class="clearfix"></div>           
+        </div>
+        <div ng-if="!checkPermission(DOCTOR_WEB_REPORTS, VIEW)" class="col-lg-10 col-lg-10 col-md-10 col-sm-10 col-xs-12 text-center gotham_book font_size_20 m_top_20">
+            <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+        </div>
+    </div>
+</div>
+</div>

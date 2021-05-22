@@ -1,0 +1,27 @@
+.patient_disease_dropbox > .chosen-container-multi .chosen-choices {
+    height: auto !important;
+}
+.pagi-btn {
+    font-size: 14px;
+    height: 30px;
+    width: 35px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    background: #fff;
+    color: #30aca5;
+    font-weight: 700;
+    border: 1px #30ACA4 solid;
+    margin-right: 3px;
+}
+.pagi-btn:hover{
+	background: #30aca5 !important;
+    color: #fff !important;
+}
+.page-active {
+	background: #30aca5 !important;
+    color: #fff !important;
+}
+.pagi-wrap{margin-bottom: 40px;}
+.totals-rows{text-align: left;}
+.pagination-wrap{text-align: right;}

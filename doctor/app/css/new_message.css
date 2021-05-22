@@ -1,0 +1,98 @@
+/* ==========================================================================
+ Common classes
+========================================================================== */
+body { font-family: 'gotham_book'; }
+
+.newMsg .nav-center{    
+    width: -moz-fit-content !important;    
+}
+.label_title{
+    font-family: 'gotham_light';
+    font-weight: normal;
+    font-size: 14px;     
+}
+.newMsg .row_title
+{
+    font-family: 'gotham_medium';
+    height: 50px;
+    padding: 17px 20px;
+}
+.newMsg input[type="text"] {
+    background-color: #f2f2f2;    
+    border: none;
+}
+.form-control{
+    height: 40px;
+    padding: 10px 12px;
+}
+.m_para_mobno{
+    margin: 5px 0;
+}
+.para_template{
+    border: none;
+}
+.list-group{
+    border-radius: 0px;
+    margin: 7.1px;
+}
+.list-group-item:first-child{
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+.list-group-item:last-child{
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+.list-group-item.right{
+    padding: 5px 0;
+}
+.list-group-item{        
+    padding: 7.3px 0px;
+    border-left: none;
+    border-right: none;
+    font-size: 15px;
+}
+.checkbox_width{
+    width: 23px;    
+    margin-top: -6px;
+}
+p{
+    margin: 0 0 10.5px;
+}
+.subject{
+    height: 40px !important;
+    padding: 10px !important;
+}
+.para_width_radio{
+    width: 95%;
+}
+.lr_padding_35{
+    padding: 0 35px;
+}
+/*========================================================================*/
+
+.c_btn1 { width: 85%;height: 40px; }
+.c_btn1.cancel_button { border: 1px #30ACA4 solid; }
+
+.c_btn1:focus ,.c_btn1:active,.c_btn1:hover { color: #ffffff; }
+
+.c_btn1.cancel_button:focus ,
+.c_btn1.cancel_button:active,
+.c_btn1.cancel_button:hover { color: #30ACA4; } 
+
+.col_width{
+    width: 46%;
+    margin: 0px 20px;        
+    position: relative;  
+    min-height: 1px;
+    padding: 0 15px 15px
+}
+.relative_postion{
+    position: relative;
+}
+.relative_postion .top-right {
+    position: absolute;
+    right: -13px;
+    top: 58px;
+
+}

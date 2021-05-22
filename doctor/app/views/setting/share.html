@@ -1,0 +1,86 @@
+<link rel="stylesheet" ng-href="app/css/fee_structure.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/billing.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/calender.css?{{getVer(3)}}" /> 
+<div class="">
+    <div class="common_hr clearfix alert_main_div">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span ng-if="current_clinic">{{current_clinic.clinic_name | capitalize}}</span>
+                    <span><img src="app/images/down_arrow.png" /></span>
+                </button>
+                <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForShare(clinic)" ><a href="" >{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul>
+            </div>
+        </div>
+        <div class="second_width common_heading_height ">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding margin_left_-4">
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 m_bottom_15">
+                    <h4 class="m_top_22 page_title pull-left">Settings</h4>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 m_bottom_15 text-right">
+                    <!-- <ul class="">
+                        <li class="navigation_li">
+                            <label  class="bg_icon_images play_video_btn custom_div_mar" data-toggle="modal"  data-target='#video_help_modal'></label>
+                        </li>
+                    </ul> -->            
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-if="current_clinic" ng-init="getDoctorShareSetting()">
+        <form name="saveShareForm" id="saveAlertForm" novalidate="" ng-submit="saveShare()">
+            <div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 padding_0">
+                    <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Share Record</h3>
+                </div>                            
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 no_padding">
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+                <div class="clearfix"></div>
+                <table ng-if="checkPermission(SETTING_SHARE, VIEW)"  class="table table-responsive">
+                    <thead class="row font_color_3 gotham_light common_tb_border font_size_18 common_p_b">
+                        <tr>
+                            <th class="width_th_10">Record Type</th>
+                            <th class="width_th_20">Status</th> 
+                            <th class="width_th_10"></th> 
+                        </tr>
+                    </thead>
+                    <tbody class="font_size_14 common_p_b">
+                        <tr class="b_padding" ng-repeat="share in share_data" ng-show="share.id==7">
+                            <td ng-if="share.id != 4 && share.id != 5">{{share.id==8 ? '&nbsp;&nbsp;&nbsp;' : ''}} {{ share.name}}</td>
+                            <td ng-if="share.id==4">Investigations</td>
+                            <td ng-if="share.id==5">Procedures</td>
+                            <td>
+                                <label class="switch">
+                                    <input type="checkbox"   
+                                           ng-model="share.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"
+                                           ng-disabled="!(checkPermission(SETTING_SHARE, EDIT))"
+                                           >
+                                    <span class="slider round"></span>
+                                </label>
+                            </td>   
+                            <td></td>
+                        </tr>                        
+                    </tbody>
+                </table>
+                <div ng-if="!(checkPermission(SETTING_BILLING, VIEW) && checkPermission(SETTING_BILLING, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+                    <div class="unauthorised-css">{{ app.unauthorised_msg}}</div>
+                </div>
+                <div class="m_top_40 clearfix">  
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <input type="submit" ng-if="checkPermission(SETTING_SHARE, EDIT)" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>                                 
+                    </div>                
+                </div> 
+            </div>
+        </form>
+    </div>
+</div>

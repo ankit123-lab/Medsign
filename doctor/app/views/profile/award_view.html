@@ -1,0 +1,54 @@
+<div class="second_width common_left_border p_top_15" ng-controller="UserController" ng-init="getAwardDetails()">
+    <form name="awardForm" novalidate="" ng-submit="updateAwardDetails()" id="register_personal_info_form">
+        <div class="" ng-repeat="(key, award) in doctor.award_obj">
+            <ng-form name="innerAwardForm">                                                                                        
+                <div class="col-md-12 padding_0 add_more_recognition_div">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <div class="f_label" ng-if="key == 0">Awards / Recognition</div>
+                            <input ng-blur="addAwardObj()" name="award" id="award" tabindex="1" class="form-control login_input" placeholder="Awards / Recognition" value="" type="text" ng-model="award.doctor_award_name">
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <div class="f_label hidden-xs" for="sel1" ng-if="key == 0">&nbsp;</div>
+                            <div class="input-group login_input">
+                                <input type="text" class="form-control login_input" datepicker-mode="'year'" datetime-picker="yyyy" ng-model="doctor.award_obj[key].award_year" is-open="doctor.award_obj[key].open" enable-time="false" datepicker-options="edu_year_picker.datepickerOptions" readonly="" placeholder="Year" name="award_year"/>
+                                <span class="input-group-btn login_input">
+                                    <button type="button" class="btn btn-default login_input" ng-click="doctor.award_obj[key].open = true"><i class="fa fa-clock-o"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 add_more_button">
+                        <div class="form-group clearfix" >
+                            <div class="f_label hidden-xs"  ng-if="key == 0">&nbsp;</div>
+                            <div class="pull-left">
+                                <img src="app/images/upload_image.png" ng-class="key == 0 ? 'add_button_image' : 'add_remove_image add_button_image_custom'"  ng-click="openFileObject('awardPicFile', key)">
+                                <input type="hidden" name="temp_img" ng-model="doctor.award_obj[key].doctor_award_image_fullpath" />
+                                <input type="file" obj="award" key="{{key}}" ng-file-select="onFileSelect($files)" class="hide" ng-model="doctor.award_obj[key].img" id="awardPicFile{{key}}" accept="image/*" />
+                                <img src="app/images/add_button.png" class="add_more_edu_qualification m_left_16" ng-class="key == 0 ? 'add_button_image' : 'add_remove_image add_button_image_custom'"  ng-click="addEduObject(4)" ng-if="key < -1">
+                                <img src="app/images/remove.png" class="remove_edu_qualification m_left_16" ng-class="key == 0 ? 'add_button_image' : 'add_remove_image add_button_image_custom'" ng-click="removeEduObject(4, key)" ng-if="(!!doctor.award_obj[key].doctor_award_name && doctor.award_obj[key].award_year != '')">
+                            </div>
+                            <div class="image_display">
+                                <img ng-src="{{doctor.award_obj[key].image_thumb_path}}" style="height: 40px;" class="m_left_16 add_button_image common_btn_radius img40" ng-hide="doctor.award_obj[key].temp_img" ng-click="showFullImage(doctor.award_obj[key].doctor_award_image_fullpath)" ng-if="doctor.award_obj[key].doctor_award_image_fullpath" >
+                                <img src="app/images/popup_remove_red.png" ng-if="doctor.award_obj[key].cancel_image == '1'" ng-click="removeImage(4, key)" class="display_remove_icon top_right" />
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>                                                               
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </ng-form>
+        </div>
+        <div class="clearfix"></div>
+        <div class="m_top_70 m_bottom_30 clearfix row">  
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right" />                                 
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <a href=""><input type="button" value="Done"  ng-click="updateAwardDetails(true)" name="next" class="btn new_common_button_1 btn_properties" /></a>
+            </div>  
+        </div>
+    </form>
+</div>

@@ -1,0 +1,125 @@
+<nav custom-hover class="main-menu">
+    <ul>
+        <li ng-repeat-start="(key,menu) in $root.sidebarMenu" ng-class='getClassActive("/app/dashboard/{{menu.key}}")' ng-hide="(menu.id == 7 && (currentUser.sub_plan_setting.reports == undefined || currentUser.sub_plan_setting.reports == '0' || !currentUser.is_sub_active)) || (menu.id == 8 && (currentUser.sub_plan_setting.promotional_messages_communication == undefined || currentUser.sub_plan_setting.promotional_messages_communication == '0' || !currentUser.is_sub_active)) || (menu.id == 9 && (currentUser.sub_plan_setting.teleconsultation == undefined || currentUser.sub_plan_setting.teleconsultation == '0' || !currentUser.is_sub_active))">
+            <a class="" href="#/app/dashboard/{{ menu.key}}" ng-if="currentUser.is_sub_active && (menu.id != 6 && menu.id != 7 && menu.id != 8 && menu.id != 9)">
+                <label class="bg_icon_images {{ menu.key}}_image"></label> 
+                <span class="nav-text">{{menu.value}}</span>
+            </a>
+            <a class="" ng-if="!currentUser.is_sub_active && (menu.id != 6 && menu.id != 7 && menu.id != 8 && menu.id != 9)">
+                <label class="bg_icon_images {{ menu.key}}_image"></label> 
+                <span class="nav-text">{{menu.value}}</span>
+            </a>
+
+            <a class="" href="#/app/dashboard/{{ menu.key}}/clinic_details"  ng-if="currentUser.is_sub_active && menu.id == 6">
+                <label class="bg_icon_images {{ menu.key}}_image"></label> 
+                <span class="nav-text">{{menu.value}}</span>
+            </a>
+            <a class="" ng-if="!currentUser.is_sub_active && menu.id == 6">
+                <label class="bg_icon_images {{ menu.key}}_image"></label> 
+                <span class="nav-text">{{menu.value}}</span>
+            </a>
+
+            <a class="" href="#/app/dashboard/{{ menu.key}}/member_summary"  ng-if="currentUser.is_sub_active && menu.id == 7 && currentUser.sub_plan_setting.reports != undefined && currentUser.sub_plan_setting.reports == '1'">
+                <label class="bg_icon_images {{ menu.key}}_image"></label> 
+                <span class="nav-text">{{menu.value}}</span>
+            </a>
+            <a class="" href="#/app/dashboard/{{ menu.key}}/list"  ng-if="currentUser.is_sub_active && menu.id == 8 && currentUser.sub_plan_setting.promotional_messages_communication != undefined && currentUser.sub_plan_setting.promotional_messages_communication == '1'">
+                <label class="bg_icon_images {{ menu.key}}_image"></label> 
+                <span class="nav-text">{{menu.value}}</span>
+            </a>
+            <a class="" href="#/app/dashboard/{{menu.key}}/list"  ng-if="currentUser.is_sub_active && menu.id == 9 && currentUser.sub_plan_setting.teleconsultation != undefined && currentUser.sub_plan_setting.teleconsultation == '1'">
+                <label class="bg_icon_images {{ menu.key}}_image"></label> 
+                <span class="nav-text">{{menu.value}}</span>
+            </a>
+            <!-- <a class="" ng-if="menu.id == 7 && (currentUser.sub_plan_setting.reports == undefined || currentUser.sub_plan_setting.reports == '0' || !currentUser.is_sub_active)">
+                <label class="bg_icon_images {{ menu.key}}_image"></label> 
+                <span class="nav-text">{{menu.value}}</span>
+            </a> -->
+
+        </li>
+        <li ng-hide="(menu.id == 7 && (currentUser.sub_plan_setting.reports == undefined || currentUser.sub_plan_setting.reports == '0' || !currentUser.is_sub_active)) || (menu.id == 8 && (currentUser.sub_plan_setting.promotional_messages_communication == undefined || currentUser.sub_plan_setting.promotional_messages_communication == '0' || !currentUser.is_sub_active)) || (menu.id == 9 && (currentUser.sub_plan_setting.teleconsultation == undefined || currentUser.sub_plan_setting.teleconsultation == '0' || !currentUser.is_sub_active))" class="divider" ng-repeat-end></li>
+				<!--
+				<li ng-class="getClassActive('/app/dashboard/calendar')">
+                    <a class="" href="#/app/dashboard/calendar">
+                        <label class="bg_icon_images calender_image"></label> 
+                        <span class="nav-text">Calendar</span>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li ng-class="getClassActive('/app/dashboard/patient')">
+                    <a class="" href="#/app/dashboard/patient">
+                        <label class="bg_icon_images patient_image"></label> 
+                        <span class="nav-text">Patients</span>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li ng-class="getClassActive('/app/dashboard/refer')">
+                    <a class="" href="#/app/dashboard/refer">
+                        <label class="bg_icon_images refer_image"></label> 
+                        <span class="nav-text">Refer</span>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li ng-class="getClassActive('/app/dashboard/communication')">
+                    <a class="" href="#/app/dashboard/communication">
+                        <label class="bg_icon_images communication_image"></label> 
+                        <span class="nav-text">Communications</span>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li  ng-class="getClassActive('/app/dashboard/report')">
+                    <a class="" href="#/app/dashboard/report">
+                        <label class="bg_icon_images report_image"></label> 
+                        <span class="nav-text">Reports</span>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li  ng-class="getClassActive('/app/dashboard/setting')">
+                    <a class="" href="#/app/dashboard/setting/clinic_details">
+                        <label class="bg_icon_images setting_image"></label> 
+                        <span class="nav-text">Settings</span>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li  ng-class="getClassActive('/app/dashboard/integration')">
+                    <a class="" href="#/app/dashboard/integration">
+                        <label class="bg_icon_images integration_image"></label> 
+                        <span class="nav-text">Integrations</span>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li ng-class="getClassActive('/app/dashboard/back')">
+                    <a class="" href="#/app/dashboard/back">
+                        <label class="bg_icon_images back_image"></label> 
+                        <span class="nav-text">Back office</span>
+                    </a>
+                </li>-->
+    </ul>
+    <ul class="full-screen">
+        <li>
+            <a href="javascript:void(0);" id="btnFullScreen" class="requestfullscreen">
+                <label class="bg_icon_images full-screen" for=""><i class="fa fa-arrows-alt" aria-hidden="true"></i></label>
+                <span class="nav-text">
+                    Full Screen
+                </span>
+            </a>
+        </li>
+    </ul>
+</nav>
+<script type="text/javascript">
+$(function() {
+	if($.fullscreen.isNativelySupported()){
+		$('#btnFullScreen').click(function() {
+			if ($.fullscreen.isFullScreen()){
+				$('#btnFullScreen').removeClass('exitfullscreen').addClass('requestfullscreen');
+				$.fullscreen.exit();
+				return false;
+			}else{
+				$('#btnFullScreen').removeClass('requestfullscreen').addClass('exitfullscreen');
+				$('#main_body').fullscreen();
+				return false;
+			}
+		});
+	}	
+});
+</script>

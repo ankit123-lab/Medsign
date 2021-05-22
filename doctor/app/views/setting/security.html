@@ -1,0 +1,83 @@
+<link rel="stylesheet" ng-href="app/css/data_security.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/clinic_staff.css?{{getVer(3)}}" />
+<div class="">
+    <div class="common_hr clearfix alert_main_div">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{app.all_clinic_label}}</span>
+                </button>
+                <!-- <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForDataSecurity(clinic)" ><a href="" >{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="second_width common_heading_height ">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding margin_left_-4">
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-4 m_bottom_15">
+                    <h4 class="m_top_22 page_title pull-left">Settings</h4>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-8 m_bottom_15 text-right">
+                    <!-- <ul class="">
+                        <li class="navigation_li">
+                            <label  class="bg_icon_images play_video_btn custom_div_mar" data-toggle="modal"  data-target='#video_help_modal'></label>
+                        </li>
+                    </ul>  -->           
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-if="current_clinic" ng-init="getDoctorDataSecurity()">
+        <form name="saveShareForm" id="saveAlertForm" novalidate="" ng-submit="saveDataSecurity()">
+            <div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Data Security</h3>                
+                <div class="common_hr"></div>
+                <div ng-if="checkPermission(SETTING_DATA, EDIT)">
+                    <div ng-repeat="security in security_data" >
+                        <div class="para_factor_authanticate font_size_16">
+                            <div class="padding_left_0 common_checbox m_top_30">
+                                <input type="checkbox" id="factor_checkbox"
+                                       ng-true-value="'1'"
+                                       ng-false-value="'2'"
+                                       ng-model="security.status" />    
+                                <label for="factor_checkbox" class="disclose">{{security.name | capitalize}}</label>
+                            </div>
+                            <p class=" m_left_36 title3 m_bottom_15">
+                                Two Factor Authentication adds an extra layer of security to your MedSign account. Once enabled,<br/>
+                                Two Factor Authentication will be required to log in.
+                            </p>
+                        </div>
+                        <div class="common_hr"></div>                
+                    </div>
+                    <div ng-repeat="(key,settingObj) in rx_setting" >
+                        <div class="para_factor_authanticate font_size_16">
+                            <div class="padding_left_0 common_checbox m_top_30">
+                                <input type="checkbox" id="rx_setting{{key}}"
+                                       ng-true-value="'1'"
+                                       ng-false-value="'2'"
+                                       ng-model="settingObj.status" />    
+                                <label for="rx_setting{{key}}" class="disclose">{{settingObj.name | capitalize}}</label>
+                            </div>
+                            <p class=" m_left_36 title3 m_bottom_15" ng-if="settingObj.id==1">By default Rx entry option is enable.</p>
+                            <p class=" m_left_36 title3 m_bottom_15" ng-if="settingObj.id==2">By enabling this option you can upload handwritten prescription document.</p>
+                        </div>
+                        <div class="common_hr"></div>                
+                    </div>
+                    <div class="m_top_40 clearfix">  
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 custom_add_doctor_btn">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>
+                        </div>                
+                    </div> 
+                </div>
+                <div ng-if="!(checkPermission(SETTING_DATA, EDIT))" class="text-center gotham_book font_size_20 m_top_20">
+                    <div class="unauthorised-css">{{ app.unauthorised_msg}}</div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

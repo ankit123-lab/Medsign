@@ -1,0 +1,55 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 22 Mar, 2016, 10:53:35 AM
+    Author     : imobdev
+*/
+
+.hide{
+    display:none;
+}
+h2{
+    text-align: center;
+    margin-bottom: 25px;
+}
+.active{
+    color: blue !important;
+}
+a{
+    color:black !important;
+}
+.select_div{
+    text-align: center;
+}
+form{
+
+}
+.api{
+    margin: auto;
+    width: 20%;
+}
+.main{
+    padding: 5px;
+    width: 70%;
+    margin: auto;
+}
+.hide{
+    display: none;
+}
+span{
+    font-size: 17px;
+    letter-spacing: 0.5px;
+}
+.select2{
+    width:350px !important;
+}
+.container{
+    padding-top: 30px;
+}
+nav{
+    height: 70px;
+}
+.navbar-brand > img {margin-top: 10px;display: block;padding: 0}.navbar-brand{margin: 0 auto !important;padding: 0;}

@@ -1,0 +1,311 @@
+<div class="">
+    <div class="common_hr clearfix  ">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{app.all_clinic_label}}</span>
+                </button>
+                <!-- <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinic(clinic)" ><a href="" >{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="second_width common_heading_height ">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
+                <h3 class="m_top_22 page_title pull-left">Practice Reports | Patients - No Show</h3>
+                <ul class="pull-right m_bottom_0 m_top_10">
+                    <li class="navigation_li">
+                        <a class="btnfc reports-fullscreen-icon" href="javascript:void(0);" onclick="setFullScreenMode('reports-fullscreen-mode',this);">
+                            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>               
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div> 
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-if="current_clinic">
+        <div ng-include="'app/views/report/report_sidebar.html?'+getVer(2)"></div>
+        <div ng-if="checkPermission(DOCTOR_WEB_REPORTS, VIEW)" class="col-lg-10 col-lg-10 col-md-10 col-sm-10 col-xs-12" ng-init="getClinicDetailForEdit(current_clinic.clinic_id)">
+            <!-- <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Lost Patients</h3>           -->
+            <!-- <div class="common_hr"></div> -->
+            <div class="row" ng-init="getLostPatient(1,1)">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 no_padding">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <p class="date-wrap input-group login_input">
+                            <input type="text"
+                                   class="form-control login_input"  
+                                   datetime-picker="dd/MM/yyyy"
+                                   datepicker-options="from_date.datepickerOptions"
+                                   enable-time="false"
+                                   ng-model="report_filters.from_date" 
+                                   is-open="from_date.open"
+                                   placeholder="From Date"
+                                   name="from_date"  
+                                   readonly=""
+                                   />
+                            <span class="input-group-btn login_input">
+                                <button type="button" class="btn btn-default login_input" 
+                                        ng-click="from_date.open = true"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <p class="date-wrap input-group login_input">
+                            <input type="text"
+                                   class="form-control login_input"  
+                                   datetime-picker="dd/MM/yyyy"
+                                   datepicker-options="to_date.datepickerOptions"
+                                   enable-time="false"
+                                   ng-model="report_filters.to_date" 
+                                   is-open="to_date.open"
+                                   placeholder="To Date"
+                                   name="to_date"  
+                                   readonly=""
+                                   />
+                            <span class="input-group-btn login_input">
+                                <button type="button" class="btn btn-default login_input" 
+                                        ng-click="to_date.open = true"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <input class="form-control common_input" placeholder="K/C/O" name="search_kco" size="35" ng-model="report_filters.search_kco" required="">
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <select name='search_clinic_id' id="search_clinic_id" chosen multiple="" allow-single-deselect="true" placeholder_text_multiple="'Clinic'" ng-options="value.clinic_id as value.clinic_name for value in clinic_data" style="width:100% !important;" ng-model="report_filters.search_clinic_id" class="common_input form-control"><option value=""></option></select>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 no_padding">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 custom_add_doctor_btn">
+                        <div class="show-text col-lg-1">Show</div>
+                        <div class="row-drowp col-lg-1 form-group selection_bx m_bottom_0">
+                             <select tabindex="1" name='duration' id="duration" chosen allow-single-deselect="true" ng-model="report_filters.per_page" ng-options="duration.value as duration.value for duration in filterRows" ng-change="getLostPatient(1)">
+                            </select>
+                            <span class="row-drowp-icon"><i class="fa fa-angle-down fa-2x"></i></span>
+                        </div>
+                    <div class="show-text col-lg-1">Entries</div>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12 custom_add_doctor_btn align-right">
+                        <input type="button" value="Filter" name="Filter" class="filter-btn filter-active" ng-click="getLostPatient(1)">
+                        <input type="button" value="Reset" name="Reset" class="filter-btn" ng-click="lostPatientFilterReset()">
+                        <input type="button" ng-click="lostPatientExport()" value="Export" name="export" class="filter-btn filter-active">
+                    </div>
+                </div>
+                <div ng-if="lost_patient.length > 0" class="table-responsive col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10">
+                    <table class="table min_width_767 table-hover">
+                        <thead class="row font_color_3 gotham_light report_tb_border font_size_18 common_p_b">
+                            <tr>                                
+                                <th>K/C/O</th>
+                                <th class="text-center">Total Number of patients</th>
+                                <th class="text-center">Visited patients applied range</th>
+                                <th class="text-center">Visited Percentage (%)</th>
+                                <th class="text-center">Not visited patients applied range</th>
+                                <th class="text-center">Not visited Percentage (%)</th>                      
+                            </tr>
+                        </thead>
+                        <tbody class="font_size_14 common_p_b report_tb_border">
+                            <tr ng-repeat="lostPatientObj in lost_patient">
+                                <td>{{lostPatientObj.disease_name}}</td>
+                                <td class="text-center cursor_pointer" ng-click="getPatientDetails(lostPatientObj.disease_id,lostPatientObj.total,1);">
+                                    {{lostPatientObj.total}}
+                                </td>
+                                <td class="text-center" ng-class="lostPatientObj.last_6_month > 0 ? 'cursor_pointer' : ''" ng-click="getPatientDetails(lostPatientObj.disease_id,lostPatientObj.last_6_month,2);">{{lostPatientObj.last_6_month}}</td>
+                                <td class="text-center">{{lostPatientObj.percentage}}</td>
+                                <td class="text-center" ng-class="lostPatientObj.last_6_month_not_visited > 0 ? 'cursor_pointer' : ''" ng-click="getPatientDetails(lostPatientObj.disease_id,lostPatientObj.last_6_month_not_visited,3);">{{lostPatientObj.last_6_month_not_visited}}</td>
+                                <td class="text-center">{{lostPatientObj.not_visited_percentage}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div ng-if="lost_patient.length == 0" class="col-lg-12 unauthorised-css text-center" ng-bind-html="no_data_found"></div>
+            </div>
+            <div ng-if="lost_patient.length > 0" class="row pagi-wrap">
+                <div class="col-lg-3 totals-rows">
+                    Showing {{((currentPage-1)*report_filters.per_page) + 1}} to {{last_rows}} of {{total_rows}} entries
+                </div>
+                <div class="pagination-wrap col-lg-9">
+                    <a href="" ng-click="getNextPrev('prev',3)"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                    <input ng-repeat="n in [] | range:total_page" type="button" ng-value="n" ng-click="getLostPatient(n)" ng-disabled="currentPage == n" ng-class="currentPage == n ? 'page-active' : ''" class="pagi-btn">
+                    <a href="" ng-click="getNextPrev('next',3)"><img alt="previous" src="app/images/next_arrow.png"></a>
+                </div>
+            </div>
+            <div class="clearfix"></div>           
+        </div>
+        <div ng-if="!checkPermission(DOCTOR_WEB_REPORTS, VIEW)" class="col-lg-10 col-lg-10 col-md-10 col-sm-10 col-xs-12 text-center gotham_book font_size_20 m_top_20">
+            <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Patient details view Modal -->
+<div class="modal fade" id="modal_patient_details" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg appointment_paients">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <button type="button" class="close" data-dismiss="modal">X</button>
+                <h3 class="modal-title modaltitle_m">Patients</h3>
+            </div>
+            <div class="modal-body">        
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding">
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 custom_add_doctor_btn m_top_10">
+                            <b>K/C/O: {{lost_patient_details[0].disease_name}}</b>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 custom_add_doctor_btn">
+                            <div class="show-text col-lg-1">Show</div>
+                            <div class="row-drowp col-lg-1 form-group selection_bx m_bottom_0">
+                                 <select tabindex="1" name='popup_duration' chosen allow-single-deselect="true" ng-model="report_filters.popup_per_page" ng-options="duration.value as duration.value for duration in popupFilterRows" ng-change="getLostPatientDetails(1)">
+                                </select>
+                                <span class="row-drowp-icon"><i class="fa fa-angle-down fa-2x"></i></span>
+                            </div>
+                            <div class="show-text col-lg-1">Entries</div>
+                        </div>
+                        
+                    </div>
+                    <div ng-if="lost_patient_details.length > 0" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10">
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="patientObj in lost_patient_details" style="margin-bottom: 10px;box-shadow: 1px -3px 10px 1px #d3d3d3;">
+                                <div class="row" style="margin-bottom: 3px;">
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 patient_detail_appointment">
+                                        <img ng-if="patientObj.user_photo_filepath != null" ng-src="{{patientObj.user_photo_filepath}}" height="80" width="95" alt="user_image">
+                                        <img ng-if="patientObj.user_photo_filepath == null" src="app/images/placeholder_user.png" alt="user_image">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <h4 class="no_margin gotham_medium user_redirect cursor_pointer pop-data-name">
+                                            {{patientObj.patient_name}}
+                                        </h4>                      
+                                        <p class="col-lg-6 padding_0">
+                                            <span class="title"><b>Gender :</b></span> <span class="gotham_medium">
+                                                {{patientObj.user_gender}}
+                                            </span>
+                                        </p>                                                        
+                                        <p class="col-lg-6 padding_0">
+                                            <span class="title"><b>Age :</b></span> 
+                                            <span class="gotham_medium">{{patientObj.user_details_dob | ageFilter}}</span>
+                                        </p>                                                        
+                                            <div class="clearfix"></div>
+                                        <p>
+                                            <span class="title"><b>Mobile no :</b></span> <span class="gotham_medium">{{patientObj.user_phone_number}}</span>
+                                        </p>                                                        
+                                        <p>
+                                            <span class="title"><b>Email :</b></span> <span class="gotham_medium cursor_pointer" data-toggle="tooltip" title="{{patientObj.user_email}}" data-placement="left">{{patientObj.user_email}}</span>
+                                        </p>  
+                                        <p>
+                                            <span class="title"><b>Emergency contact : </b></span> <span class="gotham_medium">{{patientObj.emergency_contact}}</span>
+                                        </p> 
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                        <p class="padding_0">
+                                            <span class="title"><b>Blood group :</b> {{patientObj.user_details_blood_group}}</span>
+                                        </p>
+                                        <p class="padding_0">
+                                            <span class="title"><b>Weight :</b> {{patientObj.user_details_weight | PoundToKG}}</span>
+                                        </p>
+                                        <p class="padding_0">
+                                            <span class="title"><b>BMI :</b> {{((patientObj.user_details_height | bmi:patientObj.user_details_weight | number:'0') != '0') ? (patientObj.user_details_height | bmi:patientObj.user_details_weight | number:'0') : ''}}</span>
+                                        </p>
+                                        <p class="padding_0">
+                                            <span class="title"><b>Alcohol :</b> {{patientObj.alcohol}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <p class="padding_0">
+                                            <span class="title"><b>Surgeries :</b> {{patientObj.surgeries}}</span>
+                                        </p>
+                                        <p class="padding_0">
+                                            <span class="title"><b>Family history :</b></span>
+                                        </p>
+                                        <p class="padding_0 cursor_pointer" ng-repeat="familyObj in patientObj.family_medical_history" title="{{familyObj.family_medical_history_medical_condition_id}}">
+                                            <span class="gotham_medium family-history short-history">
+                                                {{familyObj.relation}} - {{familyObj.family_medical_history_medical_condition_id | trimString:10}}
+                                            </span>
+                                            <span class="gotham_medium family-history full-history hide">
+                                                {{familyObj.relation}} - {{familyObj.family_medical_history_medical_condition_id}}
+                                            </span>
+                                            <span class="family-history" style="font-size:16px !important;">({{familyObj.family_medical_history_date}}),</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="hr"></div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <p class="padding_0">
+                                            <span class="title"><b>Smoking :</b> {{patientObj.smoking_habbit}}</span>
+                                        </p>
+                                        <p class="padding_0">
+                                            <span class="title"><b>K/C/O :</b> {{patientObj.kco}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <p class="padding_0">
+                                            <span class="title"><b>Food Allergy :</b> {{patientObj.food_allergies}}</span>
+                                        </p>
+                                        <p class="padding_0">
+                                            <span class="title"><b>Medicine Allergy :</b> {{patientObj.medicine_allergies}}</span>
+                                        </p>
+                                        <p class="padding_0">
+                                            <span class="title"><b>Other Allergy :</b> {{patientObj.other_allergies}}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <!-- <table class="table min_width_767 table-hover">
+                            <thead class="row font_color_3 gotham_light report_tb_border font_size_18 common_p_b">
+                                <tr>                                
+                                    <th width="8%" class="text-center">Unique ID</th>
+                                    <th width="8%" class="text-center">Name</th>
+                                    <th width="8%" class="text-center">Mobile No</th>
+                                    <th width="8%" class="text-center">Gender</th>
+                                    <th width="8%" class="text-center">Age</th>
+                                    <th width="8%" class="text-center">Weight</th>
+                                    <th width="8%" class="text-center">BMI</th>
+                                    <th width="8%" class="text-center">Blood group</th>
+                                    <th width="8%" class="text-center">Date of Enrolment</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody class="font_size_14 common_p_b report_tb_border">
+                                <tr ng-repeat="patientObj in lost_patient_details">
+                                    <td>{{patientObj.user_unique_id}}</td>
+                                    <td ng-click="getPatientModalHTML(patientObj.clinical_notes_reports_user_id);" class="cursor_pointer">
+                                        <b>{{patientObj.patient_name}}</b>
+                                    </td>
+                                    <td class="text-center" style="position: relative;">{{patientObj.user_phone_number}}<div class="patient_details_div patient_details_{{patientObj.clinical_notes_reports_user_id}}"></div></td>
+                                    <td class="text-center">{{patientObj.user_gender}}</td>
+                                    <td class="text-center">{{patientObj.user_details_dob | ageFilter}}</td>
+                                    <td class="text-center">{{patientObj.user_details_weight | PoundToKG}}</td>
+                                    <td class="text-center">
+                                        {{((patientObj.user_details_height | bmi:patientObj.user_details_weight | number:'0') != '0') ? (patientObj.user_details_height | bmi:patientObj.user_details_weight | number:'0') : ''}}
+                                    </td>
+                                    <td class="text-center">{{patientObj.user_details_blood_group}}</td>
+                                    <td class="text-center">{{patientObj.user_created_at}}</td>
+                                </tr>
+                            </tbody>
+                        </table> -->
+                    </div>
+                </div>
+                <div ng-if="lost_patient_details.length > 0" class="row pagi-wrap">
+                <div class="col-lg-3 totals-rows">
+                    Showing {{((currentPagePopup-1)*report_filters.popup_per_page) + 1}} to {{popup_last_rows}} of {{popup_total_rows}} entries
+                </div>
+                <div class="pagination-wrap col-lg-9">
+                    <a href="" ng-click="getNextPrevPopup('prev',1)"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                    <input ng-repeat="n in [] | range:popup_total_page" type="button" ng-value="n" ng-click="getLostPatientDetails(n)" ng-disabled="currentPagePopup == n" ng-class="currentPagePopup == n ? 'page-active' : ''" class="pagi-btn">
+                    <a href="" ng-click="getNextPrevPopup('next',1)"><img alt="previous" src="app/images/next_arrow.png"></a>
+                </div>
+            </div>
+            <div class="clearfix"></div>  
+            </div>
+        </div>
+    </div>  
+</div>
+<style type="text/css">
+    .list-group-item {width: 100%;float: left;}
+</style>

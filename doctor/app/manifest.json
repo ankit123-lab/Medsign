@@ -1,0 +1,7 @@
+{
+  "name": "MedEasy",
+  "short_name": "MedEasy",
+  "gcm_sender_id": "524892501560", 
+  "display": "standalone",
+  "gcm_user_visible_only": true
+}

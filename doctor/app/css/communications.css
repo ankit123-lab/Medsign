@@ -1,0 +1,100 @@
+.pagination li a.list_items.listdate {
+    width: 40px !important;
+    /* font-family: gotham_medium !important; */
+    line-height: 12px !important;
+    padding: 5px 3px !important;
+    text-align: center !important;
+}
+
+.list_items .month {
+    /* font-family: gotham_book; */
+    font-size: 14px;
+    margin-top: 3px;
+}
+.history_title {
+    font-size: 14px;
+    margin: 0;
+    padding: 15px;
+    font-weight: 700;
+}
+
+.pagination li a,
+.pagination li span {
+    background-color: rgba(0, 0, 0, 0);
+    border: medium none;
+    border-radius: 4px;
+    color: #30aca5;
+    font-size: 14px;
+    margin-left: 4px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0 !important;
+}
+
+.pagination li a.list_items {
+    width: 40px;
+    /* font-family: gotham_medium; */
+    font-weight: 700;
+    line-height: 12px;
+    padding: 10px 9px 5px !important;
+    text-align: center;
+    border: 1px #30aca5 solid !important;
+}
+
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+    background-color: #fff;
+    border-color: #dddddd;
+    color: #30aca5;
+}
+
+.pagination > li.active > a,
+.pagination > li.active > a:hover {
+    background-color: #30ACA4 !important;
+    color: #FFFFFF !important;
+    cursor: pointer;
+}
+.commu-patient-list {border-top: 1px solid #d2d2d2;padding: 10px 0;}
+.recipients_dropbox > .chosen-container-multi .chosen-choices {
+    height: auto !important;
+}
+.pagi-btn {
+    font-size: 14px;
+    height: 30px;
+    width: 35px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    background: #fff;
+    color: #30aca5;
+    font-weight: 700;
+    border: 1px #30ACA4 solid;
+    margin-right: 3px;
+}
+.pagi-btn:hover{
+    background: #30aca5 !important;
+    color: #fff !important;
+}
+.page-active {
+    background: #30aca5 !important;
+    color: #fff !important;
+}
+.pagi-wrap{margin-bottom: 40px;}
+.totals-rows{text-align: left;}
+.commu_active_tab {border-bottom: 2px solid #30aca5;font-weight: bold;}
+table.payment-table>tbody>tr>td{border-top:0;font-size: 15px !important;}
+.sample-sms-text{
+    border: 1px solid #30aca5;
+    border-radius: 5px;
+    padding: 4px 7px;
+}
+.dynamic-textbox{
+    margin-top: 5px;
+}
+.dynamic-txt{white-space: break-spaces;}
+.sms-text-box{
+    border: 0;
+    border-bottom: 1px solid #30aca5;
+}

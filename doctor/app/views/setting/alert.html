@@ -1,0 +1,397 @@
+<link rel="stylesheet" ng-href="app/css/alerts.css?{{getVer(3)}}" />   
+<div class="">
+    <div class="common_hr clearfix alert_main_div">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span ng-if="current_clinic">{{current_clinic.clinic_name | capitalize}}</span>
+                    <span><img src="app/images/down_arrow.png" /></span>
+                </button>
+                <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForAlert(clinic)" ><a href="">{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul>
+            </div>
+        </div>
+        <div class="second_width common_heading_height ">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding margin_left_-4">
+                <div class="col-lg-2 col-md-2 col-sm-4 col-xs-2 m_bottom_15">
+                    <h4 class="m_top_22 page_title pull-left">Settings</h4>
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-6 col-xs-8 hide" ng-init="getLanguages()">
+                    <p class="m_top_20 font_size_12 pull-left new_content_width title2">SMS To Patient Will Be Sent In This Language </p>                      
+                    <div class="selection_bx m_top_10 pull-left" style="margin-left: 15px;">                   
+                        <select
+                            name='language'
+                            id="language"
+                            chosen
+                            allow-single-deselect="true"
+                            placeholder_text_single="'Language'" 
+                            ng-model="alert.language" required=""  
+                            ng-options="value.language_id as value.language_name for value in languages"
+                            ng-disabled="!(checkPermission(SETTING_ALERT, EDIT))"
+                            >
+                            <option value=""></option>                     
+                        </select>
+                        <span><i class="fa fa-angle-down fa-2x"></i></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" >
+                    <!-- <ul class="" style="padding-left: 0;float: right;">
+                        <li class="navigation_li">
+                            <label  class="bg_icon_images play_video_btn custom_div_mar" data-toggle="modal"  data-target='#video_help_modal'></label>
+                        </li>
+                    </ul> -->
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-if="current_clinic" ng-init="getDoctorAlertSetting()">
+        <div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+        <form name="saveAlertForm" id="saveAlertForm" novalidate="" ng-submit="saveAlert()" ng-if="checkPermission(SETTING_ALERT, EDIT)">
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-3 col-xs-3 padding_0">
+                    <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Doctor Alerts</h3>
+                </div>
+                <div class="clearfix"></div>
+                <table class="table table-responsive min_width_767">
+                    <thead class="row font_color_3 gotham_light common_tb_border font_size_18 common_p_b">
+                        <tr>                                
+                            <th class="width_th_20">Category</th>
+                            <th class="width_th_13">Type</th>
+                            <th class="width_th_20 text-center hide">SMS</th>
+                            <th class="width_th_10 text-center">Email</th>
+                            <th class="width_th_20 text-center">Notification</th> 
+                            <th class="width_th_20 text-center">Google Sync</th> 
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="font_size_14 common_p_b">
+                        <tr>
+                            <td>Appointment</td>
+                            <td>Confirmation</td>
+                            <td class="text-center hide">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 1">
+                                    <input type="checkbox" id="sms_checkbox_1" ng-model="alertObj.status"        
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="sms_checkbox_1" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 2">
+                                    <input type="checkbox" id="email_checkbox_1"
+                                            ng-model="alertObj.status"        
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="email_checkbox_1" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 9">
+                                    <input type="checkbox" id="notify_checkbox_1" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="notify_checkbox_1" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 24">
+                                    <input type="checkbox" id="google_sync_checkbox_1"
+                                            ng-model="alertObj.status"        
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="google_sync_checkbox_1" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Rescheduling</td>
+                            <td class="text-center hide">
+                                <div class="padding_left_0 common_checbox"  ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 7">
+                                    <input type="checkbox" id="sms_checkbox_2" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="sms_checkbox_2" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 8">
+                                    <input type="checkbox" id="email_checkbox_2" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="email_checkbox_2" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 11">
+                                    <input type="checkbox" id="notify_checkbox_2" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="notify_checkbox_2" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Cancellation</td>
+                            <td class="text-center hide">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 3">
+                                    <input type="checkbox" id="sms_checkbox_3" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="sms_checkbox_3" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 4">
+                                    <input type="checkbox" id="email_checkbox_3" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="email_checkbox_3" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 10">
+                                    <input type="checkbox" id="notify_checkbox_3" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="notify_checkbox_3" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr class="hide">
+                            <td>Payment</td>
+                            <td>Payment</td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 12">
+                                    <input type="checkbox" id="sms_checkbox_4" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="sms_checkbox_4" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 13">
+                                    <input type="checkbox" id="email_checkbox_4" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="email_checkbox_4" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 14">
+                                    <input type="checkbox" id="notify_checkbox_4" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="notify_checkbox_4" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="m_top_40 clearfix">  
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right" />
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <p class=" m_bottom_20 m_top_24 font_color_1 font_size_12 text-center">
+                        All practice correspondence will be sent to Contact number:  
+                        +91{{currentUser.user_phone_number}}, <br>
+                        Email: {{currentUser.user_email}}
+                        to change go to practice details.
+                    </p>
+                </div>
+            </div>
+        </form>
+        <form name="savePatientAlertForm" id="savePatientAlertForm" novalidate="" ng-submit="saveAlert()" ng-if="checkPermission(SETTING_ALERT, EDIT)">
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-3 col-xs-3 padding_0">
+                    <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Patient Alerts</h3>
+                </div>
+                <div class="clearfix"></div>
+                <table class="table table-responsive min_width_767">
+                    <thead class="row font_color_3 gotham_light common_tb_border font_size_18 common_p_b">
+                        <tr>                                
+                            <th class="width_th_20">Category</th>
+                            <th class="width_th_13">Type</th>
+                            <th class="width_th_10 text-center" ng-if="currentUser.sub_plan_setting.sms_communication=='1'">SMS</th>
+                            <th class="width_th_13 text-center" ng-if="currentUser.sub_plan_setting.whatsapp_communication=='1'">Whats App</th>
+                            <th class="width_th_10 text-center">Email</th>
+                            <th class="width_th_20 text-center">Notification</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="font_size_14 common_p_b">
+                        <tr>
+                            <td>Patient Register</td>
+                            <td>Welcome</td>
+                            <td class="text-center" ng-if="currentUser.sub_plan_setting.sms_communication=='1'">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.patient_data track by $index" ng-if="alertObj.id == 1">
+                                    <input type="checkbox" id="patient_sms_checkbox_1" ng-model="alertObj.status"        
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="patient_sms_checkbox_1" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center" ng-if="currentUser.sub_plan_setting.whatsapp_communication=='1'">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.patient_data track by $index" ng-if="alertObj.id == 3">
+                                    <input type="checkbox" id="patient_whatsapp_checkbox_3" ng-model="alertObj.status"        
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="patient_whatsapp_checkbox_3" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.patient_data track by $index" ng-if="alertObj.id == 2">
+                                    <input type="checkbox" id="patient_email_checkbox_2"
+                                            ng-model="alertObj.status"        
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="patient_email_checkbox_2" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Appointment</td>
+                            <td>Confirmation</td>
+                            <td class="text-center" ng-if="currentUser.sub_plan_setting.sms_communication=='1'">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 15">
+                                    <input type="checkbox" id="sms_checkbox_15" ng-model="alertObj.status"        
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="sms_checkbox_15" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center" ng-if="currentUser.sub_plan_setting.whatsapp_communication=='1'">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 21">
+                                    <input type="checkbox" id="whatsapp_checkbox_21" ng-model="alertObj.status"        
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="whatsapp_checkbox_21" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 18">
+                                    <input type="checkbox" id="email_checkbox_18"
+                                            ng-model="alertObj.status"        
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="email_checkbox_18" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 25">
+                                    <input type="checkbox" id="email_checkbox_25"
+                                            ng-model="alertObj.status"        
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="email_checkbox_25" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Rescheduling</td>
+                            <td class="text-center" ng-if="currentUser.sub_plan_setting.sms_communication=='1'">
+                                <div class="padding_left_0 common_checbox"  ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 17">
+                                    <input type="checkbox" id="sms_checkbox_17" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="sms_checkbox_17" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center" ng-if="currentUser.sub_plan_setting.whatsapp_communication=='1'">
+                                <div class="padding_left_0 common_checbox"  ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 22">
+                                    <input type="checkbox" id="whatsapp_checkbox_22" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="whatsapp_checkbox_22" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 20">
+                                    <input type="checkbox" id="email_checkbox_20" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="email_checkbox_20" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 27">
+                                    <input type="checkbox" id="email_checkbox_27" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="email_checkbox_27" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Cancellation</td>
+                            <td class="text-center" ng-if="currentUser.sub_plan_setting.sms_communication=='1'">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 16">
+                                    <input type="checkbox" id="sms_checkbox_16" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="sms_checkbox_16" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center" ng-if="currentUser.sub_plan_setting.whatsapp_communication=='1'">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 23">
+                                    <input type="checkbox" id="whatsapp_checkbox_23" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="whatsapp_checkbox_23" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 19">
+                                    <input type="checkbox" id="email_checkbox_19" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="email_checkbox_19" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in alert.data track by $index" ng-if="alertObj.id == 26">
+                                    <input type="checkbox" id="email_checkbox_26" ng-model="alertObj.status" 
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"/>    
+                                    <label for="email_checkbox_26" class="disclose"></label>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="m_top_40 clearfix">  
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right" />
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div ng-if="!(checkPermission(SETTING_ALERT, EDIT))" class="text-center gotham_book font_size_20 m_top_20">
+            <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+        </div>
+    </div>
+</div>

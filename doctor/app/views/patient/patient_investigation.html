@@ -1,0 +1,100 @@
+<link rel="stylesheet" ng-href="app/css/diseases_template.css?{{getVer(3)}}" />
+<div class="tab-pane fade in" id="investigation">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_light font_color_5"  ng-if="common.isInvestigationOpen || addedInvestigationObj.length <= 0 && role[INVESTIGATION_MODULE][ADD] == 'on'" ng-class="current_appointment_date_obj.is_editable ? '' : 'disabled-wrap'">
+        <div ng-if="!current_appointment_date_obj.is_editable" class="overlap-wrap" style="width: 99%;left: 4px;"></div>
+        <form name="addInvestigationForm" ng-submit="addInvestigation(addInvestigationForm)" novalidate="" ng-keypress="checkFormSubmit($event)" >
+            <div class="row" id="investigation">
+                <div class="col-lg-12 gotham_light font_color_5"> 
+                    <div class="row" ng-repeat="(key, test) in testLabs track by $index">
+                        <div class="col-lg-7 col-md-6 col-sm-7 col-xs-7">
+                            <div class="form-group">
+                                <label class="m_bottom_15 required" ng-if="key == 0">Lab Test</label>
+                                <ul class="rich_text_ul">
+                                    <li>
+                                        <span class="pull-left dash_span">-</span>
+                                        <input custom-autofocus="$index == focusIndex[12]" 
+                                               id="note_{{key}}" 
+                                               key="{{key}}" 
+                                               type="text" 
+                                               class="common_input pull-left" 
+                                               client-auto-complete dirtype='12' 
+                                               name="similarbrand" 
+                                               ng-change="prescriptionOnchangeFlag()" 
+                                               ng-keyup="appendNote(key, $event, testLabs, 12)" 
+                                               placeholder="{{key==0 ? 'Enter Lab Test Name':''}}" 
+                                               ng-model="test.search" 
+                                               />
+                                        <div class="clearfix"></div>
+                                    </li>
+                                </ul>
+                                <p class="error" ng-show="lab_test_error && !lab_test_error_invalid">Please Enter At Least One Lab Test Name</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <label class="m_bottom_15" ng-if="key == 0">Instructions</label>
+                            <div 
+                                ng-if="!test.isOpenInst"
+                                ng-click="test.isOpenInst = true">
+                                <label class="cursor_pointer gotham_light add_instruction-label">
+                                    <i class="fa fa-plus"></i>
+                                    Add Instruction
+                                </label>
+                            </div>
+                            <input
+                                ng-if="test.isOpenInst"
+                                type="text"
+                                class="form-control common_input" 
+                                ng-model="test.lab_instruction" 
+                                client-auto-complete dirtype='20'
+                                ng-keyup="search_instructions(key)"
+                                ng-change="prescriptionOnchangeFlag()" 
+                                placeholder="Write Instruction" />
+                        </div>
+                        <div class="col-lg-1 col-md-2 col-sm-1 col-xs-1 padding_left_0"
+                             ng-if="key != (testLabs.length - 1)"
+                             ng-class="key == 0 ? 'm_top_25' : ''">
+                            <img src="app/images/remove.png" style="height: 35px"
+                                 class="doc_image doc_image_add cursor_pointer" 
+                                 ng-click="removeLabInvestigationObj(key)" />
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="button_container"  ng-if="current_appointment_date_obj.is_editable">
+                <input type="submit" value="Save" class="new_common_button btn_properties" />
+                <input type="button" value="Cancel" class="new_common_button_1 btn_properties" ng-click="cancelBtnRX()"/>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 font_color_7"
+         ng-if="addedInvestigationObj.keys.length > 0 && !common.isInvestigationOpen && role[INVESTIGATION_MODULE][VIEW] == 'on'">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <div class="form-group">
+                    <p class="gotham_medium title2">Lab Test</p>
+                    <p class="font_size_18 gotham_light title3" ng-repeat="(key,proc) in addedInvestigationObj.keys track by $index">{{key + 1}}. {{ addedInvestigationObj.keys[key]}}</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <div class="form-group">
+                    <p class="gotham_medium title2">Lab Instructions</p>
+                    <p class="font_size_18 gotham_light title3" 
+                       ng-repeat="(key,proc) in addedInvestigationObj.keys track by $index">                      
+                        <span ng-if="addedInvestigationObj[addedInvestigationObj.keys[key]]">{{addedInvestigationObj[addedInvestigationObj.keys[key]]}}</span>
+                        <span ng-if="!addedInvestigationObj[addedInvestigationObj.keys[key]]">-</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="button_container new_btn_container"  ng-if="current_appointment_date_obj.is_editable">                                                    
+            <input type="button" value="Edit" ng-click="openEditForm(4)" class="new_common_button btn_properties new_btn_width" ng-if="role[INVESTIGATION_MODULE][EDIT] == 'on'" />
+        </div>
+    </div>
+    <div ng-if="!(checkPermission(INVESTIGATION_MODULE, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+        <div class="unauthorised-css">{{ app.unauthorised_msg}}</div>
+    </div>
+</div>

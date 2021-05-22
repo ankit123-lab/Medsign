@@ -1,0 +1,34 @@
+<div class="modal-body no_padding view_past_rx_list">
+	<div class="container container_width top_header background_color_1 white_color text-center">
+        <button type="button" class="close" ng-click="cancel()" data-dismiss="modal">X</button>
+        <h3>Prescriptions - {{patient_name}}</h3>                                    
+    </div>
+    <div class="container container_width middle_content"> 
+    	<div class="row">
+            <div ng-if="patient_past_rx_data.length > 0" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive">
+                <table class="table table-bordered font_color_3 gotham_light m_top_10">
+                    <thead class="background_color_3 font_color_1">
+                        <tr class="common_tb_border">                                
+                            <th width="7%" class="text-center">Sr.</th>
+                            <th width="16%" class="text-center">Appointment Date</th>
+                            <th width="70%" class="text-center">Doctor Name</th>
+                            <th width="7%"></th>                                    
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                        <tr class="b_padding" ng-repeat="(key,rxObj) in patient_past_rx_data">
+                            <td class="text-center">{{key+1}}</td>                      
+                            <td class="font_color_1 text-center">{{rxObj.appointment_date}}</td>                      
+                            <td>{{docPrefix+rxObj.doctor_name}}</td>
+                            <td class="text-center">
+                                <a ng-click="view_rx_pdf(rxObj)" href="javascript:void(0);"><i class="fa fa-eye icon-color" style="color: #30aca5;font-size: 17px;"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-if="patient_past_rx_data.length == 0" class="unauthorised-css text-center" ng-bind-html="no_data_found" style="margin-top: 0;"></div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+    </div>
+</div>

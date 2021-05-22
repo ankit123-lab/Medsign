@@ -1,0 +1,52 @@
+<div ng-include="'app/views/common/header.html?'+getVer(2)"></div>
+<link rel="stylesheet" ng-href="app/css/profile.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/complete_profile.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/circle.css?{{getVer(3)}}" />
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_padding_all">
+	<div ng-show="checkPermission(MY_ACCOUNT,ADD)" ng-controller="UserController">
+        <div class="">
+            <div class="common_hr clearfix">
+                <div class="first_width gotham_medium font_color_1">
+                    <h3 class="m_bottom_25 m_top_22 font_size_20 dr_title title1" ><span ng-if="currentUser.user_first_name">{{docPrefix}}{{ currentUser.user_first_name}} {{ currentUser.user_last_name}}</span></h3>
+                </div>
+                <div class="second_width">
+                    <div class="pull-left">
+                        <h4 class="m_top_24 m_l_10 title1">Complete Your Profile</h4>
+                    </div>
+                    <div class="pull-right gotham_light width220" ng-init="getPercentage()">
+                        <div class="padding_right_0">
+                            <div class="margin_0_auto c100 p{{ Model.profile_per}} small">
+                                <span>{{Model.profile_per}}%</span>
+                                <div class="slice">
+                                    <div class="bar"></div>
+                                    <div class="fill"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gotham_medium">
+                            <h4 class="m_top_24 title1">Profile Complete</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="">
+            <div class="list_group_property">
+				<div ng-include="'app/views/profile/doctor_sidebar.html?'+getVer(2)"></div>
+                <div ui-view="" autoscroll="false"  class="content-wrapper"></div>
+                <!-- Main body data in this section-->
+            </div>
+            <!-- The full screen image Modal -->
+            <div id="fullscreen_img_modal" class="modal fade in" role="dialog"  data-backdrop="static" data-keyboard="false">
+                <!-- The Close Button -->
+                <span class="close" ng-click="closeFullImgModal()" >&times;</span>
+                <!-- Modal Content (The Image) -->
+                <img class="modal-content" id="my_img" ng-src="{{Model.currentImg}}" />
+            </div>
+        </div>
+    </div>
+	<div ng-show="!(checkPermission(MY_ACCOUNT,ADD))" class="text-center gotham_book font_size_20 m_top_20">
+		<div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+	</div>
+</div>

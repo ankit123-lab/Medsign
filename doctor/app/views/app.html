@@ -1,0 +1,45 @@
+<!-- top navbar-->
+<style>
+    /* Styles go here */
+    .my-animation.ng-enter {
+        -webkit-animation: flipInY 1s;
+        -moz-animation: flipInY 1s;
+        animation: flipInY 1s;
+    }
+
+    .my-animation.ng-leave {
+        -webkit-animation: flipOutY 1s;
+        -moz-animation: flipOutY 1s;
+        animation: flipOutY 1s;
+    }
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+        display: none !important;
+    }
+    @keyframes blinkingText{
+        0%{ color: #03aca5; }
+        49%{ color: #03aca5;}
+        50%{ color: transparent; }
+        99%{ color:transparent; }
+        100%{ color: #03aca5; }
+    }
+    .blink{
+        animation: blinkingText 2s infinite;
+        position: fixed;
+        top: 10px;
+        left: 45%;
+        z-index: 999999;
+        background-color: rgba(216,250,246,0.7);
+        font-size: 14px;
+        font-weight: 700;
+        padding: 4px 20px;
+        border-radius: 5px;
+    }
+</style>
+<div ng-cloak ui-view="" autoscroll="false"  class="content-wrapper"></div>
+<section ng-cloak>
+    <!-- Page content-->
+    <toast></toast>
+    <!--<page-loader flag="app.isLoading"></page-loader>-->
+    <div class="custom_loader" ng-if="app.isLoader"></div>
+    <div class="blink" ng-if="app.is_not_valid" ng-bind-html="error_message"></div>
+</section>

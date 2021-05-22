@@ -1,0 +1,34 @@
+
+.modal_dialog_width.block_calendar_width{
+    width: 622px !important;
+}
+.modal-body.block_calendar_padding{    
+    padding: 40px 75px;
+}
+#modal_blockcalendar .modal-backdrop.in {
+    overflow-x: auto;
+/*    min-width: 1367px !important;*/
+}
+#modal_blockcalendar{
+    overflow-x: auto;
+}
+.fa-calendar.icon_image_right{
+    top: 5px;
+    right: 5px;
+}
+.common_radio_1 [type="radio"]:checked + label::before,
+.common_radio_1 [type="radio"]:not(:checked) + label::before {   
+    left: 6px !important;    
+    top: -16px !important;    
+}
+.common_radio_1 [type="radio"]:checked + label::after, .common_radio_1 [type="radio"]:not(:checked) + label::after {
+    left: 11px !important;
+    top: -11px !important;
+}
+.common_radio_1 [type="radio"]:checked + label,
+.common_radio_1 [type="radio"]:not(:checked) + label{
+    padding-left: 95px !important; 
+}
+.btn_properties.btn_witdth{
+    width: 100% !important;
+}

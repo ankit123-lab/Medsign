@@ -1,0 +1,24 @@
+.outer_div{
+    position: relative;   
+    top: 0;
+    right: 0;       
+}
+/*---------==================================================*/
+.inner_div_3{    
+    position: absolute;
+    width: 497px;
+    height: 603px;
+    top: 100px;    
+    right: 0;    
+    box-shadow:20px 20px 50px 15px grey;    
+    display: none;
+}
+.top_header { 
+    height: 61px !important; 
+    padding: 16px !important;
+}
+.fa-calendar.icon_image_right{
+    top: 5px;
+    right: 5px;
+}
+.btn_properties{ width: 100%; }

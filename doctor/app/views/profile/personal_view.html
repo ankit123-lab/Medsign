@@ -1,0 +1,301 @@
+<div class="second_width common_left_border" ng-controller="UserController" ng-init="getDoctorWholeDetail()">
+    <form id="register_personal_info_form" method="post" role="form" style="display: block;" name="updatePersonalForm"
+        ng-submit="updatePersonalDetail()" novalidate="">
+        <div class="">
+            <div class="col-md-12 col-xs-12 margin_padding_0 ">
+                <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12 m_top_30">
+                    <div class="profile_pic_div margin_0_auto">
+                        <img src="app/images/placeholder_user.png" class="img-responsive placeholder_image" ng-hide='doctor.user_photo_filepath' />
+                        <img ng-src="{{doctor.user_photo_filepath_thumb}}" class="image_class" ng-if="doctor.user_photo_filepath && (imageSrc == undefined || imageSrc == '')" ng-click="showFullImage(doctor.user_photo_filepath)" />
+                        <input type="hidden" name="imageSrc" ng-model="doctor.user_photo_filepath" />
+                        <img ng-src="{{imageSrc}}" class="" ng-click="showFullImage(imageSrc)" ng-show="imageSrc" ng-if="imageSrc" />
+                        <div ng-show="imageSrc">
+                            <img src="app/images/popup_remove_red.png" ng-click="removeProfile(1)" class="display_remove_icon"
+                                style="top: 0; right: 0;" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 m_top_10 text-center m_bottom_10">
+                        <a href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center"
+                            ng-click="openFile('profilePicFile')">Upload photo</a>
+                        <input type="file" obj="profile" ng-file-select="onFileSelect($files)" class="hide" ng-model="other.profile"
+                            id="profilePicFile" accept="image/*">
+                    </div>
+                    <textarea class="hide image-sign-source" ng-model="signature.imageSignSrc"></textarea>
+                    <div class="profile_pic_div margin_0_auto hide">
+                        <img src="app/images/placeholder_hospital.png" class="img-responsive placeholder_image" ng-hide='doctor.user_sign_filepath || signature.imageSignSrc != ""' />
+                        <img ng-src="{{doctor.user_sign_filepath_thumb}}" class="image_class" ng-if="doctor.user_sign_filepath && (signature.imageSignSrc == undefined || signature.imageSignSrc == '')" ng-click="showFullImage(doctor.user_sign_filepath)" />
+                        <img ng-src="{{signature.imageSignSrc}}" class="" ng-click="showFullImage(signature.imageSignSrc)" ng-show="signature.imageSignSrc" ng-if="signature.imageSignSrc" />
+                        <div ng-show="signature.imageSignSrc">
+                            <img src="app/images/popup_remove_red.png" ng-click="removeSign()" class="display_remove_icon"
+                                style="top: 0; right: 0;" />
+                        </div>
+                    </div>
+                    <div class="hide col-md-12 col-sm-12 col-xs-12 m_top_10 text-center">
+                        <a href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center"
+                            ng-click="signaturePopup()">Signature</a>
+                    </div>
+                </div>
+                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12 m_top_15">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="f_label required">First Name</div>
+                                <input name="first_name" id="first_name" class="form-control login_input" placeholder="Enter First Name"
+                                    value="" type="text" ng-model="doctor.user_first_name" required="" ng-pattern="/^[a-zA-Z\. ]*$/"
+                                    ng-maxlength="30">
+                                <p ng-show="(submitted) && updatePersonalForm.first_name.$error.pattern" class="error">Only
+                                    characters allowed.</p>
+                                <p ng-show="(updatePersonalForm.first_name.$touched || submitted) && updatePersonalForm.first_name.$error.required"
+                                    class="error">{{fname_required}}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="f_label required">Last Name</div>
+                                <input name="last_name" id="last_name" class="form-control login_input" placeholder="Enter Last Name"
+                                    value="" type="text" ng-model='doctor.user_last_name' required="" ng-pattern="/^[a-zA-Z\. ]*$/"
+                                    ng-maxlength="30">
+                                <p ng-show="(submitted) && updatePersonalForm.last_name.$error.pattern" class="error">Only
+                                    characters allowed.</p>
+                                <p ng-show="(updatePersonalForm.last_name.$touched || submitted) && updatePersonalForm.last_name.$error.required"
+                                    class="error">{{lname_required}}</p>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="f_label required">Email ID</div>
+                                <input name="email_id" id="email_id" class="form-control login_input" placeholder="Enter Email Id" 
+                                ng-readonly="(doctor.user_email != undefined && doctor.user_email != '') ? true : false" 
+                                    value="" type="email" ng-model='doctor.user_email' required="" ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/"><!-- old=> /^[A-Za-z][A-Za-z0-9._]*\@[A-Za-z]*\.[A-Za-z]{2,3}$/-->
+                                <p ng-show="(updatePersonalForm.email_id.$touched || submitted) && updatePersonalForm.email_id.$error.required"
+                                    class="error">{{email_required}}</p>
+                                <p ng-show="(updatePersonalForm.email_id.$touched || submitted) && updatePersonalForm.email_id.$error.pattern"
+                                    class="error">* Invalid Email.</p>
+                                <p ng-if="doctor.user_email_verified == 2" class="cursor_pointer error text-right verify_unverify_email"
+                                    ng-click="resendMailForDoctor(1)">
+                                    Unverified
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="f_label required">Mobile Number </div>
+                                <input type="text" name="phone_number" id="phone_number" class="form-control login_input"
+                                    placeholder="Enter Mobile Number" value="" ng-model="doctor.user_phone_number"
+                                    ng-readonly="(doctor.user_phone_number != undefined && doctor.user_phone_number != '') ? true : false"
+                                    ng-pattern="/^[0-9]{10}$/" required="" maxlength="10" ng-keypress="checkMobileKey($event)">
+                                <p ng-show="(updatePersonalForm.phone_number.$touched || submitted) && updatePersonalForm.phone_number.$error.required"
+                                    class="error">{{phone_required}}</p>
+                                <p ng-show="(updatePersonalForm.phone_number.$touched || submitted) && updatePersonalForm.phone_number.$error.pattern"
+                                    class="error">* Invalid Number.</p>
+                                <p ng-if="doctor.user_phone_verified == 2" class="cursor_pointer error text-right"
+                                    ng-click="resendMailForDoctor(2)">
+                                    Unverified</p>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 col-sm-6 col-xs-12" ng-if="(doctor.user_updated_email != '')">
+                            <div class="form-group">
+                                <div class="f_label">Change Requested Email ID<br><small>Please verify to update email as primary</small></div>
+                                <input name="r_email_id" id="r_email_id" class="form-control login_input" placeholder="Enter Email Id"
+                                    value="" type="email" ng-model='doctor.user_updated_email' ng-disabled="">
+                                <p class="cursor_pointer error text-right verify_unverify_email" ng-click="resendMailForDoctor(3)">Unverified</p>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group clearfix">
+                                <div class="f_label required">Gender</div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 input_gender" gender="male" ng-click="changeGender(1)"
+                                    style="margin-left: 0px;">
+                                    <img ng-src="{{doctor.gender==1?'app/images/male_image.png':'app/images/unselect_male_image.png'}}"
+                                        alt="Male" />
+                                    <label for="male" class="m_top_10">Male</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 input_gender" gender="female" ng-click="changeGender(2)">
+                                    <img ng-src="{{doctor.gender==2 ?'app/images/select_female_image.png':'app/images/unselect_female_image.png'}}"
+                                        alt="Female" />
+                                    <label for="female" class="m_top_10">Female</label>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 input_gender" gender="other" ng-click="changeGender(3)">
+                                    <img ng-src="{{doctor.gender==3 ?'app/images/select_other_image.png':'app/images/other_image.png'}}"
+                                        alt="Other Image" />
+                                    <label for="other" class="m_top_10">Other</label>
+                                </div>
+                                <input name="gender" value="" id="gender" type="hidden">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="f_label">Language</div>
+                                <select name='language' id="country" chosen multiple="" allow-single-deselect="true"
+                                    placeholder_text_multiple="'Select Language'" ng-options="value.language_id as value.language_name for value in other.languages"
+                                    style="width:100% !important;" ng-model="doctor.language">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="f_label">{{app.address_label}}</div>
+                                <textarea class="form-control login_input resize_none" rows="3" placeholder="{{ app.address_placeholder}}"
+                                    id="user_address1" ng-model="doctor.address_name_one" name="user_address1"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="f_label">{{app.landmark_label}}</div>
+                                <textarea class="form-control login_input resize_none" rows="3" gm-places-autocomplete
+                                    placeholder="Search {{app.landmark_placeholder}}" id="comment" ng-model="doctor.address_name" name="user_address"></textarea>
+                                <a href="http://maps.google.com/" class="pull-right font_color_1" target="_blank">Google map</a>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group selection_bx">
+                                <div class="f_label">Country</div>
+                                <div class="position_relative">
+                                    <select name='selected_country' id="country" chosen allow-single-deselect="true" 
+                                        placeholder_text_single="'Select Country'" ng-options="value.country_id as value.country_name for value in other.country" 
+                                        style="width:100% !important;" ng-model="doctor.address_country_id" ng-change="getState(doctor.address_country_id)">
+                                        <option value=""></option>
+                                    </select>
+                                    <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group selection_bx">
+                                <div class="f_label">State</div>
+                                <div class="position_relative">
+                                    <select name="selected_state" chosen allow-single-deselect="true"
+                                        placeholder_text_single="'Select State'" ng-options="value.state_id  as value.state_name for value in other.state"
+                                        style="width:100% !important;" ng-model="doctor.address_state_id" ng-change="getCity(doctor.address_state_id)">
+                                        <option value=""></option>
+                                    </select>
+                                    <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group selection_bx">
+                                <div class="f_label">City</div>
+                                <div class="position_relative">
+                                    <select name="selected_city" chosen allow-single-deselect="true"
+                                        placeholder_text_single="'Select City'" ng-options="value.city_id as value.city_name for value in other.city"
+                                        style="width:100% !important;" ng-model="doctor.address_city_id">
+                                        <option value=""></option>
+                                    </select>
+                                    <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <div class="f_label">Locality</div>
+                                <input name="locality" id="locality" class="form-control login_input" placeholder="Enter Locality"
+                                    type="text" ng-model="doctor.address_locality" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <div class="f_label">Pin Code</div>
+                                <input name="zipcode" id="zipcode" class="form-control login_input" placeholder="Enter Pin Code"
+                                    type="text" ng-model="doctor.address_pincode" ng-pattern="/^[0-9]{6}$/" />
+                                <p ng-show="(updatePersonalForm.zipcode.$touched || submitted) && updatePersonalForm.zipcode.$error.pattern"
+                                    class="error">Invalid Pin code.</p>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <div class="f_label">Practicing Since</div>
+                                <div class="input-group login_input">
+                                    <input type="text" class="form-control login_input" datetime-picker="MM/yyyy" datepicker-options="years_of_picker.datepickerOptions" enable-time="false" ng-model="doctor.doctor_detail_year_of_experience" is-open="years_of_picker.open" placeholder="Select Year of Starting Practice" name="year_of_exp" readonly="" datepicker-append-to-body="true" />
+                                    <span class="input-group-btn login_input">
+                                        <button type="button" class="btn btn-default login_input clock_button" ng-click="years_of_picker.open = true"><i class="fa fa-calendar"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="m_top_40 m_bottom_30 clearfix">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="submit" value="Save" name="save" class="btn new_common_button btn_save btn_properties float_right" />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <a href=""><input type="button" ng-click="updatePersonalDetail(true)" value="Next" name="next"
+                                        class="btn new_common_button_1 btn_save btn_properties" /></a>
+                            </div>
+                        </div>
+                    </div> <!-- row -->
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Modal -->
+<div id="otp_modal" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content no_padding">
+            <div class="modal-header common_title background_color_1 white_color text-center">
+                <h3 class="modal-title modaltitle_m">OTP verification </h3>
+            </div>
+            <form id="profileOTPForm" method="post" role="form" name="profileOTPForm" ng-submit="verifyOtpForDoctor(profileOTPForm)"
+                novalidate="">
+                <div class="form-group">
+                    <div class="forgot_password_label">Please enter your verification code. <br /> Which you have
+                        received.</div>
+                    <input type="text" name="send_register_otp" id="send_register_otp" tabindex="1" class="form-control login_input"
+                        placeholder="Enter OTP" value="" required="" ng-model="doctor.otp">
+                    <p ng-show="(profileOTPForm.send_register_otp.$touched || submitted) && profileOTPForm.send_register_otp.$error.required"
+                        class="error" style="text-align: center">* Required.</p>
+                </div>
+                <div class="form-group m_top_30 text-center">
+                    <input type="submit" name="login-submit" id="login-submit" class="btn_properties new_common_button"
+                        value="Submit" />
+                    <input type="reset" name="" class="btn_properties new_common_button_1 cancel_patient" value="Close"
+                        ng-click="resetNumber(1)" />
+                </div>
+                <div class="form-group m_top_15">
+                    <div class="forgot_password_label">If you didn't receive a code you can</div>
+                    <div class="otp_again margin_0_auto font_color_2 cursor_pointer " ng-show="is_send_button_visible"
+                        ng-click="resendUpdateMobileOtp()">resend</div>
+                    <div class="otp_again margin_0_auto font_color_2 cursor_pointer" ng-show="is_send_timer_visible"
+                        ng-init="settick()">{{ resendWaiting | date:'mm:ss' }}</div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="term_condition_modal" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content no_padding">
+            <div class="modal-header common_title background_color_1 white_color text-center">                           
+                <h3 class="modal-title modaltitle_m">Terms & Condition </h3>                            
+            </div>
+            <form id="terms_form" method="post" role="form" name="termsForm" ng-submit="acceptTerms(termsForm)" novalidate="">
+                <div class="col-md-12">
+                <!-- Contain Start -->
+                <div ng-bind-html="terms_condition_contain"></div>
+                <br/>
+                <!-- Contain end -->
+                    <div class="form-group padding_left_0 common_checbox">
+                        <input type="checkbox" id="terms_checkbox"
+                                name="terms_condition"
+                                ng-model="login.terms_condition" required />    
+                        <label for="terms_checkbox" class="disclose"> I Agree</label>
+                        <p ng-show="(termsForm.terms_condition.$touched || submitted) && termsForm.terms_condition.$error.required" class="error">{{ terms_condition}}</p>
+                    </div>
+                </div>
+                <div class="form-group m_top_30 text-center">
+                    <input type="submit" name="login-submit" id="login-submit" class="btn_properties new_common_button" value="Submit"/>
+                </div>               
+            </form>            
+        </div>
+    </div>
+</div>

@@ -1,0 +1,98 @@
+<div class="tab-pane fade in active" id="profile" ng-init="getDoctorProfile()">
+    <div class="m_top_30 text-right col-lg-3 col-lg-offset-8">
+        <a href="#/app/complete_profile_view/personal"><input type="button" value="Complete Profile" class="new_common_button_1 complete_profile"></a>
+    </div>
+    <div class="clearfix"></div>
+    <div class="text-center container">
+        <div class="profile_title gotham_medium">
+            <div class="profile_image m_top_20">
+                <img src="app/images/placeholder_user.png" class="image_class"  ng-hide="user.doctor_photo" />
+                <img ng-src="{{user.doctor_photo}}" class="image_class" ng-if="user.doctor_photo" />
+            </div>
+            <h2 ng-if="user.first_name" class="text-uppercase m_top_40"> {{user.first_name}} {{ user.last_name}}</h2>
+            <h4 class="">Unique ID : {{ currentUser.user_unique_id}}</h4>
+            <h3 class="font_color_3 designation no_margin">{{ user.doctor_specialisation}}</h3>
+        </div>
+        <div class="profile_basic_detail_container col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_medium m_top_83">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                    <span class="title">
+                        Clinic Name:
+                    </span>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <span>
+                        {{user.clinic.clinic_name | capitalize}}
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                    <span class="title">
+                        Email:
+                    </span>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <span>
+                        {{ user.doctor_email}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_top_40">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                    <span class="title">
+                        Clinic Address:
+                    </span>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left breakword_css">
+                    <span>
+                        {{ user.clinic.clinic_address1 | capitalize}}<br>
+                        {{ user.clinic.clinic_address | capitalize}}
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_top_40">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                    <span class="title">
+                        Phone:
+                    </span>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                    <span>
+                        {{user.doctor_phone_number}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_top_40">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                        <span class="title">
+                            Education:
+                        </span>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span>
+                            {{ user.doctor_qualification_degree}}                               
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_top_40 ">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right hide">
+                        <span class="title">
+                            Clinic Time:
+                        </span>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left hide">
+                        <span ng-if="user.doctor_timing_start">
+                            <span> {{ user.doctor_timing_start | timeTo24 }} to {{ user.doctor_timing_end | timeTo24 }}</span><br>
+                            <span ng-if="user.doctor_timing_start2!='00:00:00'">{{ user.doctor_timing_start2 | timeTo24 }} to {{ user.doctor_timing_end2 | timeTo24 }}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

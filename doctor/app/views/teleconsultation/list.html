@@ -1,0 +1,182 @@
+<div class="">
+    <div class="common_hr clearfix">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{app.all_clinic_label}}</span>
+                </button>
+                <!-- <ul ng-if="clinic_data.length > 0" class="dropdown-menu clinic_drop_down">
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinic(clinic)" ><a href="">{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="second_width common_heading_height ">
+            <div ng-if="checkPermission(TELECONSULTATION, VIEW) && currentUser.sub_plan_setting.teleconsultation != undefined && currentUser.sub_plan_setting.teleconsultation == '1'" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h3 class="m_top_22 page_title pull-left">Tele consultation</h3>
+                <h3 class="m_top_22 page_title pull-right text-center"><span class="font_color_5">Available Minutes</span><br/>{{teleconsultation.available_minutes}}</h3>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div> 
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-if="current_clinic">
+        <div ng-if="checkPermission(TELECONSULTATION, VIEW) && currentUser.sub_plan_setting.teleconsultation != undefined && currentUser.sub_plan_setting.teleconsultation == '1'" class="col-lg-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 no_margin no_padding_left" ng-init="getClinicDetailForEdit(current_clinic.clinic_id,true)">
+            <div class="col-lg-2 col-lg-2 col-md-2 col-sm-2 col-xs-12 no_padding_left">
+                <p class="font_color_1 background_color_3 history_brand history_title">History</p>
+            </div>
+            <div class="col-lg-8 col-lg-8 col-md-8 col-sm-8 col-xs-12" ng-init="getTeleconsultationDate();getTeleGlobalData();">
+                <ul class="pagination no_margin">
+                    <li ng-show="teleconsultation_date.length > 0">
+                        <a class="margin_top_5" href="" ng-click="getTeleconsultationDates('prev')">
+                            <img alt="previous" src="app/images/prev_arrow.png" />
+                        </a>
+                    </li>
+                    <li ng-repeat="(key, dateObj) in teleconsultation_date" title="{{dateObj.title_date}}" ng-class="teleconsultation.current_date_key==key ? 'active' : ''">
+                        <a class="list_items listdate" ng-click="changeTeleconsultationTab(key)" href="">
+                            <p class="">{{dateObj.created_at | date:'dd'}}</p>
+                            <p class="month">{{dateObj.created_at | date:'MMM'}}</p>
+                        </a>
+                    </li>
+                    <li ng-show="teleconsultation_date.length > 0">
+                        <a class="margin_top_5 cursor_pointer" href="" ng-click="getTeleconsultationDates('next')">
+                            <img alt="Next" src="app/images/next_arrow.png" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-lg-2 col-md-2 col-sm-2 col-xs-12 text-right">
+                <input type="button" value="Buy Minutes" name="btn_new_message" class="new_common_button new_common_button_3" ng-click="minutes_buy_popup()">
+            </div>    
+            <div class="clearfix"></div>
+        </div>
+        <div ng-if="checkPermission(TELECONSULTATION, VIEW) && currentUser.sub_plan_setting.teleconsultation != undefined && currentUser.sub_plan_setting.teleconsultation == '1'" class="col-lg-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 no_margin no_padding_left">
+            <div class="col-lg-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Tele consultation</h3>
+                <div class="tab-content">
+                    <div class="tab-pane active" ng-if="checkPermission(SETTING_PATIENT_GROUPS, VIEW)">
+                        <table class="table table-responsive min_width_767">
+                            <thead class="row font_color_3 gotham_light font_size_18 common_p_b">
+                                <tr class="common_tb_border">                                
+                                    <th width="25%" class="">Patient Name</th>
+                                    <th width="25%" class="">Mobile No</th>
+                                    <th width="25%" class="">Appointment Date</th>
+                                    <th width="25%" class="text-center">Call Duration (Minutes)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="common_p_b">
+                                <tr class="font_size_14" ng-repeat="(key, teleconsultationObj) in teleconsultation_list">
+                                    <td>{{teleconsultationObj.patient_name}}</td>
+                                    <td>{{teleconsultationObj.user_phone_number}}</td>
+                                    <td>{{teleconsultationObj.appointment_date_time}}</td>
+                                    <td class="text-center">{{teleconsultationObj.call_duration_time}}</td>
+                                </tr>
+                                <tr ng-if="teleconsultation_list.length == 0">
+                                    <th colspan="5" class="unauthorised-css text-center" ng-bind-html="no_data_found"></th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> 
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
+                <div ng-show="teleconsultation_list.length > 0" class="pagi-wrap">
+                    <div class="col-lg-3 totals-rows padding_0">
+                        Showing {{((teleCurrentPage-1)*tele_per_page) + 1}} to {{tele_last_rows}} of {{tele_total_rows}} entries
+                    </div>
+                    <div class="pagination-wrap col-lg-9 text-right">
+                        <a href="" ng-click="getTeleNextPrev('prev')"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                        <input ng-repeat="n in [] | range:tele_total_page" type="button" ng-value="n" ng-click="getTeleconsultationList(n)" ng-disabled="teleCurrentPage == n" ng-class="teleCurrentPage == n ? 'page-active' : ''" class="pagi-btn">
+                        <a href="" ng-click="getTeleNextPrev('next')"><img alt="next" src="app/images/next_arrow.png"></a>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div ng-if="!checkPermission(TELECONSULTATION, VIEW) || currentUser.sub_plan_setting.teleconsultation == undefined || currentUser.sub_plan_setting.teleconsultation == '0'" class="col-lg-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center gotham_book font_size_20 m_top_20 no_padding_left">
+            <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div id="modal_buy_more_minutes" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <form name="modal_buy_more_minutes_Form" id="modal_buy_more_minutes_Form" novalidate="" method="post" ng-submit="modal_buy_more_minutes(modal_buy_more_minutes_Form)">
+        <div class="modal-dialog modal_dialog_width">
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">
+                    <h3 class="modal-title modaltitle_m">Buy Minutes</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_bottom_10 p_top_15">
+                                                <select style="padding: 5px;"
+                                                        name='buy_credits_box'
+                                                        id="buy_credits_box"
+                                                        placeholder="'Select'" 
+                                                        ng-model="teleconsultation.selected_credits"
+                                                        ng-required="false" 
+                                                        ng-change="changeCredits()" 
+                                                        ng-options="val.value as val.label for val in creditsPlan"
+                                                        >                   
+                                                </select>
+                                                X 100 = {{teleconsultation.total_buy_credits}} Minutes 
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_bottom_10">
+                                                Total Cost ({{teleconsultation.per_minute_price}} Rs. Per Minute): 
+                                                <b>{{teleconsultation.total_price}}</b> Rs.
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <table class="table table-responsive payment-table padding_0 m_bottom_0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align="right">Sub Total</td>
+                                                            <td align="right">{{teleconsultation.total_price}}</td>
+                                                        </tr>
+                                                        <tr ng-if="!teleconsultation.is_apply_igst">
+                                                            <td align="right">
+                                                            SGST ({{teleconsultation.gst_percent.sgst}}%)
+                                                            </td>
+                                                            <td align="right">{{order_summery_data.sgst_amount}}</td>
+                                                        </tr>
+                                                        <tr ng-if="!teleconsultation.is_apply_igst">
+                                                            <td align="right">CGST ({{teleconsultation.gst_percent.cgst}}%)</td>
+                                                            <td align="right">{{order_summery_data.cgst_amount}}</td>
+                                                        </tr>
+                                                        <tr ng-if="teleconsultation.is_apply_igst">
+                                                            <td align="right">IGST ({{teleconsultation.gst_percent.igst}}%)</td>
+                                                            <td align="right">{{order_summery_data.igst_amount}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right">Total Amount</td>
+                                                            <td align="right">{{order_summery_data.total_amount}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                                                                      
+                    </div> 
+                    <div class="row">                                       
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-0">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-center">
+                            <input type="submit" value="Buy" name="buy" ng-click="placeCreditsOrder()" class="btn new_common_button btn_properties"/>
+                            <input type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 btn_properties" data-dismiss="modal" />
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-0"></div>
+                    </div>                                                                     
+                </div>
+            </div>
+        </div>
+    </form>
+</div>  

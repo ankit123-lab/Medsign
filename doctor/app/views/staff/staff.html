@@ -1,0 +1,233 @@
+<div ng-include="'app/views/common/header.html?'+getVer(2)"></div>
+<link rel="stylesheet" ng-href="app/css/mystaff.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/profile.css?{{getVer(3)}}" />
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_padding_all" ng-init="getDoctorProfile()">
+    <div class="common_hr clearfix">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span ng-if="current_clinic">{{current_clinic.clinic_name | capitalize}}</span>
+                    <span><img src="app/images/down_arrow.png" /></span>
+                </button>
+                <ul class="dropdown-menu clinic_drop_down">
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForStaff(clinic)"><a href="">{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-9 common_heading_height">
+            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 p_left">
+                <h4 class="m_top_22 page_title pull-left">My Staff</h4>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 m_top_15 hide">
+                <input value="Updated Details" name="btn_updatedetails" class="new_common_button_1 btn_width_100" type="button"
+                    id="btn_updatedetails" data-toggle="modal" data-target="#modal_updatedetails" type="button">
+                <input value="Add Doctors" name="btn_add_doctor" class="new_common_button_1 btn_width_100 m_left_16"
+                    type="button" id="btn_add_doctor" data-toggle="modal" data-target="#modal_add_doctor" type="button">
+            </div>
+        </div>
+        <div class="mycustommenu visible-xs">
+            Menu
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-2 hidden-cust left_menu_clinic padding_0" ng-if="current_clinic"
+        ng-init="getDoctorStaffList()">
+        <ul class="list-group sidebar_list_group gotham_book font_size_16">
+            <!--font_color_5-->
+            <li class="list-group-item item background_color_3 font_size_20 gotham_medium title1">DOCTORS</li>
+            <li class="list-group-item item font_color_5 gotham_medium active cursor_pointer title2" ng-repeat="doctor in other.doctor_list"
+                ng-click="getDoctorProfile(doctor.user_id)">{{ doctor.doctor_name}}</li>
+        </ul>
+        <ul class="list-group sidebar_list_group gotham_book font_size_16">
+            <!--font_color_5-->
+            <li class="list-group-item item background_color_3 font_size_20 gotham_medium title1">ASSISTANTS</li>
+            <li class="list-group-item item font_color_5 cursor_pointer title2" ng-repeat="staff in other.staff_assistant_list"
+                ng-click="getStaffProfile(staff)">
+                {{ staff.user_first_name | capitalize }} {{ staff.user_last_name | capitalize}}
+            </li>
+        </ul>
+        <ul class="list-group sidebar_list_group gotham_book font_size_16">
+            <!--font_color_5-->
+            <li class="list-group-item item background_color_3 font_size_20 gotham_medium title1">RECEPTIONIST</li>
+            <li class="list-group-item item font_color_5 cursor_pointer title2 color_black" ng-repeat="staff in other.staff_rec_list"
+                ng-click="getStaffProfile(staff)">
+                {{ staff.user_first_name | capitalize}} {{ staff.user_last_name | capitalize}}
+            </li>
+        </ul>
+    </div>
+    <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12" ng-if="show_doctor">
+        <div class="text-center">
+            <div class="profile_title profile_flex">
+                <div class="profile_image">
+                    <img ng-src="{{ (user.doctor_photo) ? user.doctor_photo : 'app/images/placeholder_user.png' }}" class="image_class"/>
+                </div>
+                <div class="profile_content">
+                    <h2 class="text-capitalize m_top_0 m_bottom_0 title1">
+                        <span ng-if="currentUser.user_id == user.user_id"></span>
+                        {{docPrefix}} {{user.first_name}} {{ user.last_name}}</h2>
+                    <h3 class="no_margin title1">{{user.doctor_specialisation}}</h3>
+                </div>
+            </div>
+
+            <div class="profile_basic_detail_container col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_medium m_top_40 m_l_50">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                        <span class="title title2 color_black">
+                            Clinic Name:
+                        </span>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title3">
+                            {{user.clinic.clinic_name | capitalize}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 ">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                        <span class="title title2 color_black">
+                            Email:
+                        </span>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title3">
+                            {{user.doctor_email}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 m_top_15">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                        <span class="title title2 color_black">
+                            Clinic Address:
+                        </span>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left breakword_css">
+                        <span class="title3">
+                            {{user.clinic.clinic_address1 | capitalize}}<br>
+                            {{user.clinic.clinic_address | capitalize}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 m_top_15">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                        <span class="title title2 color_black">
+                            Phone:
+                        </span>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title3">
+                            {{user.doctor_phone_number}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 m_top_15">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                        <span class="title title2 color_black">
+                            Education:
+                        </span>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title3">
+                            {{user.doctor_qualification_degree}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 m_top_15 hide">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                        <span class="title title2 color_black">
+                            Clinic Time:
+                        </span>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span ng-if="user.doctor_timing_start">
+                            <span class="title3"> {{ user.doctor_timing_start | timeTo24 }} to {{
+                                user.doctor_timing_end | timeTo24 }}</span><br>
+                            <span class="title3" ng-if="user.doctor_timing_start2 != '00:00:00'">{{
+                                user.doctor_timing_start2 | timeTo24 }} to {{ user.doctor_timing_end2 | timeTo24 }}</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-lg-10 col-md-10 col-sm-9 col-xs-12" ng-if="show_receptionist && receptionist != ''">
+        <div class="text-center">
+            <div class="profile_title profile_flex">
+                <div class="profile_image">
+                    <img ng-src="{{ (receptionist.user_photo_filepath) ? receptionist.user_photo_filepath : 'app/images/placeholder_user.png' }}"
+                        class="image_class" />
+                </div>
+                <div class="profile_content">
+                    <h2 class="text-capitalize m_top_0 m_bottom_0 title1">
+                        {{(receptionist.user_role==2) ? docPrefix : ''}} {{receptionist.user_first_name}} {{receptionist.user_last_name}}
+                    </h2>
+                    <!-- <h3 class="font_color_3 designation no_margin">{{ user.doctor_specialisation}}</h3> -->
+                </div>
+            </div>
+            <div class="profile_basic_detail_container col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_medium m_top_20">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title title2 color_black">
+                            Email:
+                        </span>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title3">
+                            {{ receptionist.user_email}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title title2 color_black">
+                            Phone:
+                        </span>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title3">
+                            {{ receptionist.user_phone_number}}
+                        </span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 m_top_15">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title title2 color_black">
+                            Address:
+                        </span>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 text-left breakword_css">
+                        <span class="title3">
+                            {{receptionist.address_name | capitalize}}<br/>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 m_top_15" ng-if="currentUser.user_id == user.user_id">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title title2 color_black">
+                            Locality:
+                        </span>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title3">
+                            {{receptionist.address_locality | capitalize}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 m_top_15" ng-if="currentUser.user_id == user.user_id">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title title2 color_black">
+                            Pincode :
+                        </span>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6 text-left">
+                        <span class="title3">
+                            {{receptionist.address_pincode}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

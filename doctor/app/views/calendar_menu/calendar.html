@@ -1,0 +1,572 @@
+<div class="col-lg-12 common_padding_all">
+    <div class="common_hr clearfix">
+        <div class="" ng-init="getClinics()" style="width: 16.66666667%;">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <!-- <span ng-if="current_clinic">{{current_clinic.clinic_name | capitalize}}</span> -->
+                    <span ng-if="current_clinic">All Clinic</span>
+                    <span><img src="app/images/down_arrow.png" /></span>
+                </button>
+                <ul class="dropdown-menu clinic_drop_down">             
+                    <!-- <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinic(clinic)"><a href="">{{clinic.clinic_name | capitalize}}</a></li> -->
+                    <li ng-repeat-start="clinic in clinic_data"><a href=""><span class="doctor_status" style="background-color: #{{clinic.clinic_color_code}};"></span> {{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul>
+            </div>
+        </div>
+        <div class="left-doctor_list">
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 hidden-sm hidden-xs no_padding doctor_listing">
+                <h4 class="m_top_26 page_title" style="margin-left: 5px;">Calendar</h4>
+                <div ng-if="checkPermission(BLOCK_CALENDAR_MODULE, VIEW)" class="block_calendar_container">
+                    <input type="button" class="new_common_buttoncalendar btn_blockcalendar" data-toggle="modal" data-target='#modal_blockcalendar' value="Block Calendar" ng-click="Model.addAppointmentOpen = false; editAppointmentOpen = false; getBlockCalendarSlot()" />    
+                </div>
+                <p class="doctor_title">Doctors</p>
+                <ul class="doctor_name_listing common_checbox">
+                    <li class="active font_color_1 background_color_3">
+                        <input type="checkbox" id="dr_chk_all" ng-model="select_all" ng-change="selectAllDoctor()"/>
+                        <label for="dr_chk_all">All Doctors </label>
+                        <span class="total_appointment">{{doctor_list[0].total_appointment}}</span>
+                        <!--<span  ng-if="currentUser.user_first_name" class="total_appointment">{{ doctor_list[0].total_appointment}}</span>-->
+                    </li>
+                    <li ng-repeat="(key, doctor) in doctor_list">
+                        <input type="checkbox" id="dr_chk_{{key}}" ng-model="doctor.is_checked" ng-change="changeCurrentDoctor(doctor)" />
+                        <label for="dr_chk_{{key}}">
+                            <div class="doctor_status" style="background-color: #{{ doctor.doctor_detail_color_code}};"></div>
+                            {{doctor.full_name | trimString : 15}}
+                        </label>
+                        <span class="doctor_total_appointment">{{ doctor.total_appointment}}</span>
+                    </li>
+                    <!--
+					<li ng-if="currentUser.user_first_name">
+						<input type="checkbox" id="dr_chk_1" />
+						<label for="dr_chk_1"><div class="doctor_status" style="background-color:red;"></div>Dr.{{ currentUser.user_first_name}} {{ currentUser.user_last_name}}</label>
+						<span class="doctor_total_appointment"></span>
+                    </li>
+					-->
+                </ul>
+            </div>
+            <div ui-calendar="uiConfig.calendar" class="calendar col-md-10 col-lg-10 col-sm-12 col-xs-12" ng-model="eventSources" calendar="myCalendar" id="dashboard-calendar"></div>
+			<div class="refresh_calendar fc">  
+                <div class="fc-button-group">
+					<button type="button" ng-click="changeView('agendaDay', myCalendar)" ng-class="currentCalView == 'agendaDay' ? 'fc-state-active' : ''" class="fc-agendaDay-button fc-button fc-state-default fc-corner-left">day</button>
+					<button type="button" ng-click="changeView('agendaWeek', myCalendar)" ng-class="currentCalView == 'agendaWeek' ? 'fc-state-active' : ''" class="fc-agendaWeek-button fc-button fc-state-default">week</button>
+					<button type="button" ng-click="changeView('month', myCalendar)" ng-class="currentCalView == 'month' ? 'fc-state-active' : ''" class="fc-month-button fc-button fc-state-default fc-corner-right">month</button>
+				</div>
+				<ul class="nav navbar-nav">
+                    <li class="navigation_li set_position_tooltip" ng-click="refreshCalendarByBtn()">
+                        <label class="bg_icon_images refresh_btn tooltip_custom_5"
+                                ng-mouseover="openToolTip('5')"
+                                data-placement="left" 
+                                data-toggle="tooltip"
+                                title="{{refresh_tooltip}}">
+                        </label>
+                    </li>
+                </ul>
+            </div>
+            <img data-toggle="tooltip"  title="{{add_appointment_tooltip}}" src="app/images/add_appoinment.png" class="add_new_appointment tooltip_custom_6" ng-mouseover="openToolTip('6')" ng-click="openAppointment()" ng-if="role[APPOINTMENT_MODULE][ADD] == 'on'" />
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div><!-- Main body data in this section--></div>
+    <!-- block calendar Modal -->
+    <div class="modal fade" id="modal_blockcalendar" role="dialog" data-backdrop="static" data-keyboard="false" ng-controller="CalenderController">
+        <div class="modal-dialog modal_dialog_width modal-lg block_calendar_width">
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">                        
+                    <h3 class="modal-title m_top_15">Block calendar</h3>                            
+                </div>
+                <div class="modal-body block_calendar_padding" ng-show="!isShowBlockCalForm">
+					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+							<table class="table table-responsive">
+								<thead class="row font_color_3 gotham_light common_bottom_border font_size_14 common_p_b">
+									<tr>
+										<th class="width_th_2">No.</th>
+										<th class="width_th_20">Type</th>
+										<th class="width_th_25">Start</th>
+										<th class="width_th_25">End</th>
+										<th class="width_th_17"></th>
+									</tr>
+								</thead>
+								<tbody class="common_p_b">
+									<tr ng-repeat="(key, blockCalenderDataList) in block_calender_data">
+										<td>{{key+1}}</td>
+										<td>{{blockCalenderDataList.calender_block_duration_type == 2 ? 'Block slot' : 'All days'}}</td>
+										<td>{{blockCalenderDataList.calender_block_duration_type == 2 ? blockCalenderDataList.calender_block_from_date + ' '+ (blockCalenderDataList.calender_block_start_time|timeFormat:currentUser.hour_format) : blockCalenderDataList.calender_block_from_date}}</td>
+										<td>{{blockCalenderDataList.calender_block_duration_type == 2 ? blockCalenderDataList.calender_block_from_date + ' '+ (blockCalenderDataList.calender_block_end_time|timeFormat:currentUser.hour_format) : blockCalenderDataList.calender_block_to_date}}</td>
+										<td class="text-right">
+											<a href="" ng-if="checkPermission(BLOCK_CALENDAR_MODULE, EDIT)" ng-click="editBlockCalenderSlot(blockCalenderDataList.calender_block_id)"><img src="app/images/edit_icon.png" alt="edit_icon" class="m_lr_10"></a>
+											<a href="" ng-if="checkPermission(BLOCK_CALENDAR_MODULE, DELETE)" ng-click="deleteBlockCalenderSlot(blockCalenderDataList.calender_block_id)"><img src="app/images/delete_icon.png" alt="delete_icon"></a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="row m_top_30">                                       
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+							<input ng-click="addNewInit()" type="reset" value="Add" name="Add New" class="btn btn_witdth new_common_button btn_properties float_right"/>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_right_0">
+							<input type="reset" value="Cancel" name="Cancel" class="btn btn_witdth new_common_button_1 cancel_patient btn_properties float_left" data-dismiss="modal" ng-click="init()" />
+						</div>
+                    </div>
+				</div>
+				<div class="modal-body block_calendar_padding" ng-show="isShowBlockCalForm">
+                    <form class="font_color_5 gotham_light placeholder_class" ng-submit="addUpdateBlockCalenderSlot()" novalidate="" name="blockCalenderForm">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                                <div class="form-group selection_bx">
+                                    <label for="doctor" class="f_label select_lable">Doctor </label>
+                                    <div class="position_relative">
+                                        <!--                                        <select name="doctor" id="doctor" class="form-control common_input m_top_20" ng-model="block.doctor_id" required="" >                                                                         
+                                                                                    <option value="{{currentUser.user_id}}" >Dr. {{ currentUser.user_first_name}} {{ currentUser.user_last_name}}</option>                                        
+                                                                                </select>                                                                -->
+                                        <input class="form-control" type="text" value="{{docPrefix}} {{currentUser.user_first_name}} {{currentUser.user_last_name}}" readonly="">
+                                        <!--<img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right"/>-->                                       
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                                <div class="form-group">
+                                    <label for="comment" class="f_label select_lable">Leave details </label>
+                                    <textarea rows="3" placeholder="Write here" id="comment" class="form-control common_input resize_none"  ng-maxlength="150" ng-model="block.comment" name="comment"></textarea>
+                                    <p ng-show="submitted && !blockCalenderForm.comment.$valid" class="error">Maximum 150 characters are allowed</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 m_bottom_12">
+                                <p class="common_radio_1 right float_right checkbox_width float_left color-black">
+                                    All days 
+                                    <input id="days" name="dummy_radio_button" type="radio" ng-model="block.type" class="no_margin" value="1" checked>
+                                    <label for="days" class="no_margin"></label>
+                                </p>
+                                <p class="common_radio_1 right float_right checkbox_width float_left color-black">
+                                    Block slot
+                                    <input id="slot" name="dummy_radio_button" type="radio" ng-model="block.type" class="no_margin" value="2">
+                                    <label for="slot" class="no_margin"></label>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row common_slot alldays" ng-if="block.type == 1">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                    <div class="form-group">
+                                        <label for="startdate" class="m_bottom_15 required">Duration</label><br>
+                                        <div class="input-group login_input dropup">
+                                            <input class="form-control common_input" datepicker-options="common_calender.datepickerOptions" id="startdate" placeholder="Start date" name="startdate" ng-required="block.type=='1'" type="text" datetime-picker="dd/MM/yyyy" enable-time="false" ng-model="block.start_date" is-open="startdate_open" readonly="" />
+											<i ng-click="startdate_open = true" class="fa fa-calendar fa-2x icon_image_right"></i>
+                                        </div>                                 
+                                        <p ng-show="submitted && blockCalenderForm.startdate.$error.required" class="error">* Required</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 padding_right_0">
+                                    <div class="form-group">     
+                                        <label for="enddate" class="m_bottom_15">&nbsp;</label><br>
+                                        <div class="input-group login_input dropup">
+                                            <input class="form-control common_input" datepicker-options="enddate_calender.datepickerOptions" id="enddate" placeholder="End date" name="enddate" ng-required="block.type=='1'"  type="text" datetime-picker="dd/MM/yyyy" enable-time="false" ng-model="block.end_date" is-open="enddate_open" readonly="" />
+                                            <i ng-click="enddate_open = true" class="fa fa-calendar fa-2x icon_image_right"></i>
+                                        </div>
+                                        <p ng-show="submitted && blockCalenderForm.enddate.$error.required" class="error">* Required</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row common_slot block_slot" ng-if="block.type == 2">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 m_bottom_12">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding">
+                                    <div class="form-group">
+                                        <label for="blockslot_date" class="required">Duration</label><br>
+                                        <div class="input-group dropup" style="display:block;">
+                                            <input style="margin-bottom:10px;" class="form-control common_input" datepicker-options="common_calender.datepickerOptions" id="blockslot_date" placeholder="Select date" name="blockslot_date" ng-required="block.type=='2'" type="text" datetime-picker="dd/MM/yyyy" enable-time="false" ng-model="block.blockslot_date" is-open="blockslot_date_open" readonly="" />
+                                            <i ng-click="blockslot_date_open = true" class="fa fa-calendar fa-2x icon_image_right"></i>
+                                        </div>
+                                        <p ng-show="submitted && blockCalenderForm.blockslot_date.$error.required" class="error">* Required</p>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                    <div class="form-group">
+                                        <div class="input-group login_input dropup">
+											<!-- <input type="text" class="form-control common_input" timepicker-options="common_calender.timepickerOptions" datetime-picker="HH:mm" is-open="start_time_open" enable-date="false" close-on-selection="true" name="start_time" ng-model="block.start_time" ng-required="block.type=='2'" placeholder="Start Time" readonly="" save-as="true" />
+                                            <img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right" ng-click="start_time_open = true"/> -->
+											
+											<input type="text" class="form-control login_input" timepicker-options="common_calender.timepickerOptions" datetime-picker="HH:mm" is-open="start_time_open" enable-date="false" close-on-selection="true" name="start_time"  button-bar="startPicker.buttonBar" ng-model="block.start_time" ng-required="block.type=='2'" placeholder="Start Time" readonly=""/>
+											<span class="input-group-btn login_input">
+												<button type="button" class="btn btn-default login_input clock_button" ng-click="start_time_open = true"><i class="fa fa-clock-o"></i></button>
+											</span>
+                                        </div>
+                                        <p ng-show="submitted && blockCalenderForm.start_time.$error.required" class="error">* Required</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_right_0">
+                                    <div class="form-group">
+                                        <div class="input-group login_input dropup" style="float:right;">
+                                            <!-- <input type="text" class="form-control common_input" timepicker-options="enddtimepicker_calender.timepickerOptions" datetime-picker="HH:mm" is-open="end_time_open" enable-date="false" close-on-selection="true" name="end_time" ng-model="block.end_time" ng-required="block.type=='2'" placeholder="End Time" readonly="" save-as="true"/>
+                                            <img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right" ng-click="end_time_open = true"/> -->
+											<input type="text" class="form-control login_input" timepicker-options="enddtimepicker_calender.timepickerOptions" datetime-picker="HH:mm" is-open="end_time_open" enable-date="false" close-on-selection="true" name="end_time"  button-bar="startPicker.buttonBar" ng-model="block.end_time" ng-required="block.type=='2'" placeholder="End Time" readonly="" />
+											<span class="input-group-btn login_input">
+												<button type="button" class="btn btn-default login_input clock_button" ng-click="end_time_open = true"><i class="fa fa-clock-o"></i></button>
+											</span>
+                                        </div>
+                                        <p ng-show="submitted && blockCalenderForm.end_time.$error.required" class="error">* Required</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row m_top_30">                                       
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                <input type="submit" value="{{block.calender_block_id != '' ? 'Update' : 'Save'}}" name="{{block.calender_block_id != '' ? 'Update' : 'Save'}}" class="btn btn_witdth new_common_button btn_properties float_right" />
+							</div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_right_0">
+                                <input type="reset" value="Cancel" name="Cancel" class="btn btn_witdth new_common_button_1 cancel_patient btn_properties float_left" data-dismiss="modal" ng-click="init()" />
+							</div>  
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal end -->
+    <!-- Add appointment start -->
+    <div class="inner_div_2 appointment-popout stuck" id="add_appointment" ng-if="Model.addAppointmentOpen" ng-init="patientSearch();getTimeslot()"> 
+        <form name="addAppointmentForm" ng-submit="addAppointment(addAppointmentForm)" novalidate>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="top_header background_color_1 white_color text-center gotham_medium">
+                        <h3 class="no_margin">Add Appointment</h3>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div ng-show="!isOTPScreenOn" class="col-lg-12 font_color_4 placeholder_class" style="padding: 25px 44px;">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label ng-show="!appointment.is_patient_from_gdb" for="search_patient" class="required">Search My patient database</label>
+                                <label ng-show="appointment.is_patient_from_gdb" for="search_patient" class="required">Search global patient database</label>
+                                <div class="common_checbox global_search">
+                                    <input type="checkbox" id="global_search" ng-model="appointment.is_patient_from_gdb" />
+                                    <label for="global_search">Global Search</label>
+                                </div>
+                                <div class="position_relative">
+                                    <input client-auto-complete dirtype='6' type="text" class="form-control common_input" id="search_patient" placeholder="Search First name/Last name/Mobile number/UID" name="patient" ng-keyup="patientSearch($event)" ng-model="appointment.patient_search" required=""/>
+                                    <img src="app/images/search_icon1.png" alt="dropdown" class="icon_image_right"/>
+                                </div>
+                                <input type="hidden" name="patient_id" ng-model="appointment.patient_id" required>
+                                <p ng-show="submitted && addAppointmentForm.patient.$error.required" class="error">{{patient_required}}</p>
+                                <p ng-show="submitted && (addAppointmentForm.patient_id.$error.required) && !addAppointmentForm.patient.$error.required" class="error">* This patient is not registred</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-class="appointment.patient_id > 0 ? 'visible' : 'not_visible'">
+                        <!--<div ng-class="appointment.patient_id > 0 ? 'visible' : 'visible'">-->
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label for="patient_fname" class="m_bottom_15 required">Patient Name</label><br>
+                                    <input type="text" class="form-control common_input" id="patient_fname" placeholder="Enter Patient Name " name="patient_fname" ng-model="appointment.patient_fname" readonly="">                                
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label for="p_mobile" class="m_bottom_15 required">Mobile Number</label><br>
+                                    <input type="text" class="form-control common_input" id="p_mobile" placeholder="Enter Mobile Number " name="p_mobile"  ng-model="appointment.patient_mob"  readonly="">                                
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label for="email" class="m_bottom_15">Email Address</label><br>
+                                    <input type="email" class="form-control common_input" id="email" placeholder="Enter Email Address" name="email" ng-model="appointment.patient_email" readonly="">                                
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">                                
+                                <div class="form-group selection_bx">
+                                    <label for="doctor_name" class="m_bottom_15 required">Doctor</label><br>
+                                    <input type="text" class="form-control common_input" name="doctor_name" placeholder="Enter Doctor name " id="doctor_id" ng-model="appointment.doctor_name" readonly="" required="" />
+                                    <p ng-show="submitted && addAppointmentForm.doctor_name.$error.required" class="error">* Required</p>
+                                    <!--
+                                    <select                                                                    
+                                        name='doctor_id'
+                                        id="doctor_id"
+                                        chosen
+                                        allow-single-deselect="true"
+                                        placeholder_text_single="'Select Doctor'"                                                                
+                                        ng-options="value.user_id as value.full_name for value in doctor_list"
+                                        style="width:100% !important;"                                                                                                                                
+                                        ng-model="appointment.doctor_id" 
+                                        ng-change="getTimeslot()"  required>
+                                    </select>
+                                    <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                    -->
+                                </div>
+                                <!-- <p ng-show="submitted && addAppointmentForm.doctor_id.$error.required" class="error">{{doctor_required}}</p> -->
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="date" class="m_bottom_15 required">Select Clinic</label><br>
+                                    <div class="position_relative">
+                                        <select
+                                            name='clinic_id'
+                                            placeholder="'Select Clinic'"
+                                            ng-options="value.clinic_id as value.clinic_name for value in clinic_data"
+                                            style="width:100% !important;" ng-model="appointment.clinic_id" 
+                                            ng-change="getTimeslot()"
+                                            class="common_input form-control required" required >
+                                            <option value="">Select Clinic</option>                                                                 
+                                        </select>
+                                    </div>
+                                    <p ng-show="(submitted) && addAppointmentForm.clinic_id.$error.required" class="error" >* Please Select Clinic</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label for="date" class="m_bottom_15 required">Scheduled On</label><br>
+                                    <p class="input-group login_input dropup">
+                                        <input type="text" class="form-control login_input"  datetime-picker="dd/MM/yyyy"  datepicker-options="appointment_picker.datepickerOptions" enable-time="false" ng-model="appointment.appointment_date" is-open="date_of_birth.open"  required=""  placeholder="DD/MM/YYYY" name="appointment_date"  ui-mask="99/99/9999" ng-change="getTimeslot()" />
+                                        <span class="input-group-btn login_input">
+                                            <button type="button" class="btn btn-default login_input" ng-click="date_of_birth.open = true"><i class="fa fa-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                    <p ng-show="(submitted) && addAppointmentForm.appointment_date.$error.required" class="error" >{{date_required}}</p>
+                                    <p ng-show="(submitted) && appointment.appointment_date == undefined" class="error">{{invalid_date}}</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="m_bottom_15 required">Appointment Type </label>
+                                    <!-- <input type="text" id="appointment_type" class="form-control common_input" name="apppointment_type" value="Doctor Visit" readonly=""  /> -->
+                                    <select                                                                    
+                                        name='appointment_type'
+                                        id="appointment_type"
+                                        placeholder="'Select Appointment Type'"
+                                         ng-options="value.id as value.name for value in APPOINTMENT_TYPE | filterInArray:appointmentTypeArr:'id'"
+                                        style="width:100% !important;"
+                                        ng-model="appointment.appointment_type" 
+                                        ng-change="getTimeslot()" 
+                                        class="common_input form-control  required"
+                                        required> <!-- ng-change="getTimeslot()"  -->
+                                    </select>
+                                </div>
+                                <p ng-show="appointmentTypeArr.length > 0 && (submitted) && addAppointmentForm.appointment_type.$error.required" class="error" >{{appointment_type_required}}</p>
+                                <p ng-show="appointmentTypeArr.length == 0" class="error" >Please check your setting</p>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label class="required m_bottom_15">To</label>
+                                    <div class="position_relative">
+                                        <select
+                                            name='from_time' 
+                                            id="from_time" 
+                                            placeholder="'Select time'" 
+											no_results_text = "'Modify Calendar Setting'"  
+                                            ng-options="value as value.start_time_label for value in other.availibility_slots"
+                                            style="width:100% !important;" ng-model="appointment.from_time" class="common_input form-control required" required >
+                                            <option value="">Select time</option>                                                                 
+                                        </select>
+                                    </div>
+                                    <p ng-show="(submitted) && addAppointmentForm.from_time.$error.required" class="error" >{{appointment_time_required}}</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <label for="duration" class="m_bottom_15">For</label><br>                                                                                             
+                                    <input type="text" class="form-control common_input"  readonly="" value="{{appointment.duration | minutesToHourText}}"/>
+                                    <input type="hidden" class="form-control" name="duration" ng-model="appointment.duration" required="" placeholder="Duration" readonly=""/>
+                                </div>
+                                <p ng-show="(submitted) && addAppointmentForm.duration.$error.required" class="error" >* Required.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>       
+                    <div class="row"> 
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn addAppointmentBtn new_common_button btn_properties float_right"/>                                 
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties" ng-click="addAppointmentClose()" />
+                        </div>  
+                    </div>
+                </div>
+                <div ng-show="isOTPScreenOn" class="col-lg-12 font_color_4 placeholder_class" style="padding: 25px 44px;">
+                    <div class="form-group">
+                        <div class="forgot_password_label" >Please enter the OTP received by patient</div>
+                        <input type="text" name="send_appointment_book_otp" id="send_appointment_book_otp" tabindex="1" class="form-control login_input" placeholder="Enter OTP" value="" ng-required="isOTPScreenOn" ng-model="appointment.send_appointment_book_otp">
+                        <p ng-show="(addAppointmentForm.send_appointment_book_otp.$touched || submitted) && addAppointmentForm.send_appointment_book_otp.$error.required" class="error" style="width: 450px;
+                           margin: auto;">{{otp_required}}</p>
+                    </div>
+                    <div class="form-group m_top_30 text-center">
+                        <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>
+                    </div>
+                    <div class="form-group m_top_15">
+                        <div class="login_again font_color_2 cursor_pointer title2" ng-click="backToAppointmentScreen()">Back</div>
+                        <div class="forgot_password_label title1" >Didn't received the OTP?</div>
+                        <div class="otp_again margin_0_auto font_color_2 cursor_pointer " ng-click="resend_appointment_book_otp()" >resend</div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                            <input type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties width_30_per" ng-click="addAppointmentClose()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- Add appointment end -->
+    <!-- edit appointment start-->
+    <div class="inner_div_2" id="edit_appointment" ng-if="editAppointmentOpen">
+        <form name="editAppointmentForm" ng-submit="editAppointment(editAppointmentForm)" novalidate>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="top_header background_color_1 white_color text-center gotham_medium">
+                        <h3 class="no_margin">Edit appointment</h3>                                    
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-lg-12 font_color_4 placeholder_class" style="padding: 25px 44px;">
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group">
+                                <label for="patient_fname" class="m_bottom_15 required">Patient name</label><br>
+                                <input type="text" class="form-control common_input" id="patient_fname" placeholder="Enter patient name " name="patient_fname" required="required" ng-model="appointment.patient_fname" readonly="">
+                                <p ng-show="submitted && editAppointmentForm.patient_fname.$error.required" class="error">{{patient_required}}</p>
+                            </div>  
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group">
+                                <label for="p_mobile" class="m_bottom_15 required">Mobile number</label><br>
+                                <input type="text" class="form-control common_input" id="p_mobile" placeholder="Enter mobile number " name="p_mobile" required="required" ng-model="appointment.patient_mob"  readonly="">
+                                <p ng-show="submitted && editAppointmentForm.p_mobile.$error.required" class="error">* Required</p>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group">
+                                <label for="email" class="m_bottom_15">Email address</label><br>
+                                <input type="email" class="form-control common_input" id="email" placeholder="Enter email address" name="email" ng-model="appointment.patient_email" readonly="" />
+                                <p ng-show="submitted && editAppointmentForm.email.$error.email" class="error">* Invalid Email</p>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group selection_bx">
+                                <label for="doctor_name" class="m_bottom_15">Doctor</label><br>
+                                <input type="text" class="form-control common_input" id="p_mobile" placeholder="Enter mobile number "   ng-model="appointment.doctor_name" readonly="">                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="date" class="m_bottom_15 required">Select Clinic</label><br>
+                                <div class="position_relative">
+                                    <select
+                                        name='clinic_id'
+                                        placeholder="'Select Clinic'"
+                                        ng-options="value.clinic_id as value.clinic_name for value in clinic_data"
+                                        style="width:100% !important;" ng-model="appointment.clinic_id" 
+                                        ng-change="getTimeslot()"
+                                        class="common_input form-control required" required >
+                                        <option value="">Select Clinic</option>                                                                 
+                                    </select>
+                                </div>
+                                <p ng-show="(submitted) && editAppointmentForm.clinic_id.$error.required" class="error" >* Please Select Clinic</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group">
+                                <label for="date" class="m_bottom_15 required">Scheduled On</label><br>
+                                <p class="input-group login_input">
+                                    <input type="text" class="form-control login_input"  
+                                           datetime-picker="dd/MM/yyyy"
+                                           datepicker-options="appointment_picker.datepickerOptions"
+                                           enable-time="false" 
+                                           ng-model="appointment.appointment_date" is-open="date_of_birth.open"  required=""  placeholder="DD/MM/YYYY" name="appointment_date" ui-mask="99/99/9999" ng-change="getTimeslot()" />
+                                    <span class="input-group-btn login_input">
+                                        <button type="button" class="btn btn-default login_input" ng-click="date_of_birth.open = true"><i class="fa fa-calendar"></i></button>
+                                    </span>
+                                </p>
+                                <p ng-show="(submitted) && editAppointmentForm.appointment_date.$error.required" class="error" >{{date_required}}</p>
+                                <p ng-show="(submitted) && appointment.appointment_date == undefined" class="error">{{invalid_date}}</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group">
+                                <label class="m_bottom_15 required">Appointment Type </label>
+                                <select                                                                    
+                                    name='appointment_type'
+                                    id="appointment_type"
+                                    placeholder="'Select Appointment Type'"                                                                
+                                    ng-options="value.id as value.name for value in APPOINTMENT_TYPE | filterInArray:appointmentTypeArr:'id'"
+                                    style="width:100% !important;padding: 8px;"                                                                                                                                
+                                    ng-model="appointment.appointment_type" 
+                                    ng-change="getTimeslot()" 
+                                    class="common_input form-control  required"
+                                    required=""> <!-- ng-change="getTimeslot()"  -->
+                                </select>
+                            </div>
+                            <p ng-show="appointmentTypeArr.length > 0 && (submitted) && editAppointmentForm.appointment_type.$error.required" class="error" >{{appointment_type_required}}</p>
+                            <p ng-show="appointmentTypeArr.length == 0" class="error" >Please check your setting</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group">
+                                <label class="required m_bottom_15">To</label>
+                                <div class="position_relative">
+                                    <select
+                                        name='from_time'
+                                        id="from_time"
+                                        placeholder="'Select time'"                                                                
+                                        ng-options="value as value.start_time_label for value in other.availibility_slots"
+                                        style="width:100% !important;"                                                                                                                                
+                                        ng-model="appointment.from_time"                                       
+                                        class="common_input form-control  required" required>
+
+                                        <option value="">Select time</option>                                                                 
+                                    </select>
+                                </div>
+                                <p ng-show="(submitted) && editAppointmentForm.from_time.$error.required" class="error" >{{appointment_time_required}}</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="form-group">
+                                <label for="duration" class="m_bottom_15">For</label><br>                                                                                             
+                                <input type="text" class="form-control common_input"  readonly="" value="{{ appointment.duration|  minutesToHourText}}"/>
+                                <input type="hidden" class="form-control" name="duration" ng-model="appointment.duration" required="" placeholder="Duration" readonly=""/>
+                                <p ng-show="(submitted) && editAppointmentForm.duration.$error.required" class="error" >* Required.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>       
+                    <div class="row"> 
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties" ng-click="addAppointmentClose()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- edit appointment end -->
+<div class="overlay-white" ng-if="calOverlayLoader"><div class="box-design-white title1" ng-bind-html="calendar_startup_load_msg"></div></div>
+</div>

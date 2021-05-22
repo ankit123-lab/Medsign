@@ -1,0 +1,214 @@
+<div class="">
+    <div class="common_hr clearfix  ">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{app.all_clinic_label}}</span>
+                </button>
+                <!-- <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForInvoiceSummary(clinic)" ><a href="" >{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="second_width common_heading_height ">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
+                <h3 class="m_top_22 page_title pull-left">Practice Reports | Invoices Summary</h3>
+                <ul class="pull-right m_bottom_0 m_top_10">
+                    <li class="navigation_li">
+                        <a class="btnfc reports-fullscreen-icon" href="javascript:void(0);" onclick="setFullScreenMode('reports-fullscreen-mode',this);">
+                            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>               
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div> 
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-if="current_clinic">
+        <div ng-include="'app/views/report/report_sidebar.html?'+getVer(2)"></div>
+        <div ng-if="checkPermission(DOCTOR_WEB_REPORTS, VIEW)" class="col-lg-10 col-lg-10 col-md-10 col-sm-10 col-xs-12" ng-init="getClinicDetailForEdit(current_clinic.clinic_id,true)">
+            <div class="row" ng-init="getInvoiceSummary(1,1)">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 no_padding">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <input class="form-control common_input ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" placeholder="Search" name="search" size="35" ng-model="report_filters.search_str" required="" maxlength="100">
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <p class="date-wrap input-group login_input">
+                            <input type="text"
+                                   class="form-control login_input"  
+                                   datetime-picker="dd/MM/yyyy"
+                                   datepicker-options="from_date.datepickerOptions"
+                                   enable-time="false"
+                                   ng-model="report_filters.from_date" 
+                                   is-open="from_date.open"
+                                   placeholder="From Date"
+                                   name="from_date"  
+                                   readonly=""
+                                   />
+                            <span class="input-group-btn login_input">
+                                <button type="button" class="btn btn-default login_input" 
+                                        ng-click="from_date.open = true"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <p class="date-wrap input-group login_input">
+                            <input type="text"
+                                   class="form-control login_input"  
+                                   datetime-picker="dd/MM/yyyy"
+                                   datepicker-options="to_date.datepickerOptions"
+                                   enable-time="false"
+                                   ng-model="report_filters.to_date" 
+                                   is-open="to_date.open"
+                                   placeholder="To Date"
+                                   name="to_date"  
+                                   readonly=""
+                                   />
+                            <span class="input-group-btn login_input">
+                                <button type="button" class="btn btn-default login_input" 
+                                        ng-click="to_date.open = true"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <select name='search_clinic_id' id="search_clinic_id" chosen multiple="" allow-single-deselect="true" placeholder_text_multiple="'Clinic'" ng-options="value.clinic_id as value.clinic_name for value in clinic_data" style="width:100% !important;" ng-model="report_filters.search_clinic_id" class="common_input form-control"><option value=""></option></select>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 no_padding">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 custom_add_doctor_btn">
+                        <div class="show-text col-lg-1">Show</div>
+                        <div class="row-drowp col-lg-1 form-group selection_bx m_bottom_0">
+                             <select tabindex="1" name='duration' id="duration" chosen allow-single-deselect="true" ng-model="report_filters.per_page" ng-options="duration.value as duration.value for duration in filterRows" ng-change="getInvoiceSummary(1)">
+                            </select>
+                            <span class="row-drowp-icon"><i class="fa fa-angle-down fa-2x"></i></span>
+                        </div>
+                        <div class="show-text col-lg-1">Entries</div>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12 custom_add_doctor_btn align-right">
+                        <input type="button" value="Filter" name="Filter" class="filter-btn filter-active" ng-click="getInvoiceSummary(1)">
+                        <input type="button" value="Reset" name="Reset" class="filter-btn" ng-click="invoiceSummaryFilterReset()">
+                        <input type="button" ng-click="invoiceSummaryExport()" value="Export" name="export" class="filter-btn filter-active">
+                    </div>
+                </div>
+                
+                <div ng-if="invoice_summary.length > 0" class="table-responsive col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10">
+                    <div class="panel-group" style="margin-bottom: 0;">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a class="panel-link" href="javascript:void(0);" data-toggle="collapse" data-target="#collapse1">Amount Summary</a>
+                            </h4>
+                          </div>
+                          <div id="collapse1" class="panel-collapse collapse in">
+                            <table class="table-responsive table min_width_767">
+                                <tbody class="font_size_14 common_p_b report_tb_border">
+                                    <tr>
+                                        <td><b>Total: <i class="fa fa-inr" aria-hidden="true"></i></b> {{invoice_sum.grand_total | number:'2'}}</td>
+                                        <td><b>Discount: <i class="fa fa-inr" aria-hidden="true"></i></b> {{invoice_sum.discount | number:'2'}}</td>
+                                        <td><b>Tax: <i class="fa fa-inr" aria-hidden="true"></i></b> {{invoice_sum.billing_tax | number:'2'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Payable Amount: <i class="fa fa-inr" aria-hidden="true"></i></b> {{invoice_sum.total_payable | number:'2'}}</td>
+                                        <td><b>Advance Pay: <i class="fa fa-inr" aria-hidden="true"></i></b> {{invoice_sum.advance_amount | number:'2'}}</td>
+                                        <td><b>Paid Amount: <i class="fa fa-inr" aria-hidden="true"></i></b> {{invoice_sum.paid_amount | number:'2'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="invoice_summary.length > 0" class="table-responsive col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10">
+                <table class="table min_width_767 table-hover">
+                    <thead class="row font_color_3 gotham_light report_tb_border font_size_18 common_p_b">
+                        <tr>                                
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Mobile No</th>
+                            <th class="text-center">Invoice No</th>
+                            <th class="text-center">INV Date</th>
+                            <th class="text-center">Total</th>
+                            <th class="text-center">Discount</th>
+                            <th class="text-center">Tax</th>
+                            <th class="text-center">Payable Amount</th>
+                            <th class="text-center">Advance Pay</th>
+                            <th class="text-center">Paid Amount</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font_size_14 common_p_b report_tb_border">
+                        <tr ng-repeat="invoiceSummaryObj in invoice_summary">
+                            <td>{{invoiceSummaryObj.user_name}}</td>
+                            <td class="text-center">{{invoiceSummaryObj.user_phone_number}}</td>
+                            <td>{{invoiceSummaryObj.invoice_number}}</td>
+                            <td class="text-center">{{invoiceSummaryObj.billing_invoice_date}}</td>
+                            <td class="text-center">{{invoiceSummaryObj.billing_grand_total | number:'2'}}</td>
+                            <td class="text-center">{{invoiceSummaryObj.billing_discount | number:'2'}}</td>
+                            <td class="text-center">{{invoiceSummaryObj.billing_tax | number:'2'}}</td>
+                            <td class="text-center">{{invoiceSummaryObj.billing_total_payable | number:'2'}}</td>
+                            <td class="text-center">
+                                <span ng-if="invoiceSummaryObj.billing_advance_amount > 0">{{invoiceSummaryObj.billing_advance_amount | number:'2'}}</span>
+                            </td>
+                            <td class="text-center">{{invoiceSummaryObj.billing_paid_amount | number:'2'}}</td>
+                            <td class="text-center"><a href="javascript:void(0);" ng-click="viewInvoice(invoiceSummaryObj)"><i class="fa fa-eye icon-color"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" align="right"><b>Total</b></td>
+                            <td class="text-center"><b>{{footer_sum.grand_total | number:'2'}}</b></td>
+                            <td class="text-center"><b>{{footer_sum.discount | number:'2'}}</b></td>
+                            <td class="text-center"><b>{{footer_sum.billing_tax | number:'2'}}</b></td>
+                            <td class="text-center"><b>{{footer_sum.total_payable | number:'2'}}</b></td>
+                            <td class="text-center"><b>{{footer_sum.advance_amount | number:'2'}}</b></td>
+                            <td class="text-center"><b>{{footer_sum.paid_amount | number:'2'}}</b></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div ng-if="invoice_summary.length == 0" class="col-lg-12 unauthorised-css text-center" ng-bind-html="no_data_found"></div>
+            </div>
+            <div ng-if="invoice_summary.length > 0" class="row pagi-wrap">
+                <div class="col-lg-3 totals-rows">
+                    Showing {{((currentPage-1)*report_filters.per_page) + 1}} to {{last_rows}} of {{total_rows}} entries
+                </div>
+                <div class="pagination-wrap col-lg-9">
+                    <a href="" ng-click="getNextPrev('prev',5)"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                    <input ng-repeat="n in [] | range:total_page" type="button" ng-value="n" ng-click="getInvoiceSummary(n)" ng-disabled="currentPage == n" ng-class="currentPage == n ? 'page-active' : ''" class="pagi-btn">
+                    <a href="" ng-click="getNextPrev('next',5)"><img alt="previous" src="app/images/next_arrow.png"></a>
+                </div>
+            </div>
+            <div class="clearfix"></div>           
+        </div>
+        <div ng-if="!checkPermission(DOCTOR_WEB_REPORTS, VIEW)" class="col-lg-10 col-lg-10 col-md-10 col-sm-10 col-xs-12 text-center gotham_book font_size_20 m_top_20">
+            <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Start invoice view Modal -->
+<div class="modal fade" id="modal_invoice_view" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg appointment_paients">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <button type="button" class="close" data-dismiss="modal">X</button>
+                <h3 class="modal-title modaltitle_m">Invoice</h3>
+            </div>
+            <div class="modal-body">        
+                <div class="row">
+                    <div class="invoice-padding col-lg-12 col-lg-12 col-md-12 col-sm-10 col-xs-12">
+                        <iframe width="100%" height="700" ng-src="{{invoice_url}}"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+<style type="text/css">
+    .icon-color {
+        color: #30aca5;
+    }
+</style>

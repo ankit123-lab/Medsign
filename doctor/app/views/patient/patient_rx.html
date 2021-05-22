@@ -1,0 +1,634 @@
+<link rel="stylesheet" ng-href="app/css/brandcatalog.css?{{getVer(3)}}" />
+<style>
+	#addPrescriptionForm .ui-autocomplete { display:block !important; }
+	/* Hide the helper */
+	#addPrescriptionForm .ui-helper-hidden-accessible { display:none !important; }
+</style>
+<div class="tab-pane fade in comman_css_brand" id="rx">          
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_light font_color_5" 
+         ng-if="(addedBrandList.length <= 0 || common.isRXFormOpen) && checkPermission(RX_MODULE, ADD)" ng-class="current_appointment_date_obj.is_editable ? '' : 'disabled-wrap'">
+         <div ng-if="!current_appointment_date_obj.is_editable" class="overlap-wrap" style="width: 99%;left: 4px;"></div>
+        <form name="addPrescriptionForm" id="addPrescriptionForm" novalidate=""
+              ng-submit="addPrescription(addPrescriptionForm)">
+            <div class="row m_bottom_10 common_hr main-div-rx" ng-repeat="(key, brand) in brandList track by $index" ng-init="innerDrugTemplateFormSubForm='innerDrugTemplateForm'+$index">
+                <ng-form name="{{innerDrugTemplateFormSubForm}}">
+					<div class="col-lg-12 col-md-12 gotham_book">
+                        <div ng-if="brand.similar_brand_id != undefined && brand.is_show_suggestion_brand_listing == true">
+                            <div style="padding-left:5px;padding-right:5px;" 
+                                ng-repeat="(suggestion_key, suggestion) in suggestion_brand_result track by $index" 
+                                class="form-control common_input text-center pull-left suggestion_txt cursor_pointer"  
+                                ng-click="setClientData(suggestion, 7, key, '', true)" ng-attr-title="{{suggestion.drug_name_with_unit}}" 
+                                >{{suggestion.drug_name | trimString : 14}}</div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div ng-class="brand.similar_brand_id!='' && brand.drug_drug_generic_id == '' ? 'col-lg-11 col-md-11 col-sm-11 col-xs-11' : 'col-lg-6 col-md-6 col-sm-6 col-xs-6'" class="">
+                        <div class="form-group">
+                            <label class="" ng-if="suggestion_brand_result.length == 0">Brand & strength</label>                           
+                            <input
+                                client-auto-complete key="{{key}}" 
+                                dirtype='7' 
+                                type="text" 
+                                class="form-control common_input" 
+                                name="similarbrand" 
+                                id="similarbrand{{key}}" 
+                                ng-keyup="searchSimilarBrand(key)" 
+                                placeholder="Search Brand Name" 
+                                ng-model="brand.similar_brand" 
+                                ng-disabled="brand.is_edit || brand.similar_brand_id || (brand.drug_name_with_unit!='' && brand.drug_name_with_unit!=undefined)" 
+								/>
+                            <div class="pull-right  right_icon cursor_pointer" 
+                                 ng-if="!brand.similar_brand_id && brand.similar_brand && brand.drug_name_with_unit==''" 
+                                 ng-click="addCustomDrug(key);" style="margin-top: -32px;">
+                                <i class="glyphicon glyphicon-ok  tooltip_custom" 
+                                   data-toggle="tooltip" 
+                                   title="If Brand not found, click on icon to add" 
+                                   data-placement="top" 
+                                   class="glyphicon glyphicon-remove tooltip_custom" 
+                                   id="addCustomBrandTooltip" 
+                                   ></i>
+                            </div>
+							<input type="hidden" name="brand_id" ng-model="brand.similar_brand_id" />
+                            <p ng-show="(submitted) && this[innerDrugTemplateFormSubForm].similarbrand.$error.required" class="error" >* Required.</p>
+                            <p ng-show="(submitted) && (this[innerDrugTemplateFormSubForm].brand_id.$error.required && !this[innerDrugTemplateFormSubForm].similarbrand.$error.required)" class="error" >Invalid drug.</p>                         
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-if="!brand.isOpenWholeForm">
+                        <div class="form-group">
+                            <label class="" ng-if="suggestion_brand_result.length == 0">Generic</label> 
+                            <label class="generic-reset" ng-if="suggestion_brand_result.length == 0"><i class="fa fa-times cursor_pointer" ng-click="clearGeneric(key)" title="Reset" aria-hidden="true"></i>&nbsp;Reset</label>
+                            <input
+                                client-auto-complete key="{{key}}" 
+                                dirtype='18' 
+                                type="text" 
+                                class="form-control common_input" 
+                                name="generic_search" 
+                                name="generic_search{{key}}" 
+                                ng-keyup="searchSimilarGeneric(key)"
+                                placeholder="Search Generic Name"
+                                ng-model="brand.similar_generic" 
+                                />
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" ng-if="brand.is_new_drug">
+                        <div class="form-group">
+                            <label class="" ng-if="suggestion_brand_result.length == 0">Dosage Form</label> 
+                            <div class="position_relative">
+                                <select
+                                    name='brand_type'
+                                    chosen                                  
+                                    allow-single-deselect="true"
+                                    placeholder_text_single="'Select Dosage Form'"         
+                                    ng-options="value.drug_unit_id as value.drug_unit_medicine_type for value in brandTypeList" 
+                                    ng-model="brand.drug_unit_id"           
+                                    class="common_input form-control" required="" 
+                                    ng-change="changeBrandType(key)">
+                                    <option value=""></option>
+                                </select>
+                                <span>
+                                    <img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right" />
+                                </span>
+                            </div>
+                            <p ng-show="(submitted) && this[innerDrugTemplateFormSubForm].brand_type.$error.required" class="error" >{{brand_type_required}}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" ng-if="brand.drug_drug_generic_id != '' && brand.isOpenWholeForm">
+                        <div class="form-group">
+                            <label class="" ng-if="suggestion_brand_result.length == 0">Generic Name</label>                      
+                            <div class="generic_div">
+								<span ng-repeat="addedGeneric in brand.drug_drug_generic_id">
+									<span ng-click="getGenericDetails(addedGeneric)" class="custom_generic_class cursor_pointer gotham_book">{{(brandGenericList|filter:{drug_generic_id:addedGeneric})[0].drug_generic_title}}</span>
+								</span>
+								<!-- <span ng-repeat="generic in brandGenericList">
+                                    <span ng-repeat="addedGeneric in brand.drug_drug_generic_id">
+                                        <span ng-if="addedGeneric == generic.drug_generic_id" ng-click="getGenericDetails(generic.drug_generic_id)" class="custom_generic_class cursor_pointer gotham_book">{{generic.drug_generic_title}}</span>
+                                    </span>
+                                </span> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" ng-if="brand.isOpenWholeForm">
+                        <div><a href="" ng-click="removeLastBrandObj(key)"><img src="app/images/delete_icon.png" alt="delete" class="img-responsive rx_delete_img" /></a></div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-6 col-md-12 col-sm-3 col-xs-3 no_padding" ng-if="brand.isOpenWholeForm">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-3 required">Unit</label>
+                            <label class="col-lg-9 col-md-9 required">Frequency</label>
+                            <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                <input ng-if="brand.drug_unit_name!='As Directed' && brand.drug_unit_name!='Tablets' && brand.drug_unit_name!='IU'" type="text" 
+                                       class="form-control common_input" 
+                                       placeholder="00" 
+                                       value="" 
+                                       ng-model="brand.dosage" 
+                                       ng-change="prescriptionOnchangeFlag()" 
+                                       required="" 
+                                       name="dosage" 
+                                       maxlength="3"
+                                       ng-pattern="/^[0-9\.]{1,3}?$/" 
+                                       />
+                                <input ng-if="brand.drug_unit_name=='IU' && !brand.defaultFreqOpen" type="text" 
+                                       class="form-control common_input" 
+                                       placeholder="00" 
+                                       value="" 
+                                       ng-model="brand.dosage" 
+                                       ng-change="prescriptionOnchangeFlag()" 
+                                       required="" 
+                                       maxlength="3"
+                                       name="dosage" 
+                                       ng-pattern="/^[1-9][0-9]*$/" 
+                                       />
+                                <select ng-if="(brand.drug_unit_name=='Tablets') && !brand.defaultFreqOpen"
+                                    name="dosage" 
+                                    class="dosage_dropdown" 
+                                    ng-model="brand.dosage" 
+                                    required="" 
+                                    ng-change="changeCustomValue(key);prescriptionOnchangeFlag();" 
+                                    ng-pattern="/^[^0]*$/"
+                                    ng-options="value.text as value.text for value in DosageDropdown">
+                                </select>
+                                <label ng-if="brand.drug_unit_name!='As Directed'" class="font_color_1 title3" ng-class="((brand.drug_unit_name=='Tablets' || brand.drug_unit_name =='IU') && brand.defaultFreqOpen==true) ? 'm_top_15 p_left_15' : ''">
+                                    {{((brand.drug_unit_name=='Tablets' || brand.drug_unit_name =='IU') && brand.defaultFreqOpen) ? 'N/A' : brand.drug_unit_name}}
+                                </label>
+                                <label ng-if="brand.drug_unit_name=='As Directed'" class="font_color_1 title3 m_top_15">{{brand.drug_unit_name}}</label>
+                                <p class="error" ng-show="submitted && this[innerDrugTemplateFormSubForm].dosage.$error.required" >* Required</p>
+                                <p class="error" ng-show="submitted && this[innerDrugTemplateFormSubForm].dosage.$error.pattern" >Invalid Dosage</p>
+                            </div>
+                            <div class="form-group col-lg-9 col-md-9 col-sm-3 col-xs-3">
+                                <div class="position_relative" ng-show="!brand.defaultFreqOpen">
+                                    <select
+                                        name='drug_frequency_id' 
+                                        id="drug_frequency_id" 
+                                        chosen 
+										allow-single-deselect="true"
+                                        placeholder_text_single="'Select frequency'" 
+                                        ng-options="value.drug_frequency_id as value.drug_frequency_name for value in brandFreqList" 
+                                        ng-model="brand.drug_frequency_id" 
+                                        class="common_input form-control" required="" ng-change="changeCustomValue(key);prescriptionOnchangeFlag();" >
+                                        <option value=""></option>
+                                    </select>
+                                    <span>
+                                        <img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right"/>
+                                    </span>
+                                </div>
+                                <div ng-if="brand.defaultFreqOpen">
+                                    <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3 m_bottom_6 no_padding_left">
+                                        <input ng-if="brand.drug_unit_name!='Tablets' && brand.drug_unit_name!='IU'" 
+                                            type="text"
+                                            name="default1"
+                                            class="form-control common_input" 
+                                            placeholder="00"
+                                            value="" ng-model="brand.default1"
+                                            ng-change="prescriptionOnchangeFlag()"
+                                            readonly="" 
+                                            required=""
+                                            ng-pattern="/^[0-9]{1,3}?$/" />
+                                        <input ng-if="brand.drug_unit_name=='IU' && (brand.default1 !='0' || brand.default2 !='0' || brand.default3 !='0')" 
+                                            type="text"
+                                            name="default1"
+                                            class="form-control common_input" 
+                                            placeholder="00"
+                                            value="" ng-model="brand.default1" 
+                                            ng-change="prescriptionOnchangeFlag()"
+                                            ng-keyup="setFrequency(key)"  
+                                            required=""
+                                            ng-pattern="/^[0-9]{1,3}?$/" /> 
+                                        <input ng-if="brand.drug_unit_name=='IU' && (brand.default1 =='0' && brand.default2 =='0' && brand.default3 =='0')" 
+                                            type="text"
+                                            name="default1"
+                                            class="form-control common_input" 
+                                            placeholder="00"
+                                            value="" ng-model="brand.default1" 
+                                            ng-change="prescriptionOnchangeFlag()"
+                                            ng-keyup="setFrequency(key)"  
+                                            required=""
+                                            ng-pattern="/^[1-9][0-9]{1,3}?$/" /> 
+                                        <select ng-if="(brand.drug_unit_name=='Tablets') && (brand.default1 =='0' && brand.default2 =='0' && brand.default3 =='0')"
+                                            name="default1" 
+                                            class="dosage_dropdown" 
+                                            ng-model="brand.default1" 
+                                            required=""
+                                            ng-pattern="/^[^0]*$/" 
+                                            ng-change="setFrequency(key);prescriptionOnchangeFlag();" 
+                                            ng-options="value.text as value.text for value in DosageDropdown">
+                                        </select> 
+                                        <select ng-if="(brand.drug_unit_name=='Tablets') && (brand.default1 !='0' || brand.default2 !='0' || brand.default3 !='0')"
+                                            name="default1" 
+                                            class="dosage_dropdown" 
+                                            ng-model="brand.default1" 
+                                            required=""
+                                            ng-pattern="" 
+                                            ng-change="setFrequency(key);prescriptionOnchangeFlag();" 
+                                            ng-options="value.text as value.text for value in DosageDropdown">
+                                        </select>      
+                                        <p class="error" ng-show="submitted && brand.defaultFreqOpen && this[innerDrugTemplateFormSubForm].default1.$error.required" >* Required</p>
+                                    </div>
+                                    <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3 m_bottom_6 p_default2">
+                                        <input ng-if="brand.drug_unit_name!='Tablets'"
+                                            type="text"
+                                            name="default2" 
+                                            class="form-control common_input" 
+                                            placeholder="00"
+                                            value="" ng-model="brand.default2"
+                                            ng-change="prescriptionOnchangeFlag()"
+                                            ng-keyup="setFrequency(key)"
+                                            ng-readonly="brand.drug_unit_name!='IU'" 
+                                            required="" 
+                                            ng-pattern="/^[0-9]{1,3}?$/" />  
+                                        <select ng-if="brand.drug_unit_name=='Tablets'"
+                                            name="default2" 
+                                            class="dosage_dropdown" 
+                                            ng-model="brand.default2" 
+                                            ng-change="setFrequency(key);prescriptionOnchangeFlag()"
+                                            required="" 
+                                            ng-options="value.text as value.text for value in DosageDropdown">
+                                        </select>  
+                                        <p class="error" ng-show="submitted && brand.defaultFreqOpen && this[innerDrugTemplateFormSubForm].default2.$error.required" >* Required</p>
+                                    </div>
+                                    <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3 m_bottom_6 no_padding_right">
+                                        <input ng-if="brand.drug_unit_name!='Tablets'" 
+                                            type="text"
+                                            name="default3" 
+                                            class="form-control common_input" 
+                                            placeholder="00"
+                                            value="" ng-model="brand.default3"
+                                            ng-change="prescriptionOnchangeFlag()"
+                                            ng-keyup="setFrequency(key)"
+                                            ng-readonly="brand.drug_unit_name!='IU'" 
+                                            required=""
+                                            ng-pattern="/^[0-9]{1,3}?$/" />  
+                                        <select ng-if="brand.drug_unit_name=='Tablets'"
+                                            name="default3" 
+                                            class="dosage_dropdown" 
+                                            ng-model="brand.default3" 
+                                            required="" 
+                                            ng-change="setFrequency(key);prescriptionOnchangeFlag();" 
+                                            ng-options="value.text as value.text for value in DosageDropdown">
+                                        </select>  
+                                        <p class="error" ng-show="submitted && brand.defaultFreqOpen && this[innerDrugTemplateFormSubForm].default3.$error.required" >* Required</p>
+                                    </div>
+                                </div>
+                                <p class="error" ng-show="submitted && (brand.drug_unit_name!='Tablets' && brand.drug_unit_name!='IU') && this[innerDrugTemplateFormSubForm].drug_frequency_id.$error.required" >* Frequency Required</p>
+                                <p class="error" ng-show="submitted && (brand.drug_unit_name=='Tablets' || brand.drug_unit_name=='IU') && !brand.defaultFreqOpen && this[innerDrugTemplateFormSubForm].drug_frequency_id.$error.required" >* Frequency Required</p>
+                                <p class="error" ng-show="submitted && brand.defaultFreqOpen && this[innerDrugTemplateFormSubForm].default1.$error.pattern" >* <span ng-if="brand.drug_unit_name=='Tablets'">Select at leat one from above</span><span ng-if="brand.drug_unit_name=='IU'">Enter at leat one from above</span></p>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 no_padding">
+                                    <label class="font_color_1 cursor_pointer font-size-12 title3" ng-click="brand.defaultFreqOpen = true;"  ng-if="!brand.defaultFreqOpen && brand.drug_frequency_id < 6">Custom</label>
+                                    <label class="font_color_1 cursor_pointer title3" ng-click="brand.defaultFreqOpen = false; clearCustomValues(key);"  ng-if="brand.defaultFreqOpen" >Default</label>
+                                </div>
+                                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 no_padding">
+                                    <label class="float_right font_color_1 cursor_pointer title3" 
+                                           ng-if="!brand.isFreqInst"
+                                           ng-click="brand.isFreqInst = true;"
+                                           >Add Note</label>
+                                    <input type="text"
+                                           class="form-control common_input m_top_10 title3" 
+                                           ng-if="brand.isFreqInst"
+                                           id="instructions" 
+                                           placeholder="Enter Note" 
+                                           name="instructions"
+                                           client-auto-complete   
+                                           ng-change="prescriptionOnchangeFlag()"
+                                           dirtype='22' 
+                                           ng-keyup="searchGlobalInstruction(2,key,1)"
+                                           ng-model="brand.freq_instruction" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-3 col-xs-3" ng-if="brand.isOpenWholeForm">
+                        <div class="form-group">
+                            <label class=" required">Instruction</label>
+                            <div class="position_relative">
+                                <select
+                                    name='drug_intake'
+                                    id="drug_intake"
+                                    chosen 
+                                    allow-single-deselect="true"
+                                    placeholder_text_single="'Select Instruction'"          
+                                    ng-options="value.id as value.name for value in brandIntakeList"                                                          
+                                    ng-model="brand.drug_intake" 
+                                    ng-change="prescriptionOnchangeFlag()" 
+                                    class="common_input form-control" required="">
+                                    <option value=""></option>                                           
+                                </select>                                                                                        
+                                <span><img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right" /></span>
+                            </div>
+                            <p class="error" ng-show="submitted && this[innerDrugTemplateFormSubForm].drug_intake.$error.required">* Required</p>
+                            <input type="text"
+                                   class="form-control common_input m_top_10" 
+                                   ng-if="brand.isIntakeInst"
+                                   id="instructions" 
+                                   placeholder="Enter Note"
+                                   name="instructions"
+                                   client-auto-complete   
+                                    dirtype='22' 
+                                    ng-change="prescriptionOnchangeFlag()"
+                                    ng-keyup="searchGlobalInstruction(2,key,2)"
+                                   ng-model="brand.intake_instruction" />
+                            <label class="float_right font_color_1 cursor_pointer font-size-12 title3" 
+                                   ng-if="!brand.isIntakeInst"
+                                   ng-click="brand.isIntakeInst = true;"
+                                   >Add Note</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" ng-if="brand.isOpenWholeForm">
+                        <div class="form-group">
+                            <label class=" required">Duration</label>
+                            <input 
+                                type="text"
+                                class="form-control common_input"
+                                id="duration_value"
+                                placeholder="00"
+                                name="duration_value"
+                                ng-change="prescriptionOnchangeFlag()"
+                                required=""
+                                ng-pattern="/^[0-9]{1,3}?$/"
+                                ng-model="brand.drug_duration_value" />
+                                <a href="" class="dropdown-toggle"  data-toggle="dropdown"><label class="cursor_pointer float_right font_color_1 title3" ng-if="brand.drug_duration == '1'">Day(s)</label></a>                                          
+                                <a href="" class="dropdown-toggle"  data-toggle="dropdown"><label class="cursor_pointer float_right font_color_1 title3" ng-if="brand.drug_duration == '2'" >Week(s)</label></a>
+                                <a href="" class="dropdown-toggle"  data-toggle="dropdown"><label class="cursor_pointer float_right font_color_1 title3" ng-if="brand.drug_duration == '3'">Month(s)</label></a>
+                                <ul class="dropdown-menu" ng-if="(brand.drug_frequency_id != 7 && brand.drug_frequency_id !=8)">             
+                                    <li ng-repeat-start="type in brandDurationTypeList" ng-click="brand.drug_duration = type.id;prescriptionOnchangeFlag();" ><a href="" >{{ type.name}}</a></li>
+                                    <li class='divider' ng-repeat-end></li>
+                                </ul>
+                            <p class="error" ng-show="submitted && this[innerDrugTemplateFormSubForm].duration_value.$error.required" >* Required</p>
+                            <p class="error" ng-show="submitted && this[innerDrugTemplateFormSubForm].duration_value.$error.pattern" >Invalid duration</p>
+                        </div>
+                    </div>
+                    <div class="m_top_10"></div>
+                </ng-form>
+            </div>
+            <div class="clearfix"></div>
+					<div class="form-group">
+                        <label class="">Diet/Specific Instruction</label>
+                        <textarea 
+                            class="form-control common_input" 
+                            id="instructions" 
+                            placeholder="Enter Instruction"
+                            name="instructions"    
+                            client-auto-complete   
+                            dirtype='19' 
+                            ng-change="prescriptionOnchangeFlag()" 
+                            ng-keyup="searchGlobalInstruction(1)"                          
+                            ng-model="common.drug_instruction"></textarea>
+                    </div>
+                    <div class="form-group hide">
+                        <div class="padding_left_0 common_checbox">
+                            <input type="checkbox" id="is_capture_compliance" ng-model="common.is_capture_compliance">    
+                            <label for="is_capture_compliance" class="disclose font-15">Capture Compliance</label>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <div class="col-lg-3 col-md-4 col-sm-3 col-xs-3 m_top_10 gotham_light font_size_13 no_padding ">
+                            <label class="">Next Followup On </label>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 no_padding">
+                            <div class="input-group login_input dropup">
+								<span class="input-group-btn login_input"><button type="button" class="btn btn-default login_input" ng-click="next_folloup_date.open = true"><i class="fa fa-calendar"></i></button></span>
+								<input type="text" class="form-control login_input" datepicker-options="next_appointment_picker.datepickerOptions" datetime-picker="dd/MM/yyyy" enable-time="false" ng-model="common.next_folloup_date" is-open="next_folloup_date.open" placeholder="DD/MM/YYYY" name="next_folloup_date" id="next_folloup_date" ui-mask="99/99/9999" ng-change="prescriptionOnchangeFlag()"/>
+                            </div>
+                            <p ng-show="(submitted && common.next_folloup_date === undefined)" class="error" >{{invalid_date}}</p>
+                        </div>
+                    </div>
+            <div class="button_container button_max" ng-if="current_appointment_date_obj.is_editable">
+                <input type="submit" value="Save" class="new_common_button btn_properties" />
+                <input type="reset" 
+                       value="Cancel"
+                       class="new_common_button_1 btn_properties"
+                       ng-click="cancelBtnRX()"
+                       />
+            </div>
+        </form>
+		<!-- <div id="autocomplete_div"></div> -->
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 font_color_7"  ng-if="addedBrandList.length > 0 && !common.isRXFormOpen && role[RX_MODULE][VIEW] == 'on'">
+        <table class="rx-view-table">
+            <thead>
+                <tr>
+                    <th width="62%" colspan="2">Brand & Strength</th>
+                    <th width="10%">Unit(s)</th>
+                    <th width="18%">Frequency</th>
+                    <th width="10%">Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat-start="(key, tempBrand) in addedBrandList track by $index">
+                    <td class="vertical-top">{{key+1}}. </td>
+                    <td>{{tempBrand.drug_name}}<br>{{tempBrand.generic_title}}</td>
+                    <td></td>
+                    <td class="vertical-top"><p ng-class="(tempBrand.prescription_dosage == '' && tempBrand.drug_unit_name == 'Tablets') ? 'rx-dosage' : ''" ng-bind-html="tempBrand.freq_value"></p></td>
+                    <td class="vertical-top">
+                        <p class="font_size_16 gotham_light title3">{{ tempBrand.prescription_duration_value}} {{ brandDurationTypeList[tempBrand.prescription_duration - 1].name}}</p>
+                    </td>
+                </tr>
+                <tr class="common_hr" ng-repeat-end>    
+                    <td></td>
+                    <td>Instruction: {{brandIntakeList[tempBrand.prescription_intake - 1].name}}<span ng-if="tempBrand.prescription_intake_instruction != ''">, </span> {{tempBrand.prescription_intake_instruction}}<span ng-if="tempBrand.prescription_frequency_instruction != ''">, </span>{{tempBrand.prescription_frequency_instruction}}</td>
+                    <td>
+                        <p class="font_size_16 gotham_light title3" ng-if="tempBrand.drug_frequency_name != undefined && tempBrand.drug_frequency_name != ''">{{tempBrand.prescription_dosage}}
+                        <span ng-if="tempBrand.drug_unit_name=='Tablets'">Tablet</span>
+                        <span ng-if="tempBrand.drug_unit_name=='Capsules'">Capsule</span>
+                        <span ng-if="tempBrand.drug_unit_name != 'Capsules' && tempBrand.drug_unit_name != 'Tablets'">{{tempBrand.drug_unit_name}}</span></p>
+                    </td>
+                    <td>{{ tempBrand.drug_frequency_name}}</td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- <div ng-repeat="(key, tempBrand) in addedBrandList track by $index" class="common_hr m_bottom_20">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="form-group no_margin">
+                        <p>Brand & strength</p>
+                        <p class="font_size_16 gotham_light title3">{{ tempBrand.drug_name}}</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="form-group no_margin">
+                        <p>Generic name</p>
+                        <p class="font_size_16 gotham_light title3">{{ tempBrand.generic_title}}</p> 
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <div class="form-group no_margin">
+                        <p>Dosage & Frequency</p>
+                        <p class="font_size_16 gotham_light title3" ng-if="tempBrand.drug_frequency_name != undefined && tempBrand.drug_frequency_name != ''">{{ tempBrand.prescription_dosage}} {{(tempBrand.drug_unit_name == 'IU' && tempBrand.prescription_dosage !='') ? tempBrand.drug_unit_name : ''}} ({{ tempBrand.drug_frequency_name}})</p>
+                        <p ng-bind-html="tempBrand.freq_value"></p>
+                        <p>{{ tempBrand.prescription_frequency_instruction}}</p>
+
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="m_top_10">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                        <div class="form-group no_margin">
+                            <p>Instruction</p>
+                            <p class="font_size_16 gotham_light title3">{{brandIntakeList[tempBrand.prescription_intake - 1].name}}</p>
+                            <p>{{tempBrand.prescription_intake_instruction}}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="form-group no_margin">
+                            <p>Duration</p>
+                            <p class="font_size_16 gotham_light title3">{{ tempBrand.prescription_duration_value}}
+                                ({{ brandDurationTypeList[tempBrand.prescription_duration - 1].name}})</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="m_top_10"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div> -->
+        <div class="m_top_20">
+            <div class="form-group no_margin">
+                <p>Diet/Specific Instruction</p>
+                <p class="font_size_16 gotham_light title3" ng-bind-html="common.drug_instruction | nl2br"></p>
+            </div>
+        </div>
+        <div class="m_top_20 row hide">
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="padding_left_0 common_checbox">
+                    <input type="checkbox" readonly ng-model="common.is_capture_compliance">    
+                    <label class="disclose font-15">Capture Compliance</label>
+                </div>
+            </div>
+        </div>
+        <div class="m_top_20">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="gotham_medium font-18 m_bottom_15">Next Follow up : {{common.next_folloup_date_string | date :'dd/MM/y'}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="button_container m_bottom_15" ng-if="current_appointment_date_obj.is_editable">                                        
+            <input type="button" value="Edit"
+                   ng-click="getEditRXObject()"
+                   ng-if="role[RX_MODULE][EDIT] == 'on'"
+                   class="new_common_button btn_properties new_btn_width" />            
+        </div>
+        <div class="button_container m_bottom_15 hide" ng-if="current_appointment_date_obj.is_editable">                                        
+            <input type="button" value="Add More"
+                   ng-click="openEditForm(3)"
+                   class="new_common_button btn_properties new_btn_width" />            
+        </div>
+    </div>
+    <div ng-if="role[RX_MODULE][VIEW] != 'on'" class="text-center gotham_book font_size_20 m_top_20">
+        <div class="unauthorised-css">{{ app.unauthorised_msg}}</div>
+    </div>
+</div>
+<div class="modal fade" id="modal_generic_details" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg savetemplate_width m_top_12">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">
+                <span class="pull-right close generic_close"   data-dismiss='modal'>&times;</span>
+                <div class="">
+                    <h3 class="modal-title modaltitle_m ">Generic Detail</h3>                            
+                </div>
+            </div>
+            <div class="modal-body savetemplate_padding">      
+                <div class="row m_top_10 m_bottom_15">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="common_hr">
+                            <label>Generic Title</label>
+                            <p>{{generic_detail.drug_generic_title}}</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                   
+                </div>                
+                <div class="row m_top_10 m_bottom_15">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="common_hr">
+                            <label>Generic Indications</label>
+                            <p>{{generic_detail.drug_generic_indications}}</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                   
+                </div>                
+                <div class="row m_top_10 m_bottom_15">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="common_hr">
+                            <label>Administration</label>
+                            <p>{{generic_detail.drug_generic_administration}}</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                   
+                </div>                
+                <div class="row m_top_10 m_bottom_15">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="common_hr">
+                            <label>Contraindications</label>
+                            <p>{{generic_detail.drug_generic_contraindications}}</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                   
+                </div>                
+                <div class="row m_top_10 m_bottom_15">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="common_hr"> 
+                            <label>Special Precautions</label>
+                            <p>{{generic_detail.drug_generic_special_precautions}}</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                   
+                </div>                
+                <div class="row m_top_10 m_bottom_15">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="common_hr">
+                            <label>Generic PC</label>
+                            <p>{{generic_detail.drug_generic_pc}}</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                   
+                </div>                
+                <div class="row m_top_10 m_bottom_15">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="common_hr">
+                            <label>Generic ADR</label>
+                            <p>{{generic_detail.drug_generic_adr}}</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                   
+                </div>                
+                <div class="row m_top_10 m_bottom_15">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="common_hr">
+                            <label>Interactions</label>
+                            <p>{{generic_detail.drug_generic_interactions}}</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                   
+                </div>                
+                <div class="row m_top_10 m_bottom_15">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="common_hr">
+                            <label>Generic Dosage1</label>
+                            <p>{{generic_detail.drug_generic_dosage1}}</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                   
+                </div>                
+                <div class="row m_top_10 m_bottom_15">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="common_hr">
+                            <label>Generic Dosage2</label>
+                            <p>{{generic_detail.drug_generic_dosage2}}</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                   
+                </div>                
+                <div class="row m_top_10 m_bottom_15">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="common_hr">
+                            <label>Indication Dosage</label>
+                            <p ng-bind-html="generic_detail.drug_generic_dosage_indication_dosage"></p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                   
+                </div>                
+            </div>                  
+        </div>
+    </div>  
+</div>

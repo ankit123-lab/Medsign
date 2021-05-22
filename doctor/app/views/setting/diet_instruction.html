@@ -1,0 +1,478 @@
+<link rel="stylesheet" ng-href="app/css/clinic_staff.css?{{getVer(3)}}">                
+<link rel="stylesheet" ng-href="app/css/clinical_notes_catalog.css?{{getVer(3)}}">
+<link rel="stylesheet" ng-href="app/css/pagination.css?{{getVer(3)}}">
+<div class="">
+    <div class="common_hr clearfix billing_main_div">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{app.all_clinic_label}}</span>
+                </button>
+                <!-- <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForDietInstruction(clinic)" ><a href="">{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="second_width common_heading_height">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding  margin_left_-4">
+                <div class="col-lg-2 col-md-1 col-sm-7 col-xs-4 m_bottom_15 min-width-left">
+                    <h4 class="m_top_22 page_title pull-left">Settings</h4>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 hidden-sm hidden-xs gotham_medium text-center m_top_15">
+                    <ul class="nav nav-pills tabs_items font_color_1" role="tablist">
+                        <li class="nav-item tabs_first active" role="presentation">
+                            <a class="nav-link" data-toggle="pill" href="" ng-click="changePrescriptionTab(1)">Diet/ Specific Instructions</a>
+                        </li>
+                        <li class="nav-item" role="presentation" style="border-right-width: 0;"> 
+                            <a class="nav-link" data-toggle="pill" href="" ng-click="changePrescriptionTab(2)">Investigations</a>
+                        </li>
+                        <li class="nav-item" role="presentation" style="border-right-width: 0;"> 
+                            <a class="nav-link" data-toggle="pill" href="" ng-click="changePrescriptionTab(3)">Add note (Freq./ Inst.)</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-right  gotham_light min-width-right">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-init="getDietInstructions(1)" >
+        <div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+        <div class="tab-content">
+            <div id="complaints" class="tab-pane active" >
+                <div ng-if="prescriptionTab==1" class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 common_hr">
+                        <div class="col-lg-3 col-md-5 col-sm-3 col-xs-12 padding_0">
+                            <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_20 title1">Diet/Specific Instructions</h3>
+                        </div>
+                        <div class="col-lg-9 col-md-7 col-sm-9 col-xs-12 padding_0 m_top_10 m_bottom_10" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, VIEW)">
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 placeholder_class">
+                                <div class="input-group">
+                                    <input type="text" class="form-control common_input custom_add_doctor_btn" placeholder="Search Diet/Specific Instructions" name="search" size="35" ng-model="current_diet_instructions.text_name" ng-keyup="getDietInstructions(1)">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default icon_style" type="submit" ng-if="!current_diet_instructions.text_name">
+                                            <i class="glyphicon glyphicon-search" ></i>
+                                        </button>
+                                        <button ng-click="clearSearchDietInstructionName()" class="btn btn-default icon_style" type="submit" ng-if="current_diet_instructions.text_name">
+                                            <i  class="glyphicon glyphicon-remove" ></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                <a href="" class="pull-right m_top_10" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, ADD)">
+                                    <input style="margin-right: 15px;" type="button" value="Add Instruction" ng-click="addDietInstructionPopup()" class="new_common_button no_top_margin"/>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 no_padding " ng-if="current_diet_instructions.addOpen && checkPermission(SETTING_DIET_INSTRUCTION, ADD)">
+                        <form name="addDietInstructionsForm" novalidate="" ng-submit="addDietInstructions()">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <input class="form-control common_input" 
+                                           placeholder="Add Diet/Specific Instruction" name="search" size="35"
+                                           ng-model="current_diet_instructions.text_name_add"   
+                                           required=""
+                                            />
+                                    <p ng-show="submitted && addDietInstructionsForm.search.$error.required" class="error">Please Enter Diet/Specific Instruction</p>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 custom_add_doctor_btn">
+                                    <input type="submit" value="Save" name="save" class="pull-left btn new_common_button btn_properties m_right_10 "/>
+                                    <input type="button" ng-click="closeDietInstructionForm()" value="Cancel" name="Cancel" class="pull-left btn new_common_button_1 cancel_patient btn_properties" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="clearfix"></div>
+                    <table class="table table-responsive m_top_20 min_width_767" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, VIEW)">                        
+                        <tbody class="font_size_14 common_p_b" >
+                            <tr ng-repeat="(key, instruction) in diet_instructions">
+                                <td class="width_th_80">{{instruction.diet_instruction}}</td>                                
+                                <td class="text-center">
+                                    <a href="" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, EDIT)" ng-click="detailDietInstruction(key)"><img src="app/images/edit_icon.png" alt="edit_icon" class="m_lr_icons"></a>
+                                    <a href="" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, DELETE)" ng-click="deleteDietInstruction(instruction.id)"><img src="app/images/delete_icon.png" alt="delete_icon"></a>
+                                </td>                                
+                            </tr>  
+                            <tr ng-if="diet_instructions.length==0">
+                                <td colspan="2" class="text-center">
+                                    <h4 ng-bind-html="no_data_found"></h4>
+                                </td>
+                            </tr>                                                    
+                        </tbody>
+                    </table>
+                    <div ng-if="!(checkPermission(SETTING_DIET_INSTRUCTION, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+                        <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+                    </div>
+                    <div ng-show="diet_instructions.length > 0" class="row pagi-wrap">
+                        <div class="col-lg-3 totals-rows">
+                            <p class="m_top_10">Showing {{((currentPage-1)*per_page) + 1}} to {{last_rows}} of {{total_rows}} entries</p>
+                        </div>
+                        <div class="pagination-wrap col-lg-9 text-right">
+                            <a href="" ng-click="getNextInvPrev('prev')"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                            <input ng-repeat="n in [] | range:total_page" type="button" ng-value="n" ng-click="getDietInstructions(n)" ng-disabled="currentPage == n" ng-class="currentPage == n ? 'page-active' : ''" class="pagi-btn">
+                            <a href="" ng-click="getNextInvPrev('next')"><img alt="previous" src="app/images/next_arrow.png"></a>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="prescriptionTab==2" class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 common_hr">
+                        <div class="col-lg-3 col-md-5 col-sm-3 col-xs-12 padding_0">
+                            <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_20 title1">Investigations</h3>
+                        </div>
+                        <div class="col-lg-9 col-md-7 col-sm-9 col-xs-12 padding_0 m_top_10 m_bottom_10" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, VIEW)">
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 placeholder_class">
+                                <div class="input-group">
+                                    <input type="text" class="form-control common_input custom_add_doctor_btn" placeholder="Search Investigations" name="search" size="35" ng-model="investigations_data.search" ng-keyup="getInvestigations(1)" maxlength="100">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default icon_style" type="submit" ng-if="!investigations_data.search">
+                                            <i class="glyphicon glyphicon-search" ></i>
+                                        </button>
+                                        <button ng-click="clearSearchInvestigation()" class="btn btn-default icon_style" type="submit" ng-if="investigations_data.search">
+                                            <i  class="glyphicon glyphicon-remove" ></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                <a href="" class="pull-right m_top_10" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, ADD)">
+                                    <input style="margin-right: 15px;" type="button" value="Add Investigation" ng-click="addInvestigation()" class="new_common_button no_top_margin"/>                        
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    
+                    <table class="table table-responsive m_top_20 min_width_767" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, VIEW)">                        
+                        <tbody class="font_size_14 common_p_b" >
+                            <tr ng-repeat="(key, investigation) in investigations">
+                                <td class="width_th_80">{{investigation.health_analytics_test_name}}</td>                                
+                                <td class="text-center">
+                                    <a href="" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, EDIT)" ng-click="editInvestigation(key)"><img src="app/images/edit_icon.png" alt="edit_icon" class="m_lr_icons"></a>
+                                    <a href="" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, DELETE)" ng-click="deleteInvestigation(investigation.health_analytics_test_id)"><img src="app/images/delete_icon.png" alt="delete_icon"></a>
+                                </td>                                
+                            </tr>  
+                            <tr ng-if="investigations.length==0">
+                                <td colspan="2" class="text-center">
+                                    <h4 ng-bind-html="no_data_found"></h4>
+                                </td>
+                            </tr>                                                       
+                        </tbody>
+                    </table>
+
+                    <div ng-if="!(checkPermission(SETTING_DIET_INSTRUCTION, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+                        <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+                    </div>
+                    <div ng-show="investigations.length > 0" class="row pagi-wrap">
+                        <div class="col-lg-3 totals-rows">
+                            <p class="m_top_10">Showing {{((currentPage-1)*per_page) + 1}} to {{last_rows}} of {{total_rows}} entries</p>
+                        </div>
+                        <div class="pagination-wrap col-lg-9 text-right">
+                            <a href="" ng-click="getNextInvPrev('prev')"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                            <input ng-repeat="n in [] | range:total_page" type="button" ng-value="n" ng-click="getInvestigations(n)" ng-disabled="currentPage == n" ng-class="currentPage == n ? 'page-active' : ''" class="pagi-btn">
+                            <a href="" ng-click="getNextInvPrev('next')"><img alt="previous" src="app/images/next_arrow.png"></a>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="prescriptionTab==3" class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 common_hr">
+                        <div class="col-lg-3 col-md-5 col-sm-3 col-xs-12 padding_0">
+                            <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_20 title1">Add note (Freq./ Inst.)</h3>
+                        </div>
+                        <div class="col-lg-9 col-md-7 col-sm-9 col-xs-12 padding_0 m_top_10 m_bottom_10" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, VIEW)">
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 placeholder_class">
+                                <div class="input-group">
+                                    <input type="text" class="form-control common_input custom_add_doctor_btn" placeholder="Search Add note (Freq./ Inst.)" name="search" ng-model="current_rx_instructions.text_name" ng-keyup="getRxInstructions(1)">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default icon_style" type="submit" ng-if="!current_rx_instructions.text_name">
+                                            <i class="glyphicon glyphicon-search" ></i>
+                                        </button>
+                                        <button ng-click="clearSearchRxInstructionName()" class="btn btn-default icon_style" type="submit" ng-if="current_rx_instructions.text_name">
+                                            <i  class="glyphicon glyphicon-remove" ></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                <a href="" class="pull-right m_top_10" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, ADD)">
+                                    <input style="margin-right: 15px;" type="button" value="Add Note" ng-click="addRxInstructionPopup();" class="new_common_button no_top_margin"/>                        
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 no_padding " ng-if="current_rx_instructions.addOpen && checkPermission(SETTING_DIET_INSTRUCTION, ADD)">
+                        <form name="addRxInstructionsForm" novalidate="" ng-submit="addRxInstructions()">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <input class="form-control common_input" 
+                                           placeholder="Enter Add note (Freq./ Inst.)" name="search"
+                                           ng-model="current_rx_instructions.text_name_add"   
+                                           required=""
+                                           />
+                                    <p ng-show="submitted && addRxInstructionsForm.search.$error.required" class="error">Please Enter Note</p>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 custom_add_doctor_btn">
+                                    <input type="submit" value="Save" name="save" class="pull-left btn new_common_button btn_properties m_right_10 "/>
+                                    <input type="button" ng-click="closeRxInstructionForm()" value="Cancel" name="Cancel" class="pull-left btn new_common_button_1 cancel_patient btn_properties" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="clearfix"></div>
+                    <table class="table table-responsive m_top_20 min_width_767" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, VIEW)">                        
+                        <tbody class="font_size_14 common_p_b" >
+                            <tr ng-repeat="(key, instruction) in rx_instructions">
+                                <td class="width_th_80">{{instruction.diet_instruction}}</td>                                
+                                <td class="text-center">
+                                    <a href="" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, EDIT)" ng-click="detailRxInstruction(key)"><img src="app/images/edit_icon.png" alt="edit_icon" class="m_lr_icons"></a>
+                                    <a href="" ng-if="checkPermission(SETTING_DIET_INSTRUCTION, DELETE)" ng-click="deleteRxInstruction(instruction.id)"><img src="app/images/delete_icon.png" alt="delete_icon"></a>
+                                </td>                                
+                            </tr>  
+                            <tr ng-if="rx_instructions.length==0">
+                                <td colspan="2" class="text-center">
+                                    <h4 ng-bind-html="no_data_found"></h4>
+                                </td>
+                            </tr>                                                    
+                        </tbody>
+                    </table>
+                    <div ng-if="!(checkPermission(SETTING_DIET_INSTRUCTION, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+                        <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+                    </div>
+                    <div ng-show="rx_instructions.length > 0" class="row pagi-wrap">
+                        <div class="col-lg-3 totals-rows">
+                            <p class="m_top_10">Showing {{((currentPage-1)*per_page) + 1}} to {{last_rows}} of {{total_rows}} entries</p>
+                        </div>
+                        <div class="pagination-wrap col-lg-9 text-right">
+                            <a href="" ng-click="getNextInvPrev('prev')"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                            <input ng-repeat="n in [] | range:total_page" type="button" ng-value="n" ng-click="getRxInstructions(n)" ng-disabled="currentPage == n" ng-class="currentPage == n ? 'page-active' : ''" class="pagi-btn">
+                            <a href="" ng-click="getNextInvPrev('next')"><img alt="previous" src="app/images/next_arrow.png"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="modal_edit_rx_instructions" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <form name="editRxInstructionForm" id="editRxInstructionForm" novalidate="" method="post" ng-submit="addEditRxInstruction(editRxInstructionForm)">
+        <div class="modal-dialog modal_dialog_width modal-lg">
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">             
+                    <h3 class="modal-title modaltitle_m"><span ng-if="current_rx_instructions.id != ''">Edit</span> Add note (Freq./ Inst.)</h3>                            
+                </div>
+                <div class="modal-body padding_body text-left">
+                    <div class="font_color_4 gotham_light placeholder_class">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-offset-1  col-md-11 col-sm-11 col-xs-12 m_top_12 m_bottom_12 padding_0">
+                                <div class="col-lg-11 col-md-11 col-sm-11 col-xs-12 padding_left_0">
+                                    <h4 class="title2 color_black">Add note (Freq./ Inst.)</h4>
+                                    <div class="form-group">
+                                        <input class="form-control common_input" 
+                                           placeholder="Enter Add note (Freq./ Inst.)" name="text_name" 
+                                           ng-model="current_rx_instructions.edit_text_name"   
+                                           required=""
+                                           />
+                                        <p ng-show="(submitted) && editRxInstructionForm.text_name.$error.required" class="error" >Please Enter Note</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="translate_data.length > 0" ng-repeat="(key, translateObj) in translate_data">
+                            <ng-form name="innerNotesForm">
+                                <div class="col-lg-11 col-md-offset-1  col-md-11 col-sm-11 col-xs-12 m_top_12 m_bottom_12 padding_0 m_bottom_0">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 padding_left_0">
+                                        <select
+                                            name='language_id'
+                                            placeholder="'Select Language'"
+                                            style="width:100% !important;"
+                                            ng-model="translateObj.language_id" 
+                                            class="common_input form-control required"
+                                            required>
+                                            <option value="">Select Language</option>
+                                            <option ng-repeat="lang in languages" value="{{lang.language_id}}" ng-if="lang.language_id!=1">{{lang.language_name}}</option>
+                                        </select>
+                                        <p ng-show="(submitted) && innerNotesForm.language_id.$error.required" class="error" >Select Language</p>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 padding_left_0">
+                                        <div class="form-group">
+                                            <input class="form-control common_input" 
+                                               placeholder="Enter Add note (Freq./ Inst.)" name="note" 
+                                               ng-model="translateObj.note"   
+                                               required=""
+                                               ng-paste="notePaste($event, key)"
+                                               />
+                                            <p ng-show="(submitted) && innerNotesForm.note.$error.required" class="error" >Please Enter Note</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 padding_left_0">
+                                        <img src="app/images/remove_icon.png" class="cursor_pointer" ng-click="removeLangauge(key)">
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-10 col-md-offset-1  col-md-10 col-sm-10 col-xs-12 m_top_12 m_bottom_12 padding_0">
+                                <input type="button" value="Add Langauge" name="AddLangauge" class="btn new_common_button" ng-click="AddLangauge()"/>
+                            </div>
+                        </div>
+
+                    </div>                                                                        
+                </div>
+                <div class="modal-footer">
+                    <div class="row m_top_20per">                                       
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input ng-if="current_rx_instructions.id != ''" type="submit" value="Edit" name="save" class="btn new_common_button btn_properties float_right"/>
+                            <input ng-if="current_rx_instructions.id == ''" type="submit" value="Add" name="save" class="btn new_common_button btn_properties float_right"/>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties float_left" data-dismiss="modal" />
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Start Diet/Specific Instructions Modal -->
+<div id="modal_diet_instructions" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <form name="dietInstructionForm" id="dietInstructionForm" novalidate="" method="post" ng-submit="addEditDietInstruction(dietInstructionForm)">
+        <div class="modal-dialog modal_dialog_width modal-lg">
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">             
+                    <h3 class="modal-title modaltitle_m"><span ng-if="current_diet_instructions.id != ''">Edit</span><span ng-if="current_diet_instructions.id == ''">Add</span> Diet/Specific Instructions</h3>                            
+                </div>
+                <div class="modal-body padding_body text-left">
+                    <div class="font_color_4 gotham_light placeholder_class">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-offset-1  col-md-11 col-sm-11 col-xs-12 m_top_12 m_bottom_12 padding_0">
+                                <div class="col-lg-11 col-md-11 col-sm-11 col-xs-12 padding_left_0">
+                                    <h4 class="title2 color_black">Diet/Specific Instructions</h4>
+                                    <div class="form-group">
+                                        <textarea class="form-control common_input" 
+                                           placeholder="Enter Diet/Specific Instructions" 
+                                           name="text_name" 
+                                           ng-model="current_diet_instructions.edit_text_name"required=""></textarea>
+                                        <p ng-show="(submitted) && dietInstructionForm.text_name.$error.required" class="error" >Please Enter Note</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="translate_data.length > 0" ng-repeat="(key, translateObj) in translate_data">
+                            <ng-form name="innerDietNotesForm">
+                                <div class="col-lg-11 col-md-offset-1  col-md-11 col-sm-11 col-xs-12 m_top_12 m_bottom_12 padding_0 m_bottom_0">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 padding_left_0">
+                                        <select
+                                            name='language_id'
+                                            placeholder="'Select Language'"
+                                            style="width:100% !important;"
+                                            ng-model="translateObj.language_id" 
+                                            class="common_input form-control required"
+                                            required>
+                                            <option value="">Select Language</option>
+                                            <option ng-repeat="lang in languages" value="{{lang.language_id}}" ng-if="lang.language_id!=1">{{lang.language_name}}</option>
+                                        </select>
+                                        <p ng-show="(submitted) && innerDietNotesForm.language_id.$error.required" class="error" >Select Language</p>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 padding_left_0">
+                                        <div class="form-group">
+                                            <textarea class="form-control common_input" 
+                                               placeholder="Enter Diet/Specific Instructions" name="note" 
+                                               ng-model="translateObj.note"   
+                                               required=""
+                                               ng-paste="notePaste($event, key)"
+                                               ></textarea>
+                                            <p ng-show="(submitted) && innerDietNotesForm.note.$error.required" class="error" >Please Enter Note</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 padding_left_0">
+                                        <img src="app/images/remove_icon.png" class="cursor_pointer" ng-click="removeLangauge(key)">
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-10 col-md-offset-1  col-md-10 col-sm-10 col-xs-12 m_top_12 m_bottom_12 padding_0">
+                                <input type="button" value="Add Langauge" name="AddLangauge" class="btn new_common_button" ng-click="AddLangauge()"/>
+                            </div>
+                        </div>
+
+                    </div>                                                                        
+                </div>
+                <div class="modal-footer">
+                    <div class="row m_top_20per">                                       
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input ng-if="current_diet_instructions.id != ''" type="submit" value="Edit" name="save" class="btn new_common_button btn_properties float_right"/>
+                            <input ng-if="current_diet_instructions.id == ''" type="submit" value="Add" name="save" class="btn new_common_button btn_properties float_right"/>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties float_left" data-dismiss="modal" />
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- End Investigation Modal -->
+<div id="modal_investigation" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <form name="investigationForm" id="investigationForm" novalidate="" method="post" ng-submit="addEditInvestigation(investigationForm)">
+        <div class="modal-dialog modal_dialog_width modal-lg">
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">
+                    <h3 class="modal-title modaltitle_m">{{investigations_data.health_analytics_test_id != '' ? "Edit" : 'Add'}} Investigation</h3>
+                </div>
+                <div class="modal-body padding_body text-left">
+                    <div class="font_color_4 gotham_light placeholder_class">
+                        <div class="row">
+                            <div class="col-lg-10 col-md-offset-2  col-md-10 col-sm-10 col-xs-12 m_top_12 m_bottom_12 padding_0">
+                                <div class="row">
+                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 padding_left_0">
+                                        <h4 class="title2 color_black">Investigation Name</h4>
+                                        <div class="form-group m_top_10">
+                                            <input type="text" class="form-control login_input" id="health_analytics_test_name" placeholder="Enter Investigation name" name="health_analytics_test_name" ng-required="true" ng-readonly="investigations_data.health_analytics_test_id !='' && (investigations_data.health_analytics_test_doctor_id == NULL || investigations_data.health_analytics_test_doctor_id == '')" ng-model="investigations_data.health_analytics_test_name">
+                                                <p ng-show="(submitted) && investigationForm.health_analytics_test_name.$error.required" class="error" >{{value_required}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 padding_left_0">
+                                        <h4 class="title2 color_black">instructions</h4>
+                                    </div>
+                                </div>
+                                <div class="row" ng-repeat="(key, inv_instruction) in investigations_data.instruction">
+                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 padding_left_0">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control login_input" placeholder="Enter instructions" name="inv_instruction" ng-required="false" ng-model="inv_instruction.instruction">
+                                                <!-- <p ng-show="(submitted) && investigationForm.health_analytics_test_name.$error.required" class="error" >{{value_required}}</p> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                                        <img src="app/images/add_icon.png" ng-if="key == (investigations_data.instruction.length - 1)" class="cursor_pointer" ng-click="addMoreInvInstruction()">
+                                        <img src="app/images/remove_icon.png" ng-if="key != (investigations_data.instruction.length - 1)" class="cursor_pointer" ng-click="removeInvInstruction(key)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                                                                        
+                </div>
+                <div class="modal-footer">
+                    <div class="row m_top_20per">                                       
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="{{investigations_data.health_analytics_test_id != '' ? 'Update' : 'Save'}}" name="save" class="btn new_common_button btn_properties float_right"/>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties float_left" data-dismiss="modal" />
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

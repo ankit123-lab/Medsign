@@ -1,0 +1,97 @@
+.complete_profile {
+    width: 175px;
+}
+
+.profile_title .designation {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.profile_basic_detail_container {
+    margin-top: 50px;
+    font-size: 16px !important;
+    word-break: break-all;
+    padding-bottom: 50px;
+}
+
+.title {
+    color: #9f9f9f;
+}
+
+.profile_image {
+    width: 100px;
+    margin: 20px auto;
+}
+
+.profile_image .image_class {
+    border-radius: 5px;
+    height: 100%;
+    width: 100%;
+}
+
+/*============================================================*/
+.m_top_83 {
+    margin-top: 83px;
+}
+
+.row.row_properteies {
+    margin: 40px auto;
+}
+
+.col_properties {
+    border: 1px #30aca5 solid;
+    border-radius: 6px;
+    /*    width: 90%;*/
+    padding: 20px 15px;
+}
+
+.icon_edit {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    text-align: right;
+    padding: 5px 7px;
+    border: 1px #30aca5 solid;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.common_checbox [type="checkbox"]:checked+label::after,
+.common_checbox [type="checkbox"]:not(:checked)+label::after {
+    left: 0;
+}
+
+.common_checbox [type="checkbox"]:checked+label::before,
+.common_checbox [type="checkbox"]:not(:checked)+label::before {
+    left: 0;
+}
+
+.m_left_30 {
+    margin-left: 30px;
+}
+
+.font_size_18 {
+    font-size: 18px;
+}
+
+.m_right_50 {
+    margin-right: 50px;
+}
+
+.margin_t_b {
+    margin: 28px 20px;
+}
+
+.margin_t_b_1 {
+    margin: 28px 90px;
+}
+
+.setting_title {
+    font-size: 20px;
+}
+
+.mar_li {
+    margin-left: 20px;
+}
+

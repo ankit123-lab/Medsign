@@ -1,0 +1,1580 @@
+<!-- Start Update DOB Modal -->
+<div class="modal fade" id="modal_update_dob_details" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg savetemplate_width m_top_12">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <span class="pull-right close generic_close" data-dismiss='modal'>&times;</span>
+                <div class="">
+                    <h3 class="modal-title modaltitle_m">Are you sure do you want to update Date Of Birth of {{current_patient.name}} ? </h3>
+                </div>
+            </div>
+            <div class="modal-body savetemplate_padding">
+				<form action="" method='post' id="update_pt_dob_form" class="font_color_5 placeholder_class" name="update_pt_dob_form" novalidate="">
+					<div class="row m_top_10 m_bottom_15">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label for="date" class="m_bottom_15 required">Current Selected Date Of Birth is {{current_patient.user_details_dob}} ({{current_patient.user_details_dob | ageFilter}})</label><br>
+								<p class="input-group login_input">
+									<span class="input-group-btn login_input">
+										<button type="button" class="btn btn-default login_input" ng-click="date_of_birth.open = true"><i class="fa fa-calendar"></i></button>
+									</span>
+									<input type="text" class="form-control login_input" datetime-picker="dd/MM/yyyy" datepicker-options="date_of_birth.datepickerOptions" enable-time="false" ng-model="current_patient.update_user_details_dob" is-open="date_of_birth.open" required="" placeholder="DD / MM / YYYY" name="date" id="update_pt_dob" readonly="" />
+								</p>
+								<p ng-show="update_pt_dob_form.date.$error.required" class="error">{{dob_required}}</p>
+							</div>
+						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+								<input type="button" value="Save" name="save" class="btn new_common_button btn_properties float_right" ng-click="updateCurrentPatientDob()" />                                 
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+								<input data-dismiss="modal" type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties"/>
+							</div>
+						</div>
+						<div class="clearfix"></div>                   
+					</div>
+				</form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End update DOB Modal -->
+<!-- Start Save Template Modal -->
+<div class="modal fade" id="modal_savetemplate" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg savetemplate_width m_top_12">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <h3 class="modal-title modaltitle_m">Save Template</h3>                            
+            </div>
+            <div class="modal-body savetemplate_padding">        
+                <form class="gotham_light placeholder_class" name="addTemplateForm" ng-submit="addNewTemplate(addTemplateForm)" novalidate="" id="addTemplateForm">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                            <div class="form-group">
+                                <label for="template_name" class="m_bottom_20 font_color_5">Template Name</label><br>
+                                <input type="text"
+                                       class="form-control common_input" 
+                                       id="template_name" 
+                                       placeholder="Enter Template Name"
+                                       name="template_name" 
+                                       required="required"
+                                       ng-model="template.new_template_name" />
+                                <p ng-show="submitted && addTemplateForm.template_name.$error.required" class="error" >* Required</p>
+                            </div>                                    
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="row m_top_10">                                       
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="submit" value="Done" name="done" class="btn btn_properties btn_witdth new_common_button  float_right" />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="reset" value="Cancel" name="cancle" data-dismiss='modal' class="btn btn_properties btn_witdth new_common_button_1 cancel_patient float_left" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Save Template Modal -->
+<!--Start DS Template Modal -->    
+<div class="modal fade" id="modal_dstemplate" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg appointment_paients">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <h3 class="modal-title modaltitle_m">Disease Template</h3>                            
+            </div>
+            <div class="modal-body appointment_paients_padding">        
+                <form class="gotham_book placeholder_class" ng-submit="getTemplateDetail()" novalidate>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                            <div class="form-group">                                                                        
+                                <input type="text" class="form-control common_input" id="search_disease" placeholder="Search Disease " 
+                                       name="search_disease"
+                                       ng-model="template.template_search"
+                                       ng-keyup="getDSTemplates()"
+                                       >
+                            </div>
+                            <div class="m_top_12">
+                                <ul class="list-group list_group_shadow">
+                                    <li class="list-group-item list_item right clearfix para_template" 
+                                        ng-repeat="tempObj in template_list track by $index">
+                                        <p class="float_left no_margin">
+                                            {{ tempObj.template_diagnosis_name}} ({{tempObj.template_template_name}})
+                                        </p>
+                                        <div class="common_radio_1 right float_right checkbox_width">
+                                            <input id="dummy{{ tempObj.template_id}}" 
+                                                   name="dummy_radio_button" 
+                                                   type="radio"
+                                                   ng-model="template.selected_template"
+                                                   ng-value="tempObj.template_id"
+                                                   >
+                                            <label for="dummy{{ tempObj.template_id}}" class="no_margin" ></label>
+                                        </div>
+                                    </li>                                                                                                                          
+                                </ul>                                  
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row m_top_26" >                                       
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                            <input type="submit" value="Done" name="done"  ng-if="template_list.length > 0" class="btn new_common_button btn_properties btn_width_60 float_right"/>                                 
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_right_0">
+                            <input type="reset" value="Cancel" name="cancle"  data-dismiss='modal' class="btn new_common_button_1 cancel_patient btn_properties btn_width_60 float_left" />                                                                                                                  
+                        </div>  
+                    </div>
+                </form>
+            </div>                  
+        </div>
+    </div>  
+</div>
+<!--End DS Template Modal -->
+<!-- Start Health Analytics Modal -->
+<div class="modal fade" id="modal_health_analytics" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal_dialog_width modal-lg health_analytics">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <h3 class="modal-title modaltitle_m">Create Health Analytics Table</h3>                            
+            </div>
+            <div class="modal-body appointment_paients_padding gotham_book placeholder_class">        
+                <div class="row d-flex">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="common_border common_health_p_h">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 font_color_1 padding_0">
+                                <h4 class="title2 color_black">Search Health Analytic Parameters</h4>
+                            </div>                                    
+                            <div class="m_top_20 row">
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <input
+                                        ng-model="health.search"
+                                        ng-keyup="getHealthAnalyticsTest()"
+                                        class="form-control common_input" id="searchhealth" placeholder="Search Health Analytics Parameters" 
+                                        name="searchhealth"                                        
+                                        type="text" />
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"> 
+                                    <div class="row hide">
+                                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 padding_0 m_top_10 text-right">
+                                            <p class="font_color_2 font_size_16">Select all</p>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 padding_0 text-right">
+                                            <div class="common_checbox">
+                                                <input id="selectall" type="checkbox">
+                                                <label for="selectall"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="m_top_20">
+                                <ul class="list-group list_group_shadow create_health_custom">
+                                    <li class="list-group-item clearfix list_item" 
+                                        ng-repeat="(key, healthTemp) in health.data track by $index"
+                                        >
+                                        <p class="float_left m_para_mobno no_margin">{{ healthTemp.health_analytics_test_name}}</p>                                                
+                                        <div class="common_checbox float_right checkbox_width">
+                                            <input id="healt_name{{key}}" type="checkbox"                                                
+                                                   ng-model="healthTemp.is_selected"
+                                                   ng-true-value="'1'" 
+                                                   ng-false-value="'2'" 
+                                                   ng-change="getHealthAnalyticsTest(healthTemp.health_analytics_test_id, true, key)"                                                  
+                                                   >
+                                            <label for="healt_name{{key}}" class="m_bottom_20"></label>
+                                        </div>
+                                    </li>                                                                                                                                                                                                              
+                                </ul>                                  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="common_border common_health_p_h">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 font_color_1 padding_0">
+                                <h4 class="title2 color_black">Selected Health Analytic Parameters</h4>
+                            </div>                                    
+                            <div class="clearfix"></div>
+                            <div>
+                                <ul class="list-group list_group_shadow">
+                                    <li class="list-group-item clearfix list_item list_item_parameter"
+                                        ng-repeat="(innerKey, tempChildObj) in health.subData track by $index"
+                                        >
+                                        <p class="float_left m_para_mobno no_margin">{{ tempChildObj.health_analytics_test_name}}</p>                                                
+                                        <div class="float_right" >
+                                            <img src="app/images/popup_remove.png" alt="remove"
+                                                 class="cursor_pointer"
+                                                 ng-click="removeSubHealthObj(innerKey)"
+                                                 ng-if="tempChildObj.is_editable == 1 || tempChildObj.is_checked == 2"
+                                                 />
+                                        </div>
+                                    </li>                                                                                                                                                                                                                    
+                                </ul>                                  
+                            </div>
+
+                            <div class="row m_top_62per">                                       
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_top_26">
+                                    <input type="button"
+                                           value="Done"
+                                           name="done"
+                                           class="btn btn_properties btn_witdth new_common_button  float_right"
+                                           ng-click="addHealthComponents()"
+                                           />                                 
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_top_26">
+                                    <input type="reset" value="Cancel"  data-dismiss='modal' name="cancle" class="btn btn_properties btn_witdth new_common_button_1 cancel_patient float_left" />                                                                                                                  
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                  
+        </div>
+    </div>  
+</div>
+<!-- End Health Analytics Modal -->
+<!-- Start Health Advice Modal -->
+<div class="modal fade" id="modal_health_advice" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg health_analytics">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <h3 class="modal-title modaltitle_m">Health Advice</h3>                            
+            </div>
+            <div class="modal-body health_analytics_padding gotham_book placeholder_class">        
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="common_border common_health_p_h health_advice_h">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 font_color_1 padding_0">
+                                <h4>Search name for Health Advice</h4>
+                            </div>       
+                            <div class="clearfix"></div>
+                            <div class="m_top_12">
+                                <ul class="list-group list_group_shadow">
+                                    <li class="list-group-item list_item right clearfix para_template">
+                                        <p class="float_left no_margin">
+                                            HIV/AIDS                                            
+                                        </p>
+                                        <div class="common_radio_1 right float_right checkbox_width">
+                                            <input id="dummy_1" name="dummy_radio_button" type="radio">
+                                            <label for="dummy_1" class="no_margin"></label>
+                                        </div>
+                                    </li>                                                                                       
+                                    <li class="list-group-item list_item right clearfix para_template">
+                                        <p class="float_left no_margin">
+                                            Anthar
+                                        </p>
+                                        <div class="common_radio_1 float_right checkbox_width">
+                                            <input id="dummy_2" name="dummy_radio_button" type="radio">
+                                            <label for="dummy_2" class="no_margin"></label>
+                                        </div>
+                                    </li>                                                                                       
+                                    <li class="list-group-item list_item right clearfix para_template">
+                                        <p class="float_left no_margin">
+                                            Appendicitis
+                                        </p>
+                                        <div class="common_radio_1 float_right checkbox_width">
+                                            <input id="dummy_3" name="dummy_radio_button" type="radio">
+                                            <label for="dummy_3" class="no_margin"></label>
+                                        </div>
+                                    </li>                                                                                       
+                                    <li class="list-group-item list_item right clearfix para_template">
+                                        <p class="float_left no_margin">
+                                            Asthama
+                                        </p>
+                                        <div class="common_radio_1 float_right checkbox_width">
+                                            <input id="dummy_4" name="dummy_radio_button" type="radio">
+                                            <label for="dummy_4" class="no_margin"></label>
+                                        </div>
+                                    </li>                                                 
+                                </ul>                                  
+                            </div>
+                            <div class="common_hr m_top_130"></div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="m_top_26">
+                                    <span class="font_color_1 gotham_medium">Already receiving health advice from other Dr.</span>
+                                    <p>HIV/ADIS, Anthrax, Appendictis</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="common_border common_health_p_h health_advice_h">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 font_color_1 padding_0">
+                                <h4>Active Health Advice from other</h4>
+                            </div>                                    
+                            <div class="clearfix"></div>
+                            <div>
+                                <ul class="list-group list_group_shadow">
+                                    <li class="list-group-item clearfix list_item">
+                                        <p class="float_left m_para_mobno no_margin">Asthma</p>                                                                                                
+                                    </li>                                                                                                                                   
+                                </ul>                                  
+                            </div>
+                            <div class="row m_top_62per">                                       
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_top_30">
+                                    <input type="button" value="Save" name="save" class="btn btn_properties btn_witdth new_common_button  float_right"/>                                 
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_top_30">
+                                    <input type="reset" value="Cancel"  data-dismiss='modal' name="cancle" class="btn btn_properties btn_witdth new_common_button_1 cancel_patient float_left" />                                                                                                                  
+                                </div>  
+                            </div>                               
+                        </div>
+                    </div>
+                </div>
+            </div>                  
+        </div>
+    </div>  
+</div>
+<!-- End Health Advice Modal -->
+<!-- Start Refer Modal -->
+<div class="modal fade" id="modal_refer" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg appointment_paients">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <h3 class="modal-title modaltitle_m">Refer</h3>
+            </div>
+            <div class="modal-body appointment_paients_padding">        
+                <form class="gotham_book placeholder_class" ng-submit="addReferal()" novalidate="">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                            <div class="form-group">                                        
+                                <input type="text"
+                                       ng-model="fav_search.search"
+                                       class="form-control common_input" 
+                                       ng-keyup="getFavListing()"
+                                       id="search_dr_refer" placeholder="Search Dr. for refer " name="search_dr_refer" required="required">
+                            </div>
+                            <div class="m_top_12">
+                                <ul class="list-group list_group_shadow">
+                                    <li class="list-group-item list_item right clearfix para_template"
+                                        ng-repeat="favObj in fav_doctors track by $index"
+                                        >
+                                        <p class="float_left no_margin">
+                                            {{ favObj.user_name}}
+                                        </p>
+                                        <div class="common_radio_1 right float_right checkbox_width">
+                                            <input id="refer{{favObj.user_id}}" 
+                                                   name="dummy_radio_button"
+                                                   type="radio"
+                                                   ng-model="fav_search.selected"
+                                                   ng-value="{{favObj.user_id}}"
+                                                   >
+                                            <label for="refer{{favObj.user_id}}"  class="no_margin"></label>
+                                        </div>
+                                    </li>                                                                                                                           
+                                </ul>                                  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m_top_26">                                       
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                            <input type="submit" value="Refer" name="refer" class="btn new_common_button btn_properties btn_width_60 float_right"/>                                 
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_right_0">
+                            <input type="reset" value="Cancel" name="cancle"  data-dismiss='modal' class="btn new_common_button_1 cancel_patient btn_properties btn_width_60 float_left" />                                                                                                                  
+                        </div>  
+                    </div>
+                </form>
+            </div>                  
+        </div>
+    </div>  
+</div>
+<!-- Start follow up Modal -->
+<div class="modal fade" id="modal_followuptemplate" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg appointment_paients">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <h3 class="modal-title modaltitle_m">Follow Up Template</h3>                            
+            </div>
+            <div class="modal-body appointment_paients_padding">        
+                <form class="gotham_book placeholder_class" method="post"
+                      ng-submit="getFollowupTemplate()"
+                      novalidate=""
+                      >                   
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+
+                            <div class="m_top_12">
+                                <ul class="list-group list_group_shadow">
+                                    <li class="list-group-item list_item right clearfix para_template"
+                                        ng-repeat="dateObj in appointment_followup_dates track by $index"
+                                        ng-if='dateObj.appointment_id != current_appointment_date_obj.appointment_id'
+                                        >
+                                        <p class="float_left no_margin">
+                                            {{ dateObj.appointment_date}} 
+                                        </p>
+                                        <div class="common_radio_1 right float_right checkbox_width">
+                                            <input id="dateobj_{{dateObj.appointment_id}}"
+                                                   name="dummy_radio_button" type="radio"
+                                                   ng-model="followup.is_selected_follow"
+                                                   ng-value="{{ dateObj}}"
+                                                   >
+                                            <label for="dateobj_{{dateObj.appointment_id}}"  class="no_margin"></label>
+                                        </div>
+                                    </li>                                                                                                                           
+                                </ul>                                  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m_top_26">                                       
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                            <input type="submit" value="Add" name="add" class="btn new_common_button btn_properties btn_width_60 float_right"/>                                 
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_right_0">
+                            <input type="reset" value="Cancel" name="cancle"  data-dismiss='modal' class="btn new_common_button_1 cancel_patient btn_properties btn_width_60 float_left" />                                                                                                                  
+                        </div>  
+                    </div>
+                </form>
+            </div>                  
+        </div>
+    </div>  
+</div>
+<!-- End Refer Modal -->   
+<!-- Add appointment start -->
+<div class="inner_div_2 template_add_appointment_div" id="add_appointment" ng-if="addAppointmentOpen" ng-init="getTimeslot()">
+    <form name="addAppointmentForm" ng-submit="addAppointment(addAppointmentForm, true)" novalidate>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="top_header background_color_1 white_color text-center gotham_medium">
+                    <h3 class="no_margin">Add appointment ({{current_clinic.clinic_name}})</h3>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-lg-12 font_color_4 placeholder_class" style="padding: 25px 44px;">                           
+                <div class="row m_top_12">                    
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group selection_bx">
+                            <label for="doctor_name" class="m_bottom_15 required">Doctor</label><br>
+                            <input type="text" class="form-control common_input" id="p_mobile" placeholder="Enter Doctor name " name="doctor_name"  ng-model="appointment.doctor_name" readonly="" required="">                                
+                            <p ng-show="submitted && addAppointmentForm.doctor_name.$error.required" class="error">* Required</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row m_top_12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label class="m_bottom_15 required">Appointment Type </label>
+                                <select                                                                    
+                                    name='appointment_type'
+                                    id="appointment_type"
+                                    placeholder="'Select Appointment Type'"
+                                     ng-options="value.id as value.name for value in APPOINTMENT_TYPE | filterInArray:appointmentTypeArr:'id'"
+                                    style="width:100% !important;padding: 8px;"
+                                    ng-model="appointment.appointment_type" 
+                                    class="common_input form-control  required" 
+                                    ng-change="getTimeslot()" 
+                                    required>
+                                </select>
+                            </div>
+                            <p ng-show="appointmentTypeArr.length > 0 && (submitted) && addAppointmentForm.appointment_type.$error.required" class="error" >{{appointment_type_required}}</p>
+                            <p ng-show="appointmentTypeArr.length == 0" class="error" >Please check your setting</p>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="clearfix"></div>
+                <div class="row m_top_12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label for="date" class="m_bottom_15 required">Scheduled On</label><br>
+                            <p class="input-group login_input dropup">
+                                <input type="text" class="form-control login_input" datetime-picker="dd/MM/yyyy" datepicker-options="appointment_picker.datepickerOptions" enable-time="false" ng-model="appointment.appointment_date" is-open="date_of_birth1.open"  required=""  placeholder="DD/MM/YYYY" name="appointment_date" ui-mask="99/99/9999" ng-change="getTimeslot()" />
+                                <span class="input-group-btn login_input">
+                                    <button type="button" class="btn btn-default login_input" ng-click="date_of_birth1.open = true"><i class="fa fa-calendar"></i></button>
+                                </span>
+                            </p>
+                            <p ng-show="(submitted) && addAppointmentForm.appointment_date.$error.required" class="error" >* Required.</p>
+                            <p ng-show="appointment.appointment_date == undefined" class="error" >{{invalid_date}}</p>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="clearfix"></div>
+                <div class="row m_top_12 m_bottom_20">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <label class="required m_bottom_15">To</label>
+                            <div class="position_relative">
+                                <select
+                                    name='from_time'
+                                    id="from_time"
+                                    placeholder="'Select time'"                                                                
+                                    ng-options="value as value.start_time_label for value in other.availibility_slots"
+                                    style="width:100% !important;"                                                                                                                                
+                                    ng-model="appointment.from_time" class="common_input form-control  required" required>
+                                    <option value="">Select time</option>                                                                 
+                                </select>
+                            </div>
+                        </div>
+                        <p ng-show="(submitted) && addAppointmentForm.from_time.$error.required" class="error" >* Required.</p>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <label for="duration" class="m_bottom_15">For</label><br>                                                                                             
+                            <input type="text" class="form-control common_input"  readonly="" value="{{appointment.duration | minutesToHourText}}" />
+                            <input type="hidden" class="form-control" name="duration" ng-model="appointment.duration" required="" placeholder="Duration" readonly=""/>
+                        </div>
+                        <p ng-show="(submitted) && addAppointmentForm.duration.$error.required" class="error" >* Required.</p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>       
+                <div class="row"> 
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <input type="hidden" name="patient_id" ng-model="appointment.patient_id" />
+						<input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>                                 
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <input type="button" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties" ng-click="addAppointmentClose()" />                                                                                                                  
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- img display modal-->
+<div id="fullscreen_img_modal" class="modal fade in" role="dialog" data-backdrop="static" data-keyboard="false">
+    <!-- The Close Button -->
+    <span class="close" ng-click="closeFullImgModal()" >&times;</span>
+    <!-- Modal Content (The Image) -->
+    <img class="modal-content" id="my_img" ng-if="Model.currentImg != ''" ng-src="{{Model.currentImg}}" />
+	<div class="modal-content" ng-if="Model.currentPdf != ''" style="width:90%;height:95%;">
+		<iframe frameBorder="0" ng-src="{{Model.currentPdf}}" ng-if="Model.currentPdf != ''" width="100%" height="100%"></iframe>
+	</div>
+</div>
+<!-- img display of clinical notes modal-->
+<div id="show_clinical_notes_image_modal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content">
+            <div class="modal-header common_title background_color_1 white_color text-center">                  
+                <h3 class="modal-title modaltitle_m">Clinical Note Image<span class="close pull-right" data-dismiss='modal' >&times;</span></h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_bottom_15">
+                        <img ng-if="current_appointment_date_obj.is_editable" src="app/images/delete_icon.png" alt="delete"
+                         class="img-responsive pull-right fullscreen-icons cursor_pointer"
+                         ng-click="deleteClinicalImage()"
+                     />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                        <img style="max-width: 100%;max-height: 635px;" ng-src="{{Model.currentImgClinicalNotes.clinic_notes_reports_images_url}}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade modal-custom-lg" id="modal_report_detail" role="dialog" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg appointment_paients">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <h3 class="modal-title modaltitle_m">{{report_detail.file_report_name}} ({{report_detail.file_report_date| date:'dd/MM/y'}}) <span class="close pull-right" data-dismiss='modal' >&times;</span></h3>
+            </div>
+            <!-- <div class="modal-body appointment_paients_padding">
+                <div class="row text-center font-15 m_bottom_20 zoom-div">
+                    <img src="app/images/zoom_in.png" class="cursor_pointer " ng-click="zoomplus(.1)" />
+                    <img src="app/images/zoom_out.png" class="cursor_pointer " ng-click="zoomplus(-.1)" />
+                </div>
+                <div class="row image-zoom-div" ng-mouseup="checkMouseLeave($event)" ng-mousedown="checkMouseDown($event)">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 padding_0 text-center modal_report_image m_bottom_20" ng-repeat="(key,imgObj) in report_detail.images">
+                        <div class="m_top_12" movable resizable>
+                            <img ng-if="imgObj.substr((imgObj.lastIndexOf('.') + 1)) != 'pdf'" ng-src="{{ imgObj}}" class="report_img" ng-style="{transform: zoomtest}" />
+                            <iframe 
+                                ng-src="{{trustSrc(imgObj)}}"
+                                width="450px"
+                                height="450px"
+                                ng-if="imgObj.substr((imgObj.lastIndexOf('.') + 1)) == 'pdf'"
+                                >
+                            </iframe>
+                        </div>
+                        <div ng-if="((key) % 3 == 0)" class="clearfix"></div>
+                    </div>
+                </div>
+            </div> -->
+			<div class="modal-body appointment_paients_padding">
+                <div class="row">
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 padding_0 text-center modal_report_image m_bottom_20" ng-repeat="(key,imgObj) in report_detail.images">
+                        <div class="m_top_12"><!-- movable resizable -->
+                            <img ng-if="imgObj.substr((imgObj.lastIndexOf('.') + 1)) != 'pdf'" ng-src="{{report_detail.images_thumb[key]}}" 
+                                  ng-click="openFullImageModal(imgObj)" class="cursor_pointer" style="width:95%; height:95%"
+                                  />
+							<img ng-if="imgObj.substr((imgObj.lastIndexOf('.') + 1)) == 'pdf'" ng-click="openFullImageModal(trustSrc(imgObj),'file')" class="cursor_pointer" src="app/images/pdf-report-icone.png" />
+                        </div>
+                        <div ng-if="((key) % 3 == 0)" class="clearfix"></div>
+                    </div>
+					<div ng-if="isPreRptShow" class="row text-center font-15 m_bottom_20 model_previous_btn">
+						<img alt="Previous" class="cursor_pointer" title="Click to Check Previous Report" ng-click="openReportDetail(nxtPreRptObj.preRptObj.id, nxtPreRptObj.preRptObj.indx)" src="app/images/prev_arrow.png" />
+					</div>
+					<div ng-if="isNextRptShow" class="row text-center font-15 m_bottom_20 model_next_btn">
+						<img alt="Next" class="cursor_pointer" title="Click to Check Next Report" ng-click="openReportDetail(nxtPreRptObj.nextRptObj.id, nxtPreRptObj.nextRptObj.indx)" src="app/images/next_arrow.png" />
+					</div>
+                </div>
+            </div>
+            <div class="modal-footer" style="display:none;">&nbsp;</div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal_print" role="dialog"  data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg appointment_paients">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <h3 class="modal-title modaltitle_m">Print Preview
+                    <span class="close pull-right"  data-dismiss='modal'
+                          ng-click="clearPrint()"
+                          >&times;</span>                    
+                </h3> 
+            </div>
+            <div class="modal-body appointment_paients_padding">       
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 " >
+                        <div class="m_top_12" ng-if="print_share_url">
+                            <iframe 
+                                style="height: 500px;"
+                                width="95%"
+                                ng-src="{{print_share_url}}">
+                            </iframe>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                        <div class="m_top_12">
+                            <p class="gotham_light">Select The Items You Want To Print</p>
+                            <div class="m_top_10 common_hr m_bottom_20" style="padding-bottom:5px;"> 
+                                <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="vital_chk" ng-model="pdf_url_data.with_vitalsign" 
+                                           ng-change="getPDFUrl()"
+                                           />    
+                                    <label for="vital_chk" class="disclose font-15">Vitals</label>
+                                </div>                                
+                                <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="clinical_checkbox" ng-model="pdf_url_data.with_clinicnote" 
+                                           ng-change="getPDFUrl()"
+                                           />    
+                                    <label for="clinical_checkbox" class="disclose font-15">Clinical Notes</label>
+                                </div>
+                                <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="only_diagnosis_checkbox" ng-model="pdf_url_data.with_only_diagnosis" 
+                                           ng-change="getPDFUrl()"
+                                           />    
+                                    <label for="only_diagnosis_checkbox" class="disclose font-15">Only Diagnosis</label>
+                                </div>                                
+                                <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="lab_checkbox" ng-model="pdf_url_data.with_patient_lab_orders" 
+                                           ng-change="getPDFUrl()"
+                                           />    
+                                    <label for="lab_checkbox" class="disclose font-15">Investigations</label>
+                                </div>                                
+                                <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="prs_checkbox" ng-model="pdf_url_data.with_prescription" 
+                                           ng-change="getPDFUrl()"
+                                           />    
+                                    <label for="prs_checkbox" class="disclose font-15">Prescriptions</label>
+                                </div>
+                                <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="with_generic_checkbox" ng-model="pdf_url_data.with_generic" 
+                                           ng-change="getPDFUrl()"
+                                           />    
+                                    <label for="with_generic_checkbox" class="disclose font-15">Generic</label>
+                                </div>  
+                                <!-- <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="files_checkbox" ng-model="pdf_url_data.with_files" 
+                                           ng-change="getPDFUrl()"
+                                           />    
+                                    <label for="files_checkbox" class="disclose font-15">Files</label>
+                                </div> -->
+                                <!-- <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="treat_checkbox" ng-model="pdf_url_data.with_treatment" 
+                                           ng-change="getPDFUrl()"
+                                           />    
+                                    <label for="treat_checkbox" class="disclose font-15">Treatments plans</label>
+                                </div> -->                                                      
+                                <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="proc_checkbox" ng-model="pdf_url_data.with_procedure" ng-change="getPDFUrl()"/>
+                                    <label for="proc_checkbox" class="disclose font-15">Procedures</label>
+                                </div>
+                                <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="signature_checkbox" ng-model="pdf_url_data.with_signature" ng-change="getPDFUrl()"/>
+                                    <label for="signature_checkbox" class="disclose font-15">Signature</label>
+                                </div>
+                                <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="anatomy_diagram_checkbox" ng-model="pdf_url_data.with_anatomy_diagram" 
+                                           ng-change="getPDFUrl()"
+                                           />    
+                                    <label for="anatomy_diagram_checkbox" class="disclose font-15">Patient Tools</label>
+                                </div>
+                            </div>
+                            <div ng-if="!pdf_url_data.tele_consultation" class="m_top_10 common_hr m_bottom_20" style="padding-bottom:5px;"> 
+                                <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="prnt_tele_consultation_chk" ng-model="pdf_url_data.tele_consultation" 
+                                           ng-change="changeAppointmentType(false)"
+                                           />    
+                                    <label for="prnt_tele_consultation_chk" class="disclose font-15">Tele Consultation</label>
+                                </div>
+                            </div>
+                            <!-- <div class="m_top_5 common_hr" style="padding-bottom:5px;">
+                                <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="hide_header_footer_chk" ng-model="pdf_url_data.hide_header_footer" ng-change="getPDFUrl()" class="ng-pristine ng-untouched ng-valid">    
+                                    <label for="hide_header_footer_chk" class="disclose font-15">Page Setup</label>
+									<input ng-if="!pdf_url_data.hide_header_footer" type="button" ng-click="savePrintSetup()" value="Save" class="title3 new_common_button btn_properties" style="line-height:0px; height:20px;float:right;" />
+                                </div>
+							</div> -->
+							<!-- <div ng-if="pdf_url_data.hide_header_footer" class="m_top_10 m_bottom_40 common_hr" style="padding-bottom:5px;">
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<p class="gotham_light" style="margin-bottom:2px;">Margins (CM)</p>
+									<div class="col-sm-6">
+										<input type="number" id="header_space" ng-model="pdf_url_data.header_space" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" ng-change="getPDFUrl()" class="form-control" />    
+										<label for="header_space" class="title3">Header</label>
+									</div>
+									<div class="col-sm-6">
+										<input type="number" id="footer_space" ng-model="pdf_url_data.footer_space" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" ng-change="getPDFUrl()" class="form-control" />    
+										<label for="footer_space" class="title3">Footer</label>
+									</div>
+								</div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10">
+                                    <div class="col-sm-6">
+                                        <input type="number" ng-model="pdf_url_data.left_space" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" ng-change="getPDFUrl()" class="form-control" />    
+                                        <label class="title3">Left</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="number" ng-model="pdf_url_data.right_space" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" ng-change="getPDFUrl()" class="form-control" />    
+                                        <label class="title3">Right</label>
+                                    </div>
+                                </div>
+								<div style="text-align:center;">
+                                    <input type="button" ng-click="savePrintSetup()" value="Save" class="title3 new_common_button btn_properties" style="line-height:0px; height:20px;" />
+								</div>
+                            </div> -->
+                            <div class="m_top_10 common_hr" style="padding-bottom:5px;">
+                                <select allow-single-deselect="true" class="common_input form-control ng-pristine ng-valid ng-touched" ng-model="pdf_url_data.language_id" ng-change="getPDFUrl()" ng-options="language.language_id as language.language_name for language in languages"></select>
+                            </div>
+                            <form name="sharePresEmailSmsForm" novalidate="">
+                                <div class="m_top_10">                            
+                                    <label for="email" class="font-15">Email</label><br/>
+                                    
+                                    <input type="email"
+                                       class="form-control common_input font-15" 
+                                       id="email" 
+                                       placeholder="Enter Email"
+                                       name="email" 
+                                       ng-required="sharePatientPresValidate()" 
+                                       ng-model="pdf_url_data.email"                   
+                                       ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/"
+                                       >
+                                    
+                                    <p ng-show="submitted && sharePresEmailSmsForm.email.$error.required" class="error" >*Required</p>                                
+                                    <p ng-show="submitted && sharePresEmailSmsForm.email.$error.pattern" class="error" >Invalid Email</p>                                
+                                </div>
+                                <div class="m_top_10">                            
+                                    <label for="mobile_no" class="font-15">Mobile</label><br/>
+                                    <input type="text"
+                                           class="form-control common_input font-15" 
+                                           id="mobile_no" 
+                                           placeholder="Enter Mobile"
+                                           name="mobile_no" 
+                                           ng-required="sharePatientPresValidate()" 
+                                           ng-model="pdf_url_data.mobile_no"                   
+                                           ng-pattern="/^[0-9]{10}$/" 
+                                           maxlength="10" 
+                                           ng-keypress="checkMobileKey($event)"
+                                           >
+                                    <p ng-show="(submitted) && sharePresEmailSmsForm.mobile_no.$error.required" class="error" >*Required</p>                                
+                                    <p ng-show="(submitted) && sharePresEmailSmsForm.mobile_no.$error.pattern" class="error" >Invalid Number</p>                                
+                                </div>
+                            </form>
+                            <!-- <form name="sharePresSMSForm" novalidate="">
+                                
+                            </form> -->
+                            <div class="m_top_10">                                
+                                <a href="{{print_share_url}}" target="_blank">
+                                    <input type="button" value="Print" class="new_common_button btn_properties" />
+                                </a>
+                                <input type="button" ng-click="sharePDF(sharePresEmailSmsForm,'emailSms')" value="Share" class="new_common_button btn_properties"/>
+                                <input type="button" 
+                                       ng-click="clearPrint()"
+                                       data-dismiss='modal'
+                                       value="Cancel" class="new_common_button_1 btn_properties" />                                                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                  
+        </div>
+    </div>  
+</div>
+<div class="modal fade" id="modal_share" role="dialog" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg appointment_paients">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            
+                <div class="modal-header common_title background_color_1 white_color text-center">                        
+                    <h3 class="modal-title modaltitle_m">Print Preview</h3> 
+                </div>
+                <div class="modal-body appointment_paients_padding">       
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 " >
+                            <div class="m_top_12" ng-if="share_with_other_url">
+                                <iframe 
+                                    style="height: 500px;"
+                                    width="95%"
+                                    ng-src="{{share_with_other_url}}">
+                                </iframe>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                            <div class="m_top_30">
+                                <p class="gotham_light">Select The Items You Want To Print</p>
+                                <div class="m_top_10 common_hr" style="padding-bottom:5px;">
+                                    <div class="padding_left_0 common_checbox">
+                                        <input type="checkbox" id="vital_chk" ng-model="pdf_url_data.with_vitalsign" 
+                                               ng-change="getPDFUrlForShare()"
+                                               />    
+                                        <label for="vital_chk" class="disclose font-15">Vitals</label>
+                                    </div>                                
+                                    <div class="padding_left_0 common_checbox">
+                                        <input type="checkbox" id="clinical_checkbox" ng-model="pdf_url_data.with_clinicnote" 
+                                               ng-change="getPDFUrlForShare()"
+                                               />    
+                                        <label for="clinical_checkbox" class="disclose font-15">Clinical Notes</label>
+                                    </div>
+                                    <div class="padding_left_0 common_checbox">
+                                        <input type="checkbox" id="only_diagnosis_share_checkbox" ng-model="pdf_url_data.with_only_diagnosis" 
+                                               ng-change="getPDFUrlForShare()"
+                                               />    
+                                        <label for="only_diagnosis_share_checkbox" class="disclose font-15">Only Diagnosis</label>
+                                    </div>  
+                                    <div class="padding_left_0 common_checbox">
+                                        <input type="checkbox" id="prs_checkbox" ng-model="pdf_url_data.with_prescription" 
+                                               ng-change="getPDFUrlForShare()"
+                                               />
+                                        <label for="prs_checkbox" class="disclose font-15">Prescriptions</label>
+                                    </div>
+                                    <div class="padding_left_0 common_checbox">
+                                        <input type="checkbox" id="with_generic_share_checkbox" ng-model="pdf_url_data.with_generic" 
+                                               ng-change="getPDFUrlForShare()"
+                                               />    
+                                        <label for="with_generic_share_checkbox" class="disclose font-15">Generic</label>
+                                    </div>
+                                    <div class="padding_left_0 common_checbox">
+                                        <input type="checkbox" id="lab_checkbox" ng-model="pdf_url_data.with_patient_lab_orders" 
+                                               ng-change="getPDFUrlForShare()"
+                                               />
+                                        <label for="lab_checkbox" class="disclose font-15">Investigations</label>
+                                    </div>
+                                    <div class="padding_left_0 common_checbox">
+                                        <input type="checkbox" id="proc_checkbox" ng-model="pdf_url_data.with_procedure" 
+                                               ng-change="getPDFUrlForShare()"
+                                               />    
+                                        <label for="proc_checkbox" class="disclose font-15">Procedures</label>
+                                    </div>
+                                    <div class="padding_left_0 common_checbox">
+                                        <input type="checkbox" id="signature_checkbox" ng-model="pdf_url_data.with_signature" ng-change="getPDFUrl()"/>
+                                        <label for="signature_checkbox" class="disclose font-15">Signature</label>
+                                    </div>
+                                    <div class="padding_left_0 common_checbox">
+                                        <input type="checkbox" id="anatomy_diagram_checkbox" ng-model="pdf_url_data.with_anatomy_diagram" 
+                                               ng-change="getPDFUrlForShare()"
+                                               />
+                                        <label for="anatomy_diagram_checkbox" class="disclose font-15">Patient Tools</label>
+                                    </div>
+                                </div>
+                                <div ng-if="!pdf_url_data.tele_consultation" class="m_top_10 common_hr m_bottom_20" style="padding-bottom:5px;"> 
+                                <div class="padding_left_0 common_checbox">
+                                    <input type="checkbox" id="share_tele_consultation_chk" ng-model="pdf_url_data.tele_consultation" 
+                                           ng-change="changeAppointmentType(true)"
+                                           />    
+                                    <label for="share_tele_consultation_chk" class="disclose font-15">Tele Consultation</label>
+                                </div>
+                            </div>
+                                <div class="m_top_10 common_hr" style="padding-bottom:5px;">
+                                    <select allow-single-deselect="true" class="common_input form-control ng-pristine ng-valid ng-touched" ng-model="pdf_url_data.language_id" ng-change="getPDFUrlForShare()" ng-options="language.language_id as language.language_name for language in languages"></select>
+                                </div>
+                                <form name="sharePresForm" novalidate="">
+                                    <div class="m_top_10">                            
+                                        <label for="email" class="font-15">Email</label><br/>
+                                        <div class="input-group">
+                                            <input type="email"
+                                               class="form-control common_input font-15" 
+                                               id="email" 
+                                               placeholder="Enter Email"
+                                               name="email" 
+                                               required="required"
+                                               ng-model="pdf_url_data.email"                   
+                                               ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/"
+                                               >
+                                            <div class="input-group-btn">
+                                                <button title="Share on email" class="btn share-email-btn" type="button" ng-click="sharePDF(sharePresForm,'email')" style="padding: 9px 16px;"><i class="fa fa-share"></i></button>
+                                            </div>
+                                        </div>
+                                        <p ng-show="submitted && sharePresForm.email.$error.required" class="error" >*Required</p>                                
+                                        <p ng-show="submitted && sharePresForm.email.$error.pattern" class="error" >Invalid Email</p>                                
+                                    </div>
+                                </form>
+                                <form name="sharePresSMSForm" novalidate="">
+                                    <div class="m_top_10">                            
+                                        <label for="mobile_no" class="font-15">Mobile</label><br/>
+                                        <input type="text"
+                                               class="form-control common_input font-15" 
+                                               id="mobile_no" 
+                                               placeholder="Enter Mobile"
+                                               name="mobile_no" 
+                                               required="required"
+                                               ng-model="pdf_url_data.mobile_no"                   
+                                               ng-pattern="/^[0-9]{10}$/" 
+                                               maxlength="10" 
+                                               ng-keypress="checkMobileKey($event)"
+                                               >
+                                        <p ng-show="(submitted_smswhatapp) && sharePresSMSForm.mobile_no.$error.required" class="error" >*Required</p>                                
+                                        <p ng-show="(submitted_smswhatapp) && sharePresSMSForm.mobile_no.$error.pattern" class="error" >Invalid Number</p>                                
+                                    </div>
+                                </form>
+                                <div class="m_top_10">                                
+                                    <!-- <input type="button" ng-click="sharePDF(sharePresForm,'email')" value="Share" class="new_common_button btn_properties" /> -->
+                                    
+                                    <input ng-if="(pdf_url_data.sms_credit > 0 || pdf_url_data.is_check_sms_credit==false) && currentUser.sub_plan_setting.sms_share != undefined && currentUser.sub_plan_setting.sms_share == '1'" type="button" ng-click="sharePDFSmsWhatApp(sharePresSMSForm,'sms')" value="SMS" class="new_common_button btn_properties"/>
+
+                                    <button title="Share on whatsapp" ng-if="pdf_url_data.whatsapp_credit > 0 && currentUser.sub_plan_setting.whatsapp_share != undefined && currentUser.sub_plan_setting.whatsapp_share == '1'" type="button" ng-click="sharePDFSmsWhatApp(sharePresSMSForm,'whatsapp')" class="new_common_button btn_properties hide" style="position: relative;"><i class="fa fa-whatsapp" aria-hidden="true" style="position: absolute;left: 33px;font-size: 25px;"></i>&nbsp;</button>
+                                    <input type="button" 
+                                           ng-click="clearPrint()"
+                                           data-dismiss='modal'
+                                           value="Cancel" class="new_common_button_1 btn_properties" />                                                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+        </div>
+    </div>  
+</div>
+<div class="modal fade" id="modal_print_invoice" role="dialog"  data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg appointment_paients">
+        <form name="shareForm" id="shareForm" ng-submit="sharePDFInvoice(shareForm)" novalidate="">
+            <div class="modal-content no_padding modal_content_height model_content_style">
+                <div class="modal-header common_title background_color_1 white_color text-center">                        
+                    <h3 class="modal-title modaltitle_m">Print Preview
+                        <span class="close pull-right" data-dismiss='modal' ng-click="clearPrint()">&times;</span>
+                    </h3>
+                </div>
+                <div class="modal-body appointment_paients_padding">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 " >
+                            <div class="m_top_12" ng-if="print_url_invoice">
+                                <iframe 
+                                    style="height: 500px;"
+                                    width="95%"
+                                    ng-src="{{print_url_invoice}}">
+                                </iframe>
+                            </div>
+                        </div>
+                        <div ng-if="!is_share_invoice" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 m_top_30">
+                            <div class="common_radio" ng-repeat="(key, invoicesObj) in invoices_list">
+                                <input ng-if="!is_share_invoice" type="radio" name="invoice_number" id="{{invoicesObj.invoice_number}}" ng-model="pdf_url_data.billing_id" ng-value="invoicesObj.billing_id" ng-change="getPDFUrlInvoice(invoicesObj.billing_id)">
+                                <label for="{{invoicesObj.invoice_number}}" class="disclose font-15">{{invoicesObj.invoice_number}}</label>
+                            </div>                                
+                        </div>
+                        <div ng-if="is_share_invoice" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 m_top_30">
+                            <div class="padding_left_0 common_checbox" ng-repeat="(key, invoicesObj) in invoices_list">
+                                <input type="checkbox" ng-required="!someSelected()" name="billing_id_arr" ng-init="pdf_url_data.billing_id_arr[invoicesObj.billing_id]=false" ng-model="pdf_url_data.billing_id_arr[invoicesObj.billing_id]" id="{{invoicesObj.invoice_number}}"/>
+                                <label for="{{invoicesObj.invoice_number}}" class="disclose font-15"></label>
+                                <label class="cursor_pointer" ng-class="pdf_url_data.billing_id == invoicesObj.billing_id ? 'active-invoice' : ''" ng-click="sharePDFUrlInvoice(invoicesObj.billing_id)">{{invoicesObj.invoice_number}}</label>
+                            </div>
+                            <p ng-show="submitted && shareForm.billing_id_arr.$error.required" class="error" >*Required</p>
+                        </div>
+                        <div ng-if="is_share_invoice" class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                            <div class="m_top_12">                            
+                                <label for="email" class="font-15">Email</label><br>
+                                <input type="email"
+                                       class="form-control common_input font-15" 
+                                       id="email" 
+                                       placeholder="Enter Email"
+                                       name="email" 
+                                       ng-required="sharePatientPresValidate()"
+                                       ng-model="pdf_url_data.email"                   
+                                       ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/"
+                                       >
+                                <p ng-show="submitted && shareForm.email.$error.required" class="error" >*Required</p>                                
+                                <p ng-show="submitted && shareForm.email.$error.pattern" class="error" >Invalid Email</p>                                
+                            </div>
+                            <div class="m_top_12">                            
+                                <label class="font-15">Mobile</label><br>
+                                <input type="text"
+                                    class="form-control common_input font-15" 
+                                    placeholder="Enter Mobile"
+                                    name="mobile_no" 
+                                    ng-required="sharePatientPresValidate()"
+                                    ng-model="pdf_url_data.mobile_no"                   
+                                    ng-pattern="/^[0-9]{10}$/" 
+                                    maxlength="10" 
+                                />
+                                <p ng-show="submitted && shareForm.mobile_no.$error.required" class="error" >*Required</p>                                
+                                <p ng-show="submitted && shareForm.mobile_no.$error.pattern" class="error" >Invalid Number</p>                                
+                            </div>
+                            <div class="m_top_30">                                                        
+                                <div class="m_top_130">                                
+                                    <input type="submit" value="Share" class="new_common_button btn_properties" />
+                                    <input type="button" 
+                                           ng-click="clearPrint()" 
+                                           data-dismiss='modal' 
+                                           value="Cancel" class="new_common_button_1 btn_properties" />
+								</div>
+                            </div>
+                        </div>
+                        <div ng-if="!is_share_invoice" class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                            <div class="m_top_30">                                                        
+                                <div class="m_top_130">                                
+                                    <a href="{{print_url_invoice}}" target="_blank">
+                                        <input type="button" value="Print" class="new_common_button btn_properties">
+                                    </a>
+                                    <input type="button" 
+                                           ng-click="clearPrint()" 
+                                           data-dismiss='modal' 
+                                           value="Cancel" class="new_common_button_1 btn_properties" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="modal_invoiceno_update" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal_dialog_width">
+		<form name="invoicenoUpdateForm" id="invoicenoUpdateForm" ng-submit="invoicenoUpdate(invoicenoUpdateForm)" novalidate="">
+			<div class="modal-content no_padding modal_content_height model_content_style">
+                <div class="modal-header common_title background_color_1 white_color text-center">                        
+                    <h3 class="modal-title modaltitle_m">Change Invoice Number
+                        <span class="close pull-right" data-dismiss='modal' ng-click="clearPrint()">&times;</span>
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<span style="font-size:12px;">Enter an alphanumeric prefix (does not increment) and a numeric part to set initial value.<br/>You can choose to automatically increment the numeric part for every new payment.</span>
+						</div>
+					</div>
+					<div class="row m_top_15">
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+							<div class="form-group">
+								<label class="gotham_light">Alphanumeric prefix</label>
+								<input class="form-control common_input" ng-pattern="/^[a-zA-Z0-9]*$/" placeholder="Alphanumeric prefix" type="text" ng-model="invoice_no_data.inv_prefix" name="invoice_prefix" id="invoice_prefix" required="" />
+								<p ng-show="invoicenoUpdateForm.invoice_prefix.$error.required" class="error">Required</p>
+								<p ng-show="invoicenoUpdateForm.invoice_prefix.$error.pattern" class="error">Please use numbers letters only</p>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+							<div class="form-group">
+								<label class="gotham_light">Numeric</label>
+								<input class="form-control common_input" ng-pattern="/^[0-9]*$/" placeholder="Numeric" type="text" ng-model="invoice_no_data.inv_counter" name="invoice_counter" id="invoice_counter" required="" />
+								<p ng-show="invoicenoUpdateForm.invoice_counter.$error.required" class="error">Required</p>
+								<p ng-show="invoicenoUpdateForm.invoice_counter.$error.pattern" class="error">Please use numbers only.</p>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<input type="checkbox" name="invoice_autoincrement" id="invoice_autoincrement" ng-model="invoice_no_data.invoice_autoincrement" />
+                            <label for="invoice_autoincrement" class="disclose font-15">Automatically increment from this invoice number.</label>
+						</div>
+					</div>
+					<div class="row">                                                        
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_130" style="text-align:center;">                                
+							<input type="submit" value="Save" class="new_common_button btn_properties" />
+							<input type="button" data-dismiss='modal' value="Cancel" class="new_common_button_1 btn_properties" />
+						</div>
+                    </div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<!-- Patient Previous Health Analytic Modal Start-->
+<div class="modal fade" id="modal_patient_previous_health_analytic" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal_dialog_width modal-lg patient_previous_health_analytic_width">
+		<div class="modal-content no_padding">
+			<form class="font_color_5 gotham_light placeholder_class" ng-submit="managePatientPreviousHealthAnalytic(managePatientPreviousHealthAnalyticForm)" novalidate="" name="managePatientPreviousHealthAnalyticForm" id="managePatientPreviousHealthAnalyticForm">
+				<div class="modal-header common_title background_color_1 white_color text-center">                        
+					<h3 class="modal-title m_top_15">Patient Health Analytic</h3>                            
+				</div>
+				<div class="modal-body patient_previous_health_analytic_padding padding_body text-left" ng-show="isShowPatientPreviousHealthAnalyticForm">
+					<!--
+						<div ng-repeat="(key, pphad) in patientPreviousHealthAnalyticData">
+							<ng-form name="innerPphadForm">
+								<div class="font_color_4 gotham_light placeholder_class">
+									<div class="row common_tb_border" style="border-top:0px !important;">
+										<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+											<h4 class="required title2 color_black">Name</h4>
+											<div class="form-group">                                                        
+												<select required="required" class="form-control common_input" ng-model="pphad.selectedHadv" name="healthAname" ng-options="hatObj.health_analytics_test_name group by hatObj.health_analytics_parent_test_name for hatObj in healthAnalysisTest"><option ng-option value="">Select Analytic Name</option></select><p ng-show="(pphadsubmitted) && innerPphadForm.healthAname.$error.required" class="error">{{patient_health_analytic_parameter_required}}</p>
+											</div>
+										</div>
+										<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+											<h4 class="required title2 color_black">Report Date</h4>
+											<div class="form-group">
+												<p class="input-group login_input">
+												<input type="text" 
+													   class="form-control login_input" 
+													   datetime-picker="dd/MM/yyyy" 
+													   datepicker-options="analytic_report_picker.datepickerOptions" 
+													   enable-time="false" 
+													   ng-model="pphad.healthAnalysis.date" 
+													   is-open="analytic_report_picker[key].open" 
+													   required="" placeholder="DD / MM / YYYY" 
+													   name="healthdate" 
+													   readonly="" 
+													   />
+												<span class="input-group-btn login_input"><button type="button" class="btn btn-default login_input" ng-click="analytic_report_picker[key].open = true"><i class="fa fa-calendar"></i></button></span>
+												</p>
+												<p ng-show="(pphadsubmitted) && innerPphadForm.healthdate.$error.required" class="error">{{patient_health_analytic_reading_date_required}}</p>
+											</div>
+										</div>
+										<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+											<h4 class="required title2 color_black">Reading</h4>
+											<div class="form-group">                                                        
+												<input type="text" class="form-control common_input" placeholder="Enter Reading" name="healthname" ng-model="pphad.healthAnalysis.value" required="required" ng-disabled='!pphad.selectedHadv' ng-change="health_analytics_validation({{pphad.selectedHadv.health_analytics_test_validation}}, innerPphadForm, key,'pphad_analytics_error_')" />
+												<p ng-show="(pphadsubmitted) && innerPphadForm.healthname.$error.required" class="error">{{patient_health_analytic_reading_required}}</p>
+												<p ng-show="innerPphadForm.healthname.$error.pattern" id="pphad_analytics_error_{{key}}" class="error"></p>
+											</div>
+										</div>
+										<a style="position:absolute; right:15px;" href="" ng-if="key != 0" ng-click="removeLastPphadObj(key)"><img src="app/images/delete_icon.png" alt="delete" class="img-responsive rx_delete_img" /></a>
+										<div class="clearfix"></div>
+									</div>
+									<div class="margin_top_5">
+										<button name="" type="button" ng-if="key == patientPreviousHealthAnalyticData.length - 1" ng-click="addMorePphad()" class="btn common_button btn_pop_instruction float_right font_color_1 font_size_18">Add more</button>
+									</div>
+								</div>
+							</ng-form>
+						</div>
+					-->
+					<div class="row">
+						<div class="col-lg-12 gotham_light font_color_5"> 
+							<div class="row" ng-repeat="(key, pphad) in patientPreviousHealthAnalyticData track by $index">
+							<ng-form name="innerPphadForm">
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+									<label class="m_bottom_15 required" ng-if="key == 0">Lab Test</label>
+									<div class="form-group">
+										<input custom-autofocus="$index == focusIndex[17]" 
+											   id="pphad_note_{{key}}" 
+											   key="{{key}}" 
+											   type="text" 
+											   class="form-control common_input pull-left" 
+											   client-auto-complete dirtype='17' 
+											   name="healthAname" 
+											   ng-keyup="appendHealthTestOnPopUp(key, $event, patientPreviousHealthAnalyticData, 17)" 
+											   placeholder="{{key==0 ? 'Enter Lab Test Name':''}}" 
+											   ng-model="pphad.search" 
+											   ng-readonly="key != (patientPreviousHealthAnalyticData.length - 1)" 
+											   ng-disabled="key != (patientPreviousHealthAnalyticData.length - 1)" 
+											   />
+										<p class="error" ng-show="pphad_lab_test_error && !pphad_lab_test_error_invalid">Please Enter At Least One Lab Test Name</p>
+										<p ng-show="(pphadsubmitted) && innerPphadForm.healthAname.$error.required" class="error">{{patient_health_analytic_parameter_required}}</p>
+									</div>
+								</div>
+								<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+									<label class="m_bottom_15" ng-if="key == 0">Report Date</label>
+									<div class="form-group">
+										<p class="input-group login_input">
+										<input type="text"
+                                           class="form-control login_input" 
+                                           datepicker-options="analytic_report_picker.datepickerOptions" 
+                                           ng-model="pphad.healthAnalysis.date" 
+										   datetime-picker="dd/MM/yyyy" 
+										   enable-time="false" 
+										   is-open="analytic_report_picker[key].open" 
+                                           ng-required="pphad.selectedHadv != undefined && pphad.selectedHadv.health_analytics_test_id != undefined" 
+										   placeholder="DD/MM/YYYY" 
+                                           name="healthdate" 
+                                           ui-mask="99/99/9999" 
+                                           />
+										<span class="input-group-btn login_input"><button type="button" class="btn btn-default login_input" ng-click="analytic_report_picker[key].open = true"><i class="fa fa-calendar"></i></button></span>
+										</p>
+										<p ng-show="(pphadsubmitted) && innerPphadForm.healthdate.$error.required" class="error">{{patient_health_analytic_reading_date_required}}</p>
+                                        <p ng-show="(pphadsubmitted) && pphad.healthAnalysis.date == undefined" class="error">{{invalid_date}}</p>
+								    </div>
+								</div>
+								<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+									<label class="m_bottom_15" ng-if="key == 0">Reading</label>
+									<div class="form-group">
+										<div class="form-group">                                                        
+											<input type="text" class="form-control common_input" placeholder="Enter Reading" name="healthname" ng-model="pphad.healthAnalysis.value" ng-required="pphad.selectedHadv != undefined && pphad.selectedHadv.health_analytics_test_id != undefined" ng-disabled='!pphad.selectedHadv' ng-change="health_analytics_validation(pphad.selectedHadv.health_analytics_test_validation, innerPphadForm, key,'pphad_analytics_error_')" />
+											<p ng-show="(pphadsubmitted) && innerPphadForm.healthname.$error.required" class="error">{{patient_health_analytic_reading_required}}</p>
+											<p ng-show="innerPphadForm.healthname.$error.pattern" id="pphad_analytics_error_{{key}}" class="error"></p>
+										</div>
+								    </div>
+								</div>
+								<div class="col-lg-1 col-md-2 col-sm-1 col-xs-1 padding_left_0" 
+									 ng-if="key != (patientPreviousHealthAnalyticData.length - 1)" 
+									 ng-class="key == 0 ? 'm_top_25' : ''">
+									<img src="app/images/remove.png" style="height: 35px"
+										 class="doc_image doc_image_add cursor_pointer" 
+										 ng-click="removeLastPphadObj(key)" />
+								</div>
+							</ng-form>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer m_top_60">
+					<div class="row m_top_40 m_bottom_25">
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+							<input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right" />
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+							<input type="reset" ng-click="" data-dismiss="modal" value="Cancel" name="cancle" class="btn new_common_button_1 cancel_patient btn_properties float_left" />
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- Patient Previous Health Analytic Modal End-->
+<!-- Reports Compare View Modal Start-->
+<div class="modal fade" id="modal_patient_reports_image_compare" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal_dialog_width modal-lg health_analytics patient_reports_image_compare_width">
+		<div class="modal-content no_padding modal_content_height model_content_style">
+			<div class="modal-header common_title background_color_1 white_color text-center">                        
+				<h3 class="modal-title modaltitle_m">Image Analysis <span style="margin-top:0px;margin-right:12px;color:white;opacity:1;" class="close pull-right" data-dismiss='modal' ng-click="">&times;</span></h3>
+			</div>
+			<div class="modal-body appointment_paients_padding gotham_book placeholder_class">
+				<div class="row">
+					<div ng-show="isImageCompare" class="image-compare-btn" title="Swap Image" style="font-size:30px; position:absolute;z-index:77;left:95%;top:8px;cursor:pointer;"><i class="fa fa-exchange"></i></div>
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 image-page-container">
+						<div ng-show="isImageCompare" ng-images-compare class="js-img-compare">
+							<div style="display: none;">
+								<span class="images-compare-label">{{imageCompareObj.img1.title}}</span>
+								<img ng-src="{{imageCompareObj.img1.path}}" alt="{{imageCompareObj.img1.title}}" />
+							</div>
+							<div>
+								<span class="images-compare-label">{{imageCompareObj.img2.title}}</span>
+								<img ng-src="{{imageCompareObj.img2.path}}" alt="{{imageCompareObj.img2.title}}" />
+							</div>
+						</div>
+						<div ng-show="isDocumentCompare">
+							<div class="col-lg-6">
+								<span class="document-compare-label">{{imageCompareObj.doc1.title}}</span>
+								<iframe 
+									style="height: 500px;"
+									width="95%"
+									ng-src="{{trustSrc(imageCompareObj.doc1.path)}}">
+								</iframe>
+							</div>
+							<div class="col-lg-6">
+								<span class="document-compare-label">{{imageCompareObj.doc2.title}}</span>
+								<iframe 
+									style="height: 500px;"
+									width="95%"
+									ng-src="{{trustSrc(imageCompareObj.doc2.path)}}">
+								</iframe>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-lg-6"> 
+							<div ng-show="isImageCompare" ng-repeat="(key, imgObj) in imageCompareObj.img1.images_thumb track by $index" class="col-sm-6 col-md-3">
+								<div class="thumbnail">
+									<img ng-if="imgObj.substr((imgObj.lastIndexOf('.') + 1)) != 'pdf'" ng-src="{{imgObj}}" alt="{{imageCompareObj.img1.title}}" />
+									<img ng-if="imgObj.substr((imgObj.lastIndexOf('.') + 1)) == 'pdf'" class="cursor_pointer" src="app/images/pdf-report-icone.png" />
+								</div>
+								<div class="caption title3 gotham_light text-center"><p>{{imageCompareObj.img1.title}} - {{$index+1}}</p></div>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div ng-show="isImageCompare" ng-repeat="(key, imgObj2) in imageCompareObj.img2.images_thumb track by $index" class="col-sm-6 col-md-3 float_right">
+								<div class="thumbnail">
+									<img ng-if="imgObj2.substr((imgObj2.lastIndexOf('.') + 1)) != 'pdf'" ng-src="{{imgObj2}}" alt="{{imageCompareObj.img2.title}}" />
+									<img ng-if="imgObj2.substr((imgObj2.lastIndexOf('.') + 1)) == 'pdf'" class="cursor_pointer" src="app/images/pdf-report-icone.png" />
+								</div>
+								<div class="caption title3 gotham_light text-center"><p>{{imageCompareObj.img2.title}} - {{$index+1}}</p></div>
+							</div>
+						</div>
+						<div class="hide col-lg-12 col-md-12 col-sm-12 col-xs-12">                                       
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_top_26">
+								<input ng-show="isImageCompare" type="button"
+									   value="Swap Image"
+									   name="done"
+									   class="btn btn_properties new_common_button float_right image-compare-btn"
+									   />
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_top_26">
+								<input type="reset" value="Cancel" data-dismiss='modal' ng-click="closeImageCompareObj();" name="cancle" class="btn btn_properties new_common_button_1 cancel_patient float_left" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Reports Compare View Modal End-->
+<!-- Patient Previous Vitals Modal Start-->
+<div class="modal fade" id="modal_patient_previous_vitals" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg patient_previous_health_analytic_width">
+        <div class="modal-content no_padding">
+            <form class="font_color_5 gotham_light placeholder_class" ng-submit="addPreviousVital(addPreviousVitalForm)" novalidate="" name="addPreviousVitalForm" id="addPreviousVitalForm">
+                <div class="modal-header common_title background_color_1 white_color text-center">
+                    <h3 class="modal-title m_top_15">Patient Previous Vitals Entry</h3>                           
+                </div>
+                <div class="modal-body patient_previous_health_analytic_padding padding_body text-left">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <table class="table min_width_767">
+                                <thead class="row font_color_3 gotham_light font_size_18 previous_vitals_head">
+                                    <tr>                                
+                                        <th width="17%" class="text-center">Date</th>
+                                        <th width="12%" class="text-center">Weight(kg)</th>
+                                        <th width="12%" class="text-center">Pulse Rate/Min</th>
+                                        <th width="12%" class="text-center">Resp.Rate/Min</th>
+                                        <th width="10%" class="text-center">Sp02(%)</th>
+                                        <th width="20%" class="text-center">Blood Pressure(mm Hg)</th>
+                                        <th width="12%" class="text-center">Temperature</th>
+                                        <th width="5%" class="text-center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="font_size_14">
+                                    <tr ng-repeat="(key,vital) in previous_vitals track by $index">
+                                        <td colspan="8" class="vital-row">
+                                            <ng-form name="innerVitalsForm">
+                                                <table class="table min_width_767" style="margin-bottom: 0;">
+                                                    <tbody class="font_size_14 previous_vitals_body">
+                                                        <tr>
+                                                            <td width="17%">
+                                                                <p class="input-group login_input">
+                                                                <input type="text" class="form-control login_input ng-pristine ng-untouched ng-valid-required ng-invalid ng-invalid-datetime" datepicker-options="vitals_report_picker.datepickerOptions" ng-model="vital.date" datetime-picker="dd/MM/yyyy" enable-time="false" is-open="vitals_report_picker[key].open" placeholder="DD/MM/YYYY" name="date" ui-mask="99/99/9999" required="required">
+                                                                <span class="input-group-btn login_input"><button type="button" class="btn btn-default login_input" ng-click="vitals_report_picker[key].open = true"><i class="fa fa-calendar"></i></button></span>
+                                                                </p>
+                                                                <p ng-show="(submitted && innerVitalsForm.date.$error.required)" class="error" >* Required</p>
+                                                                <p ng-show="(submitted && vital.date == undefined)" class="error" >{{invalid_date}}</p>
+                                                            </td>
+                                                            <td width="12%">
+                                                                <input type="text" class="form-control common_input" 
+                                                                placeholder="Enter Reading"
+                                                                ng-model="vital.weight" 
+                                                                name="weight"                             
+                                                                ng-change="checkPreviousVitalsValidation(6, innerVitalsForm, key)"             
+                                                                       />
+                                                                <p ng-show="(submitted || innerVitalsForm.weight.$touched) && innerVitalsForm.weight.$error.required" class="error" >* Required</p>
+                                                                <p ng-show="(submitted || innerVitalsForm.weight.$touched) && innerVitalsForm.weight.$error.pattern" class="error" >{{ vital.error}}</p>
+                                                            </td>
+                                                            <td width="12%">
+                                                                <input type="text" 
+                                                                   class="form-control common_input" 
+                                                                   placeholder="Enter Reading"
+                                                                   ng-model="vital.pulse"
+                                                                   name="pulse"                               
+                                                                   ng-change="checkPreviousVitalsValidation(1, innerVitalsForm, key)"                               
+                                                                       />
+                                                                <p ng-show="(submitted || innerVitalsForm.pulse.$touched) && innerVitalsForm.pulse.$error.required" class="error" >* Required</p>                        
+                                                                <p ng-show="(submitted || innerVitalsForm.pulse.$touched) && innerVitalsForm.pulse.$error.pattern && !innerVitalsForm.pulse.$error.required" class="error" >{{ vital.pulse_error}}</p>
+                                                            </td>
+                                                            <td width="12%">
+                                                                <input type="text" 
+                                                                   class="form-control common_input" 
+                                                                   placeholder="Enter Reading"
+                                                                   ng-model="vital.resp"
+                                                                   name="resp"                               
+                                                                   ng-change="checkPreviousVitalsValidation(2, innerVitalsForm, key)"/>
+                                                                <p ng-show="(submitted || innerVitalsForm.resp.$touched) && innerVitalsForm.resp.$error.required" class="error" >* Required</p>
+                                                                <p ng-show="(submitted || innerVitalsForm.resp.$touched) && innerVitalsForm.resp.$error.pattern && !innerVitalsForm.resp.$error.required" class="error" >
+                                                                    {{ vital.resp_error}}
+                                                                </p>
+                                                            </td>
+                                                            <td width="10%">
+                                                                <input type="text" 
+                                                                   class="form-control common_input" 
+                                                                   placeholder="Enter Reading"
+                                                                   ng-model="vital.spo"
+                                                                   name="spo"                               
+                                                                   ng-change="checkPreviousVitalsValidation(7, innerVitalsForm, key)"/>
+                                                                <p ng-show="(submitted || innerVitalsForm.spo.$touched) && innerVitalsForm.spo.$error.required" class="error" >* Required</p>
+                                                                <p ng-show="(submitted || innerVitalsForm.spo.$touched) && innerVitalsForm.spo.$error.pattern && !innerVitalsForm.spo.$error.required" class="error" >
+                                                                    {{ vital.spo_error}}                            
+                                                                </p>
+                                                            </td>
+                                                            <td width="10%">
+                                                                <input type="text" 
+                                                                   class="form-control common_input pull-left" 
+                                                                   placeholder="Systolic"
+                                                                   style="width: 85%"
+                                                                   ng-model="vital.systolic"
+                                                                   name="systolic"                 
+                                                                   ng-change="checkPreviousVitalsValidation(3, innerVitalsForm, key)"/>    
+                                                                <span style="margin-left: 0;padding-left: 5px;" class="pull-left span-side-arrow">/</span>
+                                                                <div class="clearfix"></div>
+                                                                <p ng-show="(submitted || innerVitalsForm.systolic.$touched) && innerVitalsForm.systolic.$error.required" class="error" >* Required</p>
+                                                                <p ng-show="(submitted || innerVitalsForm.systolic.$touched) && innerVitalsForm.systolic.$error.pattern && !innerVitalsForm.systolic.$error.required" class="error" >
+                                                                    {{ vital.sys_error}}
+                                                                </p>
+                                                            </td>
+                                                            <td width="10%">
+                                                                <input type="text" 
+                                                                   class="form-control common_input" 
+                                                                   placeholder="Diastolic" 
+                                                                   ng-model="vital.diastolic"
+                                                                   name="diastolic"
+                                                                   ng-change="checkPreviousVitalsValidation(4, innerVitalsForm, key)"/>    
+                                                                <a href="" ng-if="vital.standing == type.id" class="dropdown-toggle" data-toggle="dropdown" ng-repeat="type in vital_bloodpressure_predefine">
+                                                                    <label class="float_right font_color_1 cursor_pointer title3">
+                                                                        {{ type.name}}
+                                                                    </label>
+                                                                </a>
+                                                                <ul class="dropdown-menu open-right title3">
+                                                                    <li ng-repeat-start="type in vital_bloodpressure_predefine" 
+                                                                    ng-click="vital.standing = type.id">
+                                                                        <a href="" >{{ type.name}}</a></li>
+                                                                    <li class='divider' ng-repeat-end></li>
+                                                                </ul>
+                                                                <p ng-show="(submitted || innerVitalsForm.diastolic.$touched) && innerVitalsForm.diastolic.$error.required" class="error" >* Required</p>
+                                                                <p ng-show="(submitted || innerVitalsForm.diastolic.$touched) && innerVitalsForm.diastolic.$error.pattern && !innerVitalsForm.diastolic.$error.required" class="error" >
+                                                                    {{ vital.dis_error}}
+                                                                </p>
+                                                            </td>
+                                                            <td width="12%">
+                                                                <input type="text"
+                                                                       class="form-control common_input" 
+                                                                       placeholder="Enter Reading"
+                                                                       ng-model="vital.temp"
+                                                                       name="temp"                        
+                                                                       ng-change="checkPreviousVitalsValidation(5, innerVitalsForm, key)"  
+                                                                       />
+                                                                <label class="m_bottom_15">
+                                                                <span class="font_color_1 cursor_pointer" ng-if="!vital.celsuis" ng-click="vital.celsuis = true;changePreFCValue(1,key);checkPreviousVitalsValidation(5, innerVitalsForm, key)"> (&#8457;)</span>
+                                                                <span class="font_color_1 cursor_pointer" ng-if="vital.celsuis" ng-click="vital.celsuis = false;changePreFCValue(2,key);checkPreviousVitalsValidation(5, innerVitalsForm, key)"> (&#8451;)</span>
+                                                                </label>
+                                                                <a href="" class="dropdown-toggle" ng-if="vital.teperature_taken_id == type.id" data-toggle="dropdown" ng-repeat="type in tempearture_taken">
+                                                                    <label class="float_right font_color_1 cursor_pointer title3"> 
+                                                                        {{ type.name}}
+                                                                    </label>
+                                                                </a>
+                                                                <ul class="dropdown-menu open-right title3">
+                                                                    <li ng-repeat-start="type in tempearture_taken" ng-click="vital.teperature_taken_id = type.id">
+                                                                        <a href="" >{{ type.name}}</a></li>
+                                                                    <li class='divider' ng-repeat-end></li>
+                                                                </ul>
+                                                                <br>
+                                                                <p ng-show="(submitted || innerVitalsForm.temp.$touched) && innerVitalsForm.temp.$error.required" class="error" >*Required</p>
+                                                                <p ng-show="(submitted || innerVitalsForm.temp.$touched) && innerVitalsForm.temp.$error.pattern && !innerVitalsForm.temp.$error.required" class="error" >
+                                                                    {{ vital.temp_error}}
+                                                                </p>
+                                                            </td>
+                                                            <td width="5%">
+                                                                <a ng-click="removePatientVitals(key)" name="addtime" class="btn common_button btn_pop_instruction float_right font_color_1 title2"><img src="app/images/popup_remove.png" alt="delete_icon"></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </ng-form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <a ng-click="addMorePatientVitals()" name="addtime" class="btn common_button btn_pop_instruction float_right font_color_1 title2">Add More Vitals</a>
+                        </div>
+                    </div>
+                    <div class="row m_bottom_20">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right" />
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" ng-click="" data-dismiss="modal" value="Cancel" name="cancle" class="btn new_common_button_1 cancel_patient btn_properties float_left" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Patient Previous Vitals Modal End-->
+<!-- Patient Refer Past Rx Verify OTP Modal Start-->
+<div class="modal fade" id="modal_patient_refer_rx_verify_otp" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width">
+        <div class="modal-content no_padding">
+            <form class="form-inline font_color_5 gotham_light placeholder_class" ng-submit="referRxVerifyOtp(referRxVerifyOtpForm)" novalidate="" name="referRxVerifyOtpForm" id="referRxVerifyOtpForm">
+                <div class="modal-header common_title background_color_1 white_color text-center">
+                    <h3 class="modal-title m_top_15">Verify OTP</h3>                           
+                </div>
+                <div class="modal-body patient_previous_health_analytic_padding padding_body text-left">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                            <div class="form-group">
+                                <label for="otp">OTP:</label>
+                                <input type="text" required="required" ng-model="refer_rx_send_otp_data.otp" name="otp" class="form-control">
+                                <span class="otp_again margin_0_auto font_color_2 cursor_pointer " ng-click="resend_refer_rx_otp()" style="margin-left: 10px;">resend</span>
+                                <p ng-show="submitted && referRxVerifyOtpForm.otp.$error.required" class="error" >*Required</p>   
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="row">
+                        <div class="row m_bottom_20">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="submit" value="Submit" name="save" class="btn new_common_button btn_properties float_right" />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="reset" ng-click="" data-dismiss="modal" value="Cancel" name="cancle" class="btn new_common_button_1 cancel_patient btn_properties float_left" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Patient Refer Past Rx Verify OTP Modal End-->
+<!-- Patient Health Analytic Calculator Modal Start-->
+<div class="modal fade" id="modal_patient_health_analytic_calculator" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg patient_previous_health_analytic_width">
+        <div class="modal-content no_padding">
+            <!-- <form class="font_color_5 gotham_light placeholder_class" novalidate="" name="managePatientHealthCalculatorForm" id="managePatientHealthCalculatorForm"> -->
+                <div class="modal-header common_title background_color_1 white_color text-center">                        
+                    <h3 class="modal-title modaltitle_m">{{objCurrentCalculator.name}} <span style="margin-top:0px;margin-right:12px;color:white;opacity:1;" class="close pull-right" data-dismiss='modal' ng-click="">&times;</span></h3>
+                </div>
+                <div class="modal-body patient_previous_health_analytic_padding padding_body text-left">
+                    <div ng-include src="objCurrentCalculatorView"></div>
+                </div>
+                <!-- <div class="modal-footer m_top_60">
+                    <div class="row m_top_40 m_bottom_25">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right" />
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" ng-click="" data-dismiss="modal" value="Cancel" name="cancle" class="btn new_common_button_1 cancel_patient btn_properties float_left" />
+                        </div>
+                    </div>
+                </div> -->
+            <!-- </form> -->
+        </div>
+    </div>
+</div>
+<!-- Patient Health Analytic Calculator Modal End-->
+<style>
+.image-page-container {
+    max-width: 1024px;
+    margin: 0 auto;
+    text-align: center;
+	border:0px;
+    padding: 15px;
+    background: white;
+}
+.js-img-compare{
+	max-width: 1024px;
+	max-height:700px;
+	width: auto;
+	height: auto;
+}
+.thumbnail{
+	width: 70px;
+	margin-bottom:1px;
+}
+.thumbnail img{
+	max-width: 60px;
+	max-height:60px;
+	width: auto;
+	height: auto;
+}
+</style>

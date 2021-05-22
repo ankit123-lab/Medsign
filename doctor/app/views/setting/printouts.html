@@ -1,0 +1,590 @@
+<div class="">
+	<div class="common_hr clearfix alert_main_div">
+		<div class="first_width" ng-init="getClinics()">
+			<div class="dropdown">
+				<button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+					<span ng-if="current_clinic">{{current_clinic.clinic_name | capitalize}}</span>
+					<span><img src="app/images/down_arrow.png" /></span>
+				</button>
+				<ul class="dropdown-menu clinic_drop_down">             
+					<li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForPrintouts(clinic)" ><a href="">{{clinic.clinic_name | capitalize}}</a></li>
+					<li class='divider' ng-repeat-end></li>
+				</ul>
+			</div>
+		</div>
+		<div class="second_width common_heading_height ">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding margin_left_-4">
+				<div class="col-lg-2 col-md-2 col-sm-4 col-xs-2 m_bottom_15">
+					<h4 class="m_top_22 page_title pull-left">Settings</h4>
+				</div>
+				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 text-right">
+					<h4 class="page_title m_top_22" ng-if="rxPrint.template_type=='1'">In clinic appointment Rx print setting</h4>
+					<h4 class="page_title m_top_22" ng-if="rxPrint.template_type=='5'">Tele-Consultation appointment Rx print setting</h4>
+				</div>
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-left m_top_20">
+					<label ng-if="checkPermission(DOCTOR_AVAILIBILITY, EDIT)" class="switch">
+                        <input type="checkbox"
+                               ng-model="rxPrint.template_type"
+                               ng-true-value="'1'"
+                               ng-false-value="'5'"
+                               ng-change="changeRxTemplate()"
+                               >
+                        <span class="slider round"></span>
+                    </label>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>
+<div class="">
+	<div class="list_group_property" ng-if="current_clinic" ng-init="getPrescriptionSetting()">
+		<div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 padding_0">
+				<h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Rx Print Settings</h3>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 padding_0 text-right" style="margin-top: 8px;">
+				<i class="fa fa-minus-circle font_color_1 rx-zoom-btn" ng-click="rxPreviewZoom('-');"></i>
+				<i class="fa fa-plus-circle font_color_1 rx-zoom-btn" ng-click="rxPreviewZoom('+');"></i>
+			</div>
+			<div class="col-lg-12 col-md-12 col-sm-3 col-xs-3 padding_0">
+				<form name="saveRxPrintSetupForm" id="saveRxPrintSetupForm" novalidate="" method="post" ng-submit="saveRxPrintSetup(saveRxPrintSetupForm)">
+					<div class="col-lg-4 padding_0">
+						<div class="col-lg-12 m_bottom_10 ">
+							<ul class="nav nav-pills tabs_items font_color_1" role="tablist">
+								<li class="nav-item tabs_first" ng-class="print_setting_tab == 1 ? 'active' : ''">
+									<a class="nav-link" data-toggle="pill" href="" ng-click="change_print_setting_tab(1)">Page Setup</a>
+								</li>
+								<li class="nav-item" role="presentation" ng-class="print_setting_tab == 2 ? 'active' : ''"> 
+									<a class="nav-link" data-toggle="pill" href="" ng-click="change_print_setting_tab(2)">Header</a>
+								</li>
+								<li class="nav-item" role="presentation" ng-class="print_setting_tab == 3 ? 'active' : ''"> 
+									<a class="nav-link" data-toggle="pill" href="" ng-click="change_print_setting_tab(3)">Footer</a>
+								</li>
+							</ul>
+						</div>
+						<div ng-show="print_setting_tab==1">
+							<div class="col-lg-12" ng-class="prescription_template.length > 1 ? '':'hide'">
+								<h3 class="gotham_medium m_bottom_10 m_top_0 title1">Template</h3>
+							</div>
+							<div class="col-lg-12" ng-class="prescription_template.length > 1 ? '':'hide'">
+								<div class="form-group">
+									<div class="common_radio col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 m_bottom_12">
+										<span ng-repeat="tempObj in prescription_template">
+											<input id="template_{{tempObj.template_id}}" name="template_id" type="radio" ng-model="rx_settings.template_id" value="{{tempObj.template_id}}" ng-change="previewRxPrint()">
+											<label for="template_{{tempObj.template_id}}" class="no_margin">{{tempObj.template_title}}</label>
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-12">
+								<h3 class="gotham_medium m_bottom_10 m_top_10 title1">Margins</h3>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="form-group">
+									<label for="mleft" class="m_bottom_15">Left(CM)</label>
+									<input type="number" class="form-control common_input" id="mleft" placeholder="" name="mleft" ng-model="rx_settings.left_space" ng-change="previewRxPrint()">
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="form-group">
+									<label for="mright" class="m_bottom_15">Right(CM)</label>
+									<input type="number" class="form-control common_input" id="mright" placeholder="" name="mright" ng-model="rx_settings.right_space" ng-change="previewRxPrint()">
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="form-group">
+									<label for="mtop" class="m_bottom_15">Top(CM)</label>
+									<input type="number" class="form-control common_input" id="mtop" placeholder="" name="mtop" ng-model="rx_settings.header_space" ng-change="previewRxPrint()">
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="form-group">
+									<label for="mbottom" class="m_bottom_15">Bottom(CM)</label>
+									<input type="number" class="form-control common_input" id="mbottom" placeholder="" name="mbottom" ng-model="rx_settings.footer_space" ng-change="previewRxPrint()">
+								</div>
+							</div>
+							<div class="col-lg-12">
+								<h3 class="gotham_medium m_bottom_10 m_top_10 title1">Orientation</h3>
+							</div>
+							<div class="col-lg-12">
+								<div class="form-group">
+									<div class="common_radio col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 m_bottom_12">
+										<input id="portrait" name="orientation" type="radio" ng-model="rx_settings.orientation" value="P">
+										<label for="portrait" class="no_margin">Portrait</label>
+										<input id="landscape" name="orientation" type="radio" ng-model="rx_settings.orientation" value="L">
+										<label for="landscape" class="no_margin">Landscape</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label for="page_type" class="m_bottom_15">Paper Size</label>
+									<div class="position_relative">
+										<select name='page_type' id="page_type" style="width:100% !important;" ng-model="rx_settings.page_type" class="common_input form-control">
+											<option value="A4">A4</option>
+											<option value="A3">A3</option>
+											<option value="Letter">Letter</option>
+											<option value="A5">A5</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label for="font_family" class="m_bottom_15">Font Family</label>
+									<div class="position_relative">
+										<select name='font_family' id="font_family" style="width:100% !important;" ng-model="rx_settings.font_family" class="common_input form-control" ng-change="previewRxPrint()">
+											<option ng-repeat="fontFamilyObj in fontFamilyArr" value="{{fontFamilyObj.val}}">{{fontFamilyObj.label}}</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-12">
+								<h3 class="gotham_medium m_bottom_10 m_top_10 title1">Font Size</h3>
+							</div>
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label for="font_size_1" class="m_bottom_15">Size 1 <i class="fa fa-info-circle font_color_1 cursor_pointer" ng-mouseover="highlightOverFontSize1()" ng-mouseout="highlightOutFontSize1()"></i></label>
+									<input type="number" class="form-control common_input" id="font_size_1" placeholder="" name="font_size_1" ng-model="rx_settings.font_size_1" ng-change="previewRxPrint()">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label for="font_size_2" class="m_bottom_15">Size 2 <i class="fa fa-info-circle font_color_1 cursor_pointer" ng-mouseover="highlightOverFontSize2()" ng-mouseout="highlightOutFontSize2()"></i></label>
+									<input type="number" class="form-control common_input" id="font_size_2" placeholder="" name="font_size_2" ng-model="rx_settings.font_size_2" ng-change="previewRxPrint()">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label for="font_size_3" class="m_bottom_15">Size 3 <i class="fa fa-info-circle font_color_1 cursor_pointer" ng-mouseover="highlightOverFontSize3()" ng-mouseout="highlightOutFontSize3()"></i></label>
+									<input type="number" class="form-control common_input" id="font_size_3" placeholder="" name="font_size_3" ng-model="rx_settings.font_size_3" ng-change="previewRxPrint()">
+								</div>
+							</div>
+							<div class="col-lg-12">
+								<div class="row m_top_10" ng-repeat="share in shareSettingData" ng-hide="share.id==6 || share.id==7">
+									<div class="col-lg-9">
+										<span ng-if="share.id != 4 && share.id != 5">{{share.id==8 ? '&nbsp;&nbsp;&nbsp;' : ''}} {{ share.name}}</span>
+			                            <span ng-if="share.id==4">Investigations</span>
+			                            <span ng-if="share.id==5">Procedures</span>
+									</div>
+									<div class="col-lg-3">
+										<label class="switch">
+		                                    <input type="checkbox"   
+		                                           ng-model="share.status" 
+		                                           ng-true-value="'1'"
+		                                           ng-false-value="'2'"
+		                                           ng-disabled="!(checkPermission(SETTING_SHARE, EDIT))"
+		                                           >
+		                                    <span class="slider round"></span>
+		                                </label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div ng-show="print_setting_tab==2">
+							<div class="col-lg-9">
+								<h3 class="gotham_medium m_bottom_10 m_top_0 title1">Title</h3>
+							</div>
+							<!-- <div class="col-lg-4">
+								<h3 ng-show="rx_settings.header_title_check" class="font_color_1 gotham_medium m_bottom_10 m_top_0 title1 cursor_pointer" ng-click="open_rx_ck_editor()">Open Editor</h3>
+							</div> -->
+							<div class="col-lg-3">
+								<div class="padding_left_0 common_checbox text-right">
+	                                <input type="checkbox" id="header_title_check" ng-model="rx_settings.header_title_check" class="" ng-change="previewRxPrint()">    
+	                                <label for="header_title_check" class="disclose font-15"></label>
+	                            </div>
+							</div>
+							<div class="col-lg-12">
+								<div class="form-group">
+									<textarea class="form-control" name="header_title" rows="4" placeholder="Type here" id="header_title" ng-model="rx_settings.header_title" readonly ng-click="open_rx_ck_editor()" ng-change="previewRxPrint()"></textarea>
+								</div>
+							</div>
+							<div class="col-lg-9">
+								<h3 class="gotham_medium m_bottom_10 m_top_0 title1">Left Text</h3>
+							</div>
+							<div class="col-lg-3">
+								<div class="padding_left_0 common_checbox text-right">
+	                                <input type="checkbox" id="header_left_check" ng-model="rx_settings.header_left_check" class="" ng-change="previewRxPrint();headerLeftText();">
+	                                <label for="header_left_check" class="disclose font-15"></label>
+	                            </div>
+							</div>
+							<div class="col-lg-12">
+								<div class="form-group">
+									<textarea class="form-control" name="header_left_text" rows="4" placeholder="Type here" id="header_left_text" ng-model="rx_settings.header_left_text" ng-disabled="!rx_settings.header_left_check" ng-change="previewRxPrint()"></textarea>
+								</div>
+							</div>
+							<div class="col-lg-9">
+								<h3 class="gotham_medium m_bottom_10 m_top_0 title1">Right Text</h3>
+							</div>
+							<div class="col-lg-3">
+								<div class="padding_left_0 common_checbox text-right">
+	                                <input type="checkbox" id="header_right_check" ng-model="rx_settings.header_right_check" class="" ng-change="previewRxPrint();headerRightText();">    
+	                                <label for="header_right_check" class="disclose font-15"></label>
+	                            </div>
+							</div>
+							<div class="col-lg-12">
+								<div class="form-group">
+									<textarea class="form-control" name="header_right_text" rows="4" placeholder="Type here" id="header_right_text" ng-model="rx_settings.header_right_text" ng-disabled="!rx_settings.header_right_check" ng-change="previewRxPrint()"></textarea>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1 cursor_pointer" ng-click='openFile("rxPrintLogoFile")'>
+									+ Add Logo
+								</h3>
+								<input type="file" obj='rx_print_logo' key="rx_print_logo" ng-select-file="onFileSelect($files)" class="hide" id="rxPrintLogoFile" accept="image/*">
+							</div>
+							<div class="col-lg-8">
+								<div class="position_relative form-group">
+									<select name='logo_position' id="logo_position" style="width:100% !important;" ng-model="rx_settings.logo_position" class="common_input form-control" ng-change="previewRxPrint()">
+										<option value="left">Left</option>
+										<option value="right">Right</option>
+										<option value="center">Center</option>
+										<!-- <option value="background">Background</option> -->
+										<option value="none">None</option>
+									</select>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-lg-6">
+								<div class="form-group" ng-if="rx_img.temp_img">
+									<img ng-src="{{rx_img.temp_img}}" class="img-responsive placeholder_image" style="height:100%;width:100%">
+									<div>
+										<img src="app/images/popup_remove_red.png" ng-click="removeRxLogoImg()" class="display_remove_icon" style="top: -10px;right: -10px;">
+									</div>
+								</div>
+								<div class="form-group" ng-if="rx_img.temp_img == '' && doctorAlldetails.logo_img_thumb_path != ''">
+									<img ng-src="{{doctorAlldetails.logo_img_thumb_path}}" class="img-responsive placeholder_image" style="height:100%;width:100%">
+								</div>
+							</div>
+							<div class="col-lg-6" ng-if="rx_img.temp_img || doctorAlldetails.logo_img_thumb_path != ''">
+								<div class="row">
+									<div class="col-lg-12 text-center m_bottom_20">Logo Width</div>
+									<div class="col-lg-4 text-right"><i class="fa fa-minus-circle font_color_1 cursor_pointer" ng-click="logoSizeMinus()"></i></div>
+									<div class="col-lg-4">{{rx_settings.logo_width}}%</div>
+									<div class="col-lg-4 text-left"><i class="fa fa-plus-circle font_color_1 cursor_pointer" ng-click="logoSizePlus()"></i></div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-lg-8">
+								<h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1 cursor_pointer" ng-click='openFile("rxWatermarkFile")'>
+									+ Add Watermark Image
+								</h3>
+								<input type="file" obj='rx_watermark_img' key="rx_watermark_img" ng-select-file="onFileSelect($files)" class="hide" id="rxWatermarkFile" accept="image/*">
+							</div>
+							<div class="col-lg-4 m_top_10">
+								<div class="padding_left_0 common_checbox text-right">
+	                                <input type="checkbox" id="watermark_check" ng-model="rx_settings.watermark_check" class="" ng-change="previewRxPrint()">    
+	                                <label for="watermark_check" class="disclose font-15"></label>
+	                            </div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-lg-6">
+								<div class="form-group" ng-if="rx_img.watermark_temp_img">
+									<img ng-src="{{rx_img.watermark_temp_img}}" class="img-responsive placeholder_image" style="height:100%;width:100%">
+									<div>
+										<img src="app/images/popup_remove_red.png" ng-click="removeRxWatermarkImg()" class="display_remove_icon" style="top: -10px;right: -10px;">
+									</div>
+								</div>
+								<div class="form-group" ng-if="rx_img.watermark_temp_img == '' && doctorAlldetails.watermark_img_thumb_path != ''">
+									<img ng-src="{{doctorAlldetails.watermark_img_thumb_path}}" class="img-responsive placeholder_image" style="height:100%;width:100%">
+								</div>
+							</div>
+							<div ng-show="rx_img.watermark_temp_img || doctorAlldetails.watermark_img_thumb_path != ''" class="col-lg-6">
+								<label for="amount">Opacity: <span id="opacity_txt"></span>%</label>
+								<div ng-if="isRenderSlider" slider-horizontal setData="{{rx_settings.watermark_opacity}}"></div>
+							</div>
+						</div>
+						<div ng-show="print_setting_tab==3">
+							<div class="col-lg-9">
+								<h3 class="gotham_medium m_bottom_10 m_top_0 title1">Full Width Content</h3>
+							</div>
+							<div class="col-lg-3">
+								<div class="padding_left_0 common_checbox text-right">
+	                                <input type="checkbox" id="footer_content_check" ng-model="rx_settings.footer_content_check" class="" ng-change="previewRxPrint()">    
+	                                <label for="footer_content_check" class="disclose font-15"></label>
+	                            </div>
+							</div>
+							<div class="col-lg-12">
+								<div class="form-group">
+									<textarea class="form-control" name="footer_content" rows="4" placeholder="Type here" id="footer_content" ng-model="rx_settings.footer_content" ng-disabled="!rx_settings.footer_content_check" ng-change="previewRxPrint()"></textarea>
+								</div>
+							</div>
+							<div class="col-lg-9">
+								<h3 class="gotham_medium m_bottom_10 m_top_0 title1">Left Signature</h3>
+							</div>
+							<div class="col-lg-3">
+								<div class="padding_left_0 common_checbox text-right">
+	                                <input type="checkbox" id="left_signature_check" ng-model="rx_settings.left_signature_check" class="" ng-change="previewRxPrint()">    
+	                                <label for="left_signature_check" class="disclose font-15"></label>
+	                            </div>
+							</div>
+							<div class="col-lg-12">
+								<div class="form-group">
+									<textarea class="form-control" name="footer_left_signature" rows="4" placeholder="Type here" id="footer_left_signature" ng-model="rx_settings.footer_left_signature" ng-disabled="!rx_settings.left_signature_check" ng-change="previewRxPrint()"></textarea>
+								</div>
+							</div>
+							<div class="col-lg-9">
+								<h3 class="gotham_medium m_bottom_10 m_top_0 title1">Right Signature</h3>
+							</div>
+							<div class="col-lg-3">
+								<div class="padding_left_0 common_checbox text-right">
+	                                <input type="checkbox" id="right_signature_check" ng-model="rx_settings.right_signature_check" class="" ng-change="previewRxPrint()">    
+	                                <label for="right_signature_check" class="disclose font-15"></label>
+	                            </div>
+							</div>
+							<div class="col-lg-12">
+								<div class="form-group">
+									<textarea class="form-control" name="footer_right_signature" rows="4" placeholder="Type here" id="footer_right_signature" ng-model="rx_settings.footer_right_signature" ng-disabled="!rx_settings.right_signature_check" ng-change="previewRxPrint()"></textarea>
+								</div>
+							</div>
+							<div class="col-lg-8">
+								<h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1 cursor_pointer" ng-click="signaturePopup()">
+									Click Here For Signature
+								</h3>
+								<textarea class="hide image-sign-source" ng-model="rx_img.imageSignSrc" ng-change="previewRxPrint()"></textarea>
+							</div>
+							<div class="col-lg-4">
+								<div class="position_relative">
+									<select name='sign_position' id="sign_position" style="width:100% !important;" ng-model="rx_settings.sign_position" class="common_input form-control">
+										<option value="left">Left</option>
+										<option value="right">Right</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-12">
+								<h3 class="font_color_1 gotham_medium m_bottom_10 m_top_0 title1 cursor_pointer" ng-click='openFile("rxUploadSignature")'>
+									Upload Signature
+								</h3>
+								<input type="file" obj="rx_print_signature" key="rx_print_signature" ng-select-file="onFileSelect($files)" class="hide" id="rxUploadSignature" accept="image/*">
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-lg-6">
+								<div class="form-group" ng-if="rx_img.imageSignSrc">
+									<img ng-src="{{rx_img.imageSignSrc}}" class="img-responsive placeholder_image" style="height:100%;width:100%">
+									<div>
+										<img src="app/images/popup_remove_red.png" ng-click="removeRxSign()" class="display_remove_icon" style="top: -10px;right: -10px;">
+									</div>
+								</div>
+								<div class="form-group" ng-if="rx_img.imageSignSrc == '' && doctorAlldetails.user_sign_thumb_filepath != ''">
+									<img ng-src="{{doctorAlldetails.user_sign_thumb_filepath}}" class="img-responsive placeholder_image" style="height:100%;width:100%">
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_bottom_20">
+							<input type="submit" value="Save" name="save" id="saveSetting" class="btn new_common_button float_right width_100">
+						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_bottom_20">
+							<input type="button" value="Reset Settings" name="Reset" ng-click="resetRxPrintSetting()" class="btn new_common_button float_right width_100">
+						</div>
+						<!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_bottom_20">
+							<input type="button" ng-click="previewRxPrint()" data-dismiss="modal" value="Preview" name="preview" class="preview-btn btn new_common_button_1 width_100 float_left">
+						</div> -->
+					</div>
+				</form>
+				<div class="col-lg-8" style="padding: 0;">
+					<div class="row margin_0 rx_preview_wrapper">
+						<div class="col-lg-12 print_preview" style="zoom: {{rx_print_preview_zoom}}%;">
+						<div class="paper-size-{{rx_settings.page_type}}-{{rx_settings.orientation}}" style="position: relative;">
+							<div style="padding: {{header_padding}}px {{right_padding}}px {{footer_padding}}px {{left_padding}}px;">
+								<div style="opacity: {{rx_settings.watermark_opacity/100}}" class="rx-watermark-img rx-watermark-{{rx_settings.orientation}}" ng-if="rx_settings.watermark_check && watermarkImgPreview != ''"><img ng-src="{{watermarkImgPreview}}"></div>
+								<div><div ng-class="is_highlight2 ? 'rx-size-2':''" ng-bind-html="current_template.template_header | safe"></div></div>
+								<div class="rx_print_body" style="font-family:{{rx_settings.font_family}};">
+									<div ng-class="is_highlight2 ? 'rx-size-2':''" style="font-size:{{rx_settings.font_size_2}}px;"  ng-if="rxPrint.template_type=='5'" class="text-center"><b>The prescription is given on telephonic consultation.</b></div>
+									<table style="width:100%;" ng-class="is_highlight2 ? 'rx-size-2':''">
+										<tr style="font-size:{{rx_settings.font_size_2}}px;">
+											<td width="50%" align="left"><span>Patient Name:</span> <span class="rx-print-text">XXXX</span></td>
+											<td width="50%" align="right"><span>Appointment On :</span> <span class="rx-print-text">00/00/0000</span></td>
+										</tr>
+										<tr class="rx_border_bottom" style="font-size:{{rx_settings.font_size_2}}px;">
+											<td width="50%" align="left"><span>Age:</span> <span class="rx-print-text">XX</span>, <span>Gender:</span> <span class="rx-print-text">XXXX</span></td>
+											<td width="50%" align="right"><span>Mobile:</span> <span class="rx-print-text">XXXXXXXXXX</span> , <span>UID:</span> <span class="rx-print-text">XXXXXX</span></td>
+										</tr>
+									</table>
+									<p ng-if="(shareSettingData | filter:{id:1})[0].status=='1'" ng-class="is_highlight1 ? 'rx-size-1':''" style="font-weight: bold; font-size: {{rx_settings.font_size_1}}px;">Vitals</p>
+									<table ng-class="is_highlight2 ? 'rx-size-2':''" ng-if="(shareSettingData | filter:{id:1})[0].status=='1'" style="width: 100%;" class="rx_custom_table">
+					                    <tr style="font-size: {{rx_settings.font_size_2}}px;">
+					                        <td>Weight (kg)</td>
+					                        <td>B.P (mm Hg)</td>
+					                        <td>Pulse Rate/min</td>
+					                        <td>Temperature (F)</td>
+					                        <td>Resp. Rate/Min</td>
+					                    </tr>
+					                    <tr class="rx-print-text" style="font-size: {{rx_settings.font_size_2}}px;">
+					                        <td>XX</td>
+					                        <td>XX/XX</td>
+					                        <td>XX</td>
+					                        <td>XX</td>
+					                        <td>XX</td>
+					                    </tr>
+					                </table>
+					                <p ng-if="(shareSettingData | filter:{id:8})[0].status=='2' && (shareSettingData | filter:{id:2})[0].status=='1'" ng-class="is_highlight1 ? 'rx-size-1':''" style="font-weight: bold; font-size: {{rx_settings.font_size_1}}px;">Clinical notes</p>
+					                <table ng-class="is_highlight2 ? 'rx-size-2':''" ng-if="(shareSettingData | filter:{id:8})[0].status=='2' && (shareSettingData | filter:{id:2})[0].status=='1'" style="width: 100%;" class="rx_custom_table">
+					                    <tr style="font-size: {{rx_settings.font_size_2}}px;">
+					                        <td style="width: 54%;">K/C/O</td>
+					                        <td style="width: 46%;" class="rx-print-text">XXXXXX</td>
+					                    </tr>
+					                    <tr style="font-size: {{rx_settings.font_size_2}}px;">
+					                        <td>Complaints</td>
+					                        <td class="rx-print-text">XXXXXX</td>
+					                    </tr>
+					                    <tr style="font-size: {{rx_settings.font_size_2}}px;">
+					                        <td>Observation</td>
+					                        <td class="rx-print-text">XXXXXX</td>
+					                    </tr>
+					                    <tr style="font-size: {{rx_settings.font_size_2}}px;">
+					                        <td>Diagnosis</td>
+					                        <td class="rx-print-text">XXXXXX</td>
+					                    </tr>
+					                </table>
+					                <p ng-if="(shareSettingData | filter:{id:8})[0].status=='1'" ng-class="is_highlight1 ? 'rx-size-1':''" style="font-weight: bold; font-size: {{rx_settings.font_size_1}}px;">Diagnosis</p>
+					                <table ng-class="is_highlight2 ? 'rx-size-2':''" ng-if="(shareSettingData | filter:{id:8})[0].status=='1'" style="width: 100%;" class="rx_custom_table">
+					                    <tr style="font-size: {{rx_settings.font_size_2}}px;">
+					                        <td class="rx-print-text">XXXXXX</td>
+					                    </tr>
+					                </table>
+					                <p ng-if="(shareSettingData | filter:{id:3})[0].status=='1'" ng-class="is_highlight1 ? 'rx-size-1':''" style="font-weight: bold; font-size: {{rx_settings.font_size_1}}px;">Rx</p> 
+					                <table ng-if="(shareSettingData | filter:{id:3})[0].status=='1'" style="width: 100%;" class="rx_pre_custom_table">
+					                    <tr class="rx_border_bottom" ng-class="is_highlight1 ? 'rx-size-1':''" style="font-weight: bold; font-size: {{rx_settings.font_size_1}}px;">
+					                        <td colspan="2" style="width: 55%;">Brand & strength</td>
+					                        <td style="width: 13%;">Unit(s)</td>
+					                        <td style="width: 20%;" align="center">Frequency</td>
+					                        <td style="width: 12%;">Duration</td>
+					                    </tr>
+					                    <tr ng-class="is_highlight2 ? 'rx-size-2':''" style="font-size: {{rx_settings.font_size_2}}px;">
+					                    	<td style="width: 5%;" class="rx-print-text">1.</td>
+					                        <td style="width: 50%;" class="rx-print-text">xxxxxx</td>
+					                        <td style="width: 13%;"></td>
+					                        <td style="width: 20%;" align="center" class="rx-print-text">xx-xx-xx</td>
+					                        <td style="width: 12%;" class="rx-print-text">xxxxxx</td>
+					                    </tr>
+					                    <tr ng-class="is_highlight2 ? 'rx-size-2':''" ng-if="(shareSettingData | filter:{id:9})[0].status=='1'" style="font-size: {{rx_settings.font_size_2}}px;">
+					                    	<td style="width: 5%;"></td>
+					                        <td style="width: 50%;" class="rx-print-text">xxxxxx</td>
+					                        <td style="width: 13%;"></td>
+					                        <td style="width: 20%;" align="center"></td>
+					                        <td style="width: 12%;"></td>
+					                    </tr>
+					                    <tr ng-class="is_highlight2 ? 'rx-size-2':''" class="rx_border_bottom" style="font-size: {{rx_settings.font_size_2}}px;">
+					                    	<td style="width: 5%;"></td>
+					                        <td style="width: 50%;">Instruction: <span class="rx-print-text">xxxxxx</span></td>
+					                        <td style="width: 13%;" class="rx-print-text">xxxxxx</td>
+					                        <td style="width: 20%;" align="center" class="rx-print-text">xx-xx-xx</td>
+					                        <td style="width: 12%;"></td>
+					                    </tr>
+					                </table>
+					                <p ng-if="(shareSettingData | filter:{id:4})[0].status=='1'" ng-class="is_highlight1 ? 'rx-size-1':''" style="font-weight: bold; font-size: {{rx_settings.font_size_1}}px;">Investigations</p>
+					                <table ng-class="is_highlight2 ? 'rx-size-2':''" ng-if="(shareSettingData | filter:{id:4})[0].status=='1'" style="width: 100%;" class="rx_custom_table">
+					                    <tr style="font-size: {{rx_settings.font_size_2}}px;">
+					                        <td style="width: 54%;" class="rx_text_upper">Test name</td>
+					                        <td style="width: 46%;" class="rx_text_upper">Instructions</td>
+					                    </tr>
+				                        <tr style="font-size: {{rx_settings.font_size_2}}px;">
+				                            <td class="rx-print-text">xxxxxxxxxxxxx</td>
+				                            <td class="rx-print-text">xxxxxxxxxxxxx</td>
+				                        </tr>
+					                </table>
+					                <p ng-if="(shareSettingData | filter:{id:5})[0].status=='1'" ng-class="is_highlight1 ? 'rx-size-1':''" style="font-weight: bold; font-size: {{rx_settings.font_size_1}}px;">Procedure</p>
+					                <table ng-class="is_highlight2 ? 'rx-size-2':''" ng-if="(shareSettingData | filter:{id:5})[0].status=='1'" style="width: 100%;" class="rx_custom_table">
+					                    <tr style="font-size: {{rx_settings.font_size_2}}px;">
+					                        <td style="width: 54%;" class="rx_text_upper">Procedure Name</td>
+					                        <td style="width: 46%;" class="rx_text_upper">Instruction</td>
+					                    </tr>
+				                        <tr style="font-size: {{rx_settings.font_size_2}}px;">
+				                            <td class="rx-print-text">xxxxxxxxxxxxx</td>
+				                            <td class="rx-print-text">xxxxxxxxxxxxx</td>
+				                        </tr>
+					                </table>
+					                <table ng-class="is_highlight2 ? 'rx-size-2':''" class="m_top_30" style="width: 100%;">
+					                    <tr>
+					                        <td><b style="font-size: {{rx_settings.font_size_2}}px;">Diet/Specific Instruction:</b> <span style="font-size: {{rx_settings.font_size_2}}px;" class="rx-print-text">xxxxxxxxxxxx</span></td>
+					                    </tr>
+					                </table>
+					                <table ng-class="is_highlight2 ? 'rx-size-2':''" class="m_bottom_30" style="width: 100%;">
+					                    <tr>
+					                        <td><b style="font-size: {{rx_settings.font_size_2}}px;">Next followup:</b> <span style="font-size: {{rx_settings.font_size_2}}px;" class="rx-print-text">00/00/0000</span></td>
+					                    </tr>
+					                </table>
+					                <table style="width: 100%; margin: 50px 0 5px 0;">
+					                    <tr>
+					                        <td width="50%" align="left"><img ng-if="rx_settings.sign_position=='left' && signatureImgPreview != ''" ng-src="{{signatureImgPreview}}" width="150"></td>
+					                        <td width="50%" align="right"><img ng-if="rx_settings.sign_position=='right' && signatureImgPreview != ''" ng-src="{{signatureImgPreview}}" width="150"></td>
+					                    </tr>
+					                </table>
+					                <table ng-class="is_highlight2 ? 'rx-size-2':''" ng-if="rx_settings.left_signature_check || rx_settings.right_signature_check" style="width: 100%; margin: 0 0 30px 0;">
+					                    <tr>
+					                        <td width="50%" align="left"><span>{{rx_settings.footer_left_signature}}</span></td>
+					                        <td width="50%" align="right"><span>{{rx_settings.footer_right_signature}}</span></td>
+					                    </tr>
+					                </table>
+					                <table ng-class="is_highlight2 ? 'rx-size-2':''" ng-if="!rx_settings.left_signature_check && !rx_settings.right_signature_check" style="width: 100%; margin: 0px 0 30px 0;">
+					                    <tr>
+					                        <td width="50%" align="left"></td>
+					                        <td width="50%" align="right"><span>{{doctorAlldetails.doctor_name}}</span></td>
+					                    </tr>
+					                </table>
+								</div>
+								<div ng-if="rx_settings.footer_content_check" style=""><div ng-class="is_highlight3 ? 'rx-size-3':''" ng-bind-html="current_template.template_footer | safe"></div></div>
+								<div ng-if="!rx_settings.footer_content_check" style="">
+									<table ng-class="is_highlight3 ? 'rx-size-3':''" style="width:100%;">
+										<tr style="font-size:{{rx_settings.font_size_3}}px;font-family:{{rx_settings.font_family}};">
+											<td width="33%" align="left"><span>Generated On: 00/00/0000</span></td>
+											<td width="33%" align="center"><span>Page No. 1/1</span></td>
+											<td width="33%" align="right"><span>Powerd by Medsign</span></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<h4 class="m_top_22 page_title">Note: It is just print preview actual print will be slightly different depends on data filled.</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div ng-if="!(checkPermission(PRINTOUTS, EDIT))" class="text-center gotham_book font_size_20 m_top_20">
+			<div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+		</div>
+	</div>
+</div>
+<div id="ckEditorModal" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content no_padding">
+            <div class="modal-header common_title background_color_1 white_color text-center">
+                <h3 class="modal-title modaltitle_m">Text Editor</h3>
+            </div>
+            <div class="modal-body padding_body text-left">
+                <div class="font_color_4 gotham_light placeholder_class">
+                    <div class="row">
+                        <div class="col-lg-12">
+							<div class="form-group">
+								<ng-ckeditor ng-if="ckEditorData.load" ng-model="ckEditorData.textInput" ng-config="ckEditorData.config"></ng-ckeditor>
+							</div>
+						</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row m_top_20per">                                       
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <input type="button" value="Preview" name="Preview" ng-click="editorTextPreview()" class="btn new_common_button btn_properties float_right"/>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <input type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties float_left" data-dismiss="modal" />
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+	.cke_toolbar_break{clear: none !important;}
+</style>

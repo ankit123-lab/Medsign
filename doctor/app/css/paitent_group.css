@@ -1,0 +1,29 @@
+.table .m_lr_8{
+    margin: 0 8%;
+}
+/*-----------------------Modal PoPUp Add Staff Css--------------------*/
+.modal-dialog.modal_dialog_width {
+    margin: 0 auto;
+    padding: 30px;
+    width: 1367px;
+}
+#modal_add_newgroup .modal-backdrop.in {
+    overflow-x: auto;
+    min-width: 1367px !important;
+}
+#modal_add_newgroup{
+    overflow-x: auto;
+}
+.modal-content{
+    border: none !important;
+    border-radius: 0;
+    height: 750px;
+}
+.modal-title.modaltitle_m{
+    /* margin: 15px !important; */
+}
+
+.modal-body.padding_body{
+    padding: 40px !important;
+}
+/*-----------------------Modal PoPUp Add Staff Css--------------------*/

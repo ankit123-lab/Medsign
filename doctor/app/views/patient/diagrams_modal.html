@@ -1,0 +1,111 @@
+<!-- Start Diagrams Modal -->
+<div class="modal fade" id="modal_diagrams" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg appointment_paients" ng-init="getDaigramsList()">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <button type="button" ng-click="unSetDiagramVideoUrls(1)" class="close" data-dismiss="modal">X</button>
+                <h3 class="modal-title modaltitle_m">Anatomical Diagrams</h3>
+            </div>
+            <div class="modal-body" ng-show="!isShowDiagramsDetail">        
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                        <div class="col-sm-3">                                                                        
+                            <select name='diagram_category' id="diagram_category" chosen multiple="" allow-single-deselect="true"
+                                style="width:100% !important;" placeholder_text_multiple="'Select Category'" ng-options="value.anatomical_category_id as value.anatomical_category_name for value in diagram_category"
+                                ng-model="diagram_search.category" ng-change="getDiagramSubCategory()">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">                                                                        
+                            <select name='diagram_sub_category' id="diagram_sub_category" chosen multiple="" allow-single-deselect="true" style="width:100% !important;" placeholder_text_multiple="'Select Sub Category'" ng-options="value.anatomical_category_id as value.anatomical_category_name for value in diagram_sub_category"
+                                ng-model="diagram_search.sub_category">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">                                                                        
+                            <input type="text" class="form-control common_input ng-valid ng-dirty ng-valid-parse ng-touched" id="search_txt" placeholder="Search" name="search_disease" ng-model="diagram_search.search">
+                        </div>
+                        <div class="col-sm-3">                                                                        
+                            <input type="button" value="Search" ng-click="getDaigramsSearch()" class="new_common_button btn_properties">
+                            <input type="button" value="Clear" ng-click="clearSearch()" class="new_common_button btn_properties">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_26">
+                        <div class="col-sm-2 patient-tool-image-box" ng-repeat="diagramObj in diagram_list"> 
+                            <img class="cursor_pointer" ng-click="diagramsDetails(diagramObj.anatomical_diagrams_id)" ng-show="diagramObj.is_show_image" ng-src="{{diagramObj.anatomical_diagrams_image_thumb_path}}" width="100%" />
+							<img ng-click="diagramsDetails(diagramObj.anatomical_diagrams_id)" ng-if="diagramObj.is_show_video" class="cursor_pointer" src="app/images/video-icon.png" />
+							<img ng-click="diagramsDetails(diagramObj.anatomical_diagrams_id)" ng-if="diagramObj.is_show_pdf" class="cursor_pointer" src="app/images/pdf-viewer-icon.png" />
+                            <div class="desc">
+                                <span class="cursor_pointer" ng-click="diagramsDetails(diagramObj.anatomical_diagrams_id)">{{diagramObj.anatomical_diagrams_title}}</span><br/>
+								<a href="javascript:void(0);" ng-repeat="category in diagramObj.categories_arr" ng-click="getDiagramCategoryWise(category.category_id)">{{category.category_name}}<span ng-show="!$last">&nbsp;,&nbsp;</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row m_top_26">                                       
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_left_0 text-center">
+                        <input ng-show="isShowViewMore" type="button" value="View more" ng-click="viewMore()" class="btn new_common_button btn_properties btn_width_60">
+                    </div>
+                    <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_right_0 hide">
+                        <input type="reset" value="Close" name="cancle" data-dismiss="modal" class="btn new_common_button_1 btn_properties btn_width_60 float_left" />
+                    </div> -->
+                </div>
+            </div>
+            <div class="modal-body" ng-show="isShowDiagramsDetail" id="zoomAnatomicalImages">
+                <div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="panel panel-info">
+							<div onclick="$('.dgPaneldesc').toggle('slow');" style="cursor: pointer;background-image:linear-gradient(to bottom,#d7f9f6 0,#d7f9f6 100%);" class="panel-heading">{{diagrams_detail.anatomical_diagrams_title}} &nbsp;<input type="button" value="Go Back" ng-click= "backToDiagrams()" class="new_common_button" style="float: right;line-height: 10px;height: 25px;" /></div>
+							<div class="panel-body dgPaneldesc" style="display:none;">{{diagrams_detail.anatomical_diagrams_desc}}</div>
+							<div class="panel-footer dgPaneldesc" style="display:none;">
+								Category: <span ng-repeat="category in diagrams_detail.categories_arr" >{{category.category_name}}<span ng-show="!$last">&nbsp;,&nbsp;</span></span>
+								<br/>
+								<span ng-show="diagrams_detail.sub_categories != null">Sub Category: {{diagrams_detail.sub_categories}}</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="img-thumbnail text-center">
+                            <div class="float_left" ng-show="diagrams_detail.anatomical_diagrams_image_thumb_path != ''"><img ng-click="viewDiagrams(1)" class="cursor_pointer " ng-src="{{diagrams_detail.anatomical_diagrams_image_thumb_path}}" /></div>
+							<div class="float_left" style="padding:8px;cursor: pointer;" ng-show="diagrams_detail.anatomical_diagrams_video_url != ''" ng-click="viewDiagrams(3)"><i style="font-size:45px;color: red;" class="fa fa-play-circle"></i></div>
+							<div class="float_left" style="padding:6px;cursor: pointer;" ng-show="diagrams_detail.anatomical_diagrams_file_path != null" ng-click="viewDiagrams(2)"><i style="font-size:45px;color: red;" class="fa fa-file-pdf-o"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_26">
+						<!-- onclick="setFullScreenMode('zoomAnatomicalImages',this);" -->
+                        <div ng-show="isShowImageDiagrams" title="Click To Edit" ng-click= "loadWPaintLib()" class="new_common_button tooltip_custom_12" ng-mouseover="openToolTip('12')" style="float:right;font-size:20px;padding:5px;line-height:0px;height:auto;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
+                        <div ng-show="isShowVideo || isShowPdf" class="col-sm-12 text-right">
+                            <label style="margin-right: 5px;vertical-align: top;">Add to prescription: </label>
+                            <label class="switch">
+                                <input type="checkbox"   
+                                       ng-model="document_share_data.status" 
+                                       ng-true-value="true"
+                                       ng-false-value="false"
+                                       ng-click="addToPrescription(document_share_data.type)"
+                                       >
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+						<div class="col-sm-12" style="text-align: center;">
+							<div ng-show="show_loadWPaintLib && !isShowImageDiagrams" id="wPaint" style="position:relative; width:100%; height:1122px; background-color:#fff; margin:0px auto 20px auto;"></div>
+							<img class="cursor_pointer" ng-show="isShowImageDiagrams" style="max-width: 925px; height:auto;" ng-src="{{diagrams_detail.anatomical_diagrams_image_path}}" />
+                            <iframe ng-show="isShowPdf" style="height: 500px;" width="95%" ng-src="{{anatomical_diagrams_file_path | trustThisUrl}}"></iframe>
+                            <iframe class="video_iframe" ng-show="isShowVideo" width="95%" height="500" ng-src="{{anatomical_diagrams_video_url | trustThisUrl}}" frameborder="0" allow="picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+<style type="text/css">
+    .ui-tooltip{z-index: 11000;}
+</style>
+<script type="text/javascript">
+    $("body").on("mouseover", ".wPaint-menu-icon", function(){
+        console.log("asd");
+    });
+</script>

@@ -1,0 +1,77 @@
+<div class="second_width common_left_border p_top_15" ng-controller="UserController" ng-init="getRegDetails()">
+    <form id="register_personal_info_form" method="post" role="form" style="display: block;" name="updateRegForm" ng-submit="updateRegDetail()" novalidate="">
+        <div class="">
+            <div class="col-md-12 col-sm-12 col-xs-12 padding_0 add_more_registration_details_div" ng-repeat="(key, registration) in doctor.registration_obj">
+                <ng-form name="innerRegistrationForm">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div class="form-group ">
+                            <div class="f_label required" ng-if="key == 0">Registration Details</div>
+                            <input ng-blur="addRegDocmentObj()" type="text" name="registration_obj" id="" class="form-control login_input" placeholder="Enter Regsitration Details" value="" ng-model="doctor.registration_obj[key].doctor_council_registration_number" ng-required="isRegDocmentObjRequired(doctor.registration_obj,key)">
+                            <p ng-show="(innerRegistrationForm.registration_obj.$touched || submitted) && innerRegistrationForm.registration_obj.$error.required" class="error" >{{reg_required}}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                        <div class="form-group  selection_bx">
+                            <div  class="f_label hidden-xs hidden-sm" ng-if="key == 0">&nbsp;</div>
+                            <!--<input type="text" name="registration_obj_councel" id="username" class="form-control login_input" placeholder="Enter regsitration counsel" value=""  ng-model="doctor.registration_obj[key].reg_councel" required>-->
+                            <div class="position_relative">
+                                <select
+                                    name="registration_obj_councel" 
+                                    chosen 
+                                    allow-single-deselect="true" 
+                                    placeholder_text_single="'Select Council'" 
+                                    ng-options="value.council_id as value.council_name for value in other.councils" 
+                                    style="width:100% !important;" 
+                                    ng-model="doctor.registration_obj[key].doctor_registration_council_id" 
+                                    ng-required="false"
+                                    >
+                                    <option value=""></option>                                                                 
+                                </select>
+                                <span><i class="fa fa-angle-down fa-2x"></i></span>
+                            </div>
+                            <p ng-show="(innerRegistrationForm.registration_obj_councel.$touched || submitted) && innerRegistrationForm.registration_obj_councel.$error.required" class="error" >{{counsil_required}}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-2 col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <div  class="f_label hidden-xs hidden-sm" ng-if="key == 0">&nbsp;</div>                            
+                            <div class="input-group login_input">
+                                <input type="text" class="form-control login_input"  datepicker-mode="'year'" datetime-picker="yyyy" ng-model="doctor.registration_obj[key].reg_year" is-open="doctor.registration_obj[key].open" enable-time="false" datepicker-options="edu_year_picker.datepickerOptions" ng-required="false" readonly="" placeholder="Year" name="reg_year"/>
+                                <span class="input-group-btn login_input">
+                                    <button type="button" class="btn btn-default login_input" ng-click="doctor.registration_obj[key].open = true"><i class="fa fa-clock-o"></i></button>
+                                </span>
+                            </div>
+                            <p ng-show="(innerRegistrationForm.reg_year.$touched || submitted) && innerRegistrationForm.reg_year.$error.required" class="error" >{{edu_year_required}}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 add_more_button">
+                        <div class="form-group clearfix" >
+                            <div class="f_label hidden-xs hidden-sm" ng-if="key == 0">&nbsp;</div>
+                            <div class="pull-left">
+                                <img src="app/images/upload_image.png"  ng-class="key == 0 ? 'add_button_image add_button_image_custom' : 'add_remove_image'" ng-click="openFileObject('regPicFile', key)">
+                                <input type="file" obj="reg" key="{{key}}" ng-file-select="onFileSelect($files)" class="hide" ng-model="doctor.registration_obj[key].img" id="regPicFile{{key}}" accept="image/*"> 
+                                <input type="hidden" ng-model="doctor.registration_obj[key].doctor_registration_image_filepath" name="imageSrc2">
+                                <img src="app/images/add_button.png" class="add_more_registration_details m_left_16" ng-class="key == 0 ? 'add_button_image add_button_image_custom' : 'add_remove_image'"  ng-click="addEduObject(2)" ng-if="key < -1"> 
+                                <img src="app/images/remove.png" class="remove_more_registration_details m_left_16" ng-class="key == 0 ? 'add_button_image add_button_image_custom' : 'add_remove_image'"  ng-click="removeEduObject(2, key)" ng-if="(!!doctor.registration_obj[key].doctor_council_registration_number && doctor.registration_obj[key].registration_obj_councel != '')">
+                            </div>
+                            <div class="image_display">
+                                <img ng-src="{{doctor.registration_obj[key].image_thumb_path}}" style="height: 40px;" class=" m_left_16 add_button_image add_button_image_custom common_btn_radius" ng-click="showFullImage(doctor.registration_obj[key].doctor_registration_image_filepath)" ng-if="doctor.registration_obj[key].doctor_registration_image_filepath" />
+                                <img src="app/images/popup_remove_red.png" ng-if="doctor.registration_obj[key].cancel_image == '1'" ng-click="removeImage(3, key)" class="display_remove_icon top_right" />
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </ng-form>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="m_top_70 m_bottom_30 clearfix row">  
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>                                 
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <a href=""><input type="button"  ng-click="updateRegDetail(true)"  value="Next" name="next" class="btn new_common_button_1 btn_properties" /></a>                                                                                                                  
+            </div>  
+        </div>                                                          
+    </form>
+</div>

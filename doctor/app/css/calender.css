@@ -1,0 +1,63 @@
+/*---------------------------------popUp Modal Css-------------------*/
+.modal-dialog.modal_dialog_width {
+    margin: 0 auto;
+    padding: 30px;
+}
+#modal_practise_timing .modal-backdrop.in {
+    overflow-x: auto;
+}
+#modal_practise_timing{
+    overflow-x: auto;
+}
+.modal-content{
+    border: none !important;
+    border-radius: 0;
+}
+#edit_doctor_timing .modal-content,#edit_clinic_timing .modal-content{  
+    height: auto !important;
+}
+.modal-title.modaltitle_m{
+    /* margin: 15px !important; */
+}
+.list-inline.list_inline_m_left{
+    margin-left: -15px !important;
+}
+#modal_practise_timing .btn_pop_instruction{
+    width: 14%;        
+}
+/*-----------------------------------------*/
+.modal-body.padding_body{
+    padding: 40px !important;
+}
+#time1,#time2,#time3,#time4{
+    border: none;
+}
+.icons{
+    position: absolute;
+    top: 0px;
+    right: -1px;
+}
+.common_checbox [type="checkbox"]:checked + label::before, 
+.common_checbox [type="checkbox"]:not(:checked) + label::before {
+    top: 1px;
+}
+.list-inline > li{
+    padding: 0 15px;
+}
+.table tbody tr.b_padding td{
+    padding-bottom: 0 !important;
+}
+.required::after {   
+    font-size: 18px !important;
+}
+/*---------------------------------popUp Modal Css-------------------*/
+
+/*==============================Media Query=====================================*/
+/*@media screen and (max-width: 1367px)
+{
+    .calender
+    {
+        width: 1367px;
+        overflow: auto;
+    }
+}*/

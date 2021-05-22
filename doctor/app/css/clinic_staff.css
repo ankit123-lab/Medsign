@@ -1,0 +1,51 @@
+/*-----------------------Modal PoPUp Add Staff Css--------------------*/
+.modal-dialog.modal_dialog_width {
+    margin: 0 auto;
+    padding: 30px;
+}
+
+#modal_add_staff {
+    overflow-x: auto;
+}
+
+.modal-content {
+    border: none !important;
+    border-radius: 0;
+}
+
+.modal-title.modaltitle_m {
+    /* margin: 10px 15px !important; */
+}
+
+.row_padding_35 {
+    padding: 35px;
+}
+
+li.tabs_first {
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+}
+
+li.tabs_last {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+}
+
+.btn_properties.btn_done {
+    width: 148px;
+    height: 38px;
+}
+
+.link_disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/*-----------------------Modal PoPUp Add Staff Css--------------------*/
+@media(max-width:1199px) {
+
+    #modal_add_staff .modal-backdrop.in,
+    #modal_add_fee_details .modal-backdrop.in {
+        overflow-x: auto;
+    }
+}

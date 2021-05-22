@@ -1,0 +1,19 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/html
+    
+ 
+hooks:
+  ApplicationStop:
+    - location: /cicd/stop_service.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: /cicd/start_service.sh
+      timeout: 300
+      runas: root
+  ValidateService:
+    - location: /cicd/validate_service.sh
+      runas: root

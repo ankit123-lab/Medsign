@@ -1,0 +1,170 @@
+/* ==========================================================================
+ Common classes
+========================================================================== */
+/*=======================History Section===================*/
+.history_title {
+    font-size: 14px;
+    margin: 0;
+    padding: 15px;
+    font-weight: 700;
+}
+
+.pagination li a,
+.pagination li span {
+    background-color: rgba(0, 0, 0, 0);
+    border: medium none;
+    border-radius: 4px;
+    color: #30aca5;
+    font-size: 14px;
+    margin-left: 4px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0 !important;
+}
+
+.pagination li a.list_items {
+    width: 40px;
+    /* font-family: gotham_medium; */
+    font-weight: 700;
+    line-height: 12px;
+    padding: 10px 9px 5px !important;
+    text-align: center;
+    border: 1px #30aca5 solid !important;
+}
+
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+    background-color: #fff;
+    border-color: #dddddd;
+    color: #30aca5;
+}
+
+.pagination > li.active > a,
+.pagination > li.active > a:hover {
+    background-color: #30ACA4 !important;
+    color: #FFFFFF !important;
+    cursor: pointer;
+}
+
+/*=================================Modal Section=======================================*/
+#newMessage_modal .modal-backdrop.in {
+    overflow-x: auto !important;
+    min-width: 1367px !important;
+}
+
+#newMessage_modal {
+    overflow-x: auto !important;
+}
+
+#newMessage_modal .modal-dialog.modal_dialog_width {
+    margin: 0 auto !important;
+    padding: 30px !important;
+    width: 1367px !important;
+}
+
+#newMessage_modal .modal_dialog_width.new_message_width {
+    width: 1165px !important;
+}
+
+#newMessage_modal .modal-content.modal_content_height {
+    height: auto;
+}
+
+#newMessage_modal .modal-content.model_content_style {
+    border: none !important;
+    border-radius: 0px !important;
+}
+
+#newMessage_modal .modal-title.modaltitle_m {
+    /* margin: 15px !important; */
+}
+
+#newMessage_modal .modal-body.modal_body_padding {
+    padding: 0px 45px !important;
+}
+
+#newMessage_modal .row_title {
+    height: 50px;
+    padding: 15px 20px;
+}
+
+#newMessage_modal .col_padding {
+    padding: 0px 15px;
+    height: 580px;
+}
+
+#newMessage_modal .para_width_radio {
+    width: 90%;
+}
+
+#newMessage_modal .para_template {
+    border: none;
+}
+
+#newMessage_modal .checkbox_width {
+    width: 23px;
+    margin-top: -6px;
+}
+
+#newMessage_modal .btn_properties.btn_w_85 {
+    width: 85% !important;
+}
+
+#newMessage_modal .m_tb_5 {
+    margin: 5px 0;
+}
+
+#newMessage_modal .list-group.list_grp {
+    border-radius: 0px;
+    margin: 7px;
+    box-shadow: none !important;
+}
+
+#newMessage_modal .list-group-item.list-group-item:first-child {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+
+#newMessage_modal .list-group-item.list-group-item:last-child {
+    border-bottom-right-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
+
+#newMessage_modal .list-group-item.p_top_bottom {
+    padding: 5px 0;
+}
+
+#newMessage_modal .list-group-item.list-group-item {
+    padding: 7px 0px;
+    border-left: none;
+    border-right: none;
+    font-size: 15px;
+}
+
+#newMessage_modal .icon_image_bottom {
+    position: absolute;
+    bottom: 7px;
+    right: 6px;
+    z-index: 2;
+    cursor: pointer;
+}
+
+#newMessage_modal textarea.form-control {
+    height: auto;
+    padding: 10px 12px;
+}
+
+#newMessage_modal .login_input {
+    font-size: 14px !important;
+}
+
+@media screen and (max-width: 1024px) {
+    .history_title {
+        font-size: 15px;
+        line-height: 2;
+        padding: 10px 0;
+        text-align: center;
+    }
+}

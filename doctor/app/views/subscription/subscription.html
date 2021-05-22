@@ -1,0 +1,141 @@
+<div ng-include="'app/views/common/header.html?'+getVer(2)"></div>
+<link rel="stylesheet" ng-href="app/css/subscription.css?{{getVer(3)}}"/>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_padding_all" ng-if="role[SUBSCRIPTION][VIEW] == 'on'">
+    <div ng-include="'app/views/subscription/sub_left_menu.html?'+getVer(2)"></div>
+    <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 padding_0">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_hr common_heading_height">
+            <h4 class="m_top_22 page_title pull-left">Subscriptions</h4>
+            <div ng-if="!isShowPaymentSummery" class="col-md-8 col-sm-8 col-xs-8 m_top_10 text-center sub-view-tab">
+                <ul class="nav nav-pills gotham_medium tabs_items font_color_1" role="tablist">
+                    <li class="nav-item active" role="presentation" ng-click="showPlans(false)">
+                        <a class="nav-link" data-toggle="pill" href="">VIEW MY PLANS</a>
+                    </li>
+                    <li class="nav-item" role="presentation" ng-click="showPlans(true)">
+                        <a class="nav-link" data-toggle="pill" href="">BUY OTHER PLANS</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div ng-if="!isShowPaymentSummery">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 background_color_3 font_size_20 gotham_medium title1">
+                <h4>Current MedSign Plan</h4>
+            </div>
+            <div ng-if="doctor_subscription_data != ''" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_hr p_bottom_20" ng-init="getDoctorSubscription()">
+                <div class="col-md-8 m_top_10">
+                    <div class="col-md-12 font_size_20">{{doctor_subscription_data.sub_plan_name}}</div>
+                    <div class="col-md-12"><i class="fa fa-clock-o fa-3" aria-hidden="true"></i> 
+                        <span ng-if="currentUser.is_sub_active">{{doctor_subscription_data.expiry_txt}}</span>
+                        <span class="blink-sub-txt" ng-if="!currentUser.is_sub_active"><b>{{doctor_subscription_data.expiry_txt}}</b></span>
+                    </div>
+                </div>
+                <div ng-show="app.is_payment_active" class="col-md-4 m_top_10">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-if="doctor_subscription_data.isShowRenewButton">
+                        <input type="button" value="{{doctor_subscription_data.doctor_plan_type == 2 ? 'RENEW' : 'BUY NOW'}}" ng-click="buyNow(doctor_subscription_data.sub_plan_id,false)" class="btn btn_witdth new_common_button_1 cancel_patient float_left">
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-if="!doctor_subscription_data.isShowRenewButton && doctor_subscription_data.isShowUpgradeButton">
+                        <input type="button" value="Upgrade Plan" ng-click="planUpgrade(doctor_subscription_data.sub_price)" class="upgrade-btn btn btn_witdth new_common_button_1 cancel_patient float_left">
+                    </div>
+                </div>
+            </div>
+            <div ng-if="doctor_subscription_data == ''" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_hr p_bottom_20">
+                <div class="col-md-12 font_size_20">No have any current plan.</div>
+            </div>
+            <div ng-if="isShowPlan">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 background_color_3 font_size_20 gotham_medium title1 m_top_10">
+                    <h4>Change Plan</h4>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_hr p_bottom_20">
+                    <div class="col-md-5 subscription-plan-box" ng-repeat="planObj in subscription_plan_data">
+                        <div class="col-md-12 common_hr plan-title">
+                            <h4 class="text-center">{{planObj.sub_plan_name}}</h4>
+                            <div class="text-center rupee-txt"><i class="fa fa-inr" aria-hidden="true"></i> {{planObj.sub_price | number:'2'}} / {{planObj.sub_period}}</div>
+                        </div>
+                        <div class="m_top_10" ng-class="app.is_payment_active ? 'common_hr' : ''">
+                            <div class="plan-description" ng-bind-html="planObj.sub_description"></div>
+                        </div>
+                        <div ng-show="app.is_payment_active" class="col-md-12 plan-buy-now-wrap text-center">
+                            <input type="button" value="BUY NOW" ng-click="buyNow(planObj.sub_plan_id,true)" class="btn btn_witdth new_common_button_1">  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="isShowPaymentSummery" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_medium  m_top_10">
+            <div class="col-md-5 subscription-plan-box">
+                <div class="col-md-12 common_hr plan-title">
+                    <h4 class="text-center">{{order_summery_data.sub_plan_name}}</h4>
+                    <div class="text-center rupee-txt"><i class="fa fa-inr" aria-hidden="true"></i> {{order_summery_data.sub_amount | number:'2'}} / {{order_summery_data.sub_period}}</div>
+                </div>
+                <div class="m_top_10">
+                    <div class="plan-description" ng-bind-html="order_summery_data.sub_description"></div>
+                </div>
+            </div>
+            <div class="col-md-4 subscription-plan-box">
+                <div class="col-md-12 payment-summery-box common_hr">
+                    <form name="promoApplyForm" novalidate="" ng-submit="promoApply(promoApplyForm)">
+                        <table class="table table-responsive payment-table">
+                            <tbody>
+                                <tr>
+                                    <td align="right">
+                                        <input type="text" name="promo_code" id="promo_code" class="form-control" placeholder="Promo code" ng-model="promo_data.promo_code" required="" style="width: 154px;">
+                                        <p ng-show="submitted && promoApplyForm.promo_code.$error.required" class="error" style="text-align: right;">{{promo_required}}</p>
+                                    </td>
+                                    <td align="right"><input type="submit" value="Apply" class="btn new_common_button btn_save proceed-btn"></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">{{order_summery_data.sub_plan_name}}</td>
+                                    <td align="right">{{order_summery_data.sub_amount | number:'2'}}</td>
+                                </tr>
+                                <tr ng-if="order_summery_data.settlement_discount > 0">
+                                    <td align="right">Settlement discount</td>
+                                    <td align="right">-{{order_summery_data.settlement_discount | number:'2'}}</td>
+                                </tr>
+                                <tr ng-if="order_summery_data.discount > 0">
+                                    <td align="right">Discount</td>
+                                    <td align="right">-{{order_summery_data.discount | number:'2'}}</td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Sub Total</td>
+                                    <td align="right">{{order_summery_data.sub_total | number:'2'}}</td>
+                                </tr>
+                                <tr ng-if="is_apply_igst">
+                                    <td align="right">IGST ({{order_summery_data.igst_percent}}%)</td>
+                                    <td align="right">{{order_summery_data.igst_amount | number:'2'}}</td>
+                                </tr>
+                                <tr ng-if="!is_apply_igst">
+                                    <td align="right">SGST ({{order_summery_data.sgst_percent}}%)</td>
+                                    <td align="right">{{order_summery_data.sgst_amount | number:'2'}}</td>
+                                </tr>
+                                <tr ng-if="!is_apply_igst">
+                                    <td align="right">CGST ({{order_summery_data.cgst_percent}}%)</td>
+                                    <td align="right">{{order_summery_data.cgst_amount | number:'2'}}</td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Total Amount</td>
+                                    <td align="right">{{order_summery_data.total_amount | number:'2'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="col-md-12">
+                    <table class="table table-responsive payment-table">
+                        <tbody>
+                            <tr>
+                                <td align="left">
+                                    <input type="button" value="BACK" ng-click="back()" class="btn btn_witdth new_common_button_1 payment-back-btn">
+                                </td>
+                                <td align="right">
+                                    <input ng-show="app.is_payment_active" type="button" value="PROCEED" ng-click="placeOrder()" class="btn new_common_button btn_save proceed-btn">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_padding_all" ng-if="role[SUBSCRIPTION][VIEW] != 'on'">
+    <div class="unauthorised-css text-center">{{ app.unauthorised_msg}}</div>
+</div>

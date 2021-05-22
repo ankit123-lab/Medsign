@@ -1,0 +1,90 @@
+.table .m_lr_23 {
+    margin: 0 10px;
+}
+
+.p_margin {
+    margin: 2px 0px 4px;
+}
+
+/*---------------------------AddDeatils PopUp-------------------------*/
+
+#modal_add_details .modal-backdrop.in {
+    overflow-x: auto;
+    min-width: 1367px !important;
+}
+
+#modal_add_details {
+    overflow-x: auto;
+}
+
+.modal-dialog .modal-content {
+    height: auto;
+}
+
+.table {
+    margin-bottom: 0px;
+}
+
+.th_width1 {
+    width: 25% !important;
+}
+
+.th_width2 {
+    width: 14% !important;
+}
+
+.selection_bx .input_width1 {
+    width: 65% !important;
+}
+
+.input_width2 {
+    width: 53% !important;
+    background: #f1f1f1 none repeat scroll 0 0 !important;
+}
+
+.icon_image_right_1 {
+    position: absolute;
+    top: 1px;
+    right: 111px;
+}
+
+.col_width_btn_instruction {
+    width: 89.667%
+}
+
+.m_top_20per {
+    margin-top: 20%;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+/*==============================Media Query=====================================*/
+@media screen and (max-width: 767px) {
+    .table-responsive {
+        border: none;
+    }
+}
+
+#modal_add_fee_details .multiple_selection_box {
+    width: 70%;
+}
+
+.final_amount {
+    font-size: 12px !important;
+    color: #000;
+}
+
+.fee_table span {
+    font-size: 14px !important;
+}
+
+.input_width3 {
+    width: 80% !important;
+}
+
+#modal_add_fee_details .modal-dialog .modal-content,
+#modal_edit_fee_details .modal-dialog .modal-content {
+    height: auto !important;
+}

@@ -1,0 +1,355 @@
+  /*==================Title Section=====================*/
+  #patient_modal .top_header {
+    padding: 10px 0px;
+    /* height: 84px !important; */
+}
+
+#patient_modal .top_header h3 {
+    margin-top: 10px;
+}
+
+/*==================Middle Section=====================*/
+.container.container_width {
+    width: 100%;
+}
+
+/* .reg_patient .middle_content {
+    padding: 0 33px;
+} */
+
+.reg_patient .middle_content .col_width_left {
+
+    padding: 0 5px;
+}
+
+.reg_patient .middle_content .col_width_right {}
+
+.middle_content .profile_bckgrnd {
+    background: #f1f1f1;
+    border-radius: 7px;
+    width: 92px;
+    height: 92px;
+    position: relative;
+    padding: 10px;
+    line-height: 62px;
+    text-align: center;
+    margin: auto;
+}
+
+.middle_content .profile_bckgrnd img.placeholder_image {
+    /*    position: absolute;
+        top: 38px;
+        left: 27px;*/
+    /*padding: 40px 10px 0px 0px*/
+    width: 50px;
+}
+
+.middle_content #patientreg_form .input_gender {
+    background-color: #F1F1F1;
+    height: 100px;
+    /*text-align: center;*/
+    /*padding: 18px;*/
+    border-radius: 4px;
+    /*    color: grey;*/
+    /*margin-left: 15px;*/
+}
+
+.middle_content #patientreg_form .disclose {
+    line-height: 24px !important;
+    padding-left: 29px !important;
+}
+
+
+.modal-dialog.modal_dialog_width {
+    /*
+    margin: 0 auto;
+    padding: 30px;
+    width: 1367px;
+*/
+}
+
+/*
+.modal-backdrop {
+    position: fixed;
+}
+*/
+
+#patient_modal .modal-backdrop.in {
+    /*    overflow-x: auto;*/
+}
+
+#help_modal .modal-backdrop.in {
+    /*    overflow-x: auto;*/
+}
+
+#patient_modal {
+    /*    overflow-x: auto;*/
+}
+
+#help_modal {
+    /*    overflow-x: auto;*/
+}
+
+.btn_properties {
+    width: 32%;
+}
+
+.m_top_5 {
+    margin-top: -5px;
+}
+
+.m_top_18 {
+    margin-top: 18px;
+}
+
+button.close {
+    padding: 10px;
+    font-size: 26px;
+}
+
+.selection_bx select {
+    height: 39px !important;
+    border: 1px solid #f1f1f1;
+    background: #f1f1f1 none repeat scroll 0 0 !important;
+    color: #8b8b8b;
+    font-size: 16px;
+    line-height: 26px;
+}
+
+.select_lable {
+    margin-bottom: 0px;
+    padding: 0 !important;
+}
+
+.m_bottom_25 {
+    margin-bottom: 25px;
+}
+
+/* #patient_modal label {
+  font-size: 13px;
+} */
+
+.input_gender {
+    width: calc((100% - 45px) / 3);
+    max-width: 58px;
+}
+.caretaker_gender {
+    width: 60px !important;
+}
+.input_gender img {
+    width: 26px;
+}
+
+.input_gender label {
+    display: block;
+    font-size: 12px;
+}
+
+/*==============================Media Query=====================================*/
+@media screen and (max-width: 1367px) {
+    .reg_patient {
+        width: 1367px;
+        overflow: auto;
+    }
+}
+
+/* by Reena  */
+/* .help_modal .middle_content {
+    padding: 12px 33px
+} */
+
+.help_modal .modal-content {
+    /* padding-bottom: 65px; */
+    height: auto !important;
+}
+
+.help_modal .report-div {
+    border-right: 3px solid #d1d1;
+    /*padding-right: 41px;*/
+}
+
+.help_modal .support_div {
+    padding: 23px 14px
+}
+
+.help_modal .new_common_button,
+.help_modal .new_common_button_1 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 50%
+}
+
+.help_modal .form-control {
+    padding: 2px 12px
+}
+
+.what_new_medeasy_dropdown {
+    left: -10px !important;
+    right: auto !important;
+    top: 42px;
+    padding: 1px 0px !important;
+}
+
+
+/* Whats new css */
+.whats_new_div {
+    background-color: #F1F1F1;
+    height: 100vh;
+}
+
+.whats_new_div h2 {
+    background-color: #FFFFFF;
+    margin-top: 0px;
+    font-size: 20px;
+    margin-bottom: 9px;
+    padding: 20px;
+    border-bottom: 1px solid #d1d1d1;
+    font-size: 14px;
+    font-weight: 700;
+
+}
+
+.whats_new_div .content {
+    width: 98.5%;
+    background-color: #FFFFFF;
+    margin: 0 auto;
+    height: calc(100vh - 150px);
+    padding: 22px;
+    border: 1px solid #d1d1d1;
+    font-size: 18px;
+}
+
+/* Survey css */
+.survey_div {
+    background-color: #F1F1F1;
+    height: 100vh;
+}
+.survey_div h2 {
+    background-color: #FFFFFF;
+    margin-top: 0px;
+    font-size: 20px;
+    margin-bottom: 9px;
+    padding: 20px;
+    border-bottom: 1px solid #d1d1d1;
+    font-size: 14px;
+    font-weight: 700;
+}
+.survey_div .content {
+    width: 98.5%;
+    background-color: #FFFFFF;
+    margin: 0 auto;
+    padding: 0 22px 22px 22px;
+    border: 1px solid #d1d1d1;
+}
+
+.survey_div .common_hr {
+    margin-top: 15px;
+}
+
+.patient_added_record {
+    color: #d15031;
+}
+
+.doctor_added_record {
+    color: #1d1d1d;
+}
+
+#patient_modal .icon_image_right,
+#add_appointment .selection_bx .icon_image_right,
+#edit_appointment .selection_bx .icon_image_right,
+.billing_main_div .selection_bx .icon_image_right {
+    position: absolute;
+    right: -13px;
+    z-index: 2;
+    cursor: pointer;
+    top: -29px !important;
+    width: 36px;
+}
+
+#patient_modal .modal-content {
+    height: auto;
+}
+
+.patientflex {
+    display: flex;
+    align-items: center;
+}
+
+.patientflex .mx100 {
+    width: 90px;
+}
+
+.patientflex .mx110 {
+    width: calc(100% - 105px);
+}
+
+.appointment_list_width_tablet_view {
+    display: none;
+}
+
+@media(max-width:1024px) {
+    .patientflex .mx100 {
+        width: 95px;
+        display: none;
+    }
+
+    .patientflex .mx110 {
+        width: 100%;
+    }
+
+    #patient_modal label {
+        margin-bottom: 10px;
+    }
+
+    .open .appointment_list_width_tablet_view {
+        display: block;
+        position: absolute;
+        left: 0;
+        top: calc(100% + 40px);
+        z-index: 1000;
+        width: 218px;
+        border-right: 1px solid rgba(0, 0, 0, .15);
+        height: calc(100vh - 180px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        background: #fff;
+    }
+
+    .text-center-md {
+        text-align: center !important;
+    }
+}
+
+@media(max-width:991px) {
+    #patient_modal .col-sm-12 {
+        padding: 0;
+    }
+
+    .input_gender {
+        padding: 8px;
+        width: 62px;
+        margin-right: 2px;
+        margin-left: 0px;
+    }
+}
+
+@media(max-width:767px) {
+    .custom_padding_xs {
+        padding: 0 2px;
+    }
+
+    #patient_modal .col-xs-12 {
+        padding: 0;
+    }
+}
+
+@media(max-width:500px) {
+    .btn_properties {
+        width: 100%;
+    }
+
+    .help_modal .new_common_button,
+    .help_modal .new_common_button_1 {
+        width: 100%
+    }
+}

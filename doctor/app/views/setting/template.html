@@ -1,0 +1,1372 @@
+<link rel="stylesheet" ng-href="app/css/clinic_staff.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/fee_structure.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/diseases_template.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/patient_visit.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/pagination.css?{{getVer(3)}}">
+<div class="">
+    <div class="common_hr clearfix patient_visit template_div " ng-init="getInitAllDataForBrand()" style="width: 100%;">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{app.all_clinic_label}}</span>
+                </button>
+                <!-- <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForTemplate(clinic)" ><a href="" >{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="second_width common_heading_height">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding  margin_left_-4">
+                <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4 m_bottom_15">
+                    <h4 class="m_top_22 page_title pull-left">Settings</h4>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-8 col-xs-8 text-right  gotham_light">
+                    <!-- <ul class="pull-right">
+                        <li class="navigation_li">
+                            <label  class="bg_icon_images play_video_btn custom_div_mar" data-toggle="modal"  data-target='#video_help_modal'></label>
+                        </li>
+                    </ul> -->
+                    <!-- Trigger the modal with a button -->
+                    <a href="" class="pull-right m_top_10" ng-if="checkPermission(SETTING_DS, ADD)">                                
+                        <input type="button" 
+                               value="Add Template"
+                               name="btn_addtemplate"
+                               class="new_common_button new_common_button_3 btn_template no_top_margin" 
+                               id="btn_addtemplate" 
+                               data-toggle="modal"
+                               data-target="#modal_add_template"
+                               ng-click="template_tab.addInvetigateTab = false;
+                                   template_tab.addRXTab = false;
+                                   template_tab.addClinicalNoteTab = false;"
+                               />
+                    </a>
+                    <div class="clearfix"></div>
+                    <!-- Modal -->
+                </div>          
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-init="getTemplateList(1)" >
+
+        <div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Diseases Templates</h3>
+            </div>
+
+            <table class="table table-responsive min_width_767" ng-if="checkPermission(SETTING_DS, VIEW)" style="min-width: 450px;">
+                <thead class="row font_color_3 gotham_light common_tb_border font_size_18 common_p_b">
+                    <tr>                                
+                        <th class="width_th_17 breakword_css">Template Name</th>
+                        <th class="width_th_17 breakword_css">Clinical Notes</th>
+                        <th class="width_th_17 breakword_css">Prescription</th>
+                        <th class="width_th_17 breakword_css">Investigation</th>
+                        <th class="width_th_17"></th>                                  
+                    </tr>
+                </thead>
+                <tbody class="font_size_14 common_p_b">                            
+                    <tr class="b_padding" ng-repeat="(key, tempObj) in template_list">
+                        <td class="breakword_css">{{ tempObj.template_template_name}}</td>                        
+                        <td class="breakword_css">{{ tempObj.clinical_notes_title}}</td>                        
+                        <td class="breakword_css">{{ tempObj.drug_name}}</td>                                              
+                        <td class="breakword_css">{{ tempObj.template_investigation_name}}</td>                                              
+                        <td>
+                            <a href="" ng-if="checkPermission(SETTING_DS, EDIT)" ng-click="editTemplateDetail(tempObj.template_id)"><img src="app/images/edit_icon.png" alt="edit_icon" class="m_lr_23"></a>
+                            <a href="" ng-if="checkPermission(SETTING_DS, DELETE)" ng-click="deleteTemplate(tempObj.template_id)"><img src="app/images/delete_icon.png" alt="delete_icon"></a>
+                        </td> 
+                    </tr>                    
+                    <tr ng-if="template_list.length==0">
+                        <td colspan="5" class="text-center">
+                            <h4 ng-bind-html="no_data_found"></h4>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div ng-show="template_list.length > 0" class="row pagi-wrap">
+                <div class="col-lg-3 totals-rows">
+                    <p class="m_top_10">Showing {{((currentPage-1)*per_page) + 1}} to {{last_rows}} of {{total_rows}} entries</p>
+                </div>
+                <div class="pagination-wrap col-lg-9">
+                    <a href="" ng-click="getNextPrevTemp('prev')"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                    <input ng-repeat="n in [] | range:total_page" type="button" ng-value="n" ng-click="getTemplateList(n)" ng-disabled="currentPage == n" ng-class="currentPage == n ? 'page-active' : ''" class="pagi-btn">
+                    <a href="" ng-click="getNextPrevTemp('next')"><img alt="previous" src="app/images/next_arrow.png"></a>
+                </div>
+            </div>
+            <div ng-if="!(checkPermission(SETTING_DS, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+                <div class="unauthorised-css">{{ app.unauthorised_msg}}</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal_edit_template" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <form name="editTemplateForm" id="" novalidate="" ng-keypress="checkFormSubmit($event)" ng-submit="editTemplate(editTemplateForm)" >
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">                            
+                    <h3 class="modal-title modaltitle_m">Edit Template</h3>                            
+                </div>
+                <div class="modal-body padding_body text-left">
+
+                    <div class="font_color_4 gotham_light placeholder_class">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <h4 class="required title2 color_black">Diagnosis</h4>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <h4 class="required title2 color_black">Template Name</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">                                                        
+                                            <input 
+                                                type="text"
+                                                class="form-control common_input" 
+                                                id="template_diagnoses" 
+                                                placeholder="Enter Diagnosis"
+                                                name="template_diagnoses"
+                                                required="required"
+                                                ng-model="template.template_diagnoses"
+                                                >
+                                            <p ng-show="(submitted) && editTemplateForm.template_diagnoses.$error.required" class="error" >{{dignosis_name_required}}</p>
+                                        </div>  
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">                                                        
+                                            <input type="text"
+                                                    class="form-control common_input" 
+                                                    id="template_name" 
+                                                    placeholder="Enter Name "
+                                                    name="template_name"
+                                                    required="required"
+                                                    ng-model="template.template_name">
+                                            <p ng-show="(submitted) && editTemplateForm.template_name.$error.required" class="error" >{{name_required}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                                            
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <h4 class="title2 color_black">Add To Template</h4>
+                            </div>                                            
+                            <div class="col-lg-9 col-md-9 col-sm-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="position_relative" ng-click="template_tab.addClinicalNoteTab = true; openClinicalTab();">
+                                            <input type="button" class="form-control form-control_padding common_input" id="clinicalnotes" value="Clinical Notes" name="clinicalnotes" >
+                                            <img src="app/images/add_icon.png" alt="add" class=" cursor_pointer icon_image_left_1"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col_xs_mar_top">
+                                        <div class="position_relative" ng-click="template_tab.addRXTab = true; openClinicalTab();"  >
+                                            <input type="button" class="form-control form-control_padding common_input" id="rx_template" value="RX" name="rx_template" >
+                                            <img src="app/images/add_icon.png" alt="add" class="cursor_pointer icon_image_left_1"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col_xs_mar_top">
+                                        <div class="position_relative" ng-click="template_tab.addInvetigateTab = true; openClinicalTab();">
+                                            <input type="button"  class="form-control form-control_padding common_input" id="investigation" value="Investigation" name="investigation" >
+                                            <img src="app/images/add_icon.png" alt="add" class="cursor_pointer icon_image_left_1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 ">
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-3 padding_left_0">
+
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <p ng-show="(submitted) && template.tab_required" class="error" >* Clinical Notes, RX and Investigation are required.</p>
+                                </div>
+                            </div>   
+                        </div>
+                    </div>                                                                        
+                    <div class="row clinical_notes" id="clinical_notes" ng-if="template_tab.addClinicalNoteTab">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <h4 class="m_top_24 pull-left title1">Clinical Notes</h4>
+                            <a href="" ng-click="template_tab.addClinicalNoteTab = false;" class="pull-right m_top_24">
+                                <img src="app/images/delete_icon.png" alt="delete_icon">
+                            </a>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="panel-group m_bottom_0" id="accordion">                                         
+
+                                <div class="panel panel-default">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="" data-target="#collapseTwoEdit" class="accordion-toggle">
+                                        <div class="panel-heading">
+                                            <h2>Chief Complaints</h2>
+                                        </div>
+                                    </a>
+                                    <div id="collapseTwoEdit" class="panel-collapse">
+                                        <div class="panel-body">
+                                            <ul class="rich_text_ul">
+                                                <li ng-repeat="(key, test) in testChief">
+                                                    <span class="pull-left dash_span">-</span>
+                                                    <input custom-autofocus="$index == focusIndex" 
+                                                           id="note_{{key}}" 
+                                                           client-auto-complete dirtype='8' 
+                                                           key="{{key}}" 
+                                                           type="text" 
+                                                           class="common_input pull-left" 
+                                                           name="similarbrand"  
+                                                           ng-keyup="appendNote(key, $event, testChief, 1)"  
+                                                           placeholder="{{key==0  ? 'Search Complaints':''}}"
+                                                           ng-model="test.search" 
+                                                           />                                                                
+                                                    <div class="clearfix"></div>
+                                                </li>
+
+                                            </ul>                                                        
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <a data-toggle="collapse" data-parent="#accordion" href=""  data-target="#collapseThreeEdit" class="accordion-toggle">
+                                        <div class="panel-heading">
+                                            <h2>Add Observations</h2>
+                                        </div>
+                                    </a>
+                                    <div id="collapseThreeEdit" class="panel-collapse">
+                                        <div class="panel-body">
+                                            <ul class="rich_text_ul">
+                                                <li ng-repeat="(key, test) in testObservation">
+                                                    <span class="pull-left dash_span">-</span>
+                                                    <input custom-autofocus="$index == focusIndex" 
+                                                           id="note_{{key}}" 
+                                                           client-auto-complete dirtype='9' 
+                                                           key="{{ key}}" 
+                                                           type="text" 
+                                                           class="common_input pull-left" 
+                                                           name="similarbrand"  
+                                                           ng-keyup="appendNote(key, $event, testObservation, 2)"  
+                                                           placeholder="{{key==0  ? 'Search Observation':''}}"
+                                                           ng-model="test.search" 
+                                                           />                                                                
+                                                    <div class="clearfix"></div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="" data-target="#collapseFourEdit" class="accordion-toggle">
+                                        <div class="panel-heading">
+                                            <h2>Add Diagnosis</h2>
+                                        </div>
+                                    </a>
+                                    <div id="collapseFourEdit" class="panel-collapse">
+                                        <div class="panel-body">
+                                            <ul class="rich_text_ul">
+                                                <li ng-repeat="(key, test) in testDiagnosis">
+                                                    <span class="pull-left dash_span">-</span>
+                                                    <input custom-autofocus="$index == focusIndex" 
+                                                           id="note_{{key}}" 
+                                                           client-auto-complete dirtype='10' 
+                                                           key="{{ key}}" 
+                                                           type="text" 
+                                                           class="common_input pull-left" 
+                                                           name="similarbrand"  
+                                                           ng-keyup="appendNote(key, $event, testDiagnosis, 3)"  
+                                                           placeholder="{{key==0  ? 'Search Diagnosis':''}}"
+                                                           ng-model="test.search" 
+                                                           />                                                                
+                                                    <div class="clearfix"></div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="" data-target="#collapseFiveEdit"  class="accordion-toggle">
+                                        <div class="panel-heading">
+                                            <h2>Add Notes</h2>
+                                        </div>
+                                    </a>
+                                    <div id="collapseFiveEdit" class="panel-collapse ">
+                                        <div class="panel-body">
+                                            <ul class="rich_text_ul">
+                                                <li ng-repeat="(key, test) in testNotes">
+                                                    <span class="pull-left dash_span">-</span>
+                                                    <input custom-autofocus="$index == focusIndex" 
+                                                           id="note_{{key}}" 
+                                                           client-auto-complete dirtype='11' 
+                                                           key="{{ key}}" 
+                                                           type="text" 
+                                                           class="common_input pull-left" 
+                                                           name="similarbrand"  
+                                                           ng-keyup="appendNote(key, $event, testNotes, 4)"  
+                                                           placeholder="{{key==0  ? 'Search Notes':''}}"
+                                                           ng-model="test.search" 
+                                                           />                                                                
+                                                    <div class="clearfix"></div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>                                             
+                                </div>
+                                <p ng-show="submitted && template.is_blank_clinical_notes" class="error">* Enter at least one clinical note</p>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="template_tab.addRXTab">
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <h4 class="m_top_24 pull-left title1">Rx</h4>
+                            <a href="" ng-click="template_tab.addRXTab = false;" class="pull-right m_top_24">
+                                <input type="button" value="Delete All RX" class="new_common_button" style="font-size: 14px;
+                                       padding: 10px;
+                                       height: auto;"/>            
+                            </a>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " >
+                            <div class="test">
+                                <div class="this-repeat" ng-repeat="(key, brand) in brandList">
+                                    <ng-form name="innerDrugTemplateForm">       
+                                        <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="m_bottom_15 required">Brand & strength</label>
+                                                <input
+                                                    client-auto-complete key="{{key}}" 
+                                                    dirtype='7'
+                                                    type="text"
+                                                    class="form-control common_input" 
+                                                    name="similarbrand"
+                                                    id="similarbrand"  
+                                                    ng-keyup="searchSimilarBrand(key)"  
+                                                    placeholder="Search Brand Name"
+                                                    ng-model="brand.similar_brand" 
+                                                    required=""/>                                                                
+                                                <a href="#/app/dashboard/setting/brand"><label class="cursor_pointer float_right font_color_1 title3">Add brand name</label></a>
+                                                <input type="hidden" name="brand_id" ng-model="brand.similar_brand_id" required="">
+                                                <p ng-show="(submitted) && innerDrugTemplateForm.similarbrand.$error.required" class="error" >{{similar_brand_required}}</p>
+                                                <p ng-show="(submitted) && (innerDrugTemplateForm.brand_id.$error.required && !innerDrugTemplateForm.similarbrand.$error.required)" class="error" >Invalid drug.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group pos-relative">
+                                                <label class="m_bottom_15">Generic Name</label>
+                                                <div class="position_relative multiple_selection_box" >
+                                                    <select
+                                                        name='drug_generic_id'
+                                                        id="drug_generic_id"
+                                                        chosen                                                                
+                                                        multiple=""
+                                                        allow-single-deselect="true"
+                                                        placeholder_text_multiple="'Generic Name'"         
+                                                        ng-options=" value.drug_generic_id as value.drug_generic_title for value in brandGenericList"                                                                
+                                                        ng-model="brand.drug_drug_generic_id"  
+                                                        class="common_input form-control" 
+                                                        disabled="">
+                                                        <option value=""></option>                                                                 
+                                                    </select>                                                                                        
+                                                </div>
+                                                <div ng-if="key != 0">
+                                                    <a href="" ng-click="removeLastBrandObj(key)"><img src="app/images/delete_icon.png" alt="delete" class="img-responsive icon_image_right"/></a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="clearfix"></div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 no_padding">
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12 m_bottom_15 required">Unit</label>
+                                                <label class="col-lg-9 col-md-9 col-sm-9 col-xs-12 m_bottom_15 required">Frequency</label>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-class="((brand.drug_unit_name=='Tablets' || brand.drug_unit_name =='IU') && brand.defaultFreqOpen) ? 'text-center' : ''">
+                                                    <input ng-if="brand.drug_unit_name!='As Directed' && brand.drug_unit_name!='Tablets' && brand.drug_unit_name!='IU'" 
+                                                        type="text" 
+                                                        class="form-control common_input" 
+                                                        placeholder="00"
+                                                        value=""
+                                                        name="dosage"
+                                                        required=""
+                                                        maxlength="3"
+                                                        ng-model="brand.dosage"
+                                                        ng-pattern="/^[0-9\.]{1,3}?$/"
+                                                        /> 
+                                                    <input ng-if="brand.drug_unit_name=='IU' && !brand.defaultFreqOpen" 
+                                                        type="text" 
+                                                        class="form-control common_input" 
+                                                        placeholder="00"
+                                                        value=""
+                                                        name="dosage"
+                                                        required=""
+                                                        maxlength="3"
+                                                        ng-model="brand.dosage"
+                                                        ng-pattern="/^[1-9][0-9]*$/"
+                                                        /> 
+                                                    <select ng-if="(brand.drug_unit_name=='Tablets') && !brand.defaultFreqOpen"
+                                                        name="dosage" 
+                                                        class="dosage_dropdown" 
+                                                        ng-model="brand.dosage" 
+                                                        required="" 
+                                                        ng-change="changeCustomValue(key)" 
+                                                        ng-pattern="/^[^0]*$/"
+                                                        ng-options="value.text as value.text for value in DosageDropdown">
+                                                    </select>   
+                                                    <label class="font_color_1 cursor_pointer title3" ng-class="(brand.drug_unit_name=='As Directed' || ((brand.drug_unit_name=='Tablets' || brand.drug_unit_name =='IU') && brand.defaultFreqOpen)) ? 'm_top_12' : ''">
+                                                        {{((brand.drug_unit_name=='Tablets' || brand.drug_unit_name =='') && brand.defaultFreqOpen) ? 'N/A' : brand.drug_unit_name| capitalize }}
+                                                    </label>                                                                    
+                                                    <p class="error" ng-show="submitted && innerDrugTemplateForm.dosage.$error.required" >{{dosage_required}}</p>
+                                                    <p class="error" ng-show="submitted && innerDrugTemplateForm.dosage.$error.pattern" >Invalid unit</p>
+                                                </div>
+                                                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                                    <div class="position_relative"  ng-if="!brand.defaultFreqOpen">
+                                                        <select
+                                                            name='drug_frequency_id'
+                                                            id="drug_frequency_id"
+                                                            chosen 
+                                                            allow-single-deselect="true" 
+                                                            placeholder_text_single="'Select frequency'" 
+                                                            ng-options="value.drug_frequency_id as value.drug_frequency_name for value in brandFreqList" 
+                                                            ng-model="brand.drug_frequency_id" 
+                                                            ng-change="changeCustomValue(key)" 
+                                                            class="common_input form-control" required=""  >
+                                                            <option value=""></option>
+                                                        </select> 
+                                                        <span>
+                                                            <img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right"/> 
+                                                        </span>
+                                                    </div> 
+                                                    <div ng-if="brand.defaultFreqOpen">
+                                                        <div class="row">
+                                                            <div class="form-group col-lg-4 col-md-3 col-sm-3 col-xs-3 m_bottom_6">
+                                                                <input ng-if="brand.drug_unit_name!='Tablets' && brand.drug_unit_name !='IU'"
+                                                                    type="text"
+                                                                    name="default1" 
+                                                                    class="form-control common_input" 
+                                                                    placeholder="00"
+                                                                    readonly=""
+                                                                    value="" 
+                                                                    ng-model="brand.default1"
+                                                                /> 
+                                                                <input ng-if="brand.drug_unit_name=='IU' && (brand.default1 !='0' || brand.default2 !='0' || brand.default3 !='0')"
+                                                                    type="text"
+                                                                    name="default1" 
+                                                                    class="form-control common_input" 
+                                                                    placeholder="00"
+                                                                    value="" 
+                                                                    ng-model="brand.default1"
+                                                                    ng-keyup="setFrequency(key)" 
+                                                                    required=""
+                                                                    ng-pattern="/^[0-9]{1,3}?$/"
+                                                                />
+                                                                <input ng-if="brand.drug_unit_name=='IU' && (brand.default1 =='0' && brand.default2 =='0' && brand.default3 =='0')"
+                                                                    type="text"
+                                                                    name="default1" 
+                                                                    class="form-control common_input" 
+                                                                    placeholder="00"
+                                                                    value="" 
+                                                                    ng-model="brand.default1"
+                                                                    ng-keyup="setFrequency(key)" 
+                                                                    required=""
+                                                                    ng-pattern="/^[1-9][0-9]{1,3}?$/"
+                                                                />
+                                                                <select ng-if="(brand.drug_unit_name=='Tablets') && (brand.default1 =='0' && brand.default2 =='0' && brand.default3 =='0')"
+                                                                    name="default1" 
+                                                                    class="dosage_dropdown" 
+                                                                    ng-model="brand.default1" 
+                                                                    required=""
+                                                                    ng-pattern="/^[^0]*$/" 
+                                                                    ng-change="setFrequency(key)" 
+                                                                    ng-options="value.text as value.text for value in DosageDropdown">
+                                                                </select>
+                                                                <select ng-if="(brand.drug_unit_name=='Tablets') && (brand.default1 !='0' || brand.default2 !='0' || brand.default3 !='0')"
+                                                                    name="default1" 
+                                                                    class="dosage_dropdown" 
+                                                                    ng-model="brand.default1" 
+                                                                    required=""
+                                                                    ng-pattern="" 
+                                                                    ng-change="setFrequency(key)" 
+                                                                    ng-options="value.text as value.text for value in DosageDropdown">
+                                                                </select>  
+                                                                <p class="error" ng-show="submitted && brand.defaultFreqOpen && innerDrugTemplateForm.default1.$error.required" >* Required</p>
+                                                            </div>
+                                                            <div class="form-group col-lg-4 col-md-3 col-sm-3 col-xs-3 m_bottom_6">
+                                                                <input ng-if="brand.drug_unit_name!='Tablets'" 
+                                                                    type="text"
+                                                                    name="default2"
+                                                                    class="form-control common_input" 
+                                                                    placeholder="00"
+                                                                    ng-readonly="brand.drug_unit_name!='IU'" 
+                                                                    value="" 
+                                                                    ng-model="brand.default2"
+                                                                    ng-keyup="setFrequency(key)"
+                                                                    required="" 
+                                                                    ng-pattern="/^[0-9]{1,3}?$/"
+                                                                />
+
+                                                                <select ng-if="brand.drug_unit_name=='Tablets'"
+                                                                    name="default2" 
+                                                                    class="dosage_dropdown" 
+                                                                    ng-model="brand.default2" 
+                                                                    required="" 
+                                                                    ng-change="setFrequency(key)" 
+                                                                    ng-options="value.text as value.text for value in DosageDropdown">
+                                                                </select> 
+                                                                <p class="error" ng-show="submitted && brand.defaultFreqOpen && innerDrugTemplateForm.default2.$error.required" >* Required</p>   
+                                                            </div>
+                                                            <div class="form-group col-lg-4 col-md-3 col-sm-3 col-xs-3 m_bottom_6">
+                                                                <input ng-if="brand.drug_unit_name!='Tablets' && brand.drug_unit_name !=''" 
+                                                                    type="text"
+                                                                    name="default3" 
+                                                                    class="form-control common_input" 
+                                                                    placeholder="00"
+                                                                    ng-readonly="brand.drug_unit_name!='IU'" 
+                                                                    value="" ng-model="brand.default3"
+                                                                    ng-keyup="setFrequency(key)"
+                                                                    required="" 
+                                                                    ng-pattern="/^[0-9]{1,3}?$/"
+                                                                />
+                                                                <select ng-if="brand.drug_unit_name=='Tablets'"
+                                                                    name="default3" 
+                                                                    class="dosage_dropdown" 
+                                                                    ng-model="brand.default3" 
+                                                                    required="" 
+                                                                    ng-change="setFrequency(key)" 
+                                                                    ng-options="value.text as value.text for value in DosageDropdown">
+                                                                </select>
+                                                                <p class="error" ng-show="submitted && brand.defaultFreqOpen && innerDrugTemplateForm.default3.$error.required" >* Required</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <p class="error" ng-show="submitted && (brand.drug_unit_name!='Tablets' && brand.drug_unit_name!='IU') && innerDrugTemplateForm.drug_frequency_id.$error.required" >* Frequency Required</p>
+                                                    <p class="error" ng-show="submitted && (brand.drug_unit_name=='Tablets' || brand.drug_unit_name=='IU') && !brand.defaultFreqOpen && innerDrugTemplateForm.drug_frequency_id.$error.required" >* Frequency Required</p>
+                                                    <p class="error" ng-show="submitted && brand.defaultFreqOpen && innerDrugTemplateForm.default1.$error.pattern" >* <span ng-if="brand.drug_unit_name=='Tablets'">Select at leat one from above</span><span ng-if="brand.drug_unit_name=='IU'">Enter at leat one from above</span></p>
+                                                    <div class="float_left">
+                                                        <label class="font_color_1 cursor_pointer title3" ng-click="brand.defaultFreqOpen = true;"  ng-if="!brand.defaultFreqOpen && brand.drug_frequency_id < 6">Custom</label>
+                                                        <label class="font_color_1 cursor_pointer title3" ng-click="brand.defaultFreqOpen = false; clearCustomValues(key);"  ng-if="brand.defaultFreqOpen">Default</label>
+                                                    </div>
+                                                    <div class="float_right">
+                                                        <label class="float_right font_color_1 title3" 
+                                                               ng-if="!brand.isFreqInst"
+                                                               ng-click="brand.isFreqInst = true;"
+                                                               >Add Note</label>
+                                                        <input type="text"
+                                                               class="form-control common_input m_top_10" 
+                                                               ng-if="brand.isFreqInst"
+                                                               id="instructions" 
+                                                               placeholder="Enter Note" 
+                                                               name="instructions"                                                               
+                                                               ng-model="brand.freq_instruction">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="m_bottom_15 required">Instruction</label>
+                                                <div class="position_relative">
+                                                    <select
+                                                        name='drug_intake'
+                                                        id="drug_intake"
+                                                        chosen 
+                                                        allow-single-deselect="true"
+                                                        placeholder_text_single="'Select Instruction'"          
+                                                        ng-options="value.id as value.name for value in brandIntakeList"  
+                                                        ng-model="brand.drug_intake" 
+                                                        class="common_input form-control" required=""  >
+                                                        <option value=""></option> 
+                                                    </select>                                                                                        
+                                                    <span>
+                                                        <img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right"/>                                                
+                                                    </span>
+                                                </div>
+                                                <p class="error" ng-show="submitted && innerDrugTemplateForm.drug_intake.$error.required">* Required</p>
+                                                <input type="text"
+                                                       class="form-control common_input m_top_10" 
+                                                       ng-if="brand.isIntakeInst"
+                                                       id="instructions" 
+                                                       placeholder="Enter Instruction"
+                                                       name="instructions"                                                       
+                                                       ng-model="brand.intake_instruction">
+                                                <label class="float_right font_color_1 cursor_pointer title3" 
+                                                       ng-if="!brand.isIntakeInst"
+                                                       ng-click="brand.isIntakeInst = true;"
+                                                       >Add Note</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="m_bottom_15 required">Duration</label>
+                                                <input 
+                                                    type="text"
+                                                    class="form-control common_input"
+                                                    id="duration_value"
+                                                    placeholder="Value "
+                                                    name="duration_value"
+                                                    required=""
+                                                    ng-pattern="/^[0-9]{1,3}?$/"
+                                                    ng-model="brand.drug_duration_value">              
+                                                <a href="" class="dropdown-toggle"  data-toggle="dropdown"><label class="cursor_pointer float_right font_color_1 title3" ng-if="brand.drug_duration == '1'">Day(s)</label></a>                                            
+                                                <a href="" class="dropdown-toggle"  data-toggle="dropdown"><label class="cursor_pointer float_right font_color_1 title3" ng-if="brand.drug_duration == '2'" >Week(s)</label></a>                                            
+                                                <a href="" class="dropdown-toggle"  data-toggle="dropdown"><label class="cursor_pointer float_right font_color_1 title3" ng-if="brand.drug_duration == '3'">Month(s)</label></a>                                            
+                                                <ul class="dropdown-menu">             
+                                                    <li ng-repeat-start="type in brandDurationTypeList" ng-click="brand.drug_duration = type.id" ><a href="" >{{ type.name}}</a></li>
+                                                    <li class='divider' ng-repeat-end></li>
+                                                </ul>
+                                                <p class="error" ng-show="submitted && innerDrugTemplateForm.duration_value.$error.required" >{{brand_duration_required}}</p>
+                                                <p class="error" ng-show="submitted && innerDrugTemplateForm.duration_value.$error.pattern" >Invalid duration</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="m_bottom_15">Diet Instruction</label>
+                                                <input 
+                                                    type="text"
+                                                    class="form-control common_input" 
+                                                    id="instructions" 
+                                                    placeholder="Enter Instruction"
+                                                    name="instructions"                                                    
+                                                    ng-model="brand.drug_instruction">
+                                            </div>
+                                        </div>
+                                            </div>
+                                    </ng-form>
+                                </div>
+                                <p ng-show="submitted && brandList.length == 0" class="error">* Enter at least one RX</p>
+                                <div class="clearfix"></div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_light font_color_5 text-center">                                       
+                                    <input ng-click="addMoreBrand()" type="button" value="ADD NEW" name="save" class="btn new_common_button btn_properties"/>                                                                           
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="template_tab.addInvetigateTab">
+                        <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <h4 class="m_top_24 pull-left title1">Investigation</h4>
+                            <a href="" ng-click="template_tab.addInvetigateTab = false;" class="pull-right m_top_24 m_right_7">
+                                <img src="app/images/delete_icon.png" alt="delete_icon">
+                            </a>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  ">
+                            <div class="m_top_10" id="investigation">
+                               
+                                <div class="row"  ng-repeat="(key, test) in testLabs track by $index">
+                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+                                        <div class="form-group">
+                                            <label class="m_bottom_15" ng-if="key == 0">Lab Test</label>                                                           
+                                            <ul class="rich_text_ul">
+                                                <li>
+                                                    <span class="pull-left dash_span">-</span>
+                                                    <input custom-autofocus="$index == focusIndex" 
+                                                           id="note_{{key}}"                                                                            
+                                                           key="{{key}}" 
+                                                           type="text" 
+                                                           class="common_input pull-left" 
+                                                           client-auto-complete dirtype='12'                                                                                
+                                                           name="similarbrand"  
+                                                           ng-keyup="appendNote(key, $event, testLabs, 12)"  
+                                                           placeholder="{{key==0  ? 'Enter lab name':''}}"
+                                                           ng-model="test.search"                                                
+                                                           ng-readonly="key != (testLabs.length - 1)"
+                                                           ng-disabled="key != (testLabs.length - 1)"
+                                                           />                                                                
+                                                    <div class="clearfix"></div>
+                                                </li>
+                                            </ul>    
+                                            <p class="error" ng-show="lab_test_error && !lab_test_error_invalid">Please enter at least one lab test name</p>                                
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="form-group">
+                                            <label class="m_bottom_15" ng-if="key == 0">Instructions</label>
+                                            <div 
+                                                ng-if="!test.isOpenInst"
+                                                ng-click="test.isOpenInst = true">
+                                                <label class="cursor_pointer gotham_light m_top_10">
+                                                    <i class="fa fa-plus"></i>
+                                                    Add Instruction</label>
+                                            </div>
+                                            <input
+                                                ng-if="test.isOpenInst"
+                                                type="text"
+                                                class="form-control common_input" 
+                                                ng-model="test.lab_instruction" 
+                                                placeholder="Write instruction" />                                                               
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 remove-btn text-right" ng-class="key == 0 ? '' : ''">
+                                        <label class="m_bottom_15 dblock">&nbsp;</label>
+                                        <img src="app/images/remove.png" style="height: 35px"
+                                             class="doc_image doc_image_add cursor_pointer" 
+                                             ng-click="removeLabInvestigationObj(key)" />
+                                    </div>                   
+                                </div>
+                            </div>
+                        </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">                                      
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>                                 
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" ng-click="closeTemplateModal()" data-dismiss="modal" value="Cancel" name="cancle" class="btn new_common_button_1 cancel_patient btn_properties float_left" />
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="modal_add_template"  role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <form name="addTemplateForm" id="" novalidate="" ng-keypress="checkFormSubmit($event)" ng-submit="addTemplate(addTemplateForm)" >
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">                            
+                    <h3 class="modal-title modaltitle_m">Add New Template</h3>                            
+                </div>
+                <div class="modal-body padding_body text-left">
+
+                    <div class="font_color_4 gotham_light placeholder_class">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                                        <h4 class="required title2 color_black">Diagnosis</h4>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <h4 class="required title2 color_black">Template Name</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                                        <div class="form-group">
+                                            <input 
+                                                type="text"
+                                                class="form-control common_input" 
+                                                id="template_diagnoses" 
+                                                placeholder="Enter Diagnosis"
+                                                name="template_diagnoses"
+                                                required="required"
+                                                ng-model="template.template_diagnoses"
+                                                >
+                                            <p ng-show="(submitted) && addTemplateForm.template_diagnoses.$error.required" class="error" >{{dignosis_name_required}}</p>
+                                        </div>  
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <input type="text"
+                                                class="form-control common_input" 
+                                                id="template_name" 
+                                                placeholder="Enter Name "
+                                                name="template_name"
+                                                required="required"
+                                                ng-model="template.template_name">
+                                            <p ng-show="(submitted) && addTemplateForm.template_name.$error.required" class="error" >{{name_required}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                                            
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <h4 class="title2 color_black">Add To Template</h4>
+                            </div>                                            
+                            <div class="col-lg-9 col-md-9 col-sm-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="position_relative" ng-click="template_tab.addClinicalNoteTab = true; openClinicalTab();">
+                                            <input type="button" class="form-control form-control_padding common_input" id="clinicalnotes" value="Clinical Notes" name="clinicalnotes" >
+                                            <img src="app/images/add_icon.png" alt="add" class=" cursor_pointer icon_image_left_1"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col_xs_mar_top">
+                                        <div class="position_relative" ng-click="template_tab.addRXTab = true; openClinicalTab();"  >
+                                            <input type="button" class="form-control form-control_padding common_input" id="rx_template" value="RX" name="rx_template" >
+                                            <img src="app/images/add_icon.png" alt="add" class="cursor_pointer icon_image_left_1"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col_xs_mar_top">
+                                        <div class="position_relative" ng-click="template_tab.addInvetigateTab = true; openClinicalTab();">
+                                            <input type="button"  class="form-control form-control_padding common_input" id="investigation" value="Investigation" name="investigation" >
+                                            <img src="app/images/add_icon.png" alt="add" class="cursor_pointer icon_image_left_1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 ">
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-3 padding_left_0">
+
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <p ng-show="(submitted) && template.tab_required" class="error" >* Clinical Notes, RX and Investigation are required.</p>
+                                </div>
+                            </div>   
+                        </div>
+                    </div>                                                                        
+                    <div class="row clinical_notes" id="clinical_notes" ng-if="template_tab.addClinicalNoteTab">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <h4 class="m_top_24 pull-left title1">Clinical Notes</h4>
+                            <a href="" ng-click="template_tab.addClinicalNoteTab = false; closeRXTab(1);" class="pull-right m_top_24">
+                                <img src="app/images/delete_icon.png" alt="delete_icon">
+                            </a>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="panel-group m_bottom_0" id="accordion">
+                                <div class="panel panel-default">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="" data-target="#collapseTwo" class="accordion-toggle">
+                                        <div class="panel-heading">
+                                            <h2>Chief Complaints</h2>
+                                        </div>
+                                    </a>
+                                    <div id="collapseTwo" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul class="rich_text_ul">
+                                                <li ng-repeat="(key, test) in testChief">
+                                                    <span class="pull-left dash_span">-</span>
+                                                    <input custom-autofocus="$index == focusIndex" 
+                                                           id="note_{{key}}" 
+                                                           client-auto-complete dirtype='8' 
+                                                           key="{{key}}" 
+                                                           type="text" 
+                                                           class="common_input pull-left" 
+                                                           name="similarbrand"  
+                                                           ng-keyup="appendNote(key, $event, testChief, 1)"  
+                                                           placeholder="{{key==0  ? 'Search Complaints':''}}"
+                                                           ng-model="test.search" 
+                                                           />                                                                
+                                                    <div class="clearfix"></div>
+                                                </li>
+
+                                            </ul>                                                        
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <a data-toggle="collapse" data-parent="#accordion" href=""  data-target="#collapseThree" class="accordion-toggle">
+                                        <div class="panel-heading">
+                                            <h2>Add Observations</h2>
+                                        </div>
+                                    </a>
+                                    <div id="collapseThree" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul class="rich_text_ul">
+                                                <li ng-repeat="(key, test) in testObservation">
+                                                    <span class="pull-left dash_span">-</span>
+                                                    <input custom-autofocus="$index == focusIndex" 
+                                                           id="note_{{key}}" 
+                                                           client-auto-complete dirtype='9' 
+                                                           key="{{ key}}" 
+                                                           type="text" 
+                                                           class="common_input pull-left" 
+                                                           name="similarbrand"  
+                                                           ng-keyup="appendNote(key, $event, testObservation, 2)"  
+                                                           placeholder="{{key==0  ? 'Search Observation':''}}"
+                                                           ng-model="test.search" 
+                                                           />                                                                
+                                                    <div class="clearfix"></div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="" data-target="#collapseFour" class="accordion-toggle">
+                                        <div class="panel-heading">
+                                            <h2>Add Diagnosis</h2>
+                                        </div>
+                                    </a>
+                                    <div id="collapseFour" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul class="rich_text_ul">
+                                                <li ng-repeat="(key, test) in testDiagnosis">
+                                                    <span class="pull-left dash_span">-</span>
+                                                    <input custom-autofocus="$index == focusIndex" 
+                                                           id="note_{{key}}" 
+                                                           client-auto-complete dirtype='10' 
+                                                           key="{{ key}}" 
+                                                           type="text" 
+                                                           class="common_input pull-left" 
+                                                           name="similarbrand"  
+                                                           ng-keyup="appendNote(key, $event, testDiagnosis, 3)"  
+                                                           placeholder="{{key==0  ? 'Search Diagnosis':''}}"
+                                                           ng-model="test.search" 
+                                                           />                                                                
+                                                    <div class="clearfix"></div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="" data-target="#collapseFive"  class="accordion-toggle">
+                                        <div class="panel-heading">
+                                            <h2>Add Notes</h2>
+                                        </div>
+                                    </a>
+                                    <div id="collapseFive" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul class="rich_text_ul">
+                                                <li ng-repeat="(key, test) in testNotes">
+                                                    <span class="pull-left dash_span">-</span>
+                                                    <input custom-autofocus="$index == focusIndex" 
+                                                           id="note_{{key}}" 
+                                                           client-auto-complete dirtype='11' 
+                                                           key="{{ key}}" 
+                                                           type="text" 
+                                                           class="common_input pull-left" 
+                                                           name="similarbrand"  
+                                                           ng-keyup="appendNote(key, $event, testNotes, 4)"  
+                                                           placeholder="{{key==0  ? 'Search Notes':''}}"
+                                                           ng-model="test.search" 
+                                                           />                                                                
+                                                    <div class="clearfix"></div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>                                             
+                                </div>
+                                <p ng-show="submitted && template.is_blank_clinical_notes" class="error">* Enter at least one clinical note</p>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="template_tab.addRXTab">
+
+                        <div class="col-lg-12 col-md-12 col-sm-8 col-xs-8">
+                            <h4 class="m_top_24 pull-left title1">Rx</h4>
+                            <a href="" ng-click="template_tab.addRXTab = false; closeRXTab(2);" class="pull-right m_top_24">
+                                <input type="button" value="Delete All RX" class="new_common_button" style="font-size: 14px; padding: 10px; height: auto;"/>  
+                            </a>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " >
+                            <div class="test">
+                                <div class="this-repeat" ng-repeat="(key, brand) in brandList">
+                                    <ng-form name="innerDrugTemplateForm">
+                                        <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="m_bottom_15 required">Brand & strength</label>
+                                                <input
+                                                    client-auto-complete key="{{key}}" 
+                                                    dirtype='7'
+                                                    type="text"
+                                                    class="form-control common_input" 
+                                                    name="similarbrand"
+                                                    id="similarbrand"  
+                                                    ng-keyup="searchSimilarBrand(key)"  
+                                                    placeholder="Search Brand Name"
+                                                    ng-model="brand.similar_brand" 
+                                                    required=""/>                                                                
+                                                <a href="#/app/dashboard/setting/brand" target="_blank"><label class="cursor_pointer float_right font_color_1 title3">Add brand name</label></a>
+                                                <input type="hidden" name="brand_id" ng-model="brand.similar_brand_id" required="">
+                                                <p ng-show="(submitted) && innerDrugTemplateForm.similarbrand.$error.required" class="error" >{{similar_brand_required}}</p>
+                                                <p ng-show="(submitted) && (innerDrugTemplateForm.brand_id.$error.required && !innerDrugTemplateForm.similarbrand.$error.required)" class="error" >Invalid drug.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group pos-relative">
+                                                <label class="m_bottom_15">Generic Name</label>
+                                                <div class="position_relative multiple_selection_box" >
+                                                    <select
+                                                        name='drug_generic_id'
+                                                        id="drug_generic_id"
+                                                        chosen                                                                
+                                                        multiple=""
+                                                        allow-single-deselect="true"
+                                                        placeholder_text_multiple="'Generic Name'"         
+                                                        ng-options=" value.drug_generic_id as value.drug_generic_title for value in brandGenericList"                                                                
+                                                        ng-model="brand.drug_drug_generic_id"  
+                                                        class="common_input form-control" 
+                                                        disabled="">
+                                                        <option value=""></option>                                                                 
+                                                    </select>                                                                                        
+                                                </div>
+                                                <div ng-if="key != 0">
+                                                    <a href="" ng-click="removeLastBrandObj(key)"><img src="app/images/delete_icon.png" alt="delete" class="img-responsive icon_image_right"/></a>
+                                                </div>                                                                  
+                                            </div>
+                                            
+                                        </div>
+
+                                        <div class="clearfix"></div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 no_padding">
+                                            <div class="form-group clearfix">
+                                                <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12 m_bottom_15 required">Unit</label>
+                                                <label class="col-lg-9 col-md-9 col-sm-9 col-xs-12 m_bottom_15 required">Frequency</label>
+                                                <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12" ng-class="((brand.drug_unit_name=='Tablets' || brand.drug_unit_name =='IU') && brand.defaultFreqOpen) ? 'text-center' : ''">
+                                                    <input ng-if="brand.drug_unit_name!='As Directed' && brand.drug_unit_name!='Tablets' && brand.drug_unit_name!='IU'" type="text" 
+                                                           class="form-control common_input" 
+                                                           placeholder="00"
+                                                           value=""
+                                                           ng-model="brand.dosage"
+                                                           required=""
+                                                           maxlength="3"
+                                                           name="dosage"
+                                                           ng-pattern="/^[0-9\.]{1,3}?$/"
+                                                           /> 
+                                                    <input ng-if="(brand.drug_unit_name=='IU') && !brand.defaultFreqOpen" type="text" 
+                                                           class="form-control common_input" 
+                                                           placeholder="00"
+                                                           value=""
+                                                           ng-model="brand.dosage"
+                                                           required=""
+                                                           maxlength="3"
+                                                           name="dosage"
+                                                           ng-pattern="/^[1-9][0-9]*$/"
+                                                           /> 
+                                                    <select ng-if="(brand.drug_unit_name=='Tablets') && !brand.defaultFreqOpen"
+                                                        name="dosage" 
+                                                        class="dosage_dropdown" 
+                                                        ng-model="brand.dosage" 
+                                                        required="" 
+                                                        ng-change="changeCustomValue(key)" 
+                                                        ng-pattern="/^[^0]*$/"
+                                                        ng-options="value.text as value.text for value in DosageDropdown">
+                                                    </select>
+                                                    <label class="font_color_1 cursor_pointer title3" ng-class="(brand.drug_unit_name=='As Directed' || ((brand.drug_unit_name=='Tablets' || brand.drug_unit_name =='IU') && brand.defaultFreqOpen)) ? 'm_top_12' : ''">
+                                                        {{((brand.drug_unit_name=='Tablets' || brand.drug_unit_name =='') && brand.defaultFreqOpen) ? 'N/A' : brand.drug_unit_name| capitalize }}
+                                                    </label>                                                                    
+                                                    <p class="error" ng-show="submitted && innerDrugTemplateForm.dosage.$error.required" style="text-align: center">{{dosage_required}}</p>
+                                                    <p class="error" ng-show="submitted && innerDrugTemplateForm.dosage.$error.pattern" >Invalid Unit</p>
+                                                </div>
+
+                                                <div class="col-lg-9 col-md-6 col-sm-12 col-xs-12">
+                                                    <div class="position_relative"  ng-show="!brand.defaultFreqOpen">
+                                                        <select
+                                                            name='drug_frequency_id'
+                                                            id="drug_frequency_id"
+                                                            chosen
+                                                            allow-single-deselect="true"
+                                                            placeholder_text_single="'Select Frequency'" 
+                                                            ng-options="value.drug_frequency_id as value.drug_frequency_name for value in brandFreqList" 
+                                                            ng-model="brand.drug_frequency_id" 
+                                                            ng-change="changeCustomValue(key)" 
+                                                            class="common_input form-control" required=""  >
+                                                            <option value=""></option>
+                                                        </select>
+                                                        <span>
+                                                            <img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right"/>
+                                                        </span>
+                                                    </div> 
+                                                    <div ng-if="brand.defaultFreqOpen">
+                                                        <div class="row">
+                                                            <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12 m_bottom_6">
+                                                                <input ng-if="brand.drug_unit_name!='Tablets' && brand.drug_unit_name !='IU'"
+                                                                    type="text"
+                                                                    name="default1" 
+                                                                    class="form-control common_input" 
+                                                                    placeholder="00"
+                                                                    readonly=""
+                                                                    value="" 
+                                                                    ng-model="brand.default1"
+                                                                /> 
+                                                                <input ng-if="brand.drug_unit_name=='IU' && (brand.default1 !='0' || brand.default2 !='0' || brand.default3 !='0')"
+                                                                    type="text"
+                                                                    name="default1" 
+                                                                    class="form-control common_input" 
+                                                                    placeholder="00"
+                                                                    value="" 
+                                                                    ng-model="brand.default1"
+                                                                    ng-keyup="setFrequency(key)" 
+                                                                    required=""
+                                                                    ng-pattern="/^[0-9]{1,3}?$/"
+                                                                />
+                                                                <input ng-if="brand.drug_unit_name=='IU' && (brand.default1 =='0' && brand.default2 =='0' && brand.default3 =='0')"
+                                                                    type="text"
+                                                                    name="default1" 
+                                                                    class="form-control common_input" 
+                                                                    placeholder="00"
+                                                                    value="" 
+                                                                    ng-model="brand.default1"
+                                                                    ng-keyup="setFrequency(key)" 
+                                                                    required=""
+                                                                    ng-pattern="/^[1-9][0-9]{1,3}?$/"
+                                                                />
+
+                                                                <select ng-if="(brand.drug_unit_name=='Tablets') && (brand.default1 =='0' && brand.default2 =='0' && brand.default3 =='0')"
+                                                                    name="default1" 
+                                                                    class="dosage_dropdown" 
+                                                                    ng-model="brand.default1" 
+                                                                    required=""
+                                                                    ng-pattern="/^[^0]*$/" 
+                                                                    ng-change="setFrequency(key)" 
+                                                                    ng-options="value.text as value.text for value in DosageDropdown">
+                                                                </select>
+                                                                <select ng-if="(brand.drug_unit_name=='Tablets') && (brand.default1 !='0' || brand.default2 !='0' || brand.default3 !='0')"
+                                                                    name="default1" 
+                                                                    class="dosage_dropdown" 
+                                                                    ng-model="brand.default1" 
+                                                                    required=""
+                                                                    ng-pattern="" 
+                                                                    ng-change="setFrequency(key)" 
+                                                                    ng-options="value.text as value.text for value in DosageDropdown">
+                                                                </select> 
+                                                                <p class="error" ng-show="submitted && brand.defaultFreqOpen && innerDrugTemplateForm.default1.$error.required" >* Required</p>
+                                                            </div>
+                                                            <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12 m_bottom_6">
+                                                                <input ng-if="brand.drug_unit_name!='Tablets'" 
+                                                                    type="text"
+                                                                    name="default2"
+                                                                    class="form-control common_input" 
+                                                                    placeholder="00"
+                                                                    ng-readonly="brand.drug_unit_name!='IU'" 
+                                                                    value="" 
+                                                                    ng-model="brand.default2"
+                                                                    ng-keyup="setFrequency(key)"
+                                                                    required="" 
+                                                                    ng-pattern="/^[0-9]{1,3}?$/"
+                                                                />
+                                                                <select ng-if="brand.drug_unit_name=='Tablets'"
+                                                                    name="default2" 
+                                                                    class="dosage_dropdown" 
+                                                                    ng-model="brand.default2" 
+                                                                    required="" 
+                                                                    ng-change="setFrequency(key)" 
+                                                                    ng-options="value.text as value.text for value in DosageDropdown">
+                                                                </select>
+                                                                <p class="error" ng-show="submitted && brand.defaultFreqOpen && innerDrugTemplateForm.default2.$error.required" >* Required</p> 
+                                                            </div>
+                                                            <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12 m_bottom_6">
+                                                                <input ng-if="brand.drug_unit_name!='Tablets' && brand.drug_unit_name !=''" 
+                                                                    type="text"
+                                                                    name="default3" 
+                                                                    class="form-control common_input" 
+                                                                    placeholder="00"
+                                                                    ng-readonly="brand.drug_unit_name!='IU'" 
+                                                                    value="" ng-model="brand.default3"
+                                                                    ng-keyup="setFrequency(key)"
+                                                                    required="" 
+                                                                    ng-pattern="/^[0-9]{1,3}?$/"
+                                                                />
+                                                                <select ng-if="brand.drug_unit_name=='Tablets'"
+                                                                    name="default3" 
+                                                                    class="dosage_dropdown" 
+                                                                    ng-model="brand.default3" 
+                                                                    required="" 
+                                                                    ng-change="setFrequency(key)" 
+                                                                    ng-options="value.text as value.text for value in DosageDropdown">
+                                                                </select>
+                                                                <p class="error" ng-show="submitted && brand.defaultFreqOpen && innerDrugTemplateForm.default3.$error.required" >* Required</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <p class="error" ng-show="submitted && (brand.drug_unit_name!='Tablets' && brand.drug_unit_name!='IU') && innerDrugTemplateForm.drug_frequency_id.$error.required" >* Frequency Required</p>
+                                                    <p class="error" ng-show="submitted && (brand.drug_unit_name=='Tablets' || brand.drug_unit_name=='IU') && !brand.defaultFreqOpen && innerDrugTemplateForm.drug_frequency_id.$error.required" >* Frequency Required</p>
+                                                    <p class="error" ng-show="submitted && brand.defaultFreqOpen && innerDrugTemplateForm.default1.$error.pattern" >* <span ng-if="brand.drug_unit_name=='Tablets'">Select at leat one from above</span><span ng-if="brand.drug_unit_name=='IU'">Enter at leat one from above</span></p>
+                                                    <div class="float_left">
+                                                        <label class="font_color_1 cursor_pointer title3" ng-click="brand.defaultFreqOpen = true;"  ng-if="!brand.defaultFreqOpen && brand.drug_frequency_id < 6">Custom</label>
+                                                        <label class="font_color_1 cursor_pointer title3" ng-click="brand.defaultFreqOpen = false; clearCustomValues(key);"  ng-if="brand.defaultFreqOpen" >Default</label>
+                                                    </div>
+                                                    <div class="float_right">
+                                                        <label class="float_right font_color_1 cursor_pointer title3" 
+                                                               ng-if="!brand.isFreqInst"
+                                                               ng-click="brand.isFreqInst = true;"
+                                                               >Add Note</label>
+                                                        <input type="text"
+                                                               class="form-control common_input m_top_10" 
+                                                               ng-if="brand.isFreqInst"
+                                                               id="instructions" 
+                                                               placeholder="Enter Note" 
+                                                               name="instructions"                                                                                
+                                                               ng-model="brand.freq_instruction">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="m_bottom_15 required">Instruction</label>
+                                                <div class="position_relative">
+                                                    <select
+                                                        name='drug_intake'
+                                                        id="drug_intake"
+                                                        chosen 
+                                                        allow-single-deselect="true"
+                                                        placeholder_text_single="'Select Instruction'"          
+                                                        ng-options="value.id as value.name for value in brandIntakeList" 
+                                                        ng-model="brand.drug_intake" 
+                                                        class="common_input form-control" required=""  >
+                                                        <option value=""></option>  
+                                                    </select>                                                                                        
+                                                    <span>
+                                                        <img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right"/>                                                
+                                                    </span>
+                                                </div>
+                                                <p class="error" ng-show="submitted && innerDrugTemplateForm.drug_intake.$error.required">* Required</p>
+                                                <input type="text"
+                                                       class="form-control common_input m_top_10" 
+                                                       ng-if="brand.isIntakeInst"
+                                                       id="instructions" 
+                                                       placeholder="Enter Note"
+                                                       name="instructions"                                                                       
+                                                       ng-model="brand.intake_instruction">
+                                                <label class="float_right font_color_1 cursor_pointer title3" 
+                                                       ng-if="!brand.isIntakeInst"
+                                                       ng-click="brand.isIntakeInst = true;"
+                                                       >Add Note</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="m_bottom_15 required">Duration</label>
+                                                <input 
+                                                    type="text"
+                                                    class="form-control common_input"
+                                                    id="duration_value"
+                                                    placeholder="Value "
+                                                    name="duration_value"
+                                                    required=""
+                                                    ng-pattern="/^[0-9]{1,3}?$/"
+                                                    ng-model="brand.drug_duration_value">              
+                                                <a href="" class="dropdown-toggle"  data-toggle="dropdown"><label class="cursor_pointer float_right font_color_1" ng-if="brand.drug_duration == '1'">Day(s)</label></a>                                            
+                                                <a href="" class="dropdown-toggle"  data-toggle="dropdown"><label class="cursor_pointer float_right font_color_1" ng-if="brand.drug_duration == '2'" >Week(s)</label></a>                                            
+                                                <a href="" class="dropdown-toggle"  data-toggle="dropdown"><label class="cursor_pointer float_right font_color_1" ng-if="brand.drug_duration == '3'">Month(s)</label></a>                                            
+                                                <ul class="dropdown-menu">             
+                                                    <li ng-repeat-start="type in brandDurationTypeList" ng-click="brand.drug_duration = type.id" ><a href="" >{{ type.name}}</a></li>
+                                                    <li class='divider' ng-repeat-end></li>
+                                                </ul>
+                                                <p class="error" ng-show="submitted && innerDrugTemplateForm.duration_value.$error.required" >{{brand_duration_required}}</p>
+                                                <p class="error" ng-show="submitted && innerDrugTemplateForm.duration_value.$error.pattern" >Invalid Duration</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="m_bottom_15">Diet Instruction</label>
+                                                <input 
+                                                    type="text"
+                                                    class="form-control common_input" 
+                                                    id="instructions" 
+                                                    placeholder="Enter Instruction"
+                                                    name="instructions"                                                                    
+                                                    ng-model="brand.drug_instruction">
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </ng-form>
+                                </div>
+                                <p ng-show="submitted && brandList.length == 0" class="error">* Enter at least one RX</p>
+                                <div class="clearfix"></div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_light font_color_5 text-center">                                       
+                                    <input ng-click="addMoreBrand()" type="button" value="ADD NEW" name="save" class="btn new_common_button btn_properties"/>                                                                           
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="template_tab.addInvetigateTab">                                        
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <h4 class="m_top_24 pull-left title1">Investigation</h4>
+                            <a href="" ng-click="template_tab.addInvetigateTab = false; closeRXTab(3);" class="pull-right m_top_24 m_right_7">
+                                <img src="app/images/delete_icon.png" alt="delete_icon">
+                            </a>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  ">
+                            <div class="m_top_10 row" id="investigation">
+                                <div class="col-lg-12 gotham_light font_color_5 repeat-here">
+                                    <div class="row"  ng-repeat="(key, test) in testLabs track by $index">
+                                        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="m_bottom_15" ng-if="key == 0">Lab Test</label>                                                           
+                                                <ul class="rich_text_ul">
+                                                    <li>
+                                                        <span class="pull-left dash_span">-</span>
+                                                        <input custom-autofocus="$index == focusIndex" 
+                                                               id="note_{{key}}"                                                                            
+                                                               key="{{key}}" 
+                                                               type="text" 
+                                                               class="common_input pull-left" 
+                                                               client-auto-complete dirtype='12'                                                                                
+                                                               name="similarbrand"  
+                                                               ng-keyup="appendNote(key, $event, testLabs, 12)"  
+                                                               placeholder="{{key==0  ? 'Enter lab name':''}}"
+                                                               ng-model="test.search"                                                
+                                                               ng-readonly="key != (testLabs.length - 1)"
+                                                               ng-disabled="key != (testLabs.length - 1)"
+                                                               />                                                                
+                                                        <div class="clearfix"></div>
+                                                    </li>
+                                                </ul>    
+                                                <p class="error" ng-show="lab_test_error && !lab_test_error_invalid">Please enter at least one lab test name</p>                                
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="m_bottom_15" ng-if="key == 0">Instructions</label>
+                                                <div 
+                                                    ng-if="!test.isOpenInst"
+                                                    ng-click="test.isOpenInst = true">
+                                                    <label class="cursor_pointer gotham_light m_top_10">
+                                                        <i class="fa fa-plus"></i>
+                                                        Add Instruction</label>
+                                                </div>
+                                                <input
+                                                    ng-if="test.isOpenInst"
+                                                    type="text"
+                                                    class="form-control common_input" 
+                                                    ng-model="test.lab_instruction" 
+                                                    placeholder="Write instruction" />                                                               
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 remove-btn text-right" ng-class="key == 0 ? '' : ''">
+                                            <label class="m_bottom_15 dblock">&nbsp;</label>
+                                            <img src="app/images/remove.png" style="height: 35px"
+                                                 class="doc_image doc_image_add cursor_pointer" 
+                                                 ng-click="removeLabInvestigationObj(key)" />
+                                        </div>                   
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">                         
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>                                 
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" ng-click="closeTemplateModal()" data-dismiss="modal" value="Cancel" name="cancle" class="btn new_common_button_1 cancel_patient btn_properties float_left" />                                                                                                                  
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

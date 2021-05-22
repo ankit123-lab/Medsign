@@ -1,0 +1,263 @@
+<div ng-include="'app/views/common/header.html?'+getVer(2)"></div>
+<div class="clearfix"></div>
+<div class="">
+    <div class="common_hr clearfix billing_main_div">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span ng-if="current_clinic">{{current_clinic.clinic_name | capitalize}}</span>
+                    <span><img src="app/images/down_arrow.png" /></span>
+                </button>
+                <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForImport(clinic)" ><a href="" >{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul>
+            </div>
+        </div>
+        <div class="second_width common_heading_height" ng-if="current_clinic" ng-init="getImportData()">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding  margin_left_-4" ng-init="get_import_file_type()">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-4 m_bottom_15">
+                    <h4 class="m_top_22 page_title pull-left"><b>Settings</b></h4>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-8 text-right  gotham_light">
+                    <!-- <ul class="pull-right">
+                        <li class="navigation_li">
+                            <label class="bg_icon_images play_video_btn custom_div_mar" data-toggle="modal" data-target='#video_help_modal'></label>
+                        </li>
+                    </ul> -->
+                    <!-- Trigger the modal with a button -->
+                    <a ng-show="!is_import_hide" href="" class="pull-right m_top_15">                                
+                        <input type="button" value="Import File" name="btn_addDetails" class="new_common_button new_common_button_3 no_top_margin" id="uploadFile" data-toggle="modal" data-target="#modal_upload_file"/>
+                    </a>
+                    <div class="clearfix"></div>
+                    <!-- Modal -->
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-if="current_clinic">
+        <div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+            <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Import</h3>
+            <table class="table table-responsive fee_table min_width_767">
+                <thead class="row font_color_3 gotham_light common_tb_border font_size_18 common_p_b">
+                    <tr>                                
+                        <th class="width_th_22">File Name</th>
+                        <th class="width_th_22">File Type</th>
+                        <th class="width_th_23">Action</th>                            
+                        <th class="width_th_23">Status</th>                            
+                    </tr>
+                </thead>
+                <tbody class="font_size_14 common_p_b">
+                    <tr ng-repeat="(key, fileObj) in import_file_list">
+                        <td>{{ fileObj.import_file_name}}</td>
+                        <td>{{ fileObj.import_file_type_name}}</td>
+                        <td>
+                            <input ng-if="fileObj.import_file_status==1" type="button" value="Validate" class="new_common_button new_common_button_3 no_top_margin" ng-click="importValidate(fileObj.import_file_id)">
+                            <input ng-if="fileObj.import_file_status==2" type="button" value="In-progress" class="new_common_button new_common_button_3 no_top_margin">
+                            <input ng-if="fileObj.import_file_status==3" type="button" value="Ready for import" class="new_common_button new_common_button_3 no_top_margin import-ready-for-import" ng-click="importReadyForImport(fileObj.import_file_id)">
+                            <input ng-if="fileObj.import_file_status==4" type="button" value="Importing data" class="new_common_button new_common_button_3 no_top_margin">
+                            <input ng-if="fileObj.import_file_status==5" type="button" value="Complete" class="new_common_button new_common_button_3 no_top_margin">
+                            <input ng-if="fileObj.import_file_status==6" type="button" value="Failed" class="new_common_button new_common_button_3 no_top_margin">
+                        </td>
+                        <td>
+                            <input ng-if="fileObj.import_file_status==6" type="button" value="Show Log" class="new_common_button new_common_button_3 no_top_margin" ng-click="get_import_log(fileObj.import_file_id,'1')">
+                            <input ng-if="fileObj.import_file_status==3" type="button" value="Show Log" class="new_common_button new_common_button_3 no_top_margin" ng-click="get_import_log(fileObj.import_file_id,'3')">
+                        </td>
+                    </tr>                        
+                </tbody>
+            </table>           
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modal_upload_file" role="dialog" data-backdrop="static" data-keyboard="false">
+        <form name="uploadImportFileForm" id="uploadImportFileForm" enctype="multipart/form-data">
+            <div class="modal-dialog modal_dialog_width modal-lg">
+                <div class="modal-content no_padding">
+                    <div class="modal-header common_title background_color_1 white_color text-center">                            
+                        <h3 class="modal-title modaltitle_m">Upload File</h3>                            
+                    </div>
+                    <div class="modal-body padding_body_details">  
+                        <div class="col-md-12">                          
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                <div class="form-group">
+                                    <div class="f_label required">Select File</div>  
+                                    <input type="file" class="form-control login_input" name="import_file">
+                                    
+                                </div>  
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                <div class="form-group">
+                                    <div class="f_label required">File Type</div>  
+                                    <label class="container" ng-repeat="typeObj in import_file_type">
+                                      <input type="radio" name="import_file_type_id" ng-click="fileType(typeObj.import_file_type_id)" value="{{typeObj.import_file_type_id}}">
+                                      {{typeObj.import_file_type_name}}
+                                    </label>
+                                </div>  
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12" ng-if="import_file_type_id == 2">
+                                <div class="form-group">
+                                    <div class="f_label">Select Reports Zip File</div>  
+                                    <input type="file" class="form-control login_input" name="reports_file">
+                                </div>  
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12" ng-if="import_file_type_id == 2">
+                                <div class="form-group">
+                                    <div class="f_label"><a href="{{app.apiUrl}}/sample_sheet/download">Download Sample File</a></div>  
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="modal-footer m_top_20">
+                        <div class="row">                                       
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="button" value="Save" name="save" ng-click="uploadDoctorImportFile()" class="btn new_common_button btn_properties float_right"/>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="reset" data-dismiss="modal" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties float_left" />          
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </form>
+    </div>
+
+    <div class="modal fade" id="modal_doctor_selection" role="dialog" data-backdrop="static" data-keyboard="false">
+        <form name="doctorSelectionForm" id="doctorSelectionForm" ng-submit="doctor_name_selection(doctorSelectionForm)">
+            <input type="hidden" name="import_file_id" ng-model="doctor_select.import_file_id">
+            <div class="modal-dialog modal_dialog_width modal-lg">
+                <div class="modal-content no_padding">
+                    <div class="modal-header common_title background_color_1 white_color text-center">                            
+                        <h3 class="modal-title modaltitle_m">Doctor Selection</h3>                            
+                    </div>
+                    <div class="modal-body padding_body_details">  
+                        <div class="col-md-12">                          
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                <div class="form-group">
+                                    <div class="f_label required">Select Doctor</div>
+
+                                    <label class="container" ng-repeat="docObj in doctor_name_list">
+                                      <input type="radio" name="selected_doctor_name" ng-model="doctor_select.selected_doctor_name" value="{{docObj}}">
+                                      {{docObj}}
+                                    </label>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="modal-footer m_top_20">
+                        <div class="row">                                       
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="reset" data-dismiss="modal" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties float_left" />          
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </form>
+    </div>
+
+    <div class="modal fade" id="doctor_file_log" role="dialog" data-backdrop="static" data-keyboard="false">
+            <input type="hidden" name="import_file_id" ng-model="doctor_select.import_file_id">
+            <div class="modal-dialog modal_dialog_width modal-lg">
+                <div class="modal-content no_padding">
+                    <div class="modal-header common_title background_color_1 white_color text-center">                            
+                        <h3 class="modal-title modaltitle_m">File Log</h3>                            
+                    </div>
+                    <div class="modal-body padding_body_details">  
+                        <table ng-if="log_status==1" class="table table-responsive font_color_4 ">
+                            <thead class="font_size_18 common_tb_border font_size_18 common_p_b">
+                                <tr class="gotham_light">
+                                    <th class="th_width1">File Name</th>
+                                    <th class="th_width2">Message</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody class="font_size_14 common_p_b">
+                                <tr  ng-repeat="logObj in log_data">
+                                    <td><b>{{logObj.file_name}}</b></td>
+                                    <td><b>{{logObj.msg}}</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table ng-if="log_status==3" class="table table-responsive font_color_4 ">
+                            <thead class="font_size_18 common_tb_border font_size_18 common_p_b">
+                                <tr class="gotham_light">
+                                    <th class="th_width1">Description</th>
+                                    <th class="th_width2">Count</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody class="font_size_14 common_p_b">
+                                <tr>
+                                    <td><b>New Patients</b></td>
+                                    <td><b>{{log_data.new_users}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Existing Patients</b></td>
+                                    <td><b>{{log_data.existing_users}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Appointments</b></td>
+                                    <td><b>{{log_data.appointments}}</b></td>
+                                </tr>
+                                <tr ng-if="log_data.vitals != undefined">
+                                    <td><b>Vitals</b></td>
+                                    <td><b>{{log_data.vitals}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Clinical Notes</b></td>
+                                    <td><b>{{log_data.clinical_notes}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td><b>RX</b></td>
+                                    <td><b>{{log_data.prescription_reports}}</b></td>
+                                </tr>
+                                <tr ng-if="log_data.investigations != undefined">
+                                    <td><b>Investigations</b></td>
+                                    <td><b>{{log_data.investigations}}</b></td>
+                                </tr>
+                                <tr ng-if="log_data.procedure != undefined">
+                                    <td><b>Procedure</b></td>
+                                    <td><b>{{log_data.procedure}}</b></td>
+                                </tr>
+                                <tr ng-if="log_data.reports != undefined">
+                                    <td><b>Reports</b></td>
+                                    <td><b>{{log_data.reports}}</b></td>
+                                </tr>
+                                <tr ng-if="log_data.analytics_values != undefined">
+                                    <td><b>Analytics values</b></td>
+                                    <td><b>{{log_data.analytics_values}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Invoices</b></td>
+                                    <td><b>{{log_data.invoices_count}}</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                    <div class="modal-footer m_top_20">
+                        <div class="row">                                       
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="reset" data-dismiss="modal" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties float_right" />          
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        
+    </div>
+
+</div>

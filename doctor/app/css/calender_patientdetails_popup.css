@@ -1,0 +1,221 @@
+.icon_image_right.close_icon {
+    position: absolute;
+    top: 12px !important;
+    right: 12px !important;
+}
+
+.inner_div_1 {
+    background: #ffffff none repeat scroll 0 0;
+    box-shadow: 1px -3px 10px 1px #d3d3d3;
+    color: #1d1d1d;
+    /*display: none;*/
+    /*height: 495px;*/
+    z-index: 20000;
+    padding: 15px;
+    position: absolute;
+    top: 5%;
+    width: 394px;
+    font-size: 14px;
+    text-align: left;
+}
+
+.inner_div_1_left {
+    left: 194px;
+}
+
+.inner_div_1_right {
+    right: 110%;
+}
+
+.inner_div_1.left-arrow:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    /*    margin-top: -10px;*/
+    width: 0;
+    height: 3px;
+    border-top: 15px solid transparent;
+    border-right: 15px solid #d3d3d3;
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid transparent;
+}
+
+.inner_div_1.left_arrow_left:after {
+    right: 100%;
+}
+
+.inner_div_1.left_arrow_right:after {
+    transform: rotate(180deg);
+    left: 100%;
+}
+
+.inner_div_1 .row.common_row {
+    padding: 0;
+    margin: 10px -15px;
+}
+
+p {
+    margin: 3px 0 0px;
+    /*font-size: 13px;*/
+}
+
+/*span { font-size: 12px; }*/
+.col_right_border {
+    border-right: 1px #dcdcdc solid;
+}
+
+.hr {
+    border-bottom: 1px #dcdcdc solid;
+}
+
+/*---------==================================================*/
+
+.inner_div_2 {
+    position: fixed;
+    width: 497px;
+    height: auto;
+    right: 5px;
+    bottom: 8px;
+    box-shadow: 20px 20px 50px 15px grey;
+    /*display: none;*/
+    background: #fff;
+    z-index: 10000;
+}
+
+@media screen and (max-height: 768px) {
+    .touch .inner_div_2.stuck {
+        position: absolute;
+        bottom: auto;
+        top: 130px;
+        overflow: hidden;
+    }
+}
+
+#modal_blockcalendar .top_header {
+    height: 61px !important;
+    padding: 16px !important;
+}
+
+.fa-calendar.icon_image_right {
+    top: 5px;
+    right: 5px;
+}
+
+#add_appointment .btn_properties,
+#edit_appointment .btn_properties {
+    width: 100%;
+}
+
+#add_appointment .top_header,
+#edit_appointment .top_header {
+    padding: 20px 0px;
+}
+
+.patient_detail_appointment {
+    height: 80px;
+    width: 95px;
+    padding-right: 0px;
+}
+
+.patient_detail_appointment img {
+    border: 1px solid #d1d1d1;
+    border-radius: 5px;
+    height: 100%;
+    width: 100%;
+}
+
+#patient_data p {
+    word-wrap: break-word;
+}
+
+.fc-agendaWeek-view .inner_div_1_left {
+    left: 146px !important;
+}
+
+.ui-menu {
+    z-index: 10001;
+}
+
+.edit_appointment {
+    cursor: pointer;
+}
+
+.width_30_per {
+    width: 30% !important;
+}
+
+@media(max-width:1450px) {
+    .inner_div_1_left {
+        left: 170px;
+    }
+}
+
+@media(max-width:1367px) {
+    .inner_div_1_left {
+        left: 120px;
+    }
+
+    .inner_div_1 {
+        width: 375px;
+    }
+}
+
+@media(max-width:991px) {
+    #add_appointment {
+        width: 400px;
+    }
+
+    #add_appointment input,
+    #add_appointment select,
+    #add_appointment .chosen-container {
+        height: 35px;
+    }
+
+    #add_appointment label {
+        margin-bottom: 2px;
+    }
+
+    #add_appointment .form-group {
+        margin-bottom: 2px;
+    }
+
+    #add_appointment .placeholder_class {
+        padding: 9px 44px !important;
+    }
+
+    #add_appointment h3 {
+        font-size: 20px;
+    }
+
+    #add_appointment .top_header {
+        padding: 13px 0;
+    }
+
+    #add_appointment .selection_bx span {
+        bottom: 1px;
+    }
+
+    #add_appointment .login_input {
+        height: 36px;
+    }
+}
+
+@media(max-width:480px) {
+    #add_appointment {
+        width: 310px;
+        font-size: 11px;
+    }
+
+    #add_appointment input {
+        font-size: 11px;
+    }
+
+    #add_appointment .login_input {
+        height: 36px;
+    }
+
+    #add_appointment .selection_bx span {
+        bottom: 1px;
+    }
+}

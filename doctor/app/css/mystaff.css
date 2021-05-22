@@ -1,0 +1,75 @@
+.list-group.sidebar_list_group{
+    border-radius: 0px !important;
+    box-shadow: none !important;
+    width: 96.5%;
+}
+.list-group.sidebar_list_group .list-group-item.item{
+    border: none;
+    border-radius: 0px !important;    
+}
+.list-group-item.active,
+.list-group-item.active:hover,
+.list-group-item.active:focus{    
+    color: #232323;
+}
+.btn_properties.btn_done{
+    width: 13% !important;
+}
+
+/*-----------------------Common Modal Css--------------------*/
+.modal-dialog.modal_dialog_width {
+    margin: 0 auto;
+    padding: 30px;
+}
+.modal-title.modaltitle_m{
+    /* margin: 15px !important; */
+}
+.modal-body.padding_body{
+    padding: 50px 80px !important;
+}
+/*-----------------------Modal PoPUp Add Staff Css--------------------*/
+#modal_add_doctor .modal-backdrop.in {
+    overflow-x: auto;
+    min-width: 1367px !important;
+}
+#modal_add_doctor{
+    overflow-x: auto;
+}
+#modal_add_doctor .modal-content{
+    border: none !important;
+    border-radius: 0;
+    height: 990px;
+}
+/*-----------------------Modal PoPUp Update Details Css--------------------*/
+#modal_updatedetails .modal-dialog.modal_dialog_width {
+    margin: 0 auto;
+    padding: 30px;    
+    width: 1500px;    
+}
+#modal_updatedetails .modal-backdrop.in {
+    overflow-x: auto;    
+    min-width: 1367px !important;
+}
+#modal_updatedetails{
+    overflow-x: auto;
+}
+#modal_updatedetails .modal-content{
+    border: none !important;
+    border-radius: 0;
+    height: auto;
+}
+.selection_bx select {
+    -moz-appearance: none;
+    cursor: pointer;
+    font-size: 14px;
+    height: 45px !important;
+    padding: 6px 40px 6px 12px;
+    position: relative;
+    text-transform: capitalize;
+    width: 100%;
+    border: 1px solid #cccccc !important;
+    background: none !important;
+}
+.selection_bx .form-control:focus{
+    border: 1px solid #cccccc;
+}

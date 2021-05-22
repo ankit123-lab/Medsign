@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+#godaddy server
+#RewriteRule ^(.*)$ index.php?/$1 [L]
+<Files env.ini>
+    Order allow,deny
+    Deny from all
+</Files>

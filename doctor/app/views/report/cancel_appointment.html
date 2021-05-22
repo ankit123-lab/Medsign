@@ -1,0 +1,139 @@
+<div class="">
+    <div class="common_hr clearfix  ">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{app.all_clinic_label}}</span>
+                </button>
+                <!-- <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForCancelAppointment(clinic)" ><a href="" >{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="second_width common_heading_height ">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
+                <h3 class="m_top_22 page_title pull-left">Practice Reports | Cancel Appointments</h3>
+                <ul class="pull-right m_bottom_0 m_top_10">
+                    <li class="navigation_li">
+                        <a class="btnfc reports-fullscreen-icon" href="javascript:void(0);" onclick="setFullScreenMode('reports-fullscreen-mode',this);">
+                            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>               
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div> 
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-if="current_clinic">
+        <div ng-include="'app/views/report/report_sidebar.html?'+getVer(2)"></div>
+        <div ng-if="checkPermission(DOCTOR_WEB_REPORTS, VIEW)" class="col-lg-10 col-lg-10 col-md-10 col-sm-10 col-xs-12" ng-init="getClinicDetailForEdit(current_clinic.clinic_id,true)">
+            <div class="row" ng-init="getCancelAppointment(1,1)">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 no_padding">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <input class="form-control common_input ng-pristine ng-invalid ng-invalid-required ng-valid-maxlength ng-touched" placeholder="Search" name="search" size="35" ng-model="report_filters.search_str" required="" maxlength="100">
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <p class="date-wrap input-group login_input">
+                            <input type="text"
+                                   class="form-control login_input"  
+                                   datetime-picker="dd/MM/yyyy"
+                                   datepicker-options="from_date.datepickerOptions"
+                                   enable-time="false"
+                                   ng-model="report_filters.from_date" 
+                                   is-open="from_date.open"
+                                   placeholder="From Date"
+                                   name="from_date"  
+                                   readonly=""
+                                   />
+                            <span class="input-group-btn login_input">
+                                <button type="button" class="btn btn-default login_input" 
+                                        ng-click="from_date.open = true"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <p class="date-wrap input-group login_input">
+                            <input type="text"
+                                   class="form-control login_input"  
+                                   datetime-picker="dd/MM/yyyy"
+                                   datepicker-options="to_date.datepickerOptions"
+                                   enable-time="false"
+                                   ng-model="report_filters.to_date" 
+                                   is-open="to_date.open"
+                                   placeholder="To Date"
+                                   name="to_date"  
+                                   readonly=""
+                                   />
+                            <span class="input-group-btn login_input">
+                                <button type="button" class="btn btn-default login_input" 
+                                        ng-click="to_date.open = true"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <select name='search_clinic_id' id="search_clinic_id" chosen multiple="" allow-single-deselect="true" placeholder_text_multiple="'Clinic'" ng-options="value.clinic_id as value.clinic_name for value in clinic_data" style="width:100% !important;" ng-model="report_filters.search_clinic_id" class="common_input form-control"><option value=""></option></select>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 no_padding">
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 custom_add_doctor_btn">
+                        <div class="show-text col-lg-1">Show</div>
+                        <div class="row-drowp col-lg-1 form-group selection_bx m_bottom_0">
+                             <select tabindex="1" name='duration' id="duration" chosen allow-single-deselect="true" ng-model="report_filters.per_page" ng-options="duration.value as duration.value for duration in filterRows" ng-change="getCancelAppointment(1)">
+                            </select>
+                            <span class="row-drowp-icon"><i class="fa fa-angle-down fa-2x"></i></span>
+                        </div>
+                        <div class="show-text col-lg-1">Entries</div>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12 custom_add_doctor_btn align-right">
+                        <input type="button" value="Filter" name="Filter" class="filter-btn filter-active" ng-click="getCancelAppointment(1)">
+                        <input type="button" value="Reset" name="Reset" class="filter-btn" ng-click="cancelAppointmentFilterReset()">
+                        <input type="button" ng-click="cancelAppointmentExport()" value="Export" name="export" class="filter-btn filter-active">
+                    </div>
+                </div>
+                <div ng-if="cancel_appointment.length > 0" class="table-responsive col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10">
+                <table class="table min_width_767 table-hover">
+                    <thead class="row font_color_3 gotham_light report_tb_border font_size_18 common_p_b">
+                        <tr>                                
+                            <th class="text-center">Unique ID</th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Mobile No</th>
+                            <th class="text-center">Appointment Date Time</th>
+                            <th class="text-center">Cancel Date Time</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font_size_14 common_p_b report_tb_border">
+                        <tr ng-repeat="cancelAppointmentObj in cancel_appointment">
+                            <td class="text-center">{{cancelAppointmentObj.user_unique_id}}</td>
+                            <td>{{cancelAppointmentObj.user_name}}</td>
+                            <td class="text-center">{{cancelAppointmentObj.user_phone_number}}</td>
+                            <td class="text-center">{{cancelAppointmentObj.appointment_date}} {{cancelAppointmentObj.appointment_from_time}}</td>
+                            <td class="text-center">{{cancelAppointmentObj.appointment_updated_at}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div ng-if="cancel_appointment.length == 0" class="col-lg-12 unauthorised-css text-center" ng-bind-html="no_data_found"></div>
+            </div>
+            <div ng-if="cancel_appointment.length > 0" class="row pagi-wrap">
+                <div class="col-lg-3 totals-rows">
+                    Showing {{((currentPage-1)*report_filters.per_page) + 1}} to {{last_rows}} of {{total_rows}} entries
+                </div>
+                <div class="pagination-wrap col-lg-9">
+                    <a href="" ng-click="getNextPrev('prev',5)"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                    <input ng-repeat="n in [] | range:total_page" type="button" ng-value="n" ng-click="getCancelAppointment(n)" ng-disabled="currentPage == n" ng-class="currentPage == n ? 'page-active' : ''" class="pagi-btn">
+                    <a href="" ng-click="getNextPrev('next',5)"><img alt="previous" src="app/images/next_arrow.png"></a>
+                </div>
+            </div>
+            <div class="clearfix"></div>           
+        </div>
+        <div ng-if="!checkPermission(DOCTOR_WEB_REPORTS, VIEW)" class="col-lg-10 col-lg-10 col-md-10 col-sm-10 col-xs-12 text-center gotham_book font_size_20 m_top_20">
+            <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+        </div>
+    </div>
+</div>
+</div>

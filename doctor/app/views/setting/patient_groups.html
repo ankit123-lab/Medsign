@@ -1,0 +1,254 @@
+<link rel="stylesheet" ng-href="app/css/fee_structure.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/billing.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/clinic_staff.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/patient_groups.css?{{getVer(3)}}" />
+<div class="">
+    <div class="common_hr clearfix billing_main_div">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{app.all_clinic_label}}</span>
+                </button>
+                <!-- <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForPaymentMode(clinic)" ><a href="">{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="second_width common_heading_height">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding  margin_left_-4">
+                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 m_bottom_15">
+                    <h4 class="m_top_22 page_title pull-left">Settings</h4>
+                </div>                
+                <div ng-if="checkPermission(SETTING_PATIENT_GROUPS, VIEW) && currentUser.sub_plan_setting.promotional_messages_communication != undefined && currentUser.sub_plan_setting.promotional_messages_communication == '1'" class="col-lg-9 col-md-9 col-sm-8 col-xs-8 text-right  gotham_light">
+                    <a href="" ng-if="checkPermission(SETTING_PATIENT_GROUPS, ADD)" class="pull-right m_top_15">
+                        <input style="width: 160px;" type="button" ng-click="addPatientGroupModePopup()" value="Add Group" name="btn_add_group_mode" class="new_common_button new_common_button_3 no_top_margin" id="btn_add_patient_group" data-toggle="modal" data-target="#modal_add_patient_group"/>
+                    </a>
+                    <div class="clearfix"></div>
+                    <!-- Modal -->
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-if="current_clinic">
+        <div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12" ng-if="checkPermission(SETTING_PATIENT_GROUPS, VIEW) && currentUser.sub_plan_setting.promotional_messages_communication != undefined && currentUser.sub_plan_setting.promotional_messages_communication == '1'">
+            <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Patient Groups</h3>
+            <div class="tab-content">
+                <div class="tab-pane active">
+                    <table class="table table-responsive min_width_767" ng-init="getPatientGroups();getPatientDiseases();">
+                        <thead class="row font_color_3 gotham_light font_size_18 common_p_b">
+                            <tr class="common_tb_border">                                
+                                <th width="25%" class="">Group Name</th>
+                                <th width="45%" class="">Disease Type</th>
+                                <th width="20%" class="text-center">Number Of Members</th>
+                                <th width="10%" class=""></th>                                  
+                            </tr>
+                        </thead>
+                        <tbody class="font_size_14 common_p_b">
+                            <tr ng-repeat="(key, patientGroupObj) in patient_groups_list">
+                                <td>{{patientGroupObj.patient_group_title}}</td>
+                                <td>{{patientGroupObj.disease_name}}</td>
+                                <td class="text-center">{{patientGroupObj.total_member}}</td>
+                                <td class="text-right">
+                                    <a href="javascript:void(0)" ng-if="checkPermission(SETTING_PATIENT_GROUPS, EDIT)" ng-click="editPatientGroup(key,1)"><img src="app/images/edit_icon.png" alt="edit_icon" class="m_lr_10"></a>
+                                    <a href="javascript:void(0)" ng-if="checkPermission(SETTING_PATIENT_GROUPS, DELETE)" ng-click="deletePatientGroup(patientGroupObj.patient_group_id)"><img src="app/images/delete_icon.png" alt="delete_icon"></a>
+                                </td>                                
+                            </tr> 
+                            <tr ng-if="patient_groups_list.length==0">
+                                <td colspan="4" class="text-center">
+                                    <h4 ng-bind-html="no_data_found"></h4>
+                                </td>
+                            </tr>                              
+                        </tbody>
+                    </table>
+                </div>                        
+            </div>                
+        </div>
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 text-center" ng-if="!checkPermission(SETTING_PATIENT_GROUPS, VIEW) || currentUser.sub_plan_setting.promotional_messages_communication == undefined || currentUser.sub_plan_setting.promotional_messages_communication == '0'" class="text-center gotham_book font_size_20 m_top_20">
+            <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+        </div>
+
+    </div>
+</div>
+<!-- Modal -->
+<div id="modal_add_patient_group" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <form name="add_patient_group_Form" id="add_patient_group_Form" novalidate="" method="post" ng-submit="add_patient_group(add_patient_group_Form)">
+        <div class="modal-dialog modal-lg modal_dialog_width">
+            <div class="modal-content no_padding add_patient_group_modal">
+                <div class="modal-header common_title background_color_1 white_color text-center">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <h3 class="modal-title modaltitle_m">{{ patient_group_data.patient_group_id == '' ? 'Add Group' : 'Edit Group' }}</h3>  
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="gotham_light placeholder_class 123">
+                            <div class="row common_b_border m_bottom_10">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 padding_left_0">
+                                        <h4 class="title2 color_black">Disease Type</h4>
+                                        <div class="form-group patient_disease_dropbox m_top_10">
+                                            <select
+                                                name='patient_disease_ids'
+                                                id="patient_disease_ids"
+                                                chosen multiple=""
+                                                allow-single-deselect="true"
+                                                placeholder_text_multiple="'Disease Type'" 
+                                                ng-model="patient_group_data.patient_disease_ids" 
+                                                ng-required="false"  
+                                                ng-options="val.disease_id as val.disease_name for val in patient_diseases"
+                                                >
+                                                <option value=""></option>                     
+                                            </select>
+                                            <p ng-show="(submitted) && add_patient_group_Form.patient_disease_ids.$error.required" class="error" >* Required</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 padding_left_0">
+                                        <h4 class="title2 color_black">Gender</h4>
+                                        <div class="selection_bx m_top_10">
+                                            <select
+                                                name='patient_gender'
+                                                id="patient_gender"
+                                                ng-model="patient_group_data.patient_gender" 
+                                                ng-required="false"  
+                                                ng-options="val.value as val.label for val in patientGender"
+                                                >                    
+                                            </select>
+                                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                        </div>
+                                        <p ng-show="(submitted) && add_patient_group_Form.patient_gender.$error.required" class="error" >* Required</p>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 padding_0">
+                                        <h4 class="title2 color_black">Age</h4>
+                                        <div class="selection_bx m_top_10">
+                                            <select
+                                                name='patient_age_group'
+                                                id="patient_age_group"
+                                                ng-model="patient_group_data.patient_age_group" 
+                                                ng-required="false"  
+                                                ng-options="val.value as val.label for val in patientAgeGroup"
+                                                >                     
+                                            </select>
+                                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                        </div>
+                                        <p ng-show="(submitted) && add_patient_group_Form.patient_age_group.$error.required" class="error" >* Required</p>
+                                        <p ng-show="(submitted) && patient_group_data.is_search_required" class="error" >
+                                            At leat select one option from above
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                                        <h4 class="title2 color_black">&nbsp;</h4>
+                                        <input type="button" ng-click="searchPatientGroup(1,1)" value="Search" name="search" class="btn new_common_button">
+                                    </div>
+                                </div>
+                                <div ng-if="search_patient_groups.length == 0 && is_search_patient_group" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_left_0">
+                                        <h4 class="title2 color_black text-center" ng-bind-html="no_data_found"></h4>
+                                    </div>
+                                </div>
+                            </div>                                        
+                            <div class="row" ng-show="patient_group_data.patient_group_id != '' || patient_group_data.user_ids.length > 0">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 padding_left_0">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control login_input" id="patient_group_name" placeholder="Enter group name" name="patient_group_name" ng-required="true" ng-model="patient_group_data.patient_group_name">
+                                            <p ng-show="(submitted) && add_patient_group_Form.patient_group_name.$error.required" class="error" >{{value_required}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 m_top_10">
+                                        <div class="common_checbox">
+                                            <input type="checkbox" id="select_all_patients" 
+                                            ng-click="selectAllPatients()" 
+                                            ng-model="patient_group_data.select_all_patients">
+                                            <label for="select_all_patients">Select All Patients</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 m_top_10">
+                                        <div class="common_checbox">
+                                            <input type="checkbox" id="auto_added_patients" 
+                                            ng-click="selectAllPatients()" 
+                                            ng-model="patient_group_data.auto_added_patients">
+                                            <label for="auto_added_patients">Auto Added</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row m_bottom_10" ng-show="!patient_group_data.auto_added_patients && patient_group_data.user_ids.length > 0">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <table class="table table-responsive min_width_767">
+                                        <thead class="row font_color_3 gotham_light font_size_18 common_p_b">
+                                            <tr class="common_tb_border">
+                                                <th width="10%" class="text-right">
+                                                    <div class="common_checbox">
+                                                    <input type="checkbox" id="pt_group_select_all" 
+                                                    ng-click="togglePtSelectAll()" 
+                                                    ng-disabled="patient_group_data.is_read_only==true"
+                                                    ng-model="patient_group_data.selected_all_pt">
+                                                    <label for="pt_group_select_all">&nbsp;</label>
+                                                    </div>
+                                                </th>
+                                                <th width="30%" class="">Patient Name</th>
+                                                <th width="30%" class="text-center">Phone Number</th>
+                                                <th width="30%" class="">Email</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="font_size_14 common_p_b">
+                                            <tr ng-repeat="(key, searchPatientGroupObj) in search_patient_groups">
+                                                <td class="text-right">
+                                                    <div class="common_checbox">
+                                                    <input type="checkbox" 
+                                                    id="pt_{{searchPatientGroupObj.user_id}}" 
+                                                    name="user_ids" 
+                                                    ng-disabled="patient_group_data.is_read_only==true"
+                                                    ng-required="!someSelected()" 
+                                                    ng-value="searchPatientGroupObj.user_id" 
+                                                    ng-model="patient_group_data.user_ids[searchPatientGroupObj.user_id]"
+                                                    ng-change="groupMemberToggled()"
+                                                    >
+                                                    <label for="pt_{{searchPatientGroupObj.user_id}}">&nbsp;</label>
+                                                    </div>
+                                                </td>                                
+                                                <td>{{searchPatientGroupObj.patient_name}}</td>
+                                                <td class="text-center">{{searchPatientGroupObj.user_phone_number}}</td>
+                                                <td>{{searchPatientGroupObj.user_email}}</td>
+                                            </tr>
+                                            <tr ng-if="search_patient_groups.length == 0">
+                                                <td colspan="4" class="text-center" ng-bind-html="no_data_found"></td>
+                                            </tr>                             
+                                        </tbody>
+                                    </table>
+                                    <p ng-show="(submitted) && add_patient_group_Form.user_ids.$error.required" class="error" >* Required</p>
+                                </div>
+                            </div>
+                            <div ng-show="!patient_group_data.auto_added_patients && search_patient_groups.length > 0" class="row pagi-wrap">
+                                <div class="col-lg-3 totals-rows">
+                                    Showing {{((currentPage-1)*per_page) + 1}} to {{last_rows}} of {{total_rows}} entries
+                                </div>
+                                <div class="pagination-wrap col-lg-9">
+                                    <a href="" ng-click="getNextPrev('prev')"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                                    <input ng-if="is_search_patient_group" ng-repeat="n in [] | range:total_page" type="button" ng-value="n" ng-click="searchPatientGroup(n)" ng-disabled="currentPage == n" ng-class="currentPage == n ? 'page-active' : ''" class="pagi-btn">
+                                    <input ng-if="!is_search_patient_group" ng-repeat="n in [] | range:total_page" type="button" ng-value="n" ng-click="getPatientGroupMembers(n)" ng-disabled="currentPage == n" ng-class="currentPage == n ? 'page-active' : ''" class="pagi-btn">
+                                    <a href="" ng-click="getNextPrev('next')"><img alt="previous" src="app/images/next_arrow.png"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                                                                      
+                </div>
+                <div class="modal-footer">
+                    <div class="row">                                       
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-0">
+                        </div>
+                        <div ng-show="patient_group_data.patient_group_id != '' || patient_group_data.user_ids.length > 0" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-center">
+                            <input ng-disabled="!patient_group_data.auto_added_patients && search_patient_groups.length == 0" type="submit" value="{{ patient_group_data.patient_group_id == '' ? 'Save' : 'Edit' }}" name="save" class="btn new_common_button btn_properties"/>
+                            <input type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 btn_properties" data-dismiss="modal" />
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>  

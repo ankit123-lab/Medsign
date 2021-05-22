@@ -1,0 +1,52 @@
+.table .m_lr_10 {
+    margin: 0px 9px;
+}
+
+
+/*-----------------------Modal PoPUp Add Staff Css--------------------*/
+#modal_add_tax {
+    overflow-x: auto;
+}
+
+.modal-content {
+    border: none !important;
+    border-radius: 0;
+}
+
+.modal-title.modaltitle_m {
+    /* margin: 15px !important; */
+}
+
+.modal-body.padding_body {
+    padding: 10px 20px !important;
+}
+
+/*-----------------------Modal PoPUp Add Staff Css--------------------*/
+
+.w_label_taxnm {
+    width: 36%;
+}
+
+.w_input_taxnm {
+    width: 70%;
+}
+
+#modal_add_tax .common_input,
+#modal_add_mode .common_input,
+#modal_add_mode .selection_bx,
+#modal_edit_tax .common_input,
+#modal_edit_mode .common_input,
+#modal_edit_mode .selection_bx {
+    width: 100%;
+}
+
+#modal_add_mode .selection_bx span,
+#modal_edit_mode .selection_bx span {
+    right: 2px;
+    top: 3px;
+}
+
+#modal_add_mode .selection_bx-mx,
+#modal_edit_mode .selection_bx-mx {
+    width: 100%;
+}

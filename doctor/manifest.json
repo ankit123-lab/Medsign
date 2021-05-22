@@ -1,0 +1,7 @@
+{
+  "name": "MedSign",
+  "short_name": "MedSign",
+  // "gcm_sender_id": "361159702817",
+  "display": "standalone",
+  "gcm_user_visible_only": true
+}

@@ -1,0 +1,60 @@
+.p_bottom_20 {padding-bottom: 20px;}
+.subscription-plan-box {border: 1px solid #d2d2d2;margin: 17px 30px 0 0;}
+.plan-description{margin-bottom: 20px;min-height: 240px;}
+.plan-title{padding-bottom: 15px;}
+.rupee-txt{color: #30aca5;font-size: 16px;}
+.plan-buy-now-wrap{margin: 20px 0;}
+.blink-sub-txt {animation: blinkingSubText 2s infinite;color: red;}
+.sub-view-tab {}
+.table_width_100 {width: 100%;}
+.payment tr td{font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;}
+.payment {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+.payment td, .payment th {
+  border: 1px solid #000;
+  padding: 8px;
+}
+.payment th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+.invoice-margin-top{margin-top: 20px;}
+.invoice-title-size{font-size: 30px;}
+.invoice-padding{padding: 0 60px;}
+.icon-color{color: #30aca5;}
+.sub-menu a{color: #30aca5;}
+.active a{color: #232323;}
+table.payment-table>tbody>tr>td{border-top:0;font-size: 15px !important;}
+.proceed-btn{padding: 0 11px;height: 30px !important;}
+.payment-back-btn{padding: 0 11px;height: 30px !important; width: 100px;}
+.payment-summery-box{min-height: 265px;margin-top:15px;}
+@keyframes blinkingSubText{
+  0%{ color: red; }
+  49%{ color: red;}
+  50%{ color: transparent; }
+  99%{ color:transparent; }
+  100%{ color: red; }
+}
+.plan-description > ul {
+  list-style: none;
+  padding: 0;
+  display: inline-block;
+  margin-top: 10px;
+}
+.plan-description > ul > li {
+  padding-left: 1.3em;
+}
+.plan-description > ul > li:before {
+  color: #30aca5;
+  content: "\f00c";
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-left: -1.3em;
+  width: 1.3em;
+}

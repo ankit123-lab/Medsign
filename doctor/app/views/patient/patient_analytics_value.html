@@ -1,0 +1,65 @@
+<div class="tab-pane fade in" id="analytics_values">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_light font_color_5 addAnalyticsValueForm" ng-if="health.healthAnalyticsObj.length > 0" ng-class="current_appointment_date_obj.is_editable ? '' : 'disabled-wrap'">
+        <div ng-if="!current_appointment_date_obj.is_editable" class="overlap-wrap analytics-overlap"></div>
+        <form name="addAnalyticsValueForm" ng-submit="addAnalyticsValue(addAnalyticsValueForm)" novalidate="" ng-if="role[ANALYTICS_MODULE][VIEW] == 'on'">
+            <div class="row addAnalyticsValueForm">
+                <div ng-repeat="(key, healthAnalysis) in health.healthAnalyticsObj track by $index">
+                    <div class="col-lg-6 col-md-12 col-sm-6 col-xs-6 nopadd">
+                        <ng-form name="innerHealthForm">
+                            <div class="form-group">
+                                <label ng-if="healthAnalysis.health_analytics_test_validation != undefined && healthAnalysis.health_analytics_test_validation.isValueCalcAct != undefined && healthAnalysis.health_analytics_test_validation.isValueCalcAct == true" class="m_bottom_15 col-md-8"><a href="" ng-click="loadPatientHealthCalculator(healthAnalysis);" data-toggle="modal" data-target="#modal_patient_health_analytic_calculator">{{healthAnalysis.name}}</a></label>
+                                <label ng-if="healthAnalysis.health_analytics_test_validation == undefined || healthAnalysis.health_analytics_test_validation.isValueCalcAct == undefined || healthAnalysis.health_analytics_test_validation.isValueCalcAct != true" class="m_bottom_15 col-md-8">{{healthAnalysis.name}}</label>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control common_input" placeholder="Enter Reading" 
+                                           name="healthname"
+                                           id="analytics_id_{{healthAnalysis.id}}"
+                                           ng-model="healthAnalysis.value"
+                                           ng-change="health_analytics_validation({{healthAnalysis.health_analytics_test_validation}}, innerHealthForm, key);prescriptionOnchangeFlag();"
+                                           />          
+                                    <p ng-show="submitted && innerHealthForm.healthname.$error.pattern" id="analytics_error_{{key}}" class="error"></p> 
+                                </div>
+                                <div class="clearfix"></div>                
+                            </div>
+                        </ng-form>
+                    </div> 
+                    <div ng-if="!(key % 2 == 0)" class="clearfix"></div>
+                </div>
+            </div>
+			<!-- <div class="row">
+				<div class="col-lg-3 col-md-6 col-sm-3 col-xs-3">
+					<div class="form-group">
+						<label class="m_bottom_15 required" for="report_date">Date Of Report</label>
+						<p class="input-group login_input dropup">
+						<input type="text" 
+							   class="form-control login_input" 
+							   datetime-picker="dd/MM/yyyy" 
+							   datepicker-options="analytic_report_picker.datepickerOptions" 
+							   enable-time="false" 
+							   ng-model="reportObj[key].report_date" 
+							   is-open="analytic_report_picker.open" 
+							   required="" placeholder="DD / MM / YYYY" 
+							   name="analytic_report_date" 
+							   readonly="" 
+							   />
+						<span class="input-group-btn login_input">
+							<button type="button" class="btn btn-default login_input" ng-click="analytic_report_picker.open = true"><i class="fa fa-calendar"></i></button>
+						</span>
+						</p>
+						<p ng-show="(submitted) && innerAddReportForm.analytic_report_date.$error.required" class="error" >{{report_date_required}}</p>
+					</div>
+				</div>
+			</div> -->
+			<div class="clearfix"></div>
+			<div class="button_container" ng-if="current_appointment_date_obj.is_editable && role[ANALYTICS_MODULE][ADD] == 'on'" >
+                <input type="submit" value="Save" class="new_common_button btn_properties" />
+                <input type="button" value="Cancel"  ng-click="clearHealthAnalyticsValue()" class="new_common_button_1 btn_properties" />
+				<a href="" class="pull-right" ng-if="checkPermission(ANALYTICS_MODULE, ADD)">
+					<input ng-click="getAllHealthTest()" type="button" style="padding: 0 15px;height: 32px;" value="Add Previous Health Analytics" name="btn_previous_health_analytics" class="new_common_button no_top_margin" id="btn_previous_health_analytics" data-toggle="modal" data-target="#modal_patient_previous_health_analytic"/>
+				</a>
+            </div>
+        </form>
+    </div>
+    <div ng-if="role[ANALYTICS_MODULE][VIEW] != 'on'" class="text-center gotham_book font_size_20 m_top_20">
+        <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+    </div>
+</div>

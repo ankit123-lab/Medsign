@@ -1,0 +1,118 @@
+<style>
+    .chosen-container-multi .chosen-choices{
+        height: auto !important;
+    }
+</style>
+<div class="second_width common_left_border p_top_15" ng-controller="UserController" ng-init="getEduDetails()">
+    <form id="register_personal_info_form" method="post" role="form" style="display: block;" name="updateEduForm" ng-submit="updateEduDetail()" novalidate="">
+        <div class="">
+            <div class="col-md-12 col-sm-12 col-xs-12 padding_0 add_more_edu_qualification_div label2line" ng-repeat="(key, edu) in doctor.edu_object">
+                <ng-form name="innerEduForm">
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        <div class="form-group selection_bx">
+                            <div  class="f_label required" ng-if="key == 0">Education Qualification</div>
+                            <input ng-blur="addEduObj()" client-auto-complete class="form-control login_input" ng-model="doctor.edu_object[key].doctor_qualification_degree" placeholder="Enter Degree" type="text" dirtype='1' name="edu" ng-required = "isEduObjRequired(doctor.edu_object,key)">
+                            <p ng-show="(innerEduForm.edu.$touched || submitted) && innerEduForm.edu.$error.required" class="error">{{degree_required}}</p>
+                        </div>
+                    </div>
+                </ng-form>
+                <ng-form name="innerEduCollegeForm">
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        <div class="form-group selection_bx">
+                            <div class="f_label hidden-xs" ng-if="key == 0">&nbsp;</div>
+                            <input ng-blur="addEduObj()" client-auto-complete class="form-control login_input" ng-model="doctor.edu_object[key].doctor_qualification_college" placeholder="Enter College/University" type="text" dirtype='2' name="edu_college"  ng-required = "false">
+                            <input client-auto-complete class="form-control" ng-model="ctrl.client.id"  type="hidden">
+                            <p ng-show="(innerEduCollegeForm.edu_college.$touched || submitted) && innerEduCollegeForm.edu_college.$error.required" class="error" >{{college_required}}</p>
+                        </div>
+                    </div>
+                </ng-form>
+                <ng-form name="innerEduYearForm">
+                    <div class="col-lg-3 col-md-2 col-sm-3 col-xs-12">
+                        <div class="form-group">
+                            <div class="f_label hidden-xs"  ng-if="key == 0">&nbsp;</div>
+                            <div class="input-group login_input">
+                                <input type="text" class="form-control login_input"  datepicker-mode="'year'" datetime-picker="yyyy" ng-model="doctor.edu_object[key].edu_year" is-open="doctor.edu_object[key].open" enable-time="false" datepicker-options="edu_year_picker.datepickerOptions" readonly="" placeholder="Year" name="edu_year" ng-required = "false" >
+                                <span class="input-group-btn login_input">
+                                    <button type="button" class="btn btn-default login_input" ng-click="doctor.edu_object[key].open = true"><i class="fa fa-clock-o"></i></button>
+                                </span>
+                            </div>
+                            <p ng-show="(innerEduYearForm.edu_year.$touched || submitted) && innerEduYearForm.edu_year.$error.required" class="error" >{{edu_year_required}}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-3 col-xs-12 add_more_button" >
+                        <div class="form-group clearfix">
+                            <div class="f_label hidden-xs"  ng-if="key == 0">&nbsp;</div>
+                            <div class="pull-left">
+                                <img src="app/images/upload_image.png" ng-class="key == 0 ? 'add_button_image add_button_image_custom' : 'add_remove_image'"  ng-click="openFileObject('eduPicFile', key)">
+                                <input type="hidden" name="temp_img" ng-model="doctor.edu_object[key].doctor_qualification_image_full_path" />
+                                <input type="file" obj="edu" key="{{key}}" ng-file-select="onFileSelect($files)" class="hide" ng-model="doctor.edu_object[key].img" id="eduPicFile{{key}}" accept="image/*">
+                                <img src="app/images/add_button.png" class="add_more_edu_qualification m_left_16" ng-class="key == 0 ? 'add_button_image add_button_image_custom' : 'add_remove_image'"  ng-click="addEduObject(1)" ng-if="key < - 1">
+                                <img src="app/images/remove.png" class="remove_edu_qualification m_left_16" ng-class="key == 0 ? 'add_button_image add_button_image_custom' : 'add_remove_image'"  ng-click="removeEduObject(1, key)" ng-if="(!!doctor.edu_object[key].doctor_qualification_degree && doctor.edu_object[key].doctor_qualification_degree != '')">
+                            </div>
+                            <div class="image_display">
+                                <img ng-src="{{doctor.edu_object[key].image_thumb_path}}" class="m_left_16 add_button_image common_btn_radius add_button_image_custom register_img_class" ng-hide="doctor.edu_object[key].temp_img" ng-click="showFullImage(doctor.edu_object[key].doctor_qualification_image_full_path)" ng-if="doctor.edu_object[key].doctor_qualification_image_full_path" >
+                                <img ng-src="{{doctor.edu_object[key].temp_img}}" class="m_left_16 add_button_image add_button_image_custom common_btn_radius">
+                                <img src="app/images/popup_remove_red.png" ng-if="doctor.edu_object[key].cancel_image == '1'" ng-click="removeImage(2, key)" class="display_remove_icon top_right" />
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </ng-form>               
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-12 padding_0 add_more_specialization_div" ng-repeat="(key, sp) in doctor.specialities_obj" >
+                <ng-form name="innerRegisterSpecialForm">
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <div class="form-group selection_bx">
+                            <div class="f_label required" ng-if="key==0">Speciality</div>
+                            <select
+                                    name="speciality" 
+                                    chosen 
+                                    allow-single-deselect="true" 
+                                    placeholder_text_single="'Select Speciality'" 
+                                    style="width:100% !important;" 
+                                    ng-change="addSpecialityObj()" 
+                                    ng-model="doctor.specialities_obj[key].doctor_speciality_name" 
+                                    ng-options="value.specialization_title as value.specialization_title  for value in other.temp_specializations_child" ng-required="isSpecialityObjRequired(doctor.specialities_obj, key)"
+                                    >
+                                    <option value=""></option>                                                                 
+                                </select>
+                                <span><i class="fa fa-angle-down fa-2x"></i></span>
+
+                            <!-- <select multiple
+                                    name="speciality"
+                                    chosen
+                                    create-option-text="'Create item'"
+                                    persistent-create-option="true"
+                                    skip-no-results="true"
+                                    create-option="createOption"
+                                    placeholder_text_multiple="'Select Speciality'"
+                                    ng-model="doctor.speciality"
+                                    ng-options="value.specialization_title as value.specialization_title  for value in other.temp_specializations_child" required="">
+                                <option value=""></option>
+                            </select> -->
+                        </div>
+                        <p ng-show="(innerRegisterSpecialForm.speciality.$touched || submitted) && innerRegisterSpecialForm.speciality.$error.required" class="error" >{{speciality_required}}</p>
+                    </div>
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <div class="form-group clearfix">
+                            <div class="f_label hidden-xs" ng-if="key == 0">&nbsp;</div>
+                            <img src="app/images/remove.png" class="add_remove_image remove_edu_qualification m_left_16" ng-click="removeEduObject(5, key)" ng-if="doctor.specialities_obj.length-1 != key">
+                        </div>
+                    </div>
+                </ng-form>
+                <div class="clearfix"></div>
+            </div>        
+        </div>
+        <div class="clearfix"></div>
+        <div class="m_top_50 m_bottom_30 clearfix row">  
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>                                 
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <a href=""><input type="button"  ng-click="updateEduDetail(true)"  value="Next" name="next" class="btn new_common_button_1 btn_properties" /></a>
+            </div>  
+        </div>  
+    </form>
+</div>

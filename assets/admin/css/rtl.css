@@ -1,0 +1,76 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 18 Nov, 2016, 3:42:41 PM
+    Author     : Nitinkumar vaghani
+*/
+
+.sidebar {
+    right:0 !important;
+}
+
+section.content {
+    margin: 78px 315px 0 0 !important;
+    transition: all 0.5s ease 0s !important;
+}
+
+.sidebar .user-info .info-container .user-helper-dropdown {
+    left: 0 !important;
+    right: auto !important;
+}
+.navbar .language {
+    right: auto !important;
+    left: 15px !important;
+}
+
+[dir="rtl"] .input-group-addon:first-child{
+    border-right: none !important;
+}
+
+.circle-clipper.left .circle {
+    right: -100% !important;
+}
+.circle-clipper.right .circle {
+    right: 0 !important;
+}
+
+.bootstrap-select.btn-group .dropdown-toggle .filter-option {
+    text-align: right !important;
+}
+.pull-right {
+    float: left !important;
+}
+
+.language .dropdown-menu > li > a {
+    padding: 7px 8px !important;
+}
+.language .bootstrap-select > .dropdown-toggle {
+    padding-right: 40px !important;
+}
+.rtl{
+    overflow-x: hidden !important;
+}
+.card .body [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+    left: 0;
+    opacity: 0;
+    position: fixed;
+}
+label.error{
+    float: right;
+    clear: both;
+}
+
+.slimScrollDiv .list{
+    padding-right: 0 !important;
+}
+
+.material-icons{
+    margin-left: 5px;
+}
+
+.drop_arrow{
+    left: 10px !important;
+}

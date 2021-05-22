@@ -1,0 +1,71 @@
+<div class="col-md-12 col-sm-12 col-xs-12 padding_0 text-center m_top_10 tab-pane">
+	<ul class="nav nav-pills medicine_details" role="tablist" ng-if="reportTypeList.length > 0">
+		<li style="margin-right:0px !important;" class="nav-item report-type-tab report-type-{{rptObj.report_type_id}}" role="presentation" ng-repeat="rptObj in reportTypeList track by $index">
+			<a class="nav-link" data-toggle="pill" title="{{rptObj.report_type_name}}" ng-click="getTableDataReports(rptObj.report_type_id);" href="">{{rptObj.report_type_name}}</a>
+		</li>
+	</ul>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12 padding_0">
+	<div class="col-md-8 col-sm-8 col-xs-8 padding_0 m_top_10">
+		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <input class="form-control common_input" placeholder="Search" name="search" ng-model="report_search.search" maxlength="100">
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 padding_0">
+            <input type="button" value="Filter" name="Filter" class="new_common_button btn_properties" style="width: 80%;" ng-click="searchReports(1)">
+        </div>
+	</div>
+	<div class="col-md-4 col-sm-4 col-xs-4 m_top_10">
+		<ul class="nav nav-pills gotham_medium tabs_items font_color_1" role="tablist">
+			<li class="nav-item active" role="presentation">
+				<a ng-if="objReportsCompareSel.length >= 2" style="cursor:pointer;" class="nav-link no_top_margin btnfc" ng-click="setImageCompareData()"><i class="fa fa-files-o" aria-hidden="true"></i> Compare</a>
+				<!-- <input ng-click="setImageCompareData()" type="button" value="Compare" name="btn_reports_image_compare" class="nav-link no_top_margin" id="btn_reports_image_compare" data-toggle="modal" data-target="#modal_patient_reports_image_compare"/> -->
+			</li>
+			<!-- <li class="nav-item" role="presentation">
+				<a class="hide nav-link btnfc vital-full-screen" href="javascript:void(0);" ng-click="fullScreenVital(vital_filter_flag, $event)">Normal</a>
+				<a class="nav-link btnfc" href="javascript:void(0);" ng-click="fullScreenVital(vital_filter_flag, $event)" onclick="setFullScreenMode('vitals-monitoring-fullscreen-mode',this);">Full Screen</a>
+			</li> -->
+		</ul>
+	</div>
+	<div class="col-md-4 col-sm-4 col-xs-4 text-center">
+		<!-- <ul class="pagination no_margin">
+			<li><a href="" ng-click="getTableData('prev')"><img alt="previous" src="app/images/prev_arrow.png"></a></li>
+			<li><a href="" ng-click="getTableData('next')"><img alt="previous" src="app/images/next_arrow.png"></a></li>
+		</ul> -->
+	</div>
+</div>
+<div class="clearfix"></div>
+<div class="common_hr m_top_10"></div>
+<div class="col-md-12 col-sm-12 col-xs-12 gotham_book">
+	<div class="panel background_color_4 cursor_pointer" ng-repeat="reportObj in report_data track by $index">
+		<div class="panel-body">
+			<div ng-click="openReportDetail(reportObj.file_report_id,$index)" class="date_width_left pull-left background_color_1 white_color">
+				<p class="font_size_18 gotham_medium margin_8">{{reportObj.file_report_date | date: 'dd'}}</p>
+				<p class="gotham_light margin_12">{{reportObj.file_report_date | date: 'MMM'}}</p>
+			</div>
+			<div class="date_width_right m_left_16 pull-left">
+				<p ng-click="openReportDetail(reportObj.file_report_id,$index)" class="font_size_18 gotham_medium">{{reportObj.file_report_name}}</p>
+				<p ng-click="openReportDetail(reportObj.file_report_id,$index)" class="gotham_light font_size_15">Report Type: {{reportObj.report_type_name}}</p>
+				<p ng-click="openReportDetail(reportObj.file_report_id,$index)" class="gotham_light" ng-if="reportObj.user_type == '1'">Added by : <span ng-bind-html="PATIENT_ICON"></span> <span class="font_color_1">Patient</span></p>
+				<p ng-click="openReportDetail(reportObj.file_report_id,$index)" class="gotham_light" ng-if="reportObj.doctor_clinic_mapping_role_id == '1' && reportObj.created_by == current_doctor.user_id">Added by : <span ng-bind-html="DOCTOR_ICON"></span> <span class="font_color_1">Doctor</span></p>
+				<p ng-click="openReportDetail(reportObj.file_report_id,$index)" class="gotham_light" ng-if="reportObj.user_type == '2' && reportObj.created_by != current_doctor.user_id">Added by : <span ng-bind-html="DOCTOR_ICON"></span> <span class="font_color_1">{{docPrefix + reportObj.user_name}}</span></p>
+				<p ng-click="openReportDetail(reportObj.file_report_id,$index)" class="gotham_light" ng-if="reportObj.doctor_clinic_mapping_role_id == '2' && reportObj.created_by == current_doctor.user_id">Added by : <span ng-bind-html="DOCTOR_ASSISTANT_ICON"></span> <span class="font_color_1">Dr. {{reportObj.added_by}}</span></p>
+				<p ng-click="openReportDetail(reportObj.file_report_id,$index)" class="gotham_light" ng-if="reportObj.doctor_clinic_mapping_role_id == '3' && reportObj.created_by == current_doctor.user_id">Added by : <span ng-bind-html="RECEPTIONIST_ICON"></span> <span class="font_color_1">{{reportObj.added_by}}</span></p>
+				<input ng-hide="reportObj.report_type_id==12" ng-disabled="allCompareObjDisabled && objReportsCompareSel.indexOf(reportObj.file_report_id) == -1" style="position: relative; margin-top:-30px; float:right;" type="checkbox" name="selectedCompareImgsLst[]" value="{{reportObj.file_report_id}}" ng-checked="objReportsCompareSel.indexOf(reportObj.file_report_id) > -1" ng-click="toggleReportsCompareSelection(reportObj.file_report_id)" />
+				<span ng-click="permanentDeleteReport(reportObj.file_report_id)" ng-if="reportObj.report_type_id==11" title="Click To Remove" style="float: right;margin-right: -30px;margin-top: -55px;"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12 gotham_book m_top_10 m_bottom_30">
+	<div ng-if="report_data.length > 0" class="row pagi-wrap">
+        <div class="col-lg-4 totals-rows">
+            {{((report_search.currentPage-1)*report_search.per_page) + 1}} to {{report_search.last_rows}} of {{report_search.total_rows}} entries
+        </div>
+        <div class="pagination-wrap col-lg-8">
+            <a href="" ng-click="getNextPrev('prev',5)"><img height="30" alt="previous" src="app/images/prev_arrow.png"></a>
+            <input ng-repeat="n in [] | range:report_search.total_page" type="button" ng-value="n" ng-click="searchReports(n)" ng-disabled="report_search.currentPage == n" ng-class="report_search.currentPage == n ? 'page-active' : ''" class="pagi-btn">
+            <a href="" ng-click="getNextPrev('next',5)"><img height="30" alt="previous" src="app/images/next_arrow.png"></a>
+        </div>
+    </div>
+    <p ng-if="report_data.length == 0" class="title1 text-center"> No record found</p>
+</div>

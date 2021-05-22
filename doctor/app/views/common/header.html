@@ -1,0 +1,414 @@
+<style>
+    .selection_bx bgroup_chosen, .selection_bx .chosen-single,.selection_bx  .chosen-choices, .chosen-container-multi .chosen-choices {
+        height: 38px !important;
+        border: 1px solid #f1f1f1;
+        background: #f1f1f1 none repeat scroll 0 0 !important;
+        color: #8b8b8b;
+        font-size: 12px;
+        line-height: 22px;
+    }
+    .border-red {
+        border: 1px solid red;
+    }
+    .chosen-container.chosen-container-single,.chosen-container.chosen-container-multi {
+        width: 100% !important;
+    }
+    .chosen-container-single .chosen-single span,.chosen-container-multi .chosen-choices li.search-choice span{
+        right: 0px;
+        left: 10px;
+    }
+    .chosen-container-single .chosen-single div b{
+        background: none !important;
+    }
+    .chosen-container-single .chosen-single abbr{
+        background: none !important;
+    }
+    .ui-state-focus{
+        border:none !important;  
+        background:none !important;
+        font-size: 15px;
+    }
+    .ui-menu-item{
+        padding: 3px;
+
+    }
+    .ui-menu{
+        max-width: 274px;
+        font-size: 15px;
+        max-height: 250px;
+        overflow: auto;
+        z-index: 11001 !important;
+    }
+    .ui-menu-item:hover{
+        background-color: #3773D5;
+        color:white;
+        font-size: 15px;
+    }
+    .ui-menu-item:hover a{
+        color:white;    
+        font-size: 15px;
+    }
+    .pac-container{
+        z-index: 20000
+    }
+    .chosen-container-multi .chosen-choices li.search-field input[type="text"]{
+        /*        width: 100% !important;*/
+    }
+    .angular-datepicker-input{
+        border: none;
+    }
+    .ui-autocomplete{
+        z-index: 2500;
+    }
+    .ui-menu{
+        max-width: none;
+    }
+</style>
+<link rel="stylesheet" ng-href="app/css/dashboard.css?{{getVer(3)}}" />
+<nav class="navbar navbar-inverse custom_dashboard_navbar navbar-fixed-top" ng-controller="DashboardController">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#my_navbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand visible-xs main_logo_section" href="#/app/dashboard">
+            <img src="app/images/logo_dashoboard.png?{{getVer(3)}}" class="img-responsive mobile_logo" alt="{{currentUser.sub_plan_setting.medsign_speciality_display_name}}"/>
+        </a>
+    </div>
+    <div class="collapse navbar-collapse placeholder_class" id="my_navbar">
+        <ul class="nav navbar-nav hidden-xs">
+            <li>
+                <a href="#/app/dashboard/calendar" class="main_logo_section">
+                    <img ng-show="currentUser.sub_plan_setting.medsign_speciality_id != 2" src="app/images/logo_dashoboard.png?{{getVer(3)}}" class="img-responsive site_logo" alt="{{currentUser.sub_plan_setting.medsign_speciality_display_name}}"/>
+                    <img ng-show="currentUser.sub_plan_setting.medsign_speciality_id == 2" src="app/images/medsign-derma.png?{{getVer(3)}}" class="img-responsive site_logo" alt="{{currentUser.sub_plan_setting.medsign_speciality_display_name}}"/>
+                </a>
+                <span ng-show="currentUser.sub_plan_setting.medsign_speciality_id != 2" style="
+                    position: fixed;
+                    color: #d8faf6; 
+                    top: 46px;
+                    left: 95px;
+                    font-weight: 900;
+                    font-size: 18px;
+                    text-shadow: none;
+                ">{{currentUser.sub_plan_setting.medsign_speciality_display_name}}</span>
+            </li>
+        </ul>
+        <form class="navbar-form navbar-left" name="globalSearchForm" ng-submit="globalSearch()">
+            <div class="input-group new_input_mobile">             
+                <div class="position_relative">
+                    <input client-auto-complete dirtype='4'  type="text" class="form-control common_input new_input_width" placeholder="Search First Name/Last Name/Mobile Number/UID" name="search" ng-keyup="globalSearch()" ng-model="search_patient_keyword">
+                    <img src="app/images/search_icon1.png" alt="dropdown" class="icon_image_right" ng-click="globalSearch()" />
+                </div>
+                <div class="no_patient_found_div" ng-if="search_result.length == 0 && search_patient_keyword.length > 2">
+                    This patient is not registred 
+                </div>
+            </div>
+        </form>
+
+		<!-- idle size 420px * 50px -->
+		<!-- Advertisement box start --> 
+		<div ng-if="currentad && currentad.advertisement_type == 1" class="advertisement_top imageonly" style="background-image: url({{currentad.advertisement_filepath}});background-repeat:no-repeat;">
+			<a ng-if="currentad.advertisement_url" target="_blank" href="{{currentad.advertisement_url}}" class="advertisement_link"></a>
+		</div>
+		<div ng-if="currentad && currentad.advertisement_type == 2" class="advertisement_top textonly" style="background-color: #32aca4; color: #fff;">
+			{{currentad.advertisement_text}}
+			<a ng-if="currentad.advertisement_url" target="_blank" href="{{currentad.advertisement_url}}" class="advertisement_link"></a>
+		</div>
+		<div ng-if="currentad && currentad.advertisement_type == 3" class="advertisement_top imageText" style="background-image: url({{currentad.advertisement_filepath}});background-repeat:no-repeat;">
+			{{currentad.advertisement_text}}
+			<a ng-if="currentad.advertisement_url" target="_blank" href="{{currentad.advertisement_url}}" class="advertisement_link"></a>
+		</div>
+		<div ng-if="currentad && currentad.advertisement_type == 4" class="advertisement_top textonly" style="background-color: #32aca4; color: #fff;">
+			{{currentad.advertisement_text}}&nbsp;&nbsp;&nbsp;<i style="font-size:45px;" class="fa fa-play-circle"></i> 
+			<a href="javascript:void(0);" ng-click="setAdvertisementVideoUrls(currentad);" data-toggle="modal" data-target="#advertisement_video_modal" class="advertisement_link"></a>
+		</div>
+		<div ng-if="currentad && currentad.advertisement_type == 5" class="advertisement_top col2left">
+			<div class="image">
+				<img src="{{currentad.advertisement_filepath}}" alt="" height="50" />
+			</div>
+			<div class="text">{{currentad.advertisement_text}}</div>
+			<a ng-if="currentad.advertisement_url" target="_blank" href="{{currentad.advertisement_url}}" class="advertisement_link"></a>
+		</div>
+		<div ng-if="currentad && currentad.advertisement_type == 6" class="advertisement_top col2right">
+			<div class="image">
+				<img src="{{currentad.advertisement_filepath}}" alt="" height="50" />
+			</div>
+			<div class="text">{{currentad.advertisement_text}}</div>
+			<a ng-if="currentad.advertisement_url" target="_blank" href="{{currentad.advertisement_url}}" class="advertisement_link"></a>
+		</div>
+		<!-- Advertisement box end -->
+		
+		<ul class="nav navbar-nav navbar-right">
+            <li ng-if="!app.is_not_valid" class="navigation_li tooltip_custom_1"
+                ng-mouseover="openToolTip('1')"
+                ng-if="role[PATIENT_MODULE][ADD] == 'on'"
+                data-toggle="tooltip"                 
+                data-placement="left"             
+                title="{{add_patient_tooltip}}"                
+                >
+                <!-- <input type="button" class="new_common_button_1 add_new_patient" data-toggle="modal"  data-target='#patient_modal' value="Add New Patient" /> -->
+                <label ng-click="add_patient_popup()" class="bg_icon_images add_patient 11"></label>
+            </li>
+            <li class="navigation_li tooltip_custom_2" 
+                ng-mouseover="openToolTip('2')"
+                ng-if="role[PATIENT_MODULE][ADD] == 'on'"
+                data-toggle="tooltip"                 
+                data-placement="left"         
+                title="{{watch_video_tooltip}}">
+                <label class="bg_icon_images play_video_btn" ng-click="getVideosList()" data-toggle="modal" data-target='#video_help_modal'></label>
+            </li>
+            <!-- <li class="navigation_li tooltip_custom_3" 
+                data-toggle="tooltip" 
+                ng-mouseover="openToolTip('3')"
+                data-placement="left"
+                title="{{help_support_tooltip}}">
+                <label class="bg_icon_images info_image" data-toggle="modal" data-target="#help_modal" ng-click="getSupportContact()"></label>
+            </li>
+            <li class="navigation_li tooltip_custom_4" 
+                data-toggle="tooltip" 
+                ng-mouseover="openToolTip('4')"
+                data-placement="left"
+                title="{{whats_new_tooltip}}">
+                <a href="#/app/whats" class="padding-0 padding_0" style="padding: 0px;"><label class="bg_icon_images list_image"></label></a>               
+            </li> -->
+            <li ng-if="checkPermission(MY_ACCOUNT, VIEW)" class="visible-xs navigation_li">
+                <a href="#/app/profile/my_profile_view">My Account</a>
+            </li>
+            <li ng-if="checkPermission(SETTING_STAFF, VIEW)" class="visible-xs navigation_li">
+                <a href="#/app/dashbaord/staff">My Staff</a>
+            </li>
+            <li ng-if="checkPermission(SUBSCRIPTION, VIEW)" class="visible-xs navigation_li">
+                <a href="#/app/subscription">Subscription</a>
+            </li>
+			<li ng-if="checkPermission(SURVEY_MODULE, VIEW)" class="visible-xs navigation_li">
+                <a href="#/app/survey">Survey</a>
+            </li>
+			<li class="visible-xs navigation_li">
+                <a href="" data-toggle="modal" data-target="#help_modal" ng-click="getSupportContact()" ng-click="getSupportContact()">{{help_support_tooltip}}</a>
+            </li>
+			<li class="visible-xs navigation_li">
+                <a href="#/app/whats">{{whats_new_tooltip}}</a>
+            </li>
+            <li class="visible-xs navigation_li">
+                <a href="#" ng-click="logout()">Logout</a>
+            </li>
+            <li class="dropdown navigation_li hidden-xs" data-toggle="tooltip" title="{{my_account_tooltip}}">
+                <a href="" class="dropdown-toggle custom_toggle" data-toggle="dropdown">
+                    <label class="bg_icon_arrow"></label>
+                    <img src="app/images/user_profile.png" ng-hide="currentUser.user_photo_filepath" />                    
+                    <img ng-src="{{currentUser.user_photo_filepath}}" class="user_image" ng-if="currentUser.user_photo_filepath" />
+                </a>
+                <ul class="dropdown-menu header_dropdown">
+                    <li ng-if="checkPermission(MY_ACCOUNT, VIEW)"><a href="#/app/profile/my_profile_view">My Account</a></li>
+                    <li class="divider"></li>
+                    <li ng-if="checkPermission(SETTING_STAFF, VIEW)"><a href="#/app/dashboard/staff">My Staff</a></li>
+                    <li class="divider"></li>
+					<li ng-if="checkPermission(SURVEY_MODULE, VIEW)"><a href="#/app/survey">Survey</a></li>
+                    <li class="divider"></li>
+					<li ng-if="checkPermission(SUBSCRIPTION, VIEW)"><a href="#/app/subscription">Subscription</a></li>
+                    <li class="divider"></li>
+					<li><a data-toggle="modal" data-target="#help_modal" ng-click="getSupportContact()" ng-click="getSupportContact()">{{help_support_tooltip}}</a></li>
+					<li class="divider"></li>
+					<li><a href="#/app/whats">{{whats_new_tooltip}}</a></li>
+					<li class="divider"></li>
+                    <li><a href="#" ng-click="logout()">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="clearfix"></div>
+<div ng-include="'app/views/common/sidebar.html?'+getVer(2)"></div>
+<div class="clearfix"></div>
+<!-- happy modal -->
+<div id="help_modal" class="modal fade in help_modal" role="dialog" data-backdrop="static" data-keyboard="false" ng-controller="DashboardController" ng-init="issue.issue_email = currentUser.user_email" >
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content">                        
+            <div class="modal-body no_padding">
+                <div class="reg_patient container container_width no_padding">                               
+                    <div class="container container_width common_title background_color_1 white_color text-center">
+                        <h3>Happy to Help</h3>                                    
+                    </div>
+                    <div class="container container_width middle_content" >
+                        <form id="help_form" name="helpForm" ng-submit="addHelpForm()" novalidate="">
+                            <div class="row m_top_20 font_size_16">                                
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-md-3 col-sm-3 col-xs-12 col-lg-3">
+                                        <div class="form-group">
+                                            <label for="email" class="font_color_3">Name :</label>
+                                            <label class="font_color_1">{{ currentUser.user_first_name}} {{ currentUser.user_last_name}}</label>                                                
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 col-lg-3">
+                                        <div class="form-group">
+                                            <label for="email" class="font_color_3">Unique ID : </label>
+                                            <label class="font_color_1">{{ currentUser.user_unique_id}}</label>                                                
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-4 col-xs-12 col-lg-6">
+                                        <div class="form-group">
+                                            <label for="email" class="font_color_3">Plan Details :</label>
+                                            <label class="font_color_1">{{support_other_detail.sub_plan_name}}</label> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">                              
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-md-8 col-sm-12 col-xs-12 report-div font_size_16">
+                                        <div class="form-group">
+                                            <label for="issue" class="required">Report an issues :</label>
+                                            <textarea placeholder="Type here" class="form-control" rows="6" required="" ng-model="issue.issue_text" name="issue"></textarea>
+                                            <p ng-show="(submitted) && helpForm.issue.$error.required" class="error">{{issue_required}}</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email"  class="">Upload Screen Shot:</label>
+                                            <div class="notes-images" >
+                                                <div class="pull-left">
+                                                    <div class="pull-left" style="position: relative;" ng-repeat="(key,tempImg) in help_files" >
+                                                        <img 
+                                                        ng-src="{{tempImg.temp_img}}"
+                                                        class="help_image cursor_pointer"                                                    
+                                                        >
+                                                        <a  href="javascript:void(0)" ng-click="removeImage(key)"><img ng-if="help_files.length > 0" class="delete-img" src="app/images/popup_remove_red.png" /></a>
+                                                    </div>
+                                                </div>
+                                                <label ng-if="help_files.length < 5" class="bg_icon_images notes_img_upload_btn cursor_pointer" 
+                                                        ng-click='openHelpFile("helpFile")'></label>
+                                                <button ng-if="help_files.length > 4" class="btn btn-default" ng-disabled="true" style="height: 40px;width: 40px;overflow: hidden;padding:0px;padding-left: 2px;background: #a2a2a2">
+                                                    <img src="app/images/image_upload.png">
+                                                </button>
+                                                <input type="file" key="help_files" pass="4"
+                                                       ng-file-select-help="onFileSelect($files)" 
+                                                       class="hide" 
+                                                       id="helpFile" accept="image/*"> 
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="email"  class="required">Email where we can reach you :</label>
+                                            <input type="email" class="form-control" placeholder="Type here" name="email" ng-model="issue.issue_email" required=""  ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/" />
+                                            <p ng-show="(submitted) && helpForm.email.$error.required" class="error">{{email_required}}</p>
+                                            <p ng-show="(submitted) && helpForm.email.$error.pattern" class="error"> Invalid Email.</p>
+                                        </div>
+
+                                        <div class="clearfix"></div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right custom_padding_xs ">
+                                            <input value="Submit" name="done" class="btn new_common_button btn_properties" type="submit">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-left custom_padding_xs ">
+                                            <input data-dismiss="modal" type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties" ng-click="resetHelpForm()" /> 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-xs-12">
+                                        <div class="common_hr support_div" ng-show="local_support != undefind && local_support.name != ''">
+                                            <h4 class="font_size_16 font_bold">Local Support Contact :</h4>
+
+                                            <div class="form-group no_margin">
+                                                <label for="email" >Name :</label>
+                                                <label class="font_color_1">{{ local_support.name}}</label>                                                
+                                            </div>
+                                            <div class="form-group no_margin" ng-show="local_support.call != ''">
+                                                <label for="email">Call :</label>
+                                                <label class="font_color_1">{{ local_support.call}}</label>                                                
+                                            </div>
+                                            <div class="form-group no_margin">
+                                                <label for="email">Email :</label>
+                                                <label class="font_color_1">{{ local_support.email}}</label>                                                
+                                            </div>
+                                        </div>
+                                        <div class="support_div">
+                                            <h4 class="font_size_16 font_bold">Support Contact :</h4>                                                    
+                                            <div class="form-group no_margin">
+                                                <label for="email">Name :</label>
+                                                <label class="font_color_1">{{ global_support.name}}</label>                                                
+                                            </div>
+                                            <div class="form-group no_margin" ng-show="global_support.call != ''">
+                                                <label for="email">Call :</label>
+                                                <label class="font_color_1">{{ global_support.call}}</label>                                                
+                                            </div>
+                                            <div class="form-group no_margin">
+                                                <label for="email">Email :</label>
+                                                <label class="font_color_1">{{ global_support.email}}</label>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- help modal end -->
+
+<div id="video_help_modal" class="modal fade in" role="dialog" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog modal-lg">
+        <div ng-if="videos_list.length==0" class="modal-content no_padding modal_content_height model_content_style">                        
+            <div class="modal-header">
+                <button pause-on-close type="button" class="close" data-dismiss="modal">&times;</button>                
+                <h4>Video not available for this screen.</h4>
+            </div>
+            <div class="model-body help-video-body">
+            </div>
+        </div>
+        <div ng-if="isShowHelpVideo && videos_list.length > 0" class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header">
+                <div class="row">
+                    <button pause-on-close type="button" class="close" data-dismiss="modal">&times;</button>  
+                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">              
+                        <input style="width: 47px;float: left;" ng-if="videos_list.length > 1" type="button" value="Back" ng-click="backToVideoList()" class="new_common_button btn_properties">
+						<h4 style="text-align: center;">{{video_title}}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="model-body help-video-body">
+                <video controls controlsList="nodownload" style="width:100%;height:500px !important;;">
+                    <source ng-src="{{help_video_url}}" type="video/mp4">                        
+                    Your browser does not support the video tag.
+                </video> 
+            </div>
+        </div>
+        <div ng-if="!isShowHelpVideo && videos_list.length > 0" class="modal-content no_padding modal_content_height model_content_style">                        
+            <div class="modal-header">
+                <button pause-on-close type="button" class="close" data-dismiss="modal">&times;</button>                
+                <h4>{{page_name}}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item cursor_pointer" ng-click="showHelpVideos(videosObj.me_video_id)" ng-repeat="videosObj in videos_list">
+                            {{videosObj.me_video_title}}
+                            <i style="font-size:25px;color: red;float:right;" class="fa fa-play-circle"></i>
+                          </li>
+                        </ul>                         
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- video modal end -->
+
+<!-- advertisement_video_modal -->
+<div id="advertisement_video_modal" class="modal fade in" role="dialog" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">                        
+            <div class="modal-header">
+                <button ng-click="unSetAdvertisementVideoUrls();" type="button" class="close" data-dismiss="modal">&times;</button>                
+                <h4>Watch A Video</h4>
+            </div>
+            <div class="model-body">
+				<iframe style="width:100%;height:500px;" ng-src="{{current_advertisement_url | trustThisUrl}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- advertisement_video_modal end -->

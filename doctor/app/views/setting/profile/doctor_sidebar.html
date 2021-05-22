@@ -1,0 +1,14 @@
+<div class="first_width font_color_5" ng-controller="UserController">
+    <ul class="list-group">            
+        <li class="list-group-item" ng-class="getClassActive('/app/complete_profile_view/personal')"><a href="#/app/complete_profile_view/personal">Personal & Contact Details</a></li>
+        <li class="list-group-item" 
+            ng-if="role_type == 1"
+            ng-class="getClassActive('/app/complete_profile_view/edu')"><a href="#/app/complete_profile_view/edu">Education & Specialization</a></li>
+        <li class="list-group-item" 
+            ng-if="role_type == 1"
+            ng-class="getClassActive('/app/complete_profile_view/reg')"><a href="#/app/complete_profile_view/reg">Registration & Documents</a></li>
+        <li class="list-group-item" 
+            ng-if="role_type == 1"
+            ng-class="getClassActive('/app/complete_profile_view/award')"><a href="#/app/complete_profile_view/award" >Award & Recognition</a></li>
+    </ul>        
+</div>

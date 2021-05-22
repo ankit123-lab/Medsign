@@ -1,0 +1,35 @@
+<nav class="navbar navbar-inverse custom_navbar navbar-fixed-top">
+    <div class="container no_pad">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#my_navbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button>
+                <a class="navbar-brand visible-xs" href="#/app/login">
+                    <img src="app/images/logo.png?{{getVer(3)}}" class="img-responsive mobile_logo m_top_12" />
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="my_navbar">
+                <ul class="nav navbar-nav hidden-xs">
+                    <li><a href="#/app/login"><img src="app/images/logo.png?{{getVer(3)}}" class="img-responsive site_logo m_top_10" /></a></li>
+                </ul>
+                <ul class="main_navigation">
+                    <li class="navigation_li">
+                        <a href="{{app.base_url}}" class="active font_color_3 ">Home</a>
+                    </li>
+                    <li class="navigation_li">
+                        <a href="{{app.base_url}}about-us" target="_blank" class="font_color_3">About Us</a>
+                    </li>
+                    <!-- <li class="navigation_li">
+                        <a href="{{app.base_url}}plan" target="_blank" class="font_color_3">Plan</a>
+                    </li> -->
+                    <li class="navigation_li">
+                        <a href="{{app.base_url}}#contact" target="_blank" class="font_color_3">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

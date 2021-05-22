@@ -1,0 +1,124 @@
+.new_common_button_3.btn_template {
+    width: 148px;
+}
+
+.m_bottom_6 {
+    margin-bottom: 6px;
+}
+
+.icon_image_left_1 {
+    left: 0px;
+    position: absolute;
+    top: 1px;
+}
+
+.form-control.form-control_padding {
+    padding: 6px 45px !important;
+}
+
+.m_top_17 {
+    margin-top: 17%;
+}
+
+/*-----------------------Modal PoPUp Add Staff Css--------------------*/
+#modal_add_template,
+#modal_edit_template {
+    overflow-x: auto;
+}
+
+.modal-content {
+    border: none !important;
+    border-radius: 0;
+    height: 750px;
+}
+
+.modal-title.modaltitle_m {
+    /* margin: 15px !important; */
+}
+
+/* .modal-body.padding_body {
+    padding: 40px !important;
+} */
+
+/*-----------------------Modal PoPUp Add Staff Css--------------------*/
+
+
+.template_div #clinical_notes .panel-default,
+.clinical_notes .panel-default {
+    border-bottom: none !important;
+}
+
+#clinical_notes .notes-images {
+    /* padding: 15px; */
+    position: relative;
+    z-index: 4;
+}
+
+#modal_add_template {
+    overflow-x: auto;
+}
+
+#modal_add_template .modal-content {
+    height: auto;
+}
+
+.template_div .btn_properties {
+    width: 50%;
+}
+
+.rich_text_ul {
+    background: #F1F1F1;
+    padding: 0px;
+    list-style: none;
+    /* Remove list bullets */
+    margin-bottom: 0;
+    border-bottom: 0;
+}
+
+.rich_text_ul li {
+    border: 0px;
+    padding: 0 5px;
+}
+
+.rich_text_ul .common_input {
+    border: 0px none !important;
+    width: 96%;
+    outline: none;
+    border-radius: 0px !important;
+    padding-left: 10px;
+    height: 36px;
+}
+
+.rich_text_ul .common_input::placeholder {
+    color: #000;
+}
+
+.rich_text_ul input:focus {
+    outline: none;
+}
+
+.rich_text_ul .dash_span {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+#modal_add_template .position_relative,
+#modal_edit_template .position_relative {
+    color: #1d1d1d;
+    font-size: 16px;
+    background: #f1f1f1;
+}
+
+#modal_add_template .chosen-container-single .chosen-single,
+#modal_edit_template .chosen-container-single .chosen-single {
+    border: 1px solid #f1f1f1 !important;
+}
+
+#modal_edit_template .modal-dialog .modal-content {
+    height: auto !important;
+}
+
+#modal_add_template .chosen-container-single .chosen-single,
+#modal_edit_template .chosen-container-single .chosen-single {
+    height: 40px !important;
+}

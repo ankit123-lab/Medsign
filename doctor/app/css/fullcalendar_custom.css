@@ -1,0 +1,312 @@
+.fc-toolbar h2 {
+    /* font-family: 'gotham_medium'; */
+    /* font-weight: 600; */
+    font-size: 14px;
+}
+
+.fc-agendaDay-button,
+.fc-agendaWeek-button,
+.fc-month-button {
+    border: none !important;
+    padding: 9px 15px !important;
+    text-transform: capitalize;
+    color: #30aca5 !important;
+    border-right: 2px solid #30ACA4 !important;
+    font-size: 14px !important;
+    height: auto !important;
+    /* font-family: 'gotham_medium' !important; */
+    font-weight: 700;
+}
+
+.fc-month-button {
+    border: none !important;
+}
+
+.fc-state-default {
+    box-shadow: none !important;
+    background: none !important;
+    background-color: white !important;
+}
+
+.fc-state-active {
+    background-color: #30aca5 !important;
+    color: #F1F1F1 !important;
+}
+
+.fc .fc-button-group {
+    border: 1px #30ACA4 solid;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    /* margin-left: 37px; */
+    margin-right: 20px;
+}
+
+.fc .fc-toolbar>*> :first-child {
+    margin-right: 8px;
+}
+
+.fc button.fc-today-button {
+    border-radius: 5px;
+    font-size: 14px;
+    height: 40px;
+    margin-top: 10px;
+    padding: 8px;
+    width: 100px;
+    float: left;
+    border: none;
+    text-transform: uppercase;
+    text-align: center;
+    background: #30aca5 !important;
+    color: #fff;
+    /* font-family: 'gotham_medium'; */
+    font-weight: 700;
+    opacity: 1;
+}
+
+.fc-left {
+    width: 217px !important;
+}
+
+.fc-center {
+    display: block !important;
+}
+
+.fc-center .fc-prev-button {
+    float: left;
+}
+
+.fc-center h2 {
+    float: left;
+    padding: 12px;
+    width: 160px !important;
+}
+
+.fc-myCustomButton-button {
+    background: none !important;
+    color: inherit;
+    border: none;
+    padding: 0 !important;
+    font: inherit;
+    cursor: pointer;
+    font-size: 18px !important;
+    font-weight: 700;
+    padding: 13px 15px !important;
+}
+
+.fc-center>div {
+    margin-top: 10px;
+}
+
+
+.fc-icon-left-single-arrow::after,
+.fc-icon-right-single-arrow::after {
+    font-weight: 100;
+    font-size: 199%;
+    top: -3%;
+    /* font-family: gotham_book; */
+}
+
+.fc-prev-button,
+.fc-next-button {
+    background-color: #30ACA5 !important;
+    color: white;
+    border-radius: 5px;
+    height: 2.8em !important;
+    padding: 2px 12px !important;
+}
+
+
+.fc-widget-header thead>tr {
+    height: 35px;
+    background-color: #d8faf6;
+    /* font-family: 'gotham_book'; */
+    color: #30aca5;
+    text-transform: capitalize;
+}
+
+/*table css*/
+.fc-day-header {
+    border-bottom: 2px solid #ddd;
+    padding: 8px;
+    line-height: 1.42857143;
+    border-right: 1px solid #d1d1d1;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.fc-day-header span {
+    font-size: 14px !important;
+}
+
+.fc-ltr .fc-axis {
+    width: 12% !important;
+}
+
+.fc-ltr .fc-time {
+    border-right: 1px solid #d1d1d1 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    height: 95px !important;
+    border-bottom: 1px solid #d1d1d1 !important;
+    border-top: none;
+    line-height: 1.42857143;
+    color: #8b8b8b;
+    font-size: 14px;
+    /* font-family: gotham_book; */
+}
+
+.fc-ltr .fc-time span {
+    font-size: 12px;
+}
+
+.fc-agendaDay-view .fc-time,
+.fc-agendaWeek-view .fc-time {
+    height: 35px !important;
+}
+
+.fc-agendaDay-view .fc-widget-header {
+    color: #1d1d1d;
+    /* font-family: 'gotham_book'; */
+    text-align: center;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.fc-month-view .fc-day-number {
+    border-top: medium none;
+    font-size: 12px;
+    height: 100px;
+    padding: 10px 20px 0 0;
+    text-align: right;
+}
+
+
+/*appointment data cutom css*/
+.fc-event-container .fc-event,
+.fc-event-dot {
+    border: none !important;
+    background: #faf3eb none repeat scroll 0 0;
+    border-left: 3px solid #cc8632 !important;
+    text-align: left !important;
+    vertical-align: top !important;
+    /*position: relative;*/
+    /* ask to manish*/
+    padding-left: 15px;
+    cursor: pointer;
+}
+
+.fc-event-container .fc-time {
+    border: none !important;
+    height: auto !important;
+    text-align: left !important;
+    display: none;
+}
+
+.fc-ltr .fc-time-grid .fc-event-container {
+    margin: 0px !important;
+}
+
+.fc-event-container .fc-title {
+    margin: 0px;
+    /* font-family: "gotham_medium"; */
+    font-size: 12px;
+    line-height: 35px;
+    font-weight: 600;
+    text-align: left !important;
+    cursor: pointer;
+    color: #1d1d1d;
+}
+
+.fc-time-grid-event .fc-time {
+    white-space: normal !important;
+    /* display: none; */
+}
+
+.fc-agendaWeek-view .fc-event-container .fc-event,
+.fc-event-dot {
+    padding: 0px 0px 0 10px;
+}
+
+.fc-agendaWeek-view .doctor_visit {
+    right: 5px;
+    /* top: 3px; */
+}
+
+.fc-month-view .doctor_visit {
+    right: 3px;
+    /* top: 4px; */
+}
+
+.fc-month-view .fc-day-grid-event .fc-content {
+    white-space: normal !important;
+    padding-right: 15px;
+}
+
+.fc-view-container {
+    width: auto;
+}
+
+/* for resource view */
+/*
+.fc-agendaDay-view.fc-view {
+  overflow-x: scroll;
+}
+
+.fc-agendaDay-view.fc-view > table {
+  width: 2500px;
+}*/
+
+
+.fc-icon,
+.fc-row.fc-rigid,
+.fc-time-grid-event {
+    overflow: visible !important;
+}
+
+#patient_data * {
+    box-sizing: border-box !important;
+}
+
+#patient_data {
+    cursor: initial;
+}
+
+.refresh_calendar {
+    position: absolute;
+    right: 15px;
+    top: 80px;
+    text-align: right;
+    display: flex;
+}
+
+.refresh_calendar ul li {
+    padding: 0;
+}
+
+.doc_not_available .fc-widget-content:not(:first-child) {
+    background-color: #d1d1d1;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 700;
+}
+
+.fc-state-default {
+    text-shadow: none;
+}
+
+.fc button .fc-icon {
+    top: -.2em;
+}
+
+@media(max-width:1400px) {
+    .fc-center h2 {
+        width: 160px !important;
+    }
+
+    .fc-toolbar h2 {
+        font-size: 14px;
+    }
+}

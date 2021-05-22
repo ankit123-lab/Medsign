@@ -1,0 +1,258 @@
+<link rel="stylesheet" ng-href="app/css/fee_structure.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/billing.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/clinic_staff.css?{{getVer(3)}}" />
+<div class="">
+	<div class="common_hr clearfix billing_main_div" ng-init="getSocialMediaMaster()">
+		<div class="first_width" ng-init="getClinics()">
+			<div class="dropdown">
+				<button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+					<span ng-if="current_clinic">{{current_clinic.clinic_name | capitalize}}</span>
+					<span><img src="app/images/down_arrow.png" /></span>
+				</button>
+				<ul class="dropdown-menu clinic_drop_down">             
+					<li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForPaymentMode(clinic)" ><a href="">{{clinic.clinic_name | capitalize}}</a></li>
+					<li class='divider' ng-repeat-end></li>
+				</ul>
+			</div>
+		</div>
+		<div class="second_width common_heading_height">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding  margin_left_-4">
+				<div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 m_bottom_15">
+					<h4 class="m_top_22 page_title pull-left">Settings</h4>
+				</div>                
+				<div class="col-lg-9 col-md-9 col-sm-8 col-xs-8 text-right  gotham_light">
+					<!-- <a href="" ng-if="checkPermission(SHARE_LINK, ADD)" class="pull-right m_top_15">
+						<input style="width: 160px;" type="button" ng-click="addShareLinkPopup()" value="Create Link" name="btn_create_reg_link" class="new_common_button new_common_button_3 no_top_margin" id="btn_create_reg_link" data-toggle="modal" data-target="#modal_create_reg_link"/>
+					</a> -->
+					<div class="clearfix"></div>
+					<!-- Modal -->
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>
+<div class="">
+	<div class="list_group_property" ng-if="current_clinic" ng-init="getShareLink()">
+		<div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+			<h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Patient Registration Link</h3>
+			<div class="tab-content">
+				<div class="tab-pane active" ng-if="checkPermission(SHARE_LINK, VIEW)">
+					<table class="table table-responsive min_width_767">
+						<thead class="row font_color_3 gotham_light font_size_18 common_p_b">
+							<tr class="common_tb_border">                                
+								<!-- <th class="">Link</th> -->
+								<th width="70%" class="">Clinic Name</th>
+								<!-- <th class="">Social Media Name</th> -->
+								<!-- <th class="">Link Expiry Date</th> -->
+								<th width="30%" class="text-center">QR Code / Registration link</th>                                  
+							</tr>
+						</thead>
+						<tbody class="font_size_14 common_p_b">
+                            <tr ng-repeat="(key, shareLinkObj) in share_link_data">
+                                <!-- <td><a href="{{shareLinkObj.share_link}}" target="_blank">View Link</a></td> -->
+                                <td>{{shareLinkObj.clinic_name}}</td>
+                                <!-- <td>{{shareLinkObj.social_media_name}}</td> -->
+                                <!-- <td>{{shareLinkObj.expiry_date}}</td> -->
+                                <td class="text-center">
+                                	<a href="javascript:void(0)" title="Print QR Code" ng-click="printShareLinkPopup(key)">
+                                		<i class="fa fa-qrcode font_color_1" style="vertical-align: bottom;font-size: 18px;" aria-hidden="true"></i>
+                                	</a>
+                                    <!-- <a href="javascript:void(0)" ng-if="checkPermission(SHARE_LINK, EDIT)" ng-click="editShareLinkPopup(key)"><img src="app/images/edit_icon.png" alt="edit_icon" class="m_lr_10"></a>
+                                    <a href="javascript:void(0)" ng-if="checkPermission(SHARE_LINK, DELETE)" ng-click="deleteShareLink(shareLinkObj.registration_share_id)"><img src="app/images/delete_icon.png" alt="delete_icon"></a> -->
+                                </td>                                
+                            </tr> 
+                            <tr ng-if="share_link_data.length==0">
+                            	<td colspan="3" class="text-center">
+                            		<h4 ng-bind-html="no_data_found"></h4>
+                            	</td>
+                            </tr>                              
+                        </tbody>
+                    </table>
+                </div>                        
+                <div ng-if="!(checkPermission(SHARE_LINK, VIEW) && checkPermission(SHARE_LINK, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+                	<div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+                </div>
+            </div>                
+        </div>
+
+    </div>
+</div>
+<!-- Modal -->
+<div id="modal_create_reg_link" class="modal fade in" data-backdrop="static" data-keyboard="false">
+	<form name="create_reg_link_Form" id="create_reg_link_Form" novalidate="" method="post" ng-submit="create_reg_link(create_reg_link_Form)">
+		<div class="modal-dialog modal-lg modal_dialog_width">
+			<div class="modal-content no_padding">
+				<div class="modal-header common_title background_color_1 white_color text-center">
+					<h3 class="modal-title modaltitle_m">{{ add_edit_share_link.registration_share_id == '' ? 'Create Link' : 'Edit Link' }}</h3>                            
+				</div>
+				<div class="modal-body">
+					<div class="col-md-12">
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<div class="form-group">
+								<div class="f_label required">Select Clinic</div>  
+								<div class="form-group">
+									<div class="position_relative">
+                                        <select
+                                            name='clinic_id'
+                                            placeholder="'Select Clinic'"
+                                            ng-options="value.clinic_id as value.clinic_name for value in clinic_data"
+                                            style="width:100% !important;" ng-model="add_edit_share_link.clinic_id"
+                                            class="common_input form-control required" required >
+                                            <option value="">Select Clinic</option>
+                                        </select>
+                                    </div>
+                                    <p ng-show="(submitted) && create_reg_link_Form.clinic_id.$error.required" class="error" >* Please Select Clinic</p>
+								</div>
+							</div>  
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<div class="form-group">
+								<div class="f_label required">Link Expiry Date</div>  
+								<p class="input-group login_input">
+                                    <input type="text" class="form-control login_input"  datetime-picker="dd/MM/yyyy"  datepicker-options="share_link_expiry_date_picker.datepickerOptions" enable-time="false" ng-model="add_edit_share_link.expiry_date" is-open="share_link_expiry_date_picker.open"  required=""  placeholder="DD/MM/YYYY" name="expiry_date"  ui-mask="99/99/9999" />
+                                    <span class="input-group-btn login_input">
+                                        <button type="button" class="btn btn-default login_input" ng-click="share_link_expiry_date_picker.open = true"><i class="fa fa-calendar"></i></button>
+                                    </span>
+                                </p>
+								<p ng-show="(submitted) && create_reg_link_Form.expiry_date.$error.required" class="error" >{{value_required}}</p>
+								<p ng-show="(submitted) && create_reg_link_Form.expiry_date.$error.datetime" class="error" >Invalid date</p>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<div class="form-group">
+								<div class="f_label">Select Social Media</div>  
+								<div class="form-group">
+									<div class="position_relative">
+                                        <select
+                                            name='social_media_id'
+                                            placeholder="'Select Social Media'"
+                                            ng-options="value.social_media_id as value.social_media_name for value in social_media_master_data"
+                                            style="width:100% !important;" ng-model="add_edit_share_link.social_media_id"
+                                            class="common_input form-control required" >
+                                            <option value="">Select Social Media</option>
+                                        </select>
+                                    </div>
+                                    <p ng-show="(submitted) && create_reg_link_Form.social_media_id.$error.required" class="error" >* Please Select Social Media</p>
+								</div>
+							</div>  
+						</div>
+					</div>                                                                      
+				</div>
+				<div class="modal-footer">
+					<div class="row">                                       
+						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-0">
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-center">
+							<input type="submit" value="{{ add_edit_share_link.registration_share_id == '' ? 'Save' : 'Edit' }}" name="save" class="btn new_common_button btn_properties"/>
+							<input type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 btn_properties" data-dismiss="modal" />
+						</div>
+						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-0"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div> 
+<!-- Print Share link modal -->
+<div class="modal fade" id="modal_print_url_qrcode" role="dialog"  data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg appointment_paients">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">
+                <h3 class="modal-title modaltitle_m">QR Code Print Preview
+                    <span class="close pull-right" ng-click="clearPrintShareLink()" data-dismiss='modal'>&times;</span>
+                </h3>
+            </div>
+            <div class="modal-body appointment_paients_padding">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 " >
+                        <div class="m_top_12" ng-if="print_url_qrcode">
+                            <iframe 
+                                style="height: 500px;"
+                                width="95%"
+                                ng-src="{{print_url_qrcode}}">
+                            </iframe>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                      <p class="gotham_light">Print QR Code</p>
+                        <div class="m_top_10">
+                            <div class="m_top_130">                                
+                                <a href="{{print_url_qrcode}}" target="_blank">
+                                    <input type="button" value="Print" class="new_common_button btn_properties">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="clearfix common_hr m_top_10"></div>
+                        <p class="gotham_light">Share Registration link</p>
+                        <form name="shareQRcodeForm" novalidate="">
+                            <div class="m_top_10" ng-if="currentUser.sub_plan_setting.sms_communication=='1' || currentUser.sub_plan_setting.whatsapp_communication=='1' || currentUser.sub_plan_setting.email_communication=='1'">                            
+                                <label for="patient_name" class="font-15">Patient Name</label><br/>
+                                <div class="fotm-group">
+                                    <input type="text"
+                                       class="form-control common_input font-15" 
+                                       id="patient_name" 
+                                       placeholder="Enter Patient Name"
+                                       name="patient_name" 
+                                       required="required"
+                                       ng-model="qr_code_share.patient_name"
+                                       ng-pattern="/^[a-zA-Z\. ]*$/"
+                                       >
+                                </div>
+                                <p ng-show="submitted && shareQRcodeForm.patient_name.$error.required" class="error" >*Required</p>                                
+                                <p ng-show="submitted && shareQRcodeForm.patient_name.$error.pattern" class="error" >Only characters allowed.</p>                                
+                            </div>
+                            <div class="m_top_10" ng-if="currentUser.sub_plan_setting.email_communication=='1'">
+                                <label for="email" class="font-15">Email</label><br/>
+                                <div class="input-group">
+                                    <input type="email"
+                                       class="form-control common_input font-15" 
+                                       id="email" 
+                                       placeholder="Enter Email"
+                                       name="email" 
+                                       ng-required="qr_code_share.email_is_required"
+                                       ng-model="qr_code_share.email"                   
+                                       ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/"
+                                       >
+                                    <div class="input-group-btn">
+                                        <button title="Share on email" class="btn share-qrcode-email-btn" type="button" ng-click="shareQRcodeLink(shareQRcodeForm,'email')" style="padding: 9px 16px;"><i class="fa fa-share"></i></button>
+                                    </div>
+                                </div>
+                                <p ng-show="submitted && shareQRcodeForm.email.$error.required" class="error" >*Required</p>                                
+                                <p ng-show="submitted && shareQRcodeForm.email.$error.pattern" class="error" >Invalid Email</p>
+                            </div>
+                            <div class="m_top_10" ng-if="currentUser.sub_plan_setting.sms_communication=='1' || currentUser.sub_plan_setting.whatsapp_communication=='1'">
+                                <label for="mobile_no" class="font-15">Mobile</label><br/>
+                                <input type="text"
+                                       class="form-control common_input font-15" 
+                                       id="mobile_no" 
+                                       placeholder="Enter Mobile"
+                                       name="mobile_no" 
+                                       ng-required="qr_code_share.mobile_is_required"
+                                       ng-model="qr_code_share.mobile_no"                   
+                                       ng-pattern="/^[0-9]{10}$/" 
+                                       maxlength="10" 
+                                       ng-keypress="checkMobileKey($event)"
+                                       >
+                                <p ng-show="(submitted) && shareQRcodeForm.mobile_no.$error.required" class="error" >*Required</p>                                
+                                <p ng-show="(submitted) && shareQRcodeForm.mobile_no.$error.pattern" class="error" >Invalid Number</p>                                
+                            </div>
+                        </form>
+                        <div class="m_top_10">
+                            <input ng-if="currentUser.sub_plan_setting.sms_communication=='1'" title="Share on SMS" type="button" ng-click="shareQRcodeLink(shareQRcodeForm,'sms')" value="Share on SMS" class="new_common_button"/>
+                            <button ng-if="currentUser.sub_plan_setting.whatsapp_communication=='1'" title="Share on whatsapp" type="button" ng-click="shareQRcodeLink(shareQRcodeForm,'whatsapp')" class="new_common_button btn_properties" style="position: relative;"><i class="fa fa-whatsapp" aria-hidden="true" style="position: absolute;left: 33px;font-size: 25px;"></i>&nbsp;</button>
+                        </div>
+                        <div class="m_top_30 text-center">
+                            <input type="button" 
+                               data-dismiss='modal' 
+                                ng-click="clearPrintShareLink()"
+                               value="Cancel" class="new_common_button_1 btn_properties" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Print Share link modal -->

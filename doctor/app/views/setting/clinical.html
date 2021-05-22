@@ -1,0 +1,179 @@
+<link rel="stylesheet" ng-href="app/css/clinic_staff.css?{{getVer(3)}}">                
+<link rel="stylesheet" ng-href="app/css/clinical_notes_catalog.css?{{getVer(3)}}">
+<div class="">
+    <div class="common_hr clearfix billing_main_div" ng-init="getPaymentTypes()">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{app.all_clinic_label}}</span>
+                </button>
+                <!-- <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForClinicalNote(clinic)" ><a href="">{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="second_width common_heading_height">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding  margin_left_-4">
+                <div class="col-lg-2 col-md-1 col-sm-7 col-xs-4 m_bottom_15 min-width-left">
+                    <h4 class="m_top_22 page_title pull-left">Settings</h4>
+                </div>
+                
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 hidden-sm hidden-xs gotham_medium text-center m_top_15">
+                    <ul class="nav nav-pills tabs_items font_color_1" role="tablist">
+                        <li class="nav-item tabs_first active" role="presentation">
+                            <a class="nav-link" data-toggle="pill" href="" ng-click="changeClinicalTab(1)">Complaints</a>
+                        </li>
+                        <li class="nav-item" role="presentation" style="border-right-width: 0;"> 
+                            <a class="nav-link" data-toggle="pill" href="" ng-click="changeClinicalTab(2)">Observation</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="pill" href="" ng-click="changeClinicalTab(3)">Diagnoses</a>
+                        </li>
+                        <li class="nav-item tabs_last" role="presentation">
+                            <a class="nav-link" data-toggle="pill" href="" ng-click="changeClinicalTab(4)">Notes</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-5 col-xs-8 text-right  gotham_light min-width-right">
+                    <!-- <ul class="pull-right no_padding">
+                        <li class="navigation_li navigation_li-custom">
+                            <label  class="bg_icon_images play_video_btn custom_div_mar" data-toggle="modal" data-target='#video_help_modal'></label>
+                        </li>
+                    </ul>  -->   
+                    <!-- Trigger the modal with a button -->
+                    <a href="" class="pull-right m_top_20" ng-if="checkPermission(SETTING_CLINICAL_NOTES, ADD)">                          
+                        <input style="margin-right: 15px;" type="button" value="Add Note" ng-click="current_clinic_note.addOpen = true" class="new_common_button new_common_button_3 no_top_margin"/>                        
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="">
+    <div class="col-sm-12 col-xs-12 visible-sm visible-xs gotham_medium text-center m_top_15">
+            <ul class="nav nav-pills tabs_items font_color_1" role="tablist">
+                <li class="nav-item tabs_first active" role="presentation">
+                    <a class="nav-link" data-toggle="pill" href="" ng-click="changeClinicalTab(1)">Complaints</a>
+                </li>
+                <li class="nav-item" role="presentation" style="border-right-width: 0;"> 
+                    <a class="nav-link" data-toggle="pill" href="" ng-click="changeClinicalTab(2)">Observation</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" data-toggle="pill" href="" ng-click="changeClinicalTab(3)">Diagnoses</a>
+                </li>
+                <li class="nav-item tabs_last" role="presentation">
+                    <a class="nav-link" data-toggle="pill" href="" ng-click="changeClinicalTab(4)">Notes</a>
+                </li>                                        
+            </ul>
+    </div>
+    <div class="list_group_property" ng-init="getClinicalNotes()" >
+        <div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+        <div class="tab-content">
+            <div id="complaints" class="tab-pane active" >
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 common_hr">
+                        <div class="col-lg-3 col-md-5 col-sm-3 col-xs-12 padding_0">
+                            <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_20 title1">Clinical Notes Catalog</h3>
+                        </div>
+                        <div class="col-lg-9 col-md-7 col-sm-9 col-xs-12 padding_0 m_top_10 m_bottom_10" ng-if="checkPermission(SETTING_CLINICAL_NOTES, VIEW)">
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 placeholder_class">
+                                <div class="input-group">
+                                    <input type="text" class="form-control common_input custom_add_doctor_btn" placeholder="Search {{ currentClinicalPlaceholder}}" name="search" size="35" ng-model="current_clinic_note.text_name" ng-keyup="getClinicalNotes()" maxlength="100">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default icon_style" type="submit" ng-if="!current_clinic_note.text_name">
+                                            <i class="glyphicon glyphicon-search" ></i>                                            
+                                        </button>
+                                        <button ng-click="clearSearchName()" class="btn btn-default icon_style" type="submit" ng-if="current_clinic_note.text_name">                                        
+                                            <i  class="glyphicon glyphicon-remove" ></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7"></div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 no_padding " ng-if="current_clinic_note.addOpen && checkPermission(SETTING_CLINICAL_NOTES, ADD)">
+                        <form name="addClinicalNoteForm" novalidate="" ng-submit="addClinicalNote()">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <input class="form-control common_input" 
+                                           placeholder="Add {{ currentClinicalPlaceholder}}" name="search" size="35"
+                                           ng-model="current_clinic_note.text_name_add"   
+                                           required=""
+                                           maxlength="100" />
+                                    <p ng-show="submitted && addClinicalNoteForm.search.$error.required" class="error">{{name_required}}</p>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 custom_add_doctor_btn">
+                                    <input type="submit" value="Save" name="save" class="pull-left btn new_common_button btn_properties m_right_10 "/>
+                                    <input type="button" ng-click="closeAddNoteForm()" value="Cancel" name="Cancel" class="pull-left btn new_common_button_1 cancel_patient btn_properties" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="clearfix"></div>
+                    <table class="table table-responsive m_top_20 min_width_767" ng-if="checkPermission(SETTING_CLINICAL_NOTES, VIEW)">                        
+                        <tbody class="font_size_14 common_p_b" >
+                            <tr ng-repeat="(key, catelog) in clinical_notes">
+                                <td class="width_th_80">{{catelog.clinical_notes_catalog_title | trimString}}</td>                                
+                                <td class="text-center">
+                                    <a href="" ng-if="checkPermission(SETTING_CLINICAL_NOTES, EDIT)" ng-click="detailCatelog(key)"><img src="app/images/edit_icon.png" alt="edit_icon" class="m_lr_icons"></a>
+                                    <a href="" ng-if="checkPermission(SETTING_CLINICAL_NOTES, DELETE)" ng-click="deleteCatelog(catelog.clinical_notes_catalog_id)"><img src="app/images/delete_icon.png" alt="delete_icon"></a>
+                                </td>                                
+                            </tr>                                                      
+                        </tbody>
+                    </table>
+                    <div ng-if="!(checkPermission(SETTING_CLINICAL_NOTES, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+                        <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="modal_edit_note" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <form name="editClinicalNoteForm" id="editClinicalNoteForm" novalidate="" method="post" ng-submit="editClinicalNote(editClinicalNoteForm)">
+        <div class="modal-dialog modal_dialog_width modal-lg">
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">                           
+                    <h3 class="modal-title modaltitle_m">Edit Clinical Note</h3>                            
+                </div>
+                <div class="modal-body padding_body text-left">
+                    <div class="font_color_4 gotham_light placeholder_class">
+                        <div class="row common_tb_border">
+                            <div class="col-lg-6 col-md-offset-2 col-md-6 col-sm-6 col-xs-12 m_top_12 m_bottom_12 padding_left_0">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 padding_left_0">
+                                    <h4 class="required title2 color_black">Clinical Note Title</h4>
+                                </div>                                
+                            </div>                                            
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-offset-2  col-md-6 col-sm-6 col-xs-12 m_top_12 m_bottom_12 padding_0">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 padding_left_0">
+                                    <div class="form-group">                                                        
+                                        <input type="text" class="form-control common_input" id="text_name" placeholder="Enter Name " name="text_name" required="required" ng-model="current_clinic_note.edit_text_name" maxlength="100">
+                                        <p ng-show="(submitted) && editClinicalNoteForm.text_name.$error.required" class="error" >{{name_required}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                                                                        
+                </div>
+                <div class="modal-footer m_top_35">
+                    <div class="row m_top_20per">                                       
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" ng-click="cancleTaxBtn()" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties float_left" data-dismiss="modal" />
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

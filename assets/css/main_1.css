@@ -1,0 +1,1132 @@
+/* ==========================================================================
+ Common classes
+========================================================================== */
+html, body{
+    overflow-x: hidden;
+    font-family: 'Open Sans', sans-serif;
+}
+a {
+    outline: none !important;
+}
+a:hover, a:focus, a:active, a.active{
+    text-decoration: none;
+    color: #00DFC8;
+}
+
+.font_color_1{
+    color: #30aca5;
+}
+.font_color_2{
+    color: #00DFC8;
+}
+.font_color_3{
+    color: #9f9f9f;
+}
+.background_color_1{
+    background-color: #30aca5;
+}
+.background_color_2{
+    background-color: #00DFC8;
+}
+.white_color{
+    color: #ffffff;
+}
+.login_reigstration{
+    padding-left: 0;
+    padding-right: 0;
+}
+.no_padding{
+    padding: 0px;
+}
+.no_margin{
+    margin: 0px;
+}
+.margin_0_auto{
+    margin: 0 auto;
+    text-align: center;
+}
+
+.cursor_pointer{
+    cursor: pointer;
+}
+
+.text_decoration_none{
+    text-decoration: none;
+}
+
+.font_size_16{
+    font-size: 16px;
+}
+
+.common_button{
+    font-size: 20px;
+    height: 50px;
+    border: none;
+    border-radius: 11px;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+}
+
+.common_title{
+
+}
+
+.common_hr{
+
+}
+.float_right{
+    float: right;
+}
+.float_left{
+    float: left;
+}
+.m_top_10{ margin-top: 10px; }
+.m_top_12{ margin-top: 12px; }
+.m_top_20{ margin-top: 20px; }
+.m_top_22{ margin-top: 22px; }
+.m_top_24{ margin-top: 24px; }
+.m_top_26{ margin-top: 26px; }
+.m_top_60{ margin-top: 60px; }
+
+.m_bottom_20{ margin-bottom: 20px; }
+.m_bottom_26{ margin-bottom: 26px; }
+
+.m_left_16{
+    margin-left: 16px;
+}
+
+.padding_left_0{
+    padding-left: 0px;
+}
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a {
+    text-shadow: none;
+}
+
+.form-control:-ms-input-placeholder {
+    color: #666666; 
+}
+
+.form-control::-webkit-input-placeholder {
+    color: #666666; 
+}
+
+.form-control:-moz-placeholder {
+    color: #666666; 
+} 
+
+.form-control::-moz-placeholder {
+    color: #666666; 
+}
+.padding_0{
+    padding: 0px;
+}
+
+.margin_padding_0{
+    margin: 0px;
+    padding: 0px;
+}
+
+.help-block {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: red;
+}
+/* ==========================================================================
+   Navigation bar
+========================================================================== */
+
+
+.navbar-inverse{
+    background-color: #FFFFFF;
+    background-image: none;
+    border-bottom: 1px solid #d2d2d2;
+    height: 95px;
+}
+
+#login_register_button{
+
+    height: 50px;
+    padding: 15px 15px;
+    font-size: 18px;
+    line-height: 20px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+#login_register_button:hover, #login_register_button:focus{
+    background-color: #30aca5;
+}
+
+#login_register_button:hover{
+    text-decoration: none;
+    /*color: #ffff;*/
+}
+
+.main_navigation{
+    display: inline-block;
+    padding: 14px 20px 15px 50px;
+    width: 75%;
+    background-color: #FFFFFF;
+}
+
+.navigation_li{
+    /*display: inline;*/
+    display: inline-block;
+    padding: 20px;
+    font-size: 16px;
+    font-weight: bold;
+
+}
+
+.navigation_li > a:hover{
+    color: #00DFC8;
+}
+
+.navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus,
+.navbar-inverse .navbar-toggle{
+    background-color: #30aca5;
+    border: none;
+}
+
+.navbar-header{
+    background-color: #FFFFFF;
+    background-image: none;
+    border-bottom: 1px solid #d2d2d2;
+    height: 95px;
+}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
+    border: none;
+}
+.navbar-toggle{
+    margin-top: 31px;
+}
+/*----login-----*/
+.login_screen{
+    font-size: 20px;
+    width: 50%;
+    float: left;
+    text-align: right;
+    padding-right: 20px;
+    border-right: 1px solid #EEEEEE;
+    text-transform: uppercase;
+}
+.login_screen .active {
+    border-bottom: 3px solid #00DFC8;
+}
+.login_screen a:hover, .login_screen a:focus {
+    border-bottom: 3px solid #00DFC8;
+}
+
+.registration_screen{
+    font-size: 20px;
+    width: 50%;
+    float: right;
+    text-align: left;
+    padding-left: 20px;
+    text-transform: uppercase;
+
+}
+.registration_screen .active{
+    border-bottom: 3px solid #00DFC8;    
+}
+.registration_screen a:hover, .registration_screen a:focus {
+    border-bottom: 3px solid #00DFC8;
+}
+
+.login_reigstration #step3{
+    margin: 0 9%;
+}
+.no_resize{
+    resize: none;
+}
+
+label.required::after{
+    color: #FF8932;
+    content: "*";
+    font-size: 18px;
+}
+
+.default_section .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+    height: 45px;
+    width: 100%;
+}
+.default_section .bootstrap-select .dropdown-toggle:focus {
+    outline: 0 none !important;
+    outline-offset: 0 !important;
+}
+.default_section .btn-default {
+    background-image: none;
+    background-repeat: repeat-x;
+    border-color: rgb(204, 204, 204);
+}
+
+.default_section .btn:hover,.default_section .btn:focus,.default_section .btn.focus {
+    color: rgb(51, 51, 51);
+    text-decoration: none;
+    box-shadow: 0;
+}
+.default_section .btn-group.open .dropdown-toggle {
+    box-shadow: 0 !important; 
+}
+.default_section .btn-group.open .dropdown-toggle {
+    box-shadow: none !important;
+}
+.default_section .btn-default:hover,.default_section .btn-default:focus,.default_section .btn-default.focus,
+.default_section .btn-default:active,.default_section .btn-default.active,
+.default_section .open > .dropdown-toggle.btn-default {
+    background-color: rgb(255, 255, 255);
+    border-color: rgb(204, 204, 204);
+    color: rgb(102, 102, 102);
+    box-shadow: none !important;
+}
+.default_section .btn {
+    -moz-user-select: none;
+    background-image: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    height: 45px;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    color: rgb(102, 102, 102);
+}
+
+.login_reigstration label{
+    text-align: left;
+    padding: 12px 0;
+    font-weight: normal;
+    font-style: normal;
+    display: block;
+}
+
+.f_label{
+    text-align: left;
+    padding: 15px 0px;
+}
+
+#email_forgot_password label{
+    color: rgb(102, 102, 102);
+    display: block;
+    font-size: 18px;
+    margin: 0 auto;
+    padding: 15px 0;
+    text-align: center;
+    width: 80%;
+}
+
+.forgot_password_label{
+    padding: 15px 0px;
+    font-size: 18px;
+    width: 85%;
+    text-align: center;
+    margin: 0 auto;
+    color: #666666;
+}
+
+.login_input{
+    height: 45px;
+    font-size: 18px;
+    color: #666666;
+}
+
+.select_input{
+    height: 45px;
+    font-size: 20px;
+}
+
+.form-control:-ms-input-placeholder {
+    font-size: 14px;
+}
+
+.form-control::-webkit-input-placeholder {
+    font-size: 14px;
+}
+
+.form-control:-moz-placeholder {
+    font-size: 14px;
+} 
+
+.form-control::-moz-placeholder {
+    font-size: 14px;
+}
+
+.login_with_email, .forgot_password, #login_again, .login_again{
+    font-size: 18px;
+    float: right;
+    padding: 0px 0px 20px 0px;
+}
+.login_with_mobile{
+    font-size: 18px;
+    float: right;
+    padding: 0;
+}
+
+.login_panel_heading, .forgot_password_heading, #login_form, #login_with_email_form, #register_step1, #register_step2, #register_step3, #register_step4, #enter_otp_mobile, #email_forgot_password {
+    width: 75%;
+    margin: 0 auto;
+}
+#register_form{
+    width: 100%;
+    margin: 0 auto;
+}
+
+/*--------registration-----*/
+.nav-tabs{
+    border: none;
+}
+.wizard {
+    margin: 20px auto;
+    background: #fff;
+}
+
+.wizard .nav-tabs {
+    position: relative;
+    margin: 40px auto;
+    margin-bottom: 0;
+    /*border-bottom-color: #e0e0e0;*/
+}
+
+.wizard > div.wizard-inner {
+
+    position: absolute;
+
+    width: 75%;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: 95px;
+    z-index: 1;
+}
+
+
+.plus_button, .minus_button {
+    height: 45px;
+    width: 45px;
+}
+
+.add_more .plus_button, .remove_more .minus_button {
+    /*margin-top: 20px;*/
+}
+
+.progress-bar-register{
+    background-color: linear-gradient(to bottom,#30aca5 0,#30aca5 100%);
+    background-image: linear-gradient(to bottom,#30aca5 0,#30aca5 100%);
+}
+
+/*
+
+.connecting-line {
+    height: 2px;
+    background: #e0e0e0;
+    width: 75%;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: 95px;
+    z-index: 1;
+    position: absolute;
+}*/
+
+
+
+
+.progress {margin-bottom:0}
+.progressbar {margin-bottom:0}
+.progress {
+    height: 2px;
+    width: 100%;
+}
+
+
+.wizard .nav-tabs > li.active > a, .wizard .nav-tabs > li.active > a:hover, .wizard .nav-tabs > li.active > a:focus {
+    color: #555555;
+    cursor: default;
+    border: 0;
+    border-bottom-color: transparent;
+}
+
+span.round-tab {
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    display: inline-block;
+    border-radius: 100px;
+    /*background: #fff;*/
+    border: 2px solid #e0e0e0;
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    text-align: center;
+    font-size: 25px;
+}
+span.round-tab i{
+    color:#DCDCDC;
+
+}
+
+.wizard li.done_step span.round-tab {
+    background: #FFFFFF;
+    border: 2px solid #30aca5;
+
+}
+.wizard li.done_step span.round-tab i{
+    color: #30aca5;
+}
+
+
+.wizard li.active span.round-tab {
+    background: #30aca5;
+    border: 2px solid #30aca5;
+
+}
+.wizard li.active span.round-tab i{
+    color: #FFFFFF;
+}
+
+span.round-tab:hover {
+
+    color: #30aca5;
+    border: 2px solid #30aca5;
+
+}
+
+.wizard .nav-tabs > li {
+    width: 25%;
+}
+
+.wizard li:after {
+    content: " ";
+    position: absolute;
+    left: 46%;
+    opacity: 0;
+    margin: 0 auto;
+    bottom: 0px;
+    border: 5px solid transparent;
+    border-bottom-color: #DCDCDC;
+
+    transition: 0.1s ease-in-out;
+}
+
+/*.wizard li.active:after {
+    content: " ";
+    position: absolute;
+    left: 46%;
+    opacity: 1;
+    margin: 0 auto;
+    bottom: 0px;
+    border: 10px solid transparent;
+    border-bottom-color: #5bc0de;
+}*/
+.otp_again{
+    font-size: 18px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0px 0px 20px 0px;
+}
+
+
+.wizard .nav-tabs > li a {
+    width: 70px;
+    height: 70px;
+    margin: 20px auto;
+    border-radius: 100%;
+    padding: 0;
+}
+
+.wizard .nav-tabs > li a:hover {
+    background: transparent;
+}
+
+.wizard .tab-pane {
+    position: relative;
+    padding-top: 50px;
+}
+
+.wizard h3 {
+    margin-top: 0;
+}
+.step1 .row {
+    margin-bottom:10px;
+}
+.step_21 {
+    border :1px solid #eee;
+    border-radius:5px;
+    padding:10px;
+}
+.step33 {
+    border:1px solid #ccc;
+    border-radius:5px;
+    padding-left:10px;
+    margin-bottom:10px;
+}
+.dropselectsec {
+    width: 68%;
+    padding: 6px 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: #333;
+    margin-left: 10px;
+    outline: none;
+    font-weight: normal;
+}
+.dropselectsec1 {
+    width: 74%;
+    padding: 6px 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: #333;
+    margin-left: 10px;
+    outline: none;
+    font-weight: normal;
+}
+.mar_ned {
+    margin-bottom:10px;
+}
+.wdth {
+    width:25%;
+}
+.birthdrop {
+    padding: 6px 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: #333;
+    margin-left: 10px;
+    width: 16%;
+    outline: 0;
+    font-weight: normal;
+}
+
+
+/* according menu */
+#accordion-container {
+    font-size:13px
+}
+.accordion-header {
+    font-size:13px;
+    background:#ebebeb;
+    margin:5px 0 0;
+    padding:7px 20px;
+    cursor:pointer;
+    color:#fff;
+    font-weight:400;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px
+}
+.unselect_img{
+    width:18px;
+    -webkit-user-select: none;  
+    -moz-user-select: none;     
+    -ms-user-select: none;      
+    user-select: none; 
+}
+.active-header {
+    -moz-border-radius:5px 5px 0 0;
+    -webkit-border-radius:5px 5px 0 0;
+    border-radius:5px 5px 0 0;
+    background:#F53B27;
+}
+.active-header:after {
+    content:"\f068";
+    font-family:'FontAwesome';
+    float:right;
+    margin:5px;
+    font-weight:400
+}
+.inactive-header {
+    background:#333;
+}
+.inactive-header:after {
+    content:"\f067";
+    font-family:'FontAwesome';
+    float:right;
+    margin:4px 5px;
+    font-weight:400
+}
+.accordion-content {
+    display:none;
+    padding:20px;
+    background:#fff;
+    border:1px solid #ccc;
+    border-top:0;
+    -moz-border-radius:0 0 5px 5px;
+    -webkit-border-radius:0 0 5px 5px;
+    border-radius:0 0 5px 5px
+}
+.accordion-content a{
+    text-decoration:none;
+    color:#333;
+}
+.accordion-content td{
+    border-bottom:1px solid #dcdcdc;
+}
+
+.placeholder_image{
+    margin: 0 auto;
+    text-align: center;
+}
+.big_image_placeholder {
+    background-color: #F1F1F1;
+    height: 170px;
+    width: 170px;
+    padding: 50px;
+    border: 2px solid #EBEBEB;
+    border-radius: 15px;
+}
+.registration_gender_placeholder.male{
+    float: left;
+    text-align: left;
+}
+.registration_gender_placeholder.female{
+    float: right;
+    text-align: right;
+}
+.gender_placeholder_male{
+    background: url(../images/icon_male_unselect.png) no-repeat;
+}
+.gender_placeholder_female{
+    background: url(../images/icon_female_unselect.png) no-repeat;
+}
+.gender_placeholder_icon{
+    height: 150px;
+    width: 150px;
+    border: 2px solid #EBEBEB;
+    border-radius: 15px;
+    display: inline-block;
+    background-position: 50% 50%;
+    position: relative;    
+}
+
+.registration_gender_placeholder{
+    display: block;
+    width: 160px;
+    position: relative;
+    padding: 0;
+    margin: 0 auto;
+}
+
+.registration_gender_placeholder .gender_placeholder_male .gender_text_male{
+    font-size: 20px;
+    color: #666666;
+    right: 0;
+    left: 0;
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+}
+
+.registration_gender_placeholder .gender_placeholder_female .gender_text_female {
+    font-size: 20px;
+    color: #666666;
+    right: 0;
+    left: 0;
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+}
+
+.pull-right .next-step{
+    width: 250px;
+    line-height: 38px;
+}
+.pull-left .prev-step {
+    width: 250px;
+    background-color: #DCDCDC;
+    color: #fff;
+    line-height: 38px;
+}
+.pull-left .prev-step:hover{
+    font-size: 20px;
+    height: 50px;
+    border: none;
+    border-radius: 11px;
+    text-transform: uppercase;
+    text-align: center;
+    background-color:#30aca5;
+    color: #FFFFFF;
+    cursor: pointer;
+
+}
+
+.wizard li.disabled span.round-tab{
+    background-color: #e0e0e0;
+}
+.wizard li.done_step.active span.round-tab{   
+    background-color: #30aca5;
+}
+.wizard li.done_step.disabled span.round-tab,
+.wizard li.done_step.disabled span.round-tab:hover{   
+    background-color: #FFFFFF;
+    border: 2px solid #30aca5;
+}
+
+.wizard li.disabled span.round-tab:hover{
+    border: 2px solid #DCDCDC;   
+}
+
+/*-------*/
+.wizard li.active span.round-tab .step_1_image, .wizard li.done_step.active span.round-tab .step_1_image{
+    background: url("../images/icon_mobile_lock_unselect.png") no-repeat 50% 50%;
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+}
+.wizard li.done_step span.round-tab .step_1_image{
+    background: url("../images/icon_mobile_lock_select.png") no-repeat 50% 50%;
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+/*------step_2-------*/
+.wizard li.active span.round-tab .step_2_image, .wizard li.done_step.active span.round-tab .step_2_image{
+    background: url("../images/icon_mobile_otp_unselect.png") no-repeat 50% 50%;
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+}
+.wizard li.disabled span.round-tab .step_2_image{
+    background: url("../images/icon_mobile_otp_unselect.png") no-repeat 50% 50%;
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+}
+
+
+.wizard li.done_step span.round-tab .step_2_image{
+    background: url("../images/icon_mobile_otp_select.png") no-repeat 50% 50%;
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+
+/*------step_3-------*/
+.wizard li.active span.round-tab .step_3_image, .wizard li.done_step.active span.round-tab .step_3_image{
+    background: url("../images/icon_user_unselect.png") no-repeat 50% 50%;
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+}
+
+.wizard li.disabled span.round-tab .step_3_image{
+    background: url("../images/icon_user_unselect.png") no-repeat 50% 50%;
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+}
+
+.wizard li.done_step span.round-tab .step_3_image{
+    background: url("../images/icon_user_select.png") no-repeat 50% 50%;
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+
+/*------step_4-------*/
+.wizard li.active span.round-tab .step_4_image, .wizard li.done_step.active span.round-tab .step_4_image{
+    background: url("../images/icon_hospital_unselect.png") no-repeat 50% 50%;
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;   
+}
+
+.wizard li.disabled span.round-tab .step_4_image{
+    background: url("../images/icon_hospital_unselect.png") no-repeat 50% 50%;
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+}
+.wizard li.done_step span.round-tab .step_4_image{
+    background: url("../images/icon_hospital_select.png") no-repeat 50% 50%;
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+/*--------registration-----*/
+.remove_more .nolabel .f_label{
+    margin-top: 0px;
+}
+.extra_session_time_of_clinic .remove_more .nolabel{
+    margin-top: 0px;
+    padding: 0px;
+}
+
+.extra_session_time_of_clinic .nolabel .f_label{
+    padding: 0px;
+}
+.remove_more .nolabel .minus_button{
+    margin: 0px;
+    padding: 0px;
+}
+
+.extra_clinic_services .remove_more .nolabel .f_label{
+    margin : 0px;
+    padding: 0px;
+}
+
+.extra_clinic_services .nolabel .f_label{
+    padding: 0px;
+}
+
+.extra_session_time_of_clinic, .extra_clinic_services{
+    padding-top: 15px;
+}
+.extra_registration_details .nolabel .f_label, .extra_clinic_services .nolabel .f_label{
+    padding-top: 0px;
+}
+.form-group.has-error > .help-block{
+    text-align: left !important;
+    float: left !important;
+    clear: both;
+    margin-bottom: 0px !important;
+}
+.provider_details_reg_section{
+    margin-top: 0;
+    padding-left: 15px;
+}
+.form-control {
+    border-radius: 10px;
+}
+@media(max-width:1199px){
+    .gender_placeholder_icon{
+        height: 125px;
+        width: 125px;
+    }
+
+    .registration_gender_placeholder{
+        width: 125px;
+    }
+}
+
+@media(max-width:1024px){
+
+    .login_panel_heading, .forgot_password_heading, #login_form, #login_with_email_form, #register_step1, #register_step2, #register_step3, #register_step4{
+        width: 100%;
+    }
+    .forgot_password_label{
+        width: 100%;   
+    }
+
+    /*    .remove_button{
+            z-index: 2;
+        }*/
+    /*    .add_more_button{
+            z-index: 2;
+        }*/
+
+
+}
+
+@media(max-width:991px){
+    .login_reigstration #step3{
+        margin: 0 5%;
+    }
+    .main_navigation{
+        padding: 14px 0px 15px 0px;
+        width: 100%;
+        display: block;
+    }
+    .site_logo {
+        height: 46px;
+        padding: 20px 0px 0px 0px;
+        margin: 0px;
+    }
+
+    #email_forgot_password {
+        width: 100%;
+    }
+}
+
+
+@media(max-width:767px){
+
+    /*---navigation--*/
+    .navigation_li{
+        width: 100%;
+    }
+
+    .main_navigation{
+        width: 100%;
+        text-align: center;
+    }
+
+    .main_navigation > li{
+        float: none;
+    }
+
+    .pull-right .next-step, .pull-left .prev-step{
+        width: 150px;
+    }
+
+    .extra_registration_details > div{
+        padding-top: 10px;
+    }
+
+    .extra_edu_qualification {
+        margin-top: 135px;
+    }
+
+    .extra_edu_qualification > div{
+        padding-top: 5px;
+    }
+    .extra_registration_details{
+        z-index: 1;
+    }
+
+    .extra_registration_details.clearfix{
+        margin-top: 130px;
+    }
+
+    .nolabel .f_label{
+        padding: 0px;
+    }
+    .registration_gender_placeholder.male, .registration_gender_placeholder.female {
+        float: left;
+        text-align: left;
+    }
+
+    .registration_gender_placeholder{
+        width: 140px;
+    }
+    .big_image_placeholder {
+        float: none;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .login_reigstration label {
+        padding: 0;
+    }
+    .provider_details_reg_section{
+        margin-top: 20px;
+        padding-left: 0;
+    }
+    #email_forgot_password {
+        width: 80%;
+    }
+}
+
+@media( max-width : 585px ) {
+
+    .wizard {
+        width: 90%;
+        height: auto !important;
+    }
+
+    span.round-tab {
+        font-size: 16px;
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .wizard .nav-tabs > li a {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .wizard li.active:after {
+        content: " ";
+        position: absolute;
+        left: 35%;
+    }
+    .wizard li.done_step span.round-tab .step_1_image,
+    .wizard li.done_step span.round-tab .step_2_image,
+    .wizard li.done_step span.round-tab .step_3_image,
+    .wizard li.done_step span.round-tab .step_4_image,
+    .wizard li.disabled span.round-tab .step_1_image,
+    .wizard li.disabled span.round-tab .step_2_image,
+    .wizard li.disabled span.round-tab .step_3_image,
+    .wizard li.disabled span.round-tab .step_4_image,
+    .wizard li.active span.round-tab .step_1_image, .wizard li.done_step.active span.round-tab .step_1_image,
+    .wizard li.active span.round-tab .step_2_image, .wizard li.done_step.active span.round-tab .step_2_image,
+    .wizard li.active span.round-tab .step_3_image, .wizard li.done_step.active span.round-tab .step_3_image,
+    .wizard li.active span.round-tab .step_4_image, .wizard li.done_step.active span.round-tab .step_4_image{
+        background-size: 32px 32px;
+    }
+    .wizard > div.wizard-inner{
+        top: 87px;
+        width: 73%;
+    }
+}
+
+@media(max-width:480px){
+    .registration_gender_placeholder .gender_placeholder_female .gender_text_female,
+    .registration_gender_placeholder .gender_placeholder_male .gender_text_male{
+        font-size: 18px;
+    }
+    #email_forgot_password {
+        width: 100%;
+    }
+}
+
+@media(max-width:375px){
+
+    .registration_gender_placeholder .gender_placeholder_male .gender_text_male,
+    .registration_gender_placeholder .gender_placeholder_female .gender_text_female{
+        font-size: 18px;
+        bottom: 0;
+    }
+    .gender_placeholder_male, .gender_placeholder_female{
+        width: 100px;
+        height: 100px;        
+    }
+    .registration_gender_placeholder {
+        width: 110px;
+    }
+    .pull-right .next-step, .pull-left .prev-step{
+        width: 130px;
+    }
+}

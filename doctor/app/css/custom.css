@@ -1,0 +1,341 @@
+#drug_generic_id_chosen .chosen-choices {
+    height: auto !important;
+}
+
+select.localytics-chosen {
+    /*display: block !important;*/
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    height: 50px;
+}
+
+.border-red {
+    border: 1px solid red;
+}
+
+.chosen-container.chosen-container-single,
+.chosen-container.chosen-container-multi {
+    width: 100% !important;
+    border: 1px solid #f1f1f1;
+    border-radius: 4px;
+    color: #555;
+}
+
+.chosen-container-single .chosen-single {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    padding: 2px 2px 2px 0;
+    height: 40px !important;
+    /* box-shadow: 0 0 3px white inset, 0 1px 1px rgba(0, 0, 0, 0.1); */
+    color: #444;
+    text-decoration: none;
+    white-space: nowrap;
+    line-height: 24px;
+    background: none !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+}
+
+.chosen-container-multi .chosen-choices {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    padding: 3px 2px 1px 8px;
+    min-height: 40px !important;
+    /* box-shadow: 0 0 3px white inset, 0 1px 1px rgba(0, 0, 0, 0.1); */
+    color: #444;
+    text-decoration: none;
+    white-space: nowrap;
+    line-height: 24px;
+    background: none !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+}
+
+.chosen-container-single .chosen-single span {
+    right: 0px;
+    left: 10px;
+}
+
+.chosen-container-single .chosen-single div b {
+    background: none !important;
+}
+
+.chosen-container-single .chosen-single abbr {
+    background: none !important;
+}
+
+.ui-state-focus {
+    border: none !important;
+    background: none !important;
+    font-size: 15px;
+}
+
+.ui-menu-item {
+    padding: 3px;
+
+}
+
+.ui-menu {
+    /*max-width: 274px;*/
+    font-size: 15px;
+    max-height: 250px;
+    overflow: auto;
+}
+
+.ui-menu-item:hover {
+    background-color: #3773D5;
+    color: white;
+    font-size: 15px;
+}
+
+.ui-menu-item:hover a {
+    color: white;
+    font-size: 15px;
+}
+
+.clock_button {
+    background: #30ACA5;
+    color: #fff;
+}
+
+.clock_button:hover,
+.clock_button:focus {
+    background: #30ACA5;
+    color: #fff;
+}
+
+.my-animation.ng-enter {
+    -webkit-animation: flipInY 1s;
+    -moz-animation: flipInY 1s;
+    animation: flipInY 1s;
+}
+
+.my-animation.ng-leave {
+    -webkit-animation: flipOutY 1s;
+    -moz-animation: flipOutY 1s;
+    animation: flipOutY 1s;
+}
+
+.date-picker-menu .btn-info:active,
+.btn-info.active {
+    background-color: #30ACA5;
+    border-color: #30ACA5;
+}
+
+.date-picker-menu .btn-info:active,
+.btn-info.active .text-info {
+    color: #fff;
+}
+
+.date-picker-menu .btn-default:active,
+.btn-default.active {
+    background-color: #30ACA5;
+    border-color: #30ACA5;
+}
+
+.date-picker-menu .btn-default:active,
+.btn-default.active .text-info {
+    color: #fff;
+}
+
+/* The Modal (background) */
+#fullscreen_img_modal,
+#fullscreen_login_img_modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 10001;
+    /* Sit on top */
+    padding-top: 100px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.9);
+    /* Black w/ opacity */
+}
+
+/* Modal Content (Image) */
+#fullscreen_img_modal .modal-content,
+#fullscreen_login_img_modal .modal-content {
+    margin: auto;
+    display: block;
+    max-width: 1200px;
+}
+
+
+/* Add Animation - Zoom in the Modal */
+#fullscreen_img_modal .modal-content,
+#caption,
+#fullscreen_login_img_modal .modal-content,
+#caption {
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+#fullscreen_img_modal .modal-backdrop {
+    display: none !important;
+}
+
+@keyframes zoom {
+    from {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
+    }
+}
+
+/* The Close Button */
+#fullscreen_img_modal .close,
+#fullscreen_login_img_modal .close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    opacity: 1;
+}
+
+#fullscreen_img_modal .close:hover,
+#fullscreen_img_modal .close:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#fullscreen_login_img_modal .close:hover,
+#fullscreen_login_img_modal .close:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px) {
+    #fullscreen_img_modal .modal-content {
+        width: 100%;
+    }
+
+    #fullscreen_login_img_modal .modal-content {
+        width: 100%;
+    }
+}
+
+#patient_modal .icon_image_right {
+    top: 2px;
+}
+
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+    width: 134px;
+    font-family: gotham_book !important;
+    font-size: 12px !important;
+    padding-top: 7px !important;
+}
+
+.chosen-disabled {
+    opacity: 1 !important;
+}
+
+
+#add_appointment .chosen-container .chosen-drop,
+#edit_appointment .chosen-container .chosen-drop {
+    border-bottom: 0;
+    border-top: 1px solid #aaa;
+    top: auto;
+    bottom: 40px;
+}
+
+.clinic_img_msg {
+    /* width: 170px;
+    text-align: center; */
+}
+
+#overlay {
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 99999;
+}
+
+.sa-confirm-button-container .confirm {
+    background-color: #30ACA5 !important;
+}
+
+.uib-daypicker .btn-default[disabled] {
+    background-color: #d1d1d1;
+}
+
+.uib-daypicker .btn-default[disabled] span {
+    color: black;
+}
+
+.btn-disabled:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.global_search {
+    float: right;
+}
+.import-ready-for-import{width: 133px !important;}
+
+.patient-tool-image-box{
+    padding:0;
+	position: relative;
+    margin: 5px;
+    border: 2px solid #30aca5;
+    float: left;
+    width: 180px;
+	min-height: 220px;
+	max-height: 220px;
+    transition-duration: 0.4s;
+    border-radius: 5px;
+    animation: winanim 0.5s ;
+-webkit-backface-visibility:visible;
+    backface-visibility:visible;
+    box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 5px 8px 0 rgba(0,0,0,.14),0 1px 14px 0 rgba(0,0,0,.12)
+}
+
+.patient-tool-image-box:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+}
+
+.patient-tool-image-box img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+	max-height: 210px;
+}
+
+.patient-tool-image-box .desc {
+    padding: 5px;
+    text-align: center;
+    font-size: 90%;
+    background: #d7f9f6;
+    color:black;
+	position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+.generic-reset {float: right;}
+.generic-reset i {color: red;}
+.password-fa-icon {float: right;margin-top: -33px;right: 63px;font-size: 20px;color: #30aca5;cursor: pointer;position: absolute;}

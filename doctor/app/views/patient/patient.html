@@ -1,0 +1,1434 @@
+<link rel="stylesheet" ng-href="app/css/patient_visit.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/communication.css?{{getVer(3)}}" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+<div class="main_patient_div col-lg-12 col-md-12 col-sm-12 col-xs-12 common_padding_all patient_visit" ng-init="getInitAllDataForBrand()">
+    <div class="common_hr clearfix">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span ng-if="current_clinic">{{current_clinic.clinic_name | capitalize}}</span>
+                    <span><img src="app/images/down_arrow.png" /></span>
+                </button>
+                <ul class="dropdown-menu clinic_drop_down">
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinic(clinic)"><a href="">{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul>
+                <div class="appointment_list_width_tablet_view" ng-if="current_clinic && current_doctor">
+                    <div class="appointment_header_container font_color_1 background_color_3">
+                        <div class="patient_list_width_tablet_view gotham_medium">
+                            <div class="scroll_div" when-scrolled="getPatientList()">
+                                <div class="recent_list_single">
+                                    <p ng-if="patientFilter == 2">Recent</p>
+                                    <p ng-if="patientFilter == 1">Today</p>
+                                    <p ng-if="patientFilter == 3">All</p>
+                                </div>
+                                <div class="recent_list_all">
+                                    <p>
+                                        <span class="cursor_pointer" ng-click='changePatientListTab(2, true);'>Recent</span>
+                                        <span class="bar">|</span>
+                                        <span class="cursor_pointer" ng-click='changePatientListTab(1, true);'>Today</span>
+                                        <span class="bar">|</span>
+                                        <span class="cursor_pointer" ng-click='changePatientListTab(3, true);'>All</span>
+                                    </p>
+                                </div>
+                                <div ng-repeat="patient in patientList track by $index" ng-click="changePatientDetails(patient,$event)">
+                                    <div class="display_information">
+                                        <div class="user_side_image">
+                                            <img ng-src="{{patient.user_photo_filepath}}" ng-show="patient.user_photo_filepath"
+                                                class="common_btn_radius" />
+                                            <img ng-src="app/images/user_image_placeholder.png" ng-show="!patient.user_photo_filepath"
+                                                class="common_btn_radius" />
+                                        </div>
+                                        <p class="nav-text" title="{{patient.is_done == 1 ? 'Marked As Appointment Completed' : 'In Pending Appointment List'}}" ng-class="patient.is_done == 1 ? 'visited-patient' : ''"><i ng-class="patient.is_done == 1 ? 'fa fa-check-circle' : 'fa fa-circle'" aria-hidden="true"></i>&nbsp;{{patient.name}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="second_width common_heading_height patientflex">
+            <div class="col-md-2 col-sm-1 col-xs-1 mx100">
+                <h4 class="page_title">Patient</h4>
+            </div>
+            <div class="col-md-10 col-sm-12 col-xs-12 mx110 no_padding patient_detail_container">
+                <div class="pull-left patient_name_container">
+                    <div class="user_image_header pull-left">
+                        <img ng-src="{{current_patient.user_photo_filepath}}" ng-show="current_patient.user_photo_filepath"
+                            class="common_btn_radius" />
+                        <img ng-src="app/images/user_image_placeholder.png" ng-show="!current_patient.user_photo_filepath"
+                            class="common_btn_radius" />
+                    </div>
+                    <div class="pull-left">
+                        <p class="font_bold">
+                            <a class="cursor_pointer" title="Click to Update Patient Details" ng-click='edit_patient_detail_popup()' class="">{{current_patient.name}}</a>
+                        </p>
+                        <p ng-if="current_patient.user_patient_id == undefined || current_patient.user_patient_id == ''">{{current_patient.user_unique_id}}</p>
+                        <p ng-if="current_patient.user_patient_id != undefined && current_patient.user_patient_id != ''">{{current_patient.user_patient_id}}</p>
+                    </div>
+                </div>
+                <div class="pull-left patient_description">
+                    <p class="font_bold">{{current_patient.user_details_dob | ageFilter}}<span ng-if="current_patient.user_details_dob.length > 0">, </span> {{current_patient.weight}} {{current_patient.bmi}}<span title="Smoking">{{current_patient.smoking}}</span><span title="Alcohol">{{current_patient.alcohole}}</span></p>
+                    <p class="kco-p-tag" ng-if="checkPermission(PATIENT_KCO, VIEW)"><span ng-if="current_patient.user_details_dob.length > 0">K/C/O
+                            : </span>
+                        <span class="font_bold" ng-repeat="(key, tempKCO) in current_patient.clinical_notes_reports_kco | limitTo:5">
+                            <a ng-click="openKCODetail(tempKCO)" class="cursor_pointer" title="{{tempKCO.kco}}">{{tempKCO.kco}}</a>
+                            <span ng-if="key != (current_patient.clinical_notes_reports_kco.length - 1)">,</span>
+                        </span>
+                    </p>
+					<!-- <button type="button" style="float: right;position: relative;bottom: 20px;" ng-click="GenerateURL()">Generate URL</button> -->
+                </div>
+
+                <div class="pull-left appointment_description_container">
+                    <div class="appointment_description">
+                        <p class="font_color_6">Appointment : 
+                            <span class="font_bold">{{current_appointment_date_obj.appointment_type_name ? current_appointment_date_obj.appointment_type_name : current_patient.appointment_type}}</span>
+                        </p>
+                        <p class="font_color_6">Payment Status :
+                            <span class="font_bold">{{current_appointment_date_obj.appointment_payment_state == 1 ? 'Accepted' : 'Pending'}}</span>
+                        </p>
+                    </div>
+					<div class="pull-left appointment_description"><!-- data-toggle="tooltip" ng-mouseover="openToolTip('11')" title="{{call_tooltip}}" -->
+						<label data-toggle="modal" ng-if="!isCallGoingOn && current_appointment_date_obj.appointment_type == 1" class="bg_icon_images call_visit"></label>
+                        <label data-toggle="modal" ng-if="!isCallGoingOn && current_appointment_date_obj.appointment_type == 4" class="bg_icon_images call_image_disable"></label>
+                        <label data-toggle="modal" ng-if="!isCallGoingOn && (!current_appointment_date_obj.is_editable || current_appointment_date_obj.call_end_date_time != '') && current_appointment_date_obj.appointment_type == 5" class="bg_icon_images video_call_image_disable"></label>
+                        <label title="Video Call" data-toggle="modal" ng-if="isCallGoingOn" class="bg_icon_images active_video_call_image" ng-click="gotoVideoCall()"></label>
+                        <label data-toggle="modal" ng-if="!isCallGoingOn && current_appointment_date_obj.appointment_type == 5 && current_appointment_date_obj.call_end_date_time == '' && current_appointment_date_obj.is_editable" class="bg_icon_images" ng-class="current_appointment_date_obj.is_call_started_from_patient ? 'active_video_call_image' : 'video_call_image'" ng-click="initVideoCall()"></label>
+						<!-- ng-click="showAlertForDev()" call_visit / call_image / call_home -->
+					</div>
+				</div>
+				<!-- <div class="pull-left appointment_description tooltip_custom_10" ng-mouseover="openToolTip('10')"
+                    data-toggle="tooltip" title="{{call_tooltip}}">
+                    <input ng-click="showAlertForDev()" type="button" class="new_common_button call_button" value="Call" />
+                </div>
+				-->
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="appointment_graph_width common_border" ng-if="checkPermission(PATIENT_RIGHT_PANEL, VIEW)">
+		<div ng-show="isVideoCall" class="tele_consultation_video_call_box"> 
+			<div id="videos" style="position: relative;width: 100%;height: 100%;margin-left: auto;margin-right: auto;">
+				<div id="subscriber" style="position: absolute;left: 0;top: 0;width: 100%;height: 100%;z-index: 10;">
+					<label class="text-center" style="position: relative;top: 35%;left: 20%;" id="lblPatientMsg" ng-show="isPatientNotConnected">Patient is yet to start the teleconsultation.<br/>Please wait.</label>
+					<label class="text-center" style="position: absolute;top: 40%;left: 22%;" id="lblPatientMsg1" ng-show="isPatientDisconnected">Patient disconnected from the video call.</label>
+				</div>
+				<div id="publisher" style="position: fixed; width: 100px;height: 100px;bottom: 10px;left: 68%;z-index: 100;border: 3px solid white;border-radius: 3px;"></div>
+				<div style="z-index: 100;position: absolute;width: 100%;top: 5%; left: 40%;">
+				   <button title="Mute Audio" type="button" id="btnMute" ng-show="!isMute" style="height: 30px;width: 35px;background-color: #d8faf6;border: 1px solid #30aca4;"><i class="fas fa-microphone"></i></button>
+				   <button title="UnMute Audio" type="button" id="btnUnMute" ng-show="isMute" style="height: 30px;width: 35px;background-color: #30aca5;border: none;"> <i class="fas fa-microphone-slash"></i></button>
+				   <button title="Disable Video" type="button" id="btnDisableVideo" ng-show="!isVideoMute" style="height: 30px;width: 35px;background-color: #d8faf6;border: 1px solid #30aca4;"><i class="fa fa-video-camera"></i></button>
+				   <button title="Enable Video" type="button" id="btnEnableVideo" ng-show="isVideoMute" style="height: 30px;width: 35px;background-color: #30aca5;border: none;"><i class="fa fa-video-slash"></i></button>
+				   <button title="End Call" type="button" id="btnEndCall" style="height: 30px;width: 35px;background-color: #30aca5;border: none;" ng-click="endVideoCall()"><i class="fa fa-phone-slash"></i></button>
+				</div>
+				<div style="z-index: 100;position: absolute;top: 5%;left: 5%;">
+					<button title="Minimize" type="button" id="btnMinimize" style="height: 30px;width: 35px;background-color: #d8faf6;border: 1px solid #30aca4;" ng-click="minimizeVideoCall()"><i class="fas fa-window-minimize"></i></button>
+				</div>
+			</div>
+		</div>
+        <div class="clearfix"></div>
+        <div class="appointments_vitals" ng-if="patient_report_tab_index == 1 && patient_report_main_tab == 1">
+            <div class="clearfix background_color_1">
+                <div class="appointment_notes_width text-center">
+                    <h4 class="font_size_20 white_color">Vitals Monitoring</h4>
+					<!-- <button type="button" style="position: absolute;left: 72%;" ng-click="gotoVideoCall()" ng-show="isCallGoingOn">Video Call</button> -->
+                </div>
+                <div class="appointment_tabs_width text-center">
+                    <ul role="tablist" class="nav nav-pills gotham_medium m_top_5 tabs_items_1">
+                        <li role="presentation" class="nav-item " ng-class="vital_filter_flag == 1? 'active':''"
+                            ng-click="changeTableFlag(1)">
+                            <a href="" data-toggle="pill" class="nav-link">All</a>
+                        </li>
+                        <li role="presentation" class="nav-item " ng-class="vital_filter_flag == 2? 'active':''"
+                            ng-click="changeTableFlag(2)">
+                            <a href="" data-toggle="pill" class="nav-link">Doctor</a>
+                        </li>
+                        <li role="presentation" class="nav-item" ng-class="vital_filter_flag == 3 ? 'active':''"
+                            ng-click="changeTableFlag(3)">
+                            <a href="" data-toggle="pill" class="nav-link">Patient</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div id="vitals-monitoring-fullscreen-mode"  style="background:#fff; color:inherit;" class="tab-content" ng-if="checkPermission(VITAL_MODULE, VIEW)">
+                <div id="all" class="tab-pane fade in active height_110" ng-if="patient_report_tab_index == 1" slim-scroll>
+                    <div class="col-md-12 col-sm-12 col-xs-12 padding_0 text-center m_top_10">
+                        <ul class="nav nav-pills medicine_details" role="tablist">
+                            <li class="nav-item cursor_pointer" ng-class="active_vital_name=='WT' ? 'active' : ''" role="presentation" ng-click="show_vital_chart('WT')">
+                                <a class="nav-link" data-toggle="pill" title="Weight(kg)">WT</a>
+                            </li>
+                            <li class="nav-item cursor_pointer" ng-class="active_vital_name=='PR' ? 'active' : ''" role="presentation" ng-click="show_vital_chart('PR')">
+                                <a class="nav-link" data-toggle="pill" title="Pulse Rate/Min">PR</a>
+                            </li>
+                            <li class="nav-item cursor_pointer" ng-class="active_vital_name=='RR' ? 'active' : ''" role="presentation" ng-click="show_vital_chart('RR')">
+                                <a class="nav-link" data-toggle="pill" title="Resp.Rate/Min">RR</a>
+                            </li>
+                            <li class="nav-item cursor_pointer" ng-class="active_vital_name=='SpO2' ? 'active' : ''" role="presentation" ng-click="show_vital_chart('SpO2')">
+                                <a class="nav-link" data-toggle="pill" title="Sp02(%)">SpO<sub>2</sub></a>
+                            </li>
+                            <li class="nav-item cursor_pointer" ng-class="active_vital_name=='BP' ? 'active' : ''" role="presentation" ng-click="show_vital_chart('BP')">
+                                <a class="nav-link" data-toggle="pill" title="Blood Pressure(mm Hg)">BP</a>
+                            </li>
+                            <li class="nav-item cursor_pointer" ng-class="active_vital_name=='TEMP' ? 'active' : ''" role="presentation" ng-click="show_vital_chart('TEMP')">
+                                <a class="nav-link" data-toggle="pill" title="Temperature">TEMP</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 padding_0"> 
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <ul class="nav nav-pills gotham_medium tabs_items font_color_1" role="tablist">
+                                <li class="nav-item active" role="presentation">
+                                    <a class="nav-link" data-toggle="pill" data-target="#all_table_1" href="">Table</a>
+                                </li>
+								<li class="nav-item" role="presentation">
+									<a class="nav-link" data-toggle="pill" data-target="#all_graph_1" href="">Graph</a>
+								</li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="hide nav-link btnfc vital-full-screen" href="javascript:void(0);" ng-click="fullScreenVital(vital_filter_flag, $event)">Normal</a>
+                                    <a class="nav-link btnfc" href="javascript:void(0);" ng-click="fullScreenVital(vital_filter_flag, $event)" onclick="setFullScreenMode('vitals-monitoring-fullscreen-mode',this);">Full Screen</a>
+                                </li>
+                            </ul>
+                            <!-- <label class="print_icon_images" ng-click="export('vital-table-data')"></label> -->
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-4 text-right">
+                            <ul class="pagination no_margin">
+                                <li><a href="" ng-click="getTableData('prev')"><img alt="previous" src="app/images/prev_arrow.png"></a></li>
+                                <li><a href="" ng-click="getTableData('next')"><img alt="previous" src="app/images/next_arrow.png"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="tab-content m_left_25">
+                        <div id="all_table_1" class="tab-pane fade in active">
+                            <div class="col-md-12 col-sm-12 col-xs-12 padding_0">
+                                <div class="table-responsive">
+                                    <table ng-if="vital_table_data.length > 0" id="vital-table-data" class="table table-bordered font_color_3 gotham_light brLeft">
+                                        <colgroup>
+                                            <col>
+                                            <col width="1">
+                                            <col width="1">
+                                        </colgroup>
+                                        <thead class="background_color_3 font_color_1">
+                                            <tr>
+                                                <th></th>
+                                                <th class="text-center {{vital_head_class}}" ng-repeat="vitalTblObj in vital_table_data track by $index" title="{{((vitalTblObj.user_type==2) ? docPrefix : '') + vitalTblObj.user_name}}">
+                                                    {{vitalTblObj.vital_report_date | date:'dd'}}-{{vitalTblObj.vital_report_date | date:'MMM'}}
+                                                    <br/>({{ vitalTblObj.vital_report_date | date:'y'}})
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="font_color_1"><span class="cursor_pointer" title="Weight(kg)">WT</span></td>
+                                                <td class="text-center" ng-repeat="vitalTblObj in vital_table_data track by $index">
+                                                    <span ng-if="vitalTblObj.user_type == 1" class="patient_added_record">{{vitalTblObj.vital_report_weight | PoundToKG}}</span>
+                                                    <span ng-if="vitalTblObj.user_type == 2" class="doctor_added_record">{{vitalTblObj.vital_report_weight | PoundToKG}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font_color_1"><span class="cursor_pointer" title="Pulse Rate/Min">PR</span></td>
+                                                <td class="text-center" ng-repeat="vitalTblObj in vital_table_data track by $index">
+                                                    <span ng-if="vitalTblObj.user_type == 1" class="patient_added_record">{{vitalTblObj.vital_report_pulse}}</span>
+                                                    <span ng-if="vitalTblObj.user_type == 2" class="doctor_added_record">{{vitalTblObj.vital_report_pulse}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font_color_1"><span class="cursor_pointer" title="Resp.Rate/Min">RR</span></td>
+                                                <td class="text-center" ng-repeat="vitalTblObj in vital_table_data track by $index">
+                                                    <span ng-if="vitalTblObj.user_type == 1" class="patient_added_record">{{vitalTblObj.vital_report_resp_rate}}</span>
+                                                    <span ng-if="vitalTblObj.user_type == 2" class="doctor_added_record">{{vitalTblObj.vital_report_resp_rate}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font_color_1"><span class="cursor_pointer" title="Sp02(%)">SpO<sub>2</sub>(%)</span></td>
+                                                <td class="text-center" ng-repeat="vitalTblObj in vital_table_data track by $index">
+                                                    <span ng-if="vitalTblObj.user_type == 1" class="patient_added_record">{{vitalTblObj.vital_report_spo2}}</span>
+                                                    <span ng-if="vitalTblObj.user_type == 2" class="doctor_added_record">{{vitalTblObj.vital_report_spo2}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font_color_1"><span class="cursor_pointer" title="Blood Pressure(mm Hg)">BP</span></td>
+                                                <td class="text-center" ng-repeat="vitalTblObj in vital_table_data track by $index">
+                                                    <span ng-if="vitalTblObj.user_type == 1" class="patient_added_record">{{vitalTblObj.vital_report_bloodpressure_systolic}}</span>
+                                                    <span ng-if="vitalTblObj.user_type == 2" class="doctor_added_record">{{vitalTblObj.vital_report_bloodpressure_systolic}}</span>
+                                                    <span ng-if="vitalTblObj.vital_report_bloodpressure_systolic">/</span>
+                                                    <span title="{{vitalTblObj.vital_bloodpressure_taken}}" ng-if="vitalTblObj.user_type == 1" class="patient_added_record">{{vitalTblObj.vital_report_bloodpressure_diastolic}}</span>
+                                                    <span title="{{vitalTblObj.vital_bloodpressure_taken}}" ng-if="vitalTblObj.user_type == 2" class="doctor_added_record">{{vitalTblObj.vital_report_bloodpressure_diastolic}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font_color_1"><span class="cursor_pointer" title="Temperature">TEMP</span></td>
+                                                <td class="text-center" ng-repeat="vitalTblObj in vital_table_data track by $index">
+                                                    <span ng-if="vitalTblObj.vital_report_temperature != '' && vitalTblObj.vital_report_temperature_type == 1" title="{{vitalTblObj.temp_taken}}">
+                                                        <span ng-if="vitalTblObj.user_type == 1" class="patient_added_record">
+                                                            {{vitalTblObj.vital_report_temperature}} (&#8457;)
+                                                        </span>
+                                                        <span ng-if="vitalTblObj.user_type == 2" class="doctor_added_record">
+                                                            {{vitalTblObj.vital_report_temperature}} (&#8457;)
+                                                        </span>
+                                                    </span>
+                                                    <span ng-if="vitalTblObj.vital_report_temperature != '' && vitalTblObj.vital_report_temperature_type == 2" title="{{vitalTblObj.temp_taken}}">
+                                                        <span ng-if="vitalTblObj.user_type == 1" class="patient_added_record">
+                                                            {{vitalTblObj.vital_report_temperature | FCConvert : 1}} (&#8451;)
+                                                        </span>
+                                                        <span ng-if="vitalTblObj.user_type == 2" class="doctor_added_record">{{vitalTblObj.vital_report_temperature | FCConvert : 1}} (&#8451;)
+                                                        </span>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <p ng-if="vital_table_data.length == 0" class="m_top_20 title1 text-center"> No record found</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="all_graph_1" class="tab-pane fade">
+                            <div ng-if="isVitalChartActive" id="line-chart" ng-init="renderLineChart(vital_table_data, active_vital_name)" class="col-md-12 col-sm-12 col-xs-12 padding_0 text-center m_top_15">
+								<div class="panel panel-default">
+									<div class="panel-heading"><b>{{chart_heading}}</b></div>
+									<div class="panel-body">
+										<canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-click="onClick" chart-hover="onHover" chart-series="series" chart-options="options" chart-dataset-override="datasetOverride" chart-colors="colors" height="100%"></canvas>
+                                        <p class="text-center m_top_20 title1">x-axis: Days | y-axis: {{chart_heading}}</p>
+									</div>
+								</div>
+                            </div>
+                            <p ng-if="!isVitalChartActive" class="text-center m_top_20 title1"> No record found</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="appointments_clinicalnotes " ng-if="patient_report_tab_index == 2 && patient_report_main_tab == 1">
+            <div class="col-md-12 col-sm-12 col-xs-12 background_color_1 padding_0">
+                <div class="appointment_notes_width text-center">
+                    <h4 class="font_size_20 white_color">Clinical Notes</h4>
+                </div>
+                <div class="appointment_tabs_width text-center">
+                    <ul role="tablist" class="nav nav-pills gotham_medium m_top_5 tabs_items_1">
+                        <li role="presentation" class="nav-item active">
+                            <a href="" data-target="#app_clinical_notes" data-toggle="pill" class="nav-link p_tb_lr"
+                                ng-click="getTableDataForNotes();">Clinical Notes</a>
+                        </li>
+                        <li role="presentation" class="nav-item">
+                            <a href="" data-target="#app_health_analytics" ng-click="getTableDataHealthAnalytics(true)"
+                                data-toggle="pill" class="nav-link p_tb_lr">Health Analytics</a>
+                        </li>
+                        <li role="presentation" class="nav-item">
+                            <a href="" data-target="#app_reports" data-toggle="pill" ng-click="getTableDataReports()"
+                                class="nav-link p_tb_lr">Reports</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tab-content" id="patient-analytics-fullscreen-mode" style="background:#fff; color:inherit;">
+                <div id="app_clinical_notes" class="height_110 tab-pane fade in active" slim-scroll>
+                    <div class="col-md-12 col-sm-12 col-xs-12 m_top_15">
+                        <ul class="pagination no_margin" ng-if="notes_table_data.length > 0">
+                            <li>
+                                <a href="" ng-click="getTableDataForNotes('prev')"><img alt="previous" src="app/images/prev_arrow.png"></a></li>
+                            <li ng-repeat="(key, noteDateObj) in notes_table_data  track by $index" ng-class="noteDateObj.clinical_notes_reports_id == detail_notes.clinical_notes_reports_id ? 'active' : ''">
+                                <a class="list_items listdate" href="" ng-click="getDetailTableNotes(noteDateObj.clinical_notes_reports_id)">
+                                    <p>{{ noteDateObj.clinical_notes_reports_date | date: 'dd' }}</p>
+                                    <p class="month">{{ noteDateObj.clinical_notes_reports_date | date: 'MMM' }}</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" ng-click="getTableDataForNotes('next')" class="m_left_55"><img alt="previous"
+                                        src="app/images/next_arrow.png"></a></li>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 m_top_15" ng-if="notes_table_data.length > 0">
+                        <div class="panel background_color_4">
+                            <div class="panel-heading position_relative padding_0 common_hr">
+                                <h4 class="font_size_20 font_color_1 gotham_medium m_left_16">
+                                    {{ detail_notes.clinical_notes_reports_date | date: 'dd' }}-{{
+                                    detail_notes.clinical_notes_reports_date | date: 'MMM' }}-{{
+                                    detail_notes.clinical_notes_reports_date | date: 'y' }}
+                                </h4>
+                                <div class="icon_image_right"><img src="app/images/popup_remove.png" alt="close"
+                                        class=" hide img-responsive"></div>
+                            </div>
+                            <div class="panel-body no_padding" ng-click="copyClinicalNotes()">
+                                <div class="list-group m_left_16">
+                                    <a href="" class="list-group-item bk_none" ng-if="detail_notes.clinical_notes_reports_complaints.length > 0">
+                                        <p>Complaints</p>
+                                        <div class="font_color_7 font_size_16 gotham_book">
+                                            <div ng-repeat="obj in detail_notes.clinical_notes_reports_complaints track by $index">
+                                                - {{ obj}}
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="" class="list-group-item bk_none" ng-if="detail_notes.clinical_notes_reports_observation.length > 0">
+                                        <p>Observations</p>
+                                        <div class="font_color_7 font_size_16 gotham_book">
+                                            <div ng-repeat="obj in detail_notes.clinical_notes_reports_observation track by $index">
+                                                - {{ obj}}
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="" class="list-group-item bk_none" ng-if="detail_notes.clinical_notes_reports_diagnoses.length > 0">
+                                        <p>Diagnosis</p>
+                                        <div class="font_color_7 font_size_16 gotham_book">
+                                            <div ng-repeat="obj in detail_notes.clinical_notes_reports_diagnoses track by $index">
+                                                - {{obj}}
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="" class="list-group-item bk_none" ng-if="detail_notes.clinical_notes_reports_add_notes.length > 0">
+                                        <p>Personal notes</p>
+                                        <div class="font_color_7 font_size_16 gotham_book">
+                                            <div ng-repeat="obj in detail_notes.clinical_notes_reports_add_notes track by $index">
+                                                - {{obj}}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="app_health_analytics" class="tab-pane fade height_110" slim-scroll>
+                    <div ng-include="'app/views/patient/patient_health_analytics_c_section.html?'+getVer(2)"></div>
+                </div>
+                <div id="app_reports" class="tab-pane fade" slim-scroll>
+					<div ng-include="'app/views/patient/patient_reports_c_section.html?'+getVer(2)"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="appointment_rx " ng-if="patient_report_tab_index == 3 && patient_report_main_tab == 1">
+            <div class="col-md-12 col-sm-12 col-xs-12 background_color_1 padding_0">
+                <div class="appointment_notes_width text-center">
+                    <h4 class="font_size_20 white_color">Rx</h4>
+                </div>
+                <div class="appointment_tabs_width text-center">
+                    <ul role="tablist" class="nav nav-pills gotham_medium m_top_5 tabs_items_1">
+                        <li ng-if="currentUser.sub_plan_setting.enabled_common_brands != undefined && currentUser.sub_plan_setting.enabled_common_brands == '1'" role="presentation" class="nav-item" ng-click="getTableDataForRX(true, '', 1); tab.rx = 1;"
+                            ng-class="tab.rx == 1 ? 'active' : ''">
+                            <a href="" data-toggle="pill" class="nav-link p_tb_lr">Common Brands</a>
+                        </li>
+                        <li role="presentation" class="nav-item" ng-class="tab.rx == 2 ? 'active' : ''" ng-click="tab.rx = 2; getTableDataForRX(true, '', 2);">
+                            <a href="" data-toggle="pill" class="nav-link p_tb_lr">Past Rx</a>
+                        </li>
+                        <li role="presentation" class="nav-item" ng-click="tab.rx = 3; getTabularDataPatientCompliance();"
+                            ng-class="tab.rx == 3 ? 'active' : ''">
+                            <a href="" data-toggle="pill" class="nav-link p_tb_lr">Patient Compliance</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div id="patient-compliance-fullscreen-mode" class="tab-content mscroll" style="background:#fff; color:inherit;">
+	            <div id="app_commanbrand" class="" ng-if="tab.rx == 1" slim-scroll>
+                    <div class="col-md-12 col-sm-12 col-xs-12 fnone gotham_book">
+                        <div class="panel m_top_20 background_color_4 border_radius_6" ng-repeat="rxObj in patient_rx_data | filter:{drug_name:rxCSectionSearch} | orderBy: 'prescription_drug_name' track by $index">
+                            <div class="panel-body cursor_pointer" ng-click="addOldRX(rxObj)">
+                                <p class="pull-left font_size_16" title="{{rxObj.prescription_drug_name_with_unit != '' ? rxObj.prescription_drug_name_with_unit : rxObj.drug_name_with_unit}}">{{rxObj.prescription_drug_name}}</p>
+                                <div class="pull-right">
+                                    <img src="app/images/popup_remove.png" alt="remove" class="hide img-responsive" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="app_pastrx" class="" ng-if="tab.rx == 2 && patient_rx_data.length > 0" slim-scroll>
+                    <div class="col-md-12 col-sm-12 col-xs-12 m_top_15">
+                        <ul class="pagination no_margin">
+                            <li><a href="" ng-click="getTableDataForRX(false, 'prev', 2)"><img alt="previous" src="app/images/prev_arrow.png"></a></li>
+                            <li ng-repeat="rxObj in patient_rx_data track by $index" ng-class="patient_rx_detail_obj.prescription_date == rxObj.prescription_date ? 'active' : ''"
+                                ng-click="changeRXObj(rxObj);">
+                                <a class="list_items listdate" href="">
+                                    <p>{{rxObj.prescription_date | date:'dd' }}</p>
+                                    <p class="month">{{rxObj.prescription_date | date:'MMM' }}</p>
+                                </a>
+                            </li>
+                            <li><a href="" ng-click="getTableDataForRX(false, 'next', 2)" class="m_left_16 listdate"><img alt="next" src="app/images/next_arrow.png"></a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 gotham_book">
+                        <div class="panel m_top_20 background_color_4 border_radius_6 cursor_pointer" ng-repeat="rxDetailObj in patient_rx__detail_data track by $index"
+                            ng-click="addOldRX(rxDetailObj)">
+                            <div class="panel-body">
+                                <p class="pull-left font_size_16" title="{{rxDetailObj.prescription_drug_name_with_unit}}">{{rxDetailObj.prescription_drug_name}}</p>
+                                <div class="pull-right">
+                                    <img src="app/images/popup_remove.png" alt="remove" class="hide img-responsive" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="app_patient_compliance" class="" ng-if="tab.rx == 3" slim-scroll>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <ul class="nav nav-pills gotham_medium m_top_20 tabs_items font_color_1" role="tablist">
+                            <li class="nav-item active" role="presentation">
+                                <a class="nav-link" data-toggle="pill" href="" data-target="#tabularchart">Tabular Chart</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-toggle="pill" href="" data-target="#linegraph">Graph</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link btnfc" href="javascript:void(0);" onclick="setFullScreenMode('patient-compliance-fullscreen-mode',this);">Full Screen</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content m_left_25">
+                        <div id="tabularchart" class="tab-pane fade in active">
+                            <div class="col-md-12 col-sm-12 col-xs-12 padding_0 m_top_20 m_bottom_40">
+                                <div class="table-responsive">
+                                    <table ng-if="drug_data.length > 0" class="table table-bordered font_color_3 gotham_light" ng-if="all_dates.length > 0">
+                                        <thead class="background_color_3 font_color_1">
+                                            <tr>
+                                                <th class="text-center"></th>
+                                                <th class="text-center" ng-repeat="dateObj in all_dates">
+                                                    {{dateObj | date: 'dd'}}-{{
+                                                    dateObj | date: 'MMM'}}<br />
+                                                    ({{dateObj | date: 'y'}})
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="indexObj in drug_data">
+                                                <td>
+                                                    <span>
+                                                        <i title="{{indexObj.drug_name}}" ng-if="indexObj.drug_color_code" class="fa fa-circle"
+                                                        style="color:#{{indexObj.drug_color_code}}"></i>
+                                                    </span>
+                                                    {{indexObj.drug_name}}
+                                                </td>
+                                                <td ng-repeat="innerIndexObj in indexObj.reminder_record_date">
+                                                    <span ng-repeat="objCount in innerIndexObj.take_count_arr track by $index">
+                                                        <i ng-if="objCount.is_taken==true" title="{{objCount.time}}" ng-if="indexObj.drug_color_code" class="fa fa-circle"
+                                                        style="color:#{{indexObj.drug_color_code}}"></i>
+                                                        <i ng-if="objCount.is_taken==false" title="{{objCount.time}}" ng-if="indexObj.drug_color_code" class="fa fa-circle-o"
+                                                        style="color:#{{indexObj.drug_color_code}}"></i>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <p ng-if="drug_data.length == 0" class="m_top_20 title1 text-center"> No record found</p>
+                                </div>
+                                <div class="">
+                                    <!-- <div ng-repeat="drugColor in drug_array" class="pull-left drug-color">
+                                        <div class="bg pull-left drug_icon" style="background-color: #{{drugColor.color}};"></div>
+                                        <div class="pull-left drug_text" title="{{drugColor.name}}">{{drugColor.name | trimString : 24}}</div>
+                                        <div class="clearfix"></div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div id="linegraph" class="tab-pane fade">
+                            <div ng-if="drug_data.length > 0" id="compliance-line-chart" ng-init="complianceLineChart(drug_data)" class="col-md-12 col-sm-12 col-xs-12 padding_0 text-center m_top_15">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><b>Compliance Graph</b></div>
+                                    <div class="panel-body">
+                                        <canvas id="compliance-line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-click="onClick" chart-hover="onHover" chart-series="series" chart-options="options" chart-colors="colors"  height="100%"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="drug_data.length == 0" class="col-md-12 col-sm-12 col-xs-12 padding_0 m_top_20 m_bottom_40">
+                                <p class="text-center m_top_20 title1"> No record found</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="appointment_investigation " ng-if="patient_report_tab_index == 4 && patient_report_main_tab == 1">
+            <div class="col-md-12 col-sm-12 col-xs-12 background_color_1 padding_0">
+                <div class="appointment_notes_width text-center">
+                    <h4 class="font_size_20 white_color">Ix</h4>
+                </div>
+                <div class="appointment_tabs_width text-center">
+                    <ul role="tablist" class="nav nav-pills gotham_medium m_top_5 tabs_items_1">
+                        <li role="presentation" class="nav-item" ng-click="getListIXReport(); tab.ix = 1" ng-class="tab.ix == 1 ? 'active' : ''">
+                            <a href="" data-toggle="pill" class="nav-link ">List Of Ix</a>
+                        </li>
+                        <li role="presentation" class="nav-item " ng-class="tab.ix == 2 ? 'active' : ''" ng-click="getTableInvestigationData(true); tab.ix = 2">
+							<a href="" data-toggle="pill" class="nav-link" ng-click="getTableInvestigationData(true);">Past Ix</a>
+                        </li>
+                        <li role="presentation" class="nav-item" ng-class="tab.ix == 3 ? 'active' : ''" ng-click="getTableInvestigationData(true); tab.ix = 3">
+                            <a href="" ng-click="getTableDataReports()" data-toggle="pill" class="nav-link">Reports</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tab-content">
+                <div id="listof_Ix" class="" ng-if="tab.ix == 1 && checkPermission(INVESTIGATION_MODULE, VIEW)" slim-scroll>
+                    <div class="col-md-12 col-sm-12 col-xs-12 gotham_book">
+                        <div class="panel m_top_20 background_color_4 border_radius_6" ng-repeat="ixObj in IXList track by $index">
+                            <div class="panel-body cursor_pointer" ng-click="copyInvestigationData(2, ixObj)">
+                                <p class="pull-left font_size_16">{{ixObj.health_analytics_test_name | trimString: 60 }}</p>
+                                <div class="pull-right">
+                                    <img src="app/images/popup_remove.png" alt="remove" class="hide img-responsive">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="past_Ix" class="" ng-if="patient_investigation_detail.lab_report_id && tab.ix == 2 && checkPermission(INVESTIGATION_MODULE, VIEW)" slim-scroll>
+                    <div class="col-md-12 col-sm-12 col-xs-12 m_top_15">
+                        <ul class="pagination no_margin" ng-if="patient_investigation_data.length > 0">
+                            <li><a href="" ng-click="getTableInvestigationData(false, 'prev')"><img alt="previous"
+                                        src="app/images/prev_arrow.png"></a></li>
+                            <li ng-repeat="invObj in patient_investigation_data track by $index" ng-class="patient_investigation_detail.lab_report_id == invObj.lab_report_id ? 'active' : ''"
+                                ng-click="changeInvestigationDateObj(invObj)">
+                                <a class="list_items listdate" href="">
+                                    <p>{{ invObj.lab_report_date | date:'dd' }}</p>
+                                    <p class="month">{{ invObj.lab_report_date | date:'MMM' }}</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" class="m_left_16" ng-click="getTableInvestigationData(false, 'next')"><img
+                                        alt="previous" src="app/images/next_arrow.png"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 gotham_book cursor_pointer" ng-click="copyInvestigationData(1)"
+                        ng-if="patient_investigation_detail">
+                        <div class="panel m_top_20 background_color_4 border_radius_6 ">
+                            <div class="panel-body">
+                                <p class="pull-left font_size_16" title="{{patient_investigation_detail.test_array}}">{{ patient_investigation_detail.test_array}}</p>  <!-- | trimString : 60 -->
+                                <div class="pull-right">
+                                    <img src="app/images/popup_remove.png" alt="remove" class="img-responsive hide" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="investigation_report" class="" ng-if="tab.ix == 3 && checkPermission(REPORT_MODULE, VIEW)" slim-scroll>
+					<div ng-include="'app/views/patient/patient_reports_c_section.html?'+getVer(2)"></div>
+				</div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="appointment_procedure " ng-if="(patient_report_tab_index == 5) && patient_report_main_tab == 1">
+            <div class="col-md-12 col-sm-12 col-xs-12 background_color_1 padding_0">
+                <div class="appointment_notes_width text-center">
+                    <h4 class="font_size_20 white_color">Procedure</h4>
+                </div>
+                <div class="appointment_tabs_width text-center">
+                    <ul role="tablist" class="nav nav-pills gotham_medium m_top_5 tabs_items_1">
+                        <li role="presentation" class="nav-item " ng-click="tab.proc = 3;getMyProcData();" ng-class="tab.proc == 3 ? 'active' : ''">
+                            <a href="" data-toggle="pill" class="nav-link ">My Procedure</a>
+                        </li>
+                        <li role="presentation" class="nav-item " ng-click="tab.proc = 1;getTableProcData(true);" ng-class="tab.proc == 1 ? 'active' : ''">
+                            <a href="" data-toggle="pill" class="nav-link ">Past Procedure</a>
+                        </li>
+                        <li role="presentation" class="nav-item" ng-click="getTableDataReports(); tab.proc = 2;"
+                            ng-class="tab.proc == 2 ? 'active' : ''">
+                            <a href="" ng-click="getTableDataReports()" data-toggle="pill" class="nav-link">Reports</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tab-content">
+                <div id="commonlyprocedure" class="" ng-if="tab.proc == 1 && checkPermission(PROC_MODULE, VIEW)">
+                    <div class="col-md-12 col-sm-12 col-xs-12 m_top_15" ng-if="patient_proc_data.length > 0">
+                        <ul class="pagination no_margin">
+                            <li ng-click="getTableProcData(false, 'prev')"><a href=""><img alt="previous" src="app/images/prev_arrow.png"></a></li>
+                            <li ng-repeat="procDateObj in patient_proc_data track by $index" ng-class="patient_current_proc.procedure_report_id == procDateObj.procedure_report_id ? 'active' : ''"
+                                ng-click="changeCurrentProcObj(procDateObj)">
+                                <a class="list_items listdate" href="">
+                                    <p>{{procDateObj.procedure_report_date | date: 'dd'}}</p>
+                                    <p class="month">{{procDateObj.procedure_report_date | date: 'MMM'}}</p>
+                                </a></li>
+                            <li ng-click="getTableProcData(false, 'next')"><a href="" class=""><img alt="previous"
+                                        src="app/images/next_arrow.png"></a></li>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 m_top_15" ng-if="patient_current_proc">
+                        <div class="panel background_color_4">
+                            <div class="panel-heading position_relative padding_0 common_hr">
+                                <h4 class="font_size_20 font_color_1 gotham_medium m_left_16">
+                                    {{ patient_current_proc.procedure_report_date | date:'dd' }}-{{
+                                    patient_current_proc.procedure_report_date | date:'MMM' }}-{{
+                                    patient_current_proc.procedure_report_date | date:'y' }}
+                                </h4>
+                                <div class="icon_image_right"><img src="app/images/popup_remove.png" alt="close"
+                                        class="hide img-responsive"></div>
+                            </div>
+                            <div class="panel-body no_padding" ng-click="copyProcedureData()">
+                                <div class="list-group m_left_16">
+                                    <a href="" class="list-group-item bk_none">
+                                        <p>Procedure name</p>
+                                        <div class="font_color_7 font_size_16 gotham_book">
+                                            <p ng-repeat="procName in patient_current_proc.text_array track by $index"> - {{procName}}</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="commonlyprocedure" class="" ng-if="tab.proc == 3 && checkPermission(PROC_MODULE, VIEW)">
+                    <div class="col-md-12 col-sm-12 col-xs-12 m_top_15" ng-if="my_proc_data">
+                        <div class="panel m_top_20 background_color_4 border_radius_6" ng-repeat="myProcObj in my_proc_data | filter:cSearchProc track by $index">
+                            <div class="panel-body cursor_pointer" ng-click="addOldProc(myProcObj)">
+                                <p class="pull-left font_size_16">{{myProcObj}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="procedure_report" class="" ng-if="tab.proc == 2 && checkPermission(PROC_MODULE, VIEW)" slim-scroll>
+					<div ng-include="'app/views/patient/patient_reports_c_section.html?'+getVer(2)"></div>
+				</div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="appointment_pastreports " ng-if="(patient_report_tab_index == 6 || patient_report_tab_index == 7 || patient_report_tab_index == 8) && patient_report_main_tab == 1">
+            <div class="col-md-12 col-sm-12 col-xs-12 background_color_1 padding_0">
+                <div class="appointment_notes_width text-center">
+                    <h4 class="font_size_20 white_color">Reports</h4>
+                </div>
+                <div class="appointment_tabs_width text-center">
+                    <ul role="tablist" class="nav nav-pills gotham_medium m_top_5 tabs_items_1">
+                        <li role="presentation" class="nav-item active">
+                            <a href="" ng-click="getTableDataReports()" data-target="#reports_pastreport"
+                                data-toggle="pill" class="nav-link ">Reports</a>
+                        </li>
+                        <li role="presentation" class="nav-item ">
+                            <a href="" ng-click="getTableDataHealthAnalytics(true)" data-target="#reports_healthanalytics"
+                                data-toggle="pill" class="nav-link">Health Analytics</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tab-content" id="reports-healthanalytics-fullscreen-mode" style="background:#fff; color:inherit;">
+                <div id="reports_pastreport" class="height_110 tab-pane fade in active" ng-if="checkPermission(REPORT_MODULE, VIEW)" slim-scroll>
+					<div ng-include="'app/views/patient/patient_reports_c_section.html?'+getVer(2)"></div>
+				</div>
+                <div id="reports_healthanalytics" class="tab-pane fade height_110" ng-if="checkPermission(ANALYTICS_MODULE, VIEW)" slim-scroll>
+                    <div ng-include="'app/views/patient/patient_health_analytics_c_section.html?'+getVer(2)"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="appointment_pastreports " ng-if="patient_report_main_tab == 2 && checkPermission(INVOICE_MODULE, VIEW)">
+            <div class="col-md-12 col-sm-12 col-xs-12 background_color_1 padding_0">
+                <div class="col-md-4 col-sm-4 col-xs-4">
+                    <h4 class="font_size_20 white_color section3-main-title">Treatments</h4>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12 gotham_book">
+                <div class="panel m_top_20 background_color_4 border_radius_6 cursor_pointer" ng-repeat="treatmentObj in treatment_list track by $index"
+                    ng-click="copyTreatment(treatmentObj)">
+                    <div class="panel-body">
+                        <p class="pull-left font_size_16">{{treatmentObj.pricing_catalog_name}}</p>
+                        <div class="pull-right">
+                            <img src="app/images/popup_remove.png" alt="remove" class="hide img-responsive" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <!-- <div class="tab-content">                
+                <div id="reports_pastreport" class="tab-pane fade in active">
+                    <div class="col-md-12 col-sm-12 col-xs-12 gotham_book">
+                    </div>
+                </div>                
+            </div>
+            <div class="clearfix"></div> -->
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="appointment_list_wrapper">
+        <div class="appointment_list_width" ng-if="current_clinic && current_doctor" ng-init="getPatientList()">
+            <div class="appointment_header_container font_color_1 background_color_3">
+                <div class="patient_list_width gotham_medium" custom-hover-patient>
+                    <div class="scroll_div" when-scrolled="getPatientList()">
+                        <div class="recent_list_single">
+                            <p ng-if="patientFilter == 2">Recent</p>
+                            <p ng-if="patientFilter == 1">Today</p>
+                            <p ng-if="patientFilter == 3">All</p>
+                        </div>
+                        <div class="recent_list_all">
+                            <p>
+                                <span class="cursor_pointer" ng-click='changePatientListTab(2, true);'>Recent</span>
+                                <span class="bar">|</span>
+                                <span class="cursor_pointer" ng-click='changePatientListTab(1, true);'>Today</span>
+                                <span class="bar">|</span>
+                                <span class="cursor_pointer" ng-click='changePatientListTab(3, true);'>All</span>
+                            </p>
+                        </div>
+                        <div ng-repeat="patient in patientList track by $index" ng-click="changePatientDetails(patient,$event)">
+                            <div class="display_information">
+                                <div class="user_side_image">
+                                    <img ng-src="{{patient.user_photo_filepath}}" ng-show="patient.user_photo_filepath"
+                                        class="common_btn_radius" />
+                                    <img ng-src="app/images/user_image_placeholder.png" ng-show="!patient.user_photo_filepath"
+                                        class="common_btn_radius" />
+                                </div>
+                                <p class="nav-text" title="{{patient.is_done == 1 ? 'Marked As Appointment Completed' : 'In Pending Appointment List'}}" ng-class="patient.is_done == 1 ? 'visited-patient' : ''"><i ng-class="patient.is_done == 1 ? 'fa fa-check-circle' : 'fa fa-circle'" aria-hidden="true"></i>&nbsp;{{patient.name}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="appointment_width" ng-class="!checkPermission(PATIENT_KCO, VIEW) ? 'isReceptionist' : ''">
+            <div class="appointment_title_container text-center">
+                <ul class="nav nav-tabs appoment_nav_tabs">
+                    <li class="active appointment_title background_color_3 appointment_tab_1">
+                        <a class="no_padding patient_nav_link cursor_pointer" data-toggle="tab" data-target="#appointment_list"
+                            ng-click="changeAppointmentInvoiceTab(1,$event)">Appointment List</a>
+                    </li>
+                    <li class="m_top_7">
+                        <span class="vertical_bar"></span>
+                    </li>
+                    <li class="appointment_title background_color_3 appointment_tab_2">
+                        <a class="no_padding patient_nav_link cursor_pointer" data-toggle="tab" data-target="#billing"
+                            ng-click="changeAppointmentInvoiceTab(2,$event)">Invoice</a>
+                    </li>
+                </ul>
+                <!-- <button type="button" class="new_common_button new_appointment_button bg_icon_images add_patient tooltip_custom_7"
+                    ng-mouseover="openToolTip('7')" data-toggle="tooltip" title="{{add_appointment_tooltip}}" ng-click="(current_patient.user_id && role[APPOINTMENT_MODULE][ADD] == 'on') ? openAppointment() : ''"
+                    value="Add New Appointment">
+                </button> -->
+                <img data-toggle="tooltip"  title="{{add_appointment_tooltip}}" src="app/images/add_appoinment.png" class="add_new_appointment tooltip_custom_6 add_appointment-custom" ng-mouseover="openToolTip('6')" ng-click="openAppointment()" ng-if="role[APPOINTMENT_MODULE][ADD] == 'on'" />
+            </div>
+            <div class="clearfix"></div>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div id="appointment_list" class="" ng-show="patient_report_main_tab == 1">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 history common_border no_border_bottom no_border_top" ng-show="current_patient.user_id">
+                        <div class="row">
+                            <div class="visit_date_width">
+                                <p class="font_color_1 background_color_3 history_brand history_title">Visit Dates&nbsp;<i ng-if="is_appoinment_import_data" title="Data Import" class="fa fa-cloud-download"></i>
+									<span title="Click To Mark Appointment As Completed" class="appointment-done-checkbox">
+										<label class="common_checbox appointment-done">
+											<input type="checkbox" id="appointment_done" class="ng-valid ng-dirty ng-valid-parse ng-touched" ng-change="updateAppointmentStatus()" ng-model="is_appoinment_done" ng-checked="is_appoinment_done" ng-true-value="1"
+												   ng-false-value="0" /><label for="appointment_done"></label>
+										</label>
+									</span>
+								</p>
+                            </div>
+                            <div class="calendar_width">
+                                <ul class="pagination no_margin">
+                                    <li><a class="margin_top_5" href="" ng-click="getAppointmentDates('prev')"><img alt="previous" src="app/images/prev_arrow.png" /></a></li>
+                                    <li ng-class="dateObj.is_active ? 'active' : ''" ng-repeat="(key, dateObj) in appointment_dates  track by $index" 
+                                        ng-click="changeActiveDate(key, dateObj, $event)" title="{{dateObj.appointment_date_show}} {{dateObj.appointment_from_time|limitTo:5|timeFormat:currentUser.hour_format}}">
+                                        <a class="list_items listdate" href="">
+                                            <p class="">{{ dateObj.appointment_date_obj | date:'dd' }}</p>
+                                            <p class="month">{{ dateObj.appointment_date_obj | date:'MMM' }}</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="margin_top_5 cursor_pointer" href="" ng-click="getAppointmentDates('next')">
+                                            <img alt="previous" src="app/images/next_arrow.png">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="icon_container">
+                                <label ng-if="checkPermission(PATIENT_PDF,ADD)" class="bg_icon_images print_image tooltip_custom_8" 
+                                title="{{pdf_tooltip}}" ng-mouseover="openToolTip('8')" 
+                                    data-toggle="modal" data-target="#modal_print" ng-click="getPDFUrl()"></label>
+                                <label ng-if="checkPermission(PATIENT_SHARE,ADD)" class="bg_icon_images share_image tooltip_custom_14" 
+                                title="{{pdf_share_tooltip}}" ng-mouseover="openToolTip('14')" 
+                                    data-toggle="modal" data-target="#modal_share" ng-click="getPDFUrlForShare(1)"></label>
+                                <label ng-if="!checkPermission(PATIENT_PDF,ADD)" class="bg_icon_images print_image"
+                                    style="cursor: not-allowed;opacity: 0.5;"></label>
+                                <label ng-if="!checkPermission(PATIENT_SHARE,ADD)" class="bg_icon_images share_image"
+                                    style="cursor: not-allowed;opacity: 0.5;"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="add_appointment_details clearfix">
+                                <div class="heading">
+                                    <ul class="template_container font_color_1">
+                                        <!-- FU templates -->
+
+                                        <li ng-if="checkPermission(PATIENT_FU_TEMPLATE, ADD) && current_appointment_date_obj.is_editable"><a
+                                                href="" class="cursor_pointer" id="btn_dstemplate" data-toggle="modal"
+                                                data-target="#modal_followuptemplate" ng-click="getAppointmentDates('', true)">F/U
+                                                template</a></li>
+                                        <li ng-if="!checkPermission(PATIENT_FU_TEMPLATE, ADD) || !current_appointment_date_obj.is_editable"
+                                            class="not-active"><a href="" class="cursor_pointer" id="btn_dstemplate">F/U
+                                                template</a></li>
+                                        <!-- FU templates -->
+                                        <!-- DS templates -->
+                                        <li ng-if="checkPermission(PATIENT_DS_TEMPLATE, ADD) && current_appointment_date_obj.is_editable">
+                                            <a href="" class="cursor_pointer" id="btn_dstemplate" data-toggle="modal"
+                                                data-target="#modal_dstemplate" ng-click="getDSTemplates(true)">DS
+                                                template</a>
+                                        </li>
+                                        <li class="not-active" ng-if="!checkPermission(PATIENT_DS_TEMPLATE, ADD) || !current_appointment_date_obj.is_editable">
+                                            <a href="" class="cursor_pointer" id="btn_dstemplate">DS template</a>
+                                        </li>
+                                        <!-- DS templates -->
+                                        <!-- Save templates -->
+                                        <li ng-if="checkPermission(PATIENT_SAVE_TEMPLATE, ADD) && current_appointment_date_obj.is_editable">
+                                            <a href="" class="cursor_pointer" id="btn_savetemplate" data-toggle="modal"
+                                                data-target="#modal_savetemplate">Save template</a>
+                                        </li>
+                                        <li ng-if="!checkPermission(PATIENT_SAVE_TEMPLATE, ADD) || !current_appointment_date_obj.is_editable"
+                                            class="not-active">
+                                            <a href="" class="cursor_pointer" id="btn_savetemplate">Save template</a>
+                                        </li>
+                                        <!-- Save templates -->
+                                        <!-- Health analytics -->
+                                        <li ng-if="checkPermission(PATIENT_HEALTH_ANYLYTICS, ADD)&& current_appointment_date_obj.is_editable">
+                                            <a href="" class="cursor_pointer" id="btn_healthanalytics" data-toggle="modal"
+                                                data-target="#modal_health_analytics" ng-click="getHealthAnalyticsTest(); health.search = '';">Health
+                                                analytics</a>
+                                        </li>
+                                        <li ng-if="!checkPermission(PATIENT_HEALTH_ANYLYTICS, ADD) || !current_appointment_date_obj.is_editable"
+                                            class="not-active">
+                                            <a href="" class="cursor_pointer" id="btn_healthanalytics">Health analytics</a>
+                                        </li>
+                                        <!-- Health analytics -->
+                                        <!-- Health advise -->
+                                        <!-- <li ng-if="checkPermission(PATIENT_HEALTH_ADVISE, ADD)">
+                                            <a href="" class="cursor_pointer " id="btn_health_advice" ng-click="health_advice_popup()">Health advice</a>
+                                        </li>
+                                        <li class="not-active" ng-if="!checkPermission(PATIENT_HEALTH_ADVISE, ADD)">
+                                            <a href="" class="cursor_pointer " id="btn_health_advice">Health advice</a>
+                                        </li> -->
+                                        <!-- Health advise -->
+                                        <!-- Refer -->
+                                         <!--<li class="not-active" ng-if="checkPermission(PATIENT_REFER, ADD)">
+                                            <a href="" class="cursor_pointer" id="btn_refer" data-toggle="modal"
+                                                ng-click="getFavListing(); fav_search.search = '';" data-target="#modal_refer">Refer</a>
+                                        </li>
+                                        <li class="not-active" ng-if="!checkPermission(PATIENT_REFER, ADD)">
+                                            <a href="" class="cursor_pointer" id="btn_refer">Refer</a>
+                                        </li>-->
+                                        <!-- Refer -->
+                                        <li ng-if="currentUser.sub_plan_setting.patient_tool != undefined && currentUser.sub_plan_setting.patient_tool == '1' && currentUser.user_type != 3 && current_appointment_date_obj.is_editable">
+                                            <a href="" class="cursor_pointer" id="btn_diagrams" data-toggle="modal"
+                                                ng-click="openDaigramsModal();" data-target="">Patient Tools</a>
+                                        </li>
+                                        <li class="not-active" ng-if="currentUser.sub_plan_setting.patient_tool == undefined || currentUser.sub_plan_setting.patient_tool == '0' || currentUser.user_type == 3 || !current_appointment_date_obj.is_editable">
+                                            <a href="" class="cursor_pointer">Patient Tools</a>
+                                        </li>
+                                        <li ng-if="currentUser.sub_plan_setting.previous_rx_access != undefined && currentUser.sub_plan_setting.previous_rx_access == '1' && currentUser.user_type != 3 && current_patient.is_other_doctor_rx" class="hide">
+                                            <a href="" title="Referred Rx" ng-mouseover="openToolTip('13')" class="cursor_pointer tooltip_custom_13" ng-click="refer_patient_rx_data(false);">Ref-Rx</a>
+                                        </li>
+                                    </ul>
+                                    <ul class="nav nav-pills medicine_details ptDataTabUl" role="tablist">
+                                        <!-- vital -->
+                                        <li ng-if="checkPermission(VITAL_MODULE, ADD)" class="nav-item  cursor_pointer pt-data-tab-1"
+                                            role="presentation" id="list_vitals" ng-class="patient_report_tab_index == 1 ? 'active' : ''">
+                                            <a class="nav-link save-alert" data-toggle="pill" data-target="#vitals" ng-click="changePatientReportTab('patient_vital', 1, $event);
+                                               ">Vitals</a>
+                                        </li>
+                                        <li style="opacity: 0.6;" ng-if="!checkPermission(VITAL_MODULE, ADD)" class="nav-item  cursor_pointer"
+                                            role="presentation" id="list_vitals">
+                                            <a class="nav-link">Vitals</a>
+                                        </li>
+                                        <!-- vital -->
+                                        <!-- clinic notes-->
+                                        <li ng-if="checkPermission(CLINICAL_NOTES_MODULE, ADD)" class="nav-item  cursor_pointer pt-data-tab-2"
+                                            role="presentation" id="list_clinicalnotes" ng-class="patient_report_tab_index == 2 ? 'active' : ''">
+                                            <a class="nav-link save-alert" data-toggle="pill" data-target="#clinical_notes"
+                                                ng-click="changePatientReportTab('patient_notes', 2, $event);">Clinical Notes</a>
+                                        </li>
+                                        <li style="opacity: 0.6;" ng-if="!checkPermission(CLINICAL_NOTES_MODULE, ADD)"
+                                            class="nav-item  cursor_pointer" role="presentation" id="list_clinicalnotes">
+                                            <a class="nav-link">Clinical Notes</a>
+                                        </li>
+                                        <!-- clinic notes-->
+                                        <!-- RX -->
+                                        <li ng-if="checkPermission(RX_MODULE, ADD) && rx_setting_data[0].status == '1'" class="nav-item cursor_pointer pt-data-tab-3"
+                                            role="presentation" id="list_rx" ng-class="patient_report_tab_index == 3 ? 'active' : ''">
+                                            <a class="nav-link" data-toggle="pill" data-target="#rx" ng-click="changePatientReportTab('patient_rx', 3, $event);">Rx</a>
+                                        </li>
+                                        <li style="opacity: 0.6;" ng-hide="rx_setting_data[0].status != '1'" ng-if="!checkPermission(RX_MODULE, ADD)" class="nav-item cursor_pointer"
+                                            role="presentation" id="list_rx">
+                                            <a class="nav-link">Rx</a>
+                                        </li>
+                                        <!-- RX -->
+                                        <!-- Upload Rx-->
+                                        <li ng-if="checkPermission(RX_UPLOAD_MODULE, ADD) && rx_setting_data[1].status == '1'" class="nav-item cursor_pointer pt-data-tab-8"
+                                            role="presentation" ng-class="patient_report_tab_index == 8 ? 'active' : ''">
+                                            <a class="nav-link" data-toggle="pill" ng-click="changePatientReportTab('patient_rx_upload', 8, $event);">Upload Rx</a>
+                                        </li>
+                                        <!-- Upload Rx-->
+                                        <!-- investigation -->
+                                        <li ng-if="checkPermission(INVESTIGATION_MODULE, ADD)" class="nav-item cursor_pointer pt-data-tab-4"
+                                            role="presentation" id="list_investigation" ng-class="patient_report_tab_index == 4 ? 'active' : ''">
+                                            <a class="nav-link" data-toggle="pill" data-target="#investigation"
+                                                ng-click="changePatientReportTab('patient_investigation', 4, $event);">Investigations</a>
+                                        </li>
+                                        <li style="opacity: 0.6;" ng-if="!checkPermission(INVESTIGATION_MODULE, ADD)"
+                                            class="nav-item cursor_pointer" role="presentation" id="list_investigation">
+                                            <a class="nav-link">Investigations</a>
+                                        </li>
+                                        <!-- investigation -->
+                                        <!-- procedure -->
+                                        <li ng-if="checkPermission(PROC_MODULE, ADD)" class="nav-item cursor_pointer pt-data-tab-5"
+                                            role="presentation" id="list_procedure" ng-class="patient_report_tab_index == 5 ? 'active' : ''">
+                                            <a class="nav-link" data-toggle="pill" data-target="#procedure" ng-click="changePatientReportTab('patient_procedure', 5, $event);">Procedure</a>
+                                        </li>
+                                        <li style="opacity: 0.6;" ng-if="!checkPermission(PROC_MODULE, ADD)" class="nav-item cursor_pointer"
+                                            role="presentation" id="list_procedure">
+                                            <a class="nav-link">Procedure</a>
+                                        </li>
+                                        <!-- procedure -->
+                                        <!-- Reports -->
+                                        <li ng-if="checkPermission(REPORT_MODULE, ADD)" class="nav-item cursor_pointer pt-data-tab-6"
+                                            role="presentation" id="list_report" ng-class="patient_report_tab_index == 6 ? 'active' : ''">
+                                            <a class="nav-link" data-toggle="pill" data-target="#report" ng-click="changePatientReportTab('patient_report', 6, $event);">Reports</a>
+                                        </li>
+                                        <li style="opacity: 0.6;" ng-if="!checkPermission(REPORT_MODULE, ADD)" class="nav-item cursor_pointer"
+                                            role="presentation" id="list_report">
+                                            <a class="nav-link">Reports</a>
+                                        </li>
+                                        <!-- Reports -->
+                                        <!-- Analytics value-->
+                                        <li ng-if="checkPermission(ANALYTICS_MODULE, ADD)" class="nav-item cursor_pointer pt-data-tab-7"
+                                            role="presentation" id="list_analytics_values" ng-class="patient_report_tab_index == 7 ? 'active' : ''">
+                                            <a class="nav-link" data-toggle="pill" data-target="#analytics_values"
+                                                ng-click="changePatientReportTab('patient_analytics_value', 7, $event);">Analytics
+                                                Values</a>
+                                        </li>
+                                        <li style="opacity: 0.6;" ng-if="!checkPermission(ANALYTICS_MODULE, ADD)" class="nav-item cursor_pointer"
+                                            role="presentation" id="list_analytics_values">
+                                            <a class="nav-link">Analytics Values</a>
+                                        </li>
+                                        <!-- Analytics value-->
+                                    </ul>
+                                </div>
+                                <div class="tab-content m_top_10">
+                                    <div ng-include src="patient_report_tab"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_bottom_25 m_top_10 common_border" ng-if="!current_patient.user_id">
+                        <div class="text-center m_top_12" style="text-align: center !important;margin:100px 0px;">
+                            <div class="m_top_15 m_bottom_15">
+                                <img src="app/images/empty_placeholder_icon.png">
+                            </div>
+                            <!-- <div class="gotham_light font_size_20">Nothing to diagonise yet.</div> -->
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="billing" class="" ng-if="patient_report_main_tab == 2">
+                    <div ng-if="checkPermission(INVOICE_MODULE, VIEW)">
+                        <form name="addPaymentForm" ng-submit="addFinalPayment(addPaymentForm)" novalidate="">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 history m_top_10 common_border no_border_bottom">
+                                <div class="row">
+                                    <div class="visit_date_width">
+                                        <p class="font_color_1 background_color_3 history_brand history_title">
+                                            Invoice Dates <i ng-if="is_invoice_import_data" title="Data Import" class="fa fa-cloud-download"></i>
+                                        </p>
+                                    </div>
+                                    <div class="calendar_width">
+                                        <ul class="pagination no_margin">
+                                            <li><a class="margin_top_5" href="" ng-click="getAppointmentDates('prev')"><img
+                                                        alt="previous" src="app/images/prev_arrow.png" /></a></li>
+                                            <li ng-class="dateObj.is_active ? 'active' : ''" ng-repeat="(key, dateObj) in appointment_dates track by $index"
+                                                ng-click="changeActiveDate(key, dateObj, $event)" title="{{dateObj.appointment_date_show}} {{dateObj.appointment_from_time|limitTo:5|timeFormat:currentUser.hour_format}}">
+                                                <a class="list_items listdate" href="">
+                                                    <p class="">{{dateObj.appointment_date_obj | date:'dd' }}</p>
+                                                    <p class="month">{{dateObj.appointment_date_obj | date:'MMM' }}</p>
+                                                </a>
+                                            </li>
+                                            <li><a class="margin_top_5 cursor_pointer" href="" ng-click="getAppointmentDates('next')"><img
+                                                        alt="previous" src="app/images/next_arrow.png" /></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="icon_container tooltip_custom_9" ng-mouseover="openToolTip('9')"
+                                        data-toggle="tooltip" title="{{invoice_tooltip}}">
+                                        <label ng-if="checkPermission(INVOICE_MODULE,ADD)" class="bg_icon_images print_image"
+                                            data-toggle="modal" data-target="#modal_print_invoice" ng-click="getPDFUrlInvoice()"></label>
+                                        <label ng-if="checkPermission(INVOICE_MODULE,SHARE)" class="bg_icon_images share_image"
+                                            data-toggle="modal" data-target="#modal_print_invoice" ng-click="sharePDFUrlInvoice()"></label>
+                                        <label ng-if="!checkPermission(INVOICE_MODULE,ADD)" class="bg_icon_images print_image"
+                                            style="cursor: not-allowed;opacity: 0.5;"></label>
+                                        <label ng-if="!checkPermission(INVOICE_MODULE,SHARE)" class="bg_icon_images share_image"
+                                            style="cursor: not-allowed;opacity: 0.5;"></label>
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="isInvoiceEditMode">
+                                    <div class="add_appointment_details clearfix">
+                                        <div class="heading font_color_1 gotham_medium">
+                                            <h3 class="m_bottom_15 m_top_15 m_left_25 p_left_15 color_black">Payment</h3>
+                                            <div class="invoice-date-label">
+                                                Invoice Date:
+                                            </div>
+                                            <div class="invoice-date">
+                                                <p class="input-group login_input dropup">
+                                                <input type="text" class="form-control login_input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required ng-valid-datetime" datetime-picker="dd/MM/yyyy" datepicker-options="report_picker.datepickerOptions" enable-time="false" ng-model="final_payment.invoice_date" is-open="date_of_birth.open" placeholder="DD / MM / YYYY" name="invoice_date" readonly="">
+                                                <span class="input-group-btn login_input">
+                                                    <button type="button" class="btn btn-default login_input" ng-click="date_of_birth.open = true"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10 m_bottom_10 gotham_light font_color_5">
+                                            <div class="main_payment_div">
+                                                <div class="row my_payment-row" ng-repeat="(key, paymentObj) in paymentObjList">
+                                                    <ng-form name="innerBillingForm">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="form-group margin_0_auto position_relative">
+                                                                <label class="m_bottom_10">Treatments</label>
+                                                                <input class="form-control common_input" placeholder="Enter Treatment Name"
+                                                                    type="text" key="{{key}}" ng-model="paymentObj.treatment_name"
+                                                                    client-auto-complete dirtype='16' ng-keyup="searchTreatment(key)"
+                                                                    name="treatment_name" ng-required="checkRequiredValidation(key)"
+                                                                    ng-readonly="paymentObj.isOpenPaymentDiv" />
+                                                                <div class="no_data_found_pricing cursor_pointer" ng-if="paymentObj.treatment_name.length > 0 && search_treatment.length == 0 && !paymentObj.isOpenPaymentDiv">
+                                                                    <a ng-click="openPricingInnerDiv(key)">Add new
+                                                                        pricing</a>
+                                                                </div>
+                                                                <p ng-show="submitted && innerBillingForm.treatment_name.$error.required"
+                                                                    class="error">Required</p>
+
+                                                                <div class="remove_pos" style="position: absolute; bottom:0; right: 0;">
+                                                                    <img src="app/images/remove_icon.png" class="cursor_pointer payment_remove_btn"
+                                                                        ng-if="paymentObj.isOpenPaymentDiv" ng-click="closePaymentObj(key)" />
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        <div ng-if="paymentObj.isOpenPaymentDiv">
+                                                            <div class="col-lg-6 col-md-12 col-sm-6 col-xs-6 m_top_12  no_padding">
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_right_0">
+                                                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 padding_left_0">
+                                                                        <label class="required">Unit</label>
+                                                                        <div class="form-group">
+                                                                            <input class="form-control common_input" id="payment_value"
+                                                                                placeholder="Unit " value="00" type="text"
+                                                                                name="unit" ng-model="paymentObj.unit"
+                                                                                ng-change="finalBillingCalculation(key, innerBillingForm)"
+                                                                                ng-keydown="checkunitValidation($event, innerBillingForm, key)"
+                                                                                required="" />
+                                                                            <p ng-show="submitted && innerBillingForm.unit.$error.required"
+                                                                                class="error">Required</p>
+                                                                            <p ng-show="innerBillingForm.unit.$error.pattern"
+                                                                                class="error">Invalid unit.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 padding_left_0">
+                                                                        <label class="required">Cost (₹)</label>
+                                                                        <div class="form-group">
+                                                                            <input class="form-control common_input" id="basic_cost"
+                                                                                placeholder="Cost " is-number value="00"
+                                                                                type="text" required="" name="basic_cost"
+                                                                                ng-model="paymentObj.basic_cost"
+                                                                                ng-change="finalBillingCalculation(key, innerBillingForm)"
+                                                                                key="{{key}}" />
+                                                                            <p ng-show="submitted && innerBillingForm.basic_cost.$error.required"
+                                                                                class="error">Required</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                                                    <label class="">Discount
+                                                                        (₹{{paymentObj.discount_rupies}})</label>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                                                            <div class="form-group">
+                                                                                <input class="form-control common_input"
+                                                                                    id="discount_value" placeholder="Discount "
+                                                                                    value="00" type="text" ng-model="paymentObj.discount"
+                                                                                    name="discount" key="{{key}}"
+                                                                                    ng-change="checkDiscountValidation(innerBillingForm, key); finalBillingCalculation(key, innerBillingForm);" />
+                                                                                <p ng-show="innerBillingForm.discount.$error.pattern"
+                                                                                    class="error">{{
+                                                                                    errors.discount_error}}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 padding_left_0">
+                                                                            <div class="form-group selection_bx">
+                                                                                <div class="position_relative">
+                                                                                    <select name="rupies_type" id="rupies_type"
+                                                                                        allow-single-deselect="true"
+                                                                                        placeholder_text_single="'None'"
+                                                                                        ng-model="paymentObj.rupies_type"
+                                                                                        ng-change="checkDiscountValidation(innerBillingForm, key); finalBillingCalculation(key, innerBillingForm)"
+                                                                                        class="common_input form-control">
+                                                                                        <option value="1">%</option>
+                                                                                        <option value="2">₹</option>
+                                                                                    </select>
+                                                                                    <span>
+                                                                                        <img src="app/images/drop_down_arrow.png"
+                                                                                            alt="dropdown" class="icon_image_right_dropdown arrow-up-custom" />
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-12 col-sm-6 col-xs-6 m_top_12 no_padding">
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                                                    <label class="">Tax (₹{{paymentObj.tax_value}})</label>
+                                                                    <div class="form-group">
+                                                                        <div class="position_relative multiple_selection_box">
+                                                                            <select name='tax_id' id="tax_id" chosen
+                                                                                multiple="" allow-single-deselect="true"
+                                                                                placeholder_text_multiple="'None'"
+                                                                                ng-options="value.tax_id as value.tax_name for value in taxes"
+                                                                                ng-model="paymentObj.tax_id" ng-change="finalBillingCalculation(key, innerBillingForm)"
+                                                                                class="common_input form-control">
+                                                                                <option value=""></option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                                                    <label class="">Total (₹)</label>
+                                                                    <div class="form-group">
+                                                                        <input class="form-control common_input" id="measure_unit"
+                                                                            placeholder="Unit " name="measure_unit"
+                                                                            type="text" readonly="" ng-model="paymentObj.final_amount" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </ng-form>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="common_hr"></div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10">
+                                            <div class="col-lg-offset-3 col-lg-8 col-md-12 font_color_7">
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 no_padding">
+                                                        <div class="form-group">
+                                                            <p>Total Cost(₹)</p>
+                                                            <p class="font_size_15 gotham_medium">{{final_payment.total_cost}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                                        <div class="form-group">
+                                                            <p>Total Discount(₹)</p>
+                                                            <p class="font_size_15 gotham_medium">{{final_payment.total_discount}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 no_padding">
+                                                        <div class="form-group">
+                                                            <p>Total Tax(₹)</p>
+                                                            <p class="font_size_15 gotham_medium">{{final_payment.total_tax}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 padding_right_0">
+                                                        <div class="form-group text-right">
+                                                            <p>Grand Total(₹)</p>
+                                                            <p class="font_size_15 gotham_medium">{{final_payment.grand_total}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="common_hr"></div>
+										<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 font_color_1 background_color_3">
+                                            <div class="row m_top_10 payment_bottom-row">
+												<div ng-if="!final_payment.invoice_number" class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+													<label class="gotham_light">Invoice No will be ({{billing_invoice_no_data.inv_prefix}}{{billing_invoice_no_data.inv_counter}})</label>&nbsp;<a data-toggle="modal" data-target="#modal_invoiceno_update" ng-click="openEditInvNo()" style="text-decoration:underline;color:#30aca5;" class="cursor_pointer" title="Click To Edit Invoice No.">Edit</a>
+												</div>
+												<div ng-if="final_payment.invoice_number" class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+													<label class="gotham_light">Invoice No is ({{final_payment.invoice_number}})</label>
+												</div>
+											</div>
+										</div>
+										<div class="clearfix"></div>
+                                        <div class="common_hr"></div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 font_color_1 background_color_3">
+                                            <div class="row m_top_10 payment_bottom-row">
+                                                <div class="col-lg-3 col-md-6 col-sm-3 col-xs-3">
+                                                    <label class="m_bottom_15 gotham_light required">Mode Of Payment</label>
+                                                    <div class="form-group selection_bx">
+                                                        <div class="position_relative ">
+                                                            <select name='payment_mode' id="payment_mode" chosen
+                                                                allow-single-deselect="true" placeholder_text_single="'None'"
+                                                                ng-options="value.title for value in payment_modes"
+                                                                ng-model="final_payment.payment_mode" ng-change="calculateModeOfPayment()"
+                                                                required="" class="common_input form-control">
+                                                                <option value=""></option>
+                                                            </select>
+                                                            <span>
+                                                                <img src="app/images/drop_down_arrow.png" alt="dropdown"
+                                                                    class="icon_image_right_dropdown icon_image_right_dropdown2" />
+                                                            </span>
+                                                        </div>
+                                                        <p ng-show="submitted && addPaymentForm.payment_mode.$error.required"
+                                                            class="error">Required</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-6 col-sm-3 col-xs-3">
+                                                    <div class="form-group">
+                                                        <label class="m_bottom_15 gotham_light">Payable (₹)</label>
+                                                        <p class="font_size_12 font_color_7 margin_top_5">{{final_payment.payable_amount}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-6 col-sm-3 col-xs-3">
+                                                    <div class="form-group">
+                                                        <label class="m_bottom_15 gotham_light">From Advance (₹)</label>
+                                                        <input class="form-control common_input" value="00" placeholder="From advance"
+                                                            type="text" ng-model="final_payment.from_advance" name="from_advance"
+                                                            ng-change="checkAdvancPaynowAmount(addPaymentForm, 1)" />
+                                                        <p ng-show="submitted && addPaymentForm.from_advance.$error.required"
+                                                            class="error">Required</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-6 col-sm-3 col-xs-3">
+                                                    <div class="form-group">
+                                                        <label class="m_bottom_15 gotham_light required">Pay Now (₹)</label>
+                                                        <input class="form-control common_input" placeholder="Pay now"
+                                                            type="text" name="paynow" ng-model="final_payment.pay_now"
+                                                            ng-change="checkAdvancPaynowAmount(addPaymentForm, 2)"
+                                                            required="" />
+                                                        <p ng-show="submitted && addPaymentForm.paynow.$error.required"
+                                                            class="error">Required</p>
+                                                        <p ng-show="submitted && addPaymentForm.from_advance.$error.pattern && !addPaymentForm.paynow.$error.required"
+                                                            class="error">Invalid amount.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="button_container m_top_10" ng-if="checkPermission(INVOICE_MODULE, EDIT)">
+                                            <input value="Accept" class="new_common_button btn_properties" type="submit" />
+                                            <input value="Cancel" ng-click="getInvoiceList();" class="new_common_button_1 btn_properties"
+                                                type="button" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="!isInvoiceEditMode">
+                                    <div class="add_appointment_details clearfix">
+                                        <div class="heading font_color_1 gotham_medium">
+                                            <h3 class="m_bottom_15 m_top_15 m_left_25 p_left_15 color_black">Payment
+                                            </h3>
+                                            <input value="Add Invoice" ng-click="add_invoice()" class="add-invoice-btn" type="button">
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding">
+                                            <div class="table-responsive" ng-if="invoices_list.length > 0">
+                                                <table class="table table-bordered font_color_3 gotham_light brLeft">
+                                                    <thead class="background_color_3 font_color_1">
+                                                        <tr>
+                                                            <th width="12%" class="text-center">Invoice No</th>
+                                                            <th width="10%" class="text-center">INV Date</th>
+                                                            <th width="10%" class="text-center">Total</th>
+                                                            <th width="10%" class="text-center">Discount</th>
+                                                            <th width="10%" class="text-center">Tax(₹)</th>
+                                                            <th width="10%" class="text-center">Payable Amount</th>
+                                                            <th width="10%" class="text-center">Advance Pay</th>
+                                                            <th width="10%" class="text-center">Paid Amount</th>
+                                                            <th width="13%" class="text-center">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(key, invoicesObj) in invoices_list">
+                                                            <td>
+                                                                {{invoicesObj.invoice_number}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {{invoicesObj.billing_invoice_date}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {{invoicesObj.billing_grand_total}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {{invoicesObj.billing_discount}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {{invoicesObj.billing_tax}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {{invoicesObj.billing_total_payable}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <span ng-if="invoicesObj.billing_advance_amount > 0">{{invoicesObj.billing_advance_amount}}</span>
+                                                                <span ng-if="invoicesObj.billing_advance_amount == 0">-</span>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <span ng-if="invoicesObj.billing_paid_amount > 0">{{invoicesObj.billing_paid_amount}}</span>
+                                                                <span ng-if="invoicesObj.billing_paid_amount == 0">0</span>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <a href="javascript:void(0);" ng-click="getPDFUrlInvoice(invoicesObj.billing_id)" data-toggle="modal" data-target="#modal_print_invoice">
+                                                                    <i class="fa fa-eye fa-icon-color" title="View"></i>
+                                                                </a> | <a href="javascript:void(0);" ng-click="getBillingDetail(invoicesObj)">
+                                                                    <i class="fa fa-pencil-square-o fa-icon-color" title="Edit"></i>
+                                                                </a> | <a href="javascript:void(0);" ng-click="delete_invoice(invoicesObj)">
+                                                                    <i class="fa fa-trash-o fa-icon-color" title="Delete"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
+                                                <p ng-if="invoices_list.length == 0" class="title1 text-center"> No record found</p>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div ng-if="!(checkPermission(INVOICE_MODULE, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+                        <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="patient_visit_page">
+        <div ng-include="'app/views/patient/templates_modal.html?'+getVer(2)"></div>
+        <div ng-if="diagramsModelShow" ng-anatomical-diagrams=""></div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="overlay-white" ng-if="!current_patient.user_id">
+        <div class="box-design-white">
+            <div ng-show="patientFilter == 3" class="title1" ng-bind-html="patient_startup_load_msg"></div>
+            <div ng-if="clinic_data.length > 1 && patientFilter == 3" class="col-lg-5 col-md-5 col-sm-5 hidden-xs" style="float: none;margin: 8px auto;padding: 0;">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown" style="border-radius: 5px;height: 40px;">
+                    <span ng-if="current_clinic">{{current_clinic.clinic_name | capitalize}}</span>
+                    <span><img src="app/images/down_arrow.png" /></span>
+                </button>
+                <ul class="dropdown-menu clinic_drop_down" style="width: 100%;">
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinic(clinic)"><a href="">{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul>
+            </div>
+            <div ng-show="patientFilter == 2" class="title1" ng-bind-html="patient_startup_no_patient_pending_msg"></div>
+            <div ng-show="patientFilter == 1" class="title1" ng-bind-html="patient_startup_no_patient_today_msg"></div>
+            <span ng-show="patientFilter != 3" class="cursor_pointer all-patient-link" ng-click="getPatientList(3, true);" ng-bind-html="patient_startup_click_to_view_all"></span>
+        </div>
+    </div>
+</div>
+<script>
+    $('.patient_list_width').hover(
+        function () {
+            $(".patient_list_width .nav-text").css('padding-left', '10px');
+            $(".recent_list_single").hide();
+            $(".recent_list_all").show();
+        },
+        function () {
+            $(".patient_list_width .nav-text").css('padding-left', '40px');
+            $(".recent_list_single").show();
+            $(".recent_list_all").hide();
+        }
+    );
+</script>

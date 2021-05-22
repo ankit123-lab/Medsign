@@ -1,0 +1,235 @@
+<div class="modal-body no_padding add-message-modal">
+	<div class="container container_width top_header background_color_1 white_color text-center">
+        <button type="button" class="close" ng-click="cancel()" data-dismiss="modal">X</button>
+        <h3>New Message</h3>                                    
+    </div>
+    <div class="container container_width middle_content"> 
+    	<div class="row">
+            <form name="addCommunicationForm" id="addCommunicationForm" novalidate="" ng-submit="addCommunication(addCommunicationForm)">
+                <!-- <div class="col-md-12 col-sm-12 col-xs-12 m_top_10 text-center sub-view-tab">
+                    <ul class="nav nav-pills gotham_medium tabs_items font_color_1" role="tablist">
+                        <li class="nav-item active" role="presentation">
+                            <a class="nav-link" data-toggle="pill" href="">SMS</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="pill" href="">EMAIL</a>
+                        </li>
+                    </ul>
+                </div> -->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_10">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h5 class="font_color_1">Add Recipients</h5>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 recipients_dropbox padding_0">
+                                    <select name='recipients_list' id="recipients_list" chosen multiple="" allow-single-deselect="true" ng-required="!someSelected()" placeholder_text_multiple="'Recipients'" ng-options="value.user_id as value.patient_name for value in recipients_list" style="width:100% !important;" ng-model="patient.selected_list" class="common_input form-control"><option value=""></option></select>
+                                    <p ng-show="(submitted) && addCommunicationForm.recipients_list.$error.required" class="error" >* Required</p>
+                                </div>
+                                <div style="padding: 10px 0;" class="background_color_3 col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20"> 
+                                    <div class="col-lg-6 col-md-4 col-sm-4 col-xs-12 font_color_1 text-center">
+                                        <a href="javascript:void(0);" class="font_color_1" ng-class="user_list_tab==1 ? 'commu_active_tab' : ''" ng-click="getPatients(1,1);">PATIENTS</a>
+                                    </div>
+                                    <div class="col-lg-6 col-md-4 col-sm-4 col-xs-12 font_color_1 text-center">
+                                        <a href="javascript:void(0);" class="font_color_1" ng-class="user_list_tab==2 ? 'commu_active_tab' : ''" ng-click="getPatientGroups(1,1);">GROUPS</a>
+                                    </div>
+                                </div>
+                                <div ng-show="(patients_list.length > 0 || patient_groups_list.length > 0) || (patient.search_patient != undefined && patient.search_patient != '')" class="no_padding col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
+                                    <div ng-show="user_list_tab==1" class="no_padding col-lg-8 col-md-8 col-sm-8 col-xs-12 font_color_1">
+                                        <input type="text" class="form-control common_input" placeholder="Search by name/mobile no." ng-keyup="getPatients(1)" ng-model="patient.search_patient" name="search_user" >
+                                    </div>
+                                    <div ng-show="user_list_tab==2" class="no_padding col-lg-12 col-md-12 col-sm-12 col-xs-12 font_color_1">
+                                        <input type="text" class="form-control common_input" placeholder="Search group" ng-keyup="getPatientGroups(1)" ng-model="patient.search_patient" name="search_user" >
+                                    </div>
+                                    <div ng-hide="user_list_tab==2" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 font_color_1 text-right">Select All</div>
+                                    <div class="no_padding col-lg-1 col-md-1 col-sm-1 col-xs-12 font_color_1 text-right">
+                                        <div ng-if="user_list_tab==1" class="common_checbox">
+                                            <input type="checkbox" id="patient_select_all" ng-model="patient.pt_selected_all" ng-click="togglePatientSelectAll()">    
+                                            <label for="patient_select_all">&nbsp;</label>
+                                        </div>
+                                        <div class="hide common_checbox">
+                                            <input type="checkbox" id="groups_select_all" ng-model="patient.pt_selected_all" ng-click="addGroupsToRecipients()">    
+                                            <label for="groups_select_all">&nbsp;</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-if="user_list_tab==1" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
+                                    <div class="row commu-patient-list" ng-repeat="patientObj in patients_list">
+                                        <div class="no_padding col-lg-11 col-md-11 col-sm-11 col-xs-12 ">
+                                           {{patientObj.patient_name}} 
+                                           <span class="font_color_1 "> (+91  {{patientObj.user_phone_number}})</span>
+                                        </div>
+                                        <div class="no_padding col-lg-1 col-md-1 col-sm-1 col-xs-12  text-right">
+                                            <div class="common_checbox">
+                                                <input type="checkbox" id="patient_select_{{patientObj.user_id}}" ng-value="patientObj.user_id" ng-model="patient.patient_id[patientObj.user_id]" ng-change="addRecipients(patientObj.user_id)">    
+                                                <label for="patient_select_{{patientObj.user_id}}">&nbsp;</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row commu-patient-list text-center" ng-if="patients_list.length==0" ng-bind-html="no_data_found">
+                                    </div>
+                                </div>
+                                <div ng-if="user_list_tab==2" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
+                                    <div class="row commu-patient-list" ng-repeat="patientGrpObj in patient_groups_list">
+                                        <div class="no_padding col-lg-11 col-md-11 col-sm-11 col-xs-12 ">
+                                           {{patientGrpObj.patient_group_title}} 
+                                           <span class="font_color_1 "> ({{patientGrpObj.total_member}})</span>
+                                        </div>
+                                        <div class="no_padding col-lg-1 col-md-1 col-sm-1 col-xs-12  text-right">
+                                            <div class="common_checbox">
+                                                <input type="checkbox" id="group_select_{{patientGrpObj.patient_group_id}}" ng-value="patientGrpObj.patient_group_id" ng-model="patient.patient_grp_id[patientGrpObj.patient_group_id]" ng-change="addGroupsToRecipients(patientGrpObj.patient_group_id)">    
+                                                <label for="group_select_{{patientGrpObj.patient_group_id}}">&nbsp;</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row commu-patient-list text-center" ng-if="patient_groups_list.length==0" ng-bind-html="no_data_found">
+                                    </div>
+                                </div>
+                                <div ng-if="user_list_tab==1" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
+                                    <div ng-show="patients_list.length > 0" class="row pagi-wrap">
+                                        <div class="pagination-wrap col-lg-12 text-center">
+                                            <a href="" ng-click="getNextPrev('prev')"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                                            <input ng-repeat="n in [] | range:total_page" type="button" ng-value="n" ng-click="getPatients(n)" ng-disabled="currentPage == n" ng-class="currentPage == n ? 'page-active' : ''" class="pagi-btn">
+                                            <a href="" ng-click="getNextPrev('next')"><img alt="previous" src="app/images/next_arrow.png"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-if="user_list_tab==2" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
+                                    <div ng-show="patient_groups_list.length > 0" class="row pagi-wrap">
+                                        <div class="pagination-wrap col-lg-12 text-center">
+                                            <a href="" ng-click="getNextPrev('prev')"><img alt="previous" src="app/images/prev_arrow.png"></a>
+                                            <input ng-repeat="n in [] | range:total_page" type="button" ng-value="n" ng-click="getPatientGroups(n)" ng-disabled="currentPage == n" ng-class="currentPage == n ? 'page-active' : ''" class="pagi-btn">
+                                            <a href="" ng-click="getNextPrev('next')"><img alt="previous" src="app/images/next_arrow.png"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div ng-show="communication.is_buy_box_show" class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 m_bottom_10">
+                                    <h5 class="font_color_1 row">Buy SMS credits</h5>
+                                </div>
+                                <div class="commu-patient-list col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_bottom_10 p_top_15">
+                                            <select style="padding: 5px;"
+                                                    name='buy_credits_box'
+                                                    id="buy_credits_box"
+                                                    placeholder="'Select'" 
+                                                    ng-model="communication.selected_credits" 
+                                                    ng-required="false" 
+                                                    ng-change="changeCredits()" 
+                                                    ng-options="val.value as val.label for val in creditsPlan"
+                                                    >                   
+                                            </select>
+                                            X 100 = {{communication.total_buy_credits}} Credits 
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_bottom_10">
+                                            Total Cost ({{communication.sms_price}} Rs. Per SMS): 
+                                            <b>{{communication.total_price}}</b> Rs.
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <table class="table table-responsive payment-table padding_0 m_bottom_0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td align="right">Sub Total</td>
+                                                        <td align="right">{{communication.total_price}}</td>
+                                                    </tr>
+                                                    <tr ng-if="!communication.is_apply_igst">
+                                                        <td align="right">
+                                                        SGST ({{communication.gst_percent.sgst}}%)
+                                                        </td>
+                                                        <td align="right">{{order_summery_data.sgst_amount}}</td>
+                                                    </tr>
+                                                    <tr ng-if="!communication.is_apply_igst">
+                                                        <td align="right">CGST ({{communication.gst_percent.cgst}}%)</td>
+                                                        <td align="right">{{order_summery_data.cgst_amount}}</td>
+                                                    </tr>
+                                                    <tr ng-if="communication.is_apply_igst">
+                                                        <td align="right">IGST ({{communication.gst_percent.igst}}%)</td>
+                                                        <td align="right">{{order_summery_data.igst_amount}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="right">Total Amount</td>
+                                                        <td align="right">{{order_summery_data.total_amount}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center commu-patient-list" style="padding-bottom: 0px;">
+                                            <input ng-disabled="communication.selected_credits == undefined || communication.selected_credits == ''" type="button" value="Buy Now" name="buy_now" ng-click="placeCreditsOrder()" class="btn new_common_button btn_properties">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 m_bottom_10">
+                                    <h5 class="font_color_1 row">Add Message</h5>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 m_bottom_10 text-right">
+                                    <span class="font_color_5">Available credits:</span>&nbsp;{{communication.available_sms_credit}}<br/><a ng-show="!communication.is_buy_box_show" class="font_color_2 common_bottom_border" href="" ng-click="buyMoreBox()">Buy more</a>
+                                    <!-- <input type="button" valng-click="buyMoreBox()"ue="More Credits" name="more_credits" class="btn new_common_button"> -->
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_bottom_10">
+                                    <!-- <p>Dear {patient_name},</p> -->
+                                    <div ng-if="patient.patient_message != undefined && patient.patient_message != ''" class="sample-sms-text">
+                                        <span class="dynamic-textbox" ng-repeat="(key, tmpText) in sms_template_text_arr">
+                                            <span class="dynamic-txt">{{tmpText}}</span> <input ng-if="(key+1) != sms_template_text_arr.length" type="text" ng-model="sms_dynamic_text[key].text" name="dynamic_text_{{key}}" class="sms-text-box" ng-keyup="dynamicTextUpdate()" ng-pattern="/^[^`~!#$%\^&*()_+={}|[\]\\<>?]*$/" required maxlength="30" ng-maxlength="30" placeholder="{{sms_template_placeholder[key] != undefined ? sms_template_placeholder[key] : ''}}">
+                                            <p ng-show="(submitted) && addCommunicationForm.dynamic_text_{{key}}.$error.required" class="error">* Required</p>
+                                            <p ng-show="(submitted) && addCommunicationForm.dynamic_text_{{key}}.$error.pattern" class="error">Not allow special characters</p>
+                                            <p ng-show="(submitted) && addCommunicationForm.dynamic_text_{{key}}.$error.maxlength" class="error">Only 30 characters allowed.</p>
+                                        </span>
+                                    </div>
+                                    <!-- <p ng-if="patient.patient_message != undefined && patient.patient_message != ''" class="sample-sms-text">{{patient.patient_message}}</p> -->
+                                    <!-- <textarea type="text" class="form-control common_input" id="patient_message" placeholder="Message" name="patient_message" ng-model="patient.patient_message" maxlength="{{patient.smsCharLimit}}" ng-maxlength="patient.smsCharLimit" required="true" style="height: 150px;" 
+                                    ng-keyup="smsCheckLength()" 
+                                    ng-pattern="/^[^`~!#$%\^&*()_+={}|[\]\\<>?]*$/"
+                                    ></textarea> -->
+                                    <p ng-if="patient.patient_message != undefined && patient.patient_message != ''" class="text-right pull-right">{{patient.remainingChars}} <span class="font_color_5 font_size_13">characters</span><br/>{{patient.per_sms_credit_used}} <span class="font_color_5 font_size_13">credit(s) used per message</span></p>
+                                    <p ng-if="patient.patient_message != undefined && patient.patient_message != ''" class="text-right pull-left"><a class="font_color_5 common_bottom_border font_size_13" href="" ng-click="testTemplateSms()">Click to test message on your mobile</a></p>
+
+                                    <!-- <p ng-show="(submitted) && addCommunicationForm.patient_message.$error.required" class="error">* Required</p>
+                                    <p ng-show="(submitted) && addCommunicationForm.patient_message.$error.pattern" class="error">Not allow special characters</p>
+                                    <p ng-show="(submitted) && addCommunicationForm.patient_message.$error.maxlength" class="error">Only {{patient.smsCharLimit}} characters allowed.</p> -->
+                                </div>
+                                <div ng-if="sms_template_list.length > 0" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
+                                    <h5 class="font_color_1 row">Select SMS Templates</h5>
+                                    <div class="row commu-patient-list" ng-repeat="(key, templateObj) in sms_template_list">
+                                        <div class="no_padding col-lg-11 col-md-11 col-sm-11 col-xs-12 ">
+                                           {{templateObj.communication_sms_template_title | trimString : 50}} 
+                                        </div>
+                                        <div class="no_padding col-lg-1 col-md-1 col-sm-1 col-xs-12  text-right">
+                                            <div class="text-right common_radio">
+                                                <input type="radio" name="sms_template_id" id="template_select_{{templateObj.communication_sms_template_id}}" ng-value="templateObj.communication_sms_template_id" ng-model="patient.template_id" ng-change="changeSmsTemplate(key)" required>    
+                                                <label for="template_select_{{templateObj.communication_sms_template_id}}">&nbsp;</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p ng-show="(submitted) && addCommunicationForm.sms_template_id.$error.required" class="error row">* Select Template</p>
+                                </div>
+                                <div class="common_bottom_border col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center m_bottom_10">
+                                        <input type="submit" value="Send" name="save" class="btn new_common_button btn_properties">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left m_top_20 m_bottom_10 font_color_5 font_size_13">
+                                      Dear Doctor,<br/>While sending bulk message communication to your patients, following text message credit points will be deducted per message. Depending upon length of the message, number of credit points will be deducted as follows.
+                                      <p>Message length upto 125 characters – 1 message credit deducted</p>
+                                      <p>Message length upto 250 characters – 2 messages credit deducted</p>
+                                      <p>Message length upto 375  characters – 3 messages credit deducted</p>
+                                      <p>Message length upto 500 characters – 4 messages credit deducted</p>
+                                      <p>Message length upto 640  characters – 5 messages credit  deducted</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+    </div>
+</div>

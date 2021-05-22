@@ -1,0 +1,390 @@
+<link rel="stylesheet" ng-href="app/css/diseases_template.css?{{getVer(3)}}" /> 
+<div class="tab-pane fade in" id="clinical_notes">
+    <div ng-if="clinical_notes_reports_id == undefined || common.isClinicalForEdit" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_light font_color_5" ng-class="current_appointment_date_obj.is_editable ? '' : 'disabled-wrap'">
+      <div ng-if="!current_appointment_date_obj.is_editable" class="overlap-wrap" style="left: 3px;width: 99%;"></div>
+        <form ng-keypress="checkFormSubmit($event)" name="addClinicalNotesForm" ng-submit="addClinicalNotes(addClinicalNotesForm)" novalidate="" ng-if="checkPermission(CLINICAL_NOTES_MODULE, VIEW)">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+					<!-- data-parent="#accordion" -->
+                    <a href="" data-toggle="collapse" data-target="#collapseOne" class="accordion-toggle" aria-expanded="true" ng-click="closeTooltip()">
+                        <div class="panel-heading"><h2>K/C/O</h2></div>
+                    </a>
+                    <div id="collapseOne" class="panel-collapse collapse in" aria-expanded="true">
+                        <div class="panel-body">
+                            <ul class="rich_text_ul">
+                                <li ng-repeat="(key, test) in testKCO track by $index">
+                                    <span class="pull-left dash_span">-</span>
+                                    <input custom-autofocus="$index == focusIndex[13]" 
+                                           id="note_{{key}}" 
+                                           client-auto-complete dirtype='13' 
+                                           key="{{key}}" 
+                                           type="text" 
+                                           class="common_input pull-left" 
+                                           name="similarbrand"  
+                                           ng-keyup="appendNote(key, $event, testKCO, 13)"  
+                                           placeholder="{{key==0  ? 'Enter K/C/O':''}}"
+                                           ng-model="test.search" 
+                                           />   
+                                    <div class="pull-right right_icon cursor_pointer" 
+                                         ng-if="!test.autoID && test.search"
+                                         ng-click="removeClinicalNote(key, 5)">
+                                        <i class="glyphicon glyphicon-remove tooltip_custom"
+                                           id="testChiefRight_1_{{key}}"
+                                           ></i>                                        
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
+                            </ul> 
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <a data-toggle="collapse"  href="" data-target="#collapseTwo" class="accordion-toggle" aria-expanded="true" ng-click="closeTooltip()">
+                        <div class="panel-heading">
+                            <h2>Chief Complaints</h2>
+                        </div>
+                    </a>
+                    <div id="collapseTwo" class="panel-collapse collapse in" aria-expanded="true">
+                        <div class="panel-body">
+                            <div class="rich_text_ul">
+                                <ul class="rich_text_ul common_hr">
+                                    <li ng-repeat="(key, test) in testChief track by $index">
+                                        <span class="pull-left dash_span">-</span>
+                                        <input custom-autofocus="$index == focusIndex[1]" 
+                                               id="note_{{key}}" 
+                                               client-auto-complete dirtype='8' 
+                                               key="{{key}}" 
+                                               type="text" 
+                                               class="common_input pull-left" 
+                                               name="similarbrand" 
+                                               ng-keyup="appendNote(key, $event, testChief, 1)" 
+                                               placeholder="{{key==0  ? 'Enter Complaints':''}}" 
+                                               ng-model="test.search" 
+                                               />                                          
+                                        <div class="pull-right  right_icon cursor_pointer" 
+                                             ng-if="!test.autoID && test.search" 
+                                             ng-click="addClinicalNotesMain(key, 1); test.isAdded = true;">
+                                            <i class="glyphicon glyphicon-ok  tooltip_custom" 
+                                               data-toggle="tooltip" 
+                                               title="Click on the icon to add to local catalog." 
+                                               data-placement="left" 
+                                               ng-class="test.isAdded ? 'green_class' : ''" 
+                                               id="testChiefRight_1_{{key}}" 
+                                               ></i>
+                                        </div>
+                                        <div class="pull-right  right_icon cursor_pointer" 
+                                             ng-if="!test.autoID && test.search"
+                                             ng-click="removeClinicalNote(key, 1)">
+                                            <i class="glyphicon glyphicon-remove  tooltip_custom"
+                                               id="testChiefRight_1_{{key}}"
+                                               ></i>                                        
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </li>
+                                </ul>
+                                <div class="notes-images " >
+                                    <div class="pull-left">
+                                        <img 
+                                            ng-repeat="tempImg in chief_images track by $index" 
+                                            ng-src="{{tempImg.images_thumb_url}}"
+                                            class="clinical_image cursor_pointer"
+                                            ng-click="openImageForDelete(tempImg)"
+                                            >
+                                    </div>
+                                    <label ng-if="current_appointment_date_obj.is_editable"
+                                           class="bg_icon_images notes_img_upload_btn cursor_pointer pull-right" 
+                                           ng-click='openPatientFile("patientReportFile1")'></label>
+                                    <input type="file" key="clinical_notes" pass="1"
+                                           ng-file-select-patient-report="onFileSelect($files)" 
+                                           class="hide" 
+                                           id="patientReportFile1" accept="image/*"> 
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <a data-toggle="collapse"  href="" data-target="#collapseThree" class="accordion-toggle" aria-expanded="true" ng-click="closeTooltip()">
+                        <div class="panel-heading">
+                            <h2>Add Observations</h2>
+                        </div>
+                    </a>
+                    <div id="collapseThree" class="panel-collapse collapse in" aria-expanded="true">
+                        <div class="panel-body">
+                            <div class="rich_text_ul">
+                                <ul class="rich_text_ul common_hr">
+                                    <li ng-repeat="(key, test) in testObservation track by $index">
+                                        <span class="pull-left dash_span">-</span>
+                                        <input custom-autofocus="$index == focusIndex[2]" 
+                                               id="note_{{key}}" 
+                                               client-auto-complete dirtype='9' 
+                                               key="{{ key}}" 
+                                               type="text" 
+                                               class="common_input pull-left" 
+                                               name="similarbrand"  
+                                               ng-keyup="appendNote(key, $event, testObservation, 2)"  
+                                               placeholder="{{key==0  ? 'Enter Observation':''}}"
+                                               ng-model="test.search" 
+                                               />
+                                        <div class="pull-right  right_icon cursor_pointer" 
+                                             ng-if="!test.autoID && test.search"
+                                             ng-click="addClinicalNotesMain(key, 2); test.isAdded = true;">
+                                            <i class="glyphicon glyphicon-ok  cursor_pointer"
+                                               ng-if="!test.autoID && test.search"
+                                               data-toggle="tooltip" title="Click on the icon to add to local catalog."
+                                               data-placement="left"                                                
+                                               ng-class="test.isAdded ? 'green_class' : ''"
+                                               id="testChiefRight_2_{{key}}"
+                                               ></i>
+                                        </div>
+                                        <div class="pull-right  right_icon cursor_pointer" 
+                                             ng-if="!test.autoID && test.search"
+                                             ng-click="removeClinicalNote(key, 2)">
+                                            <i class="glyphicon glyphicon-remove  tooltip_custom"
+                                               id="testChiefRight_1_{{key}}"
+                                               ></i>                                        
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </li>
+                                </ul>
+                                <div class="notes-images">
+                                    <div class="pull-left">
+                                        <img 
+                                            ng-repeat="tempImg in obs_images" 
+                                            ng-src="{{tempImg.images_thumb_url}}"
+                                            class="clinical_image cursor_pointer"
+                                            ng-click="openImageForDelete(tempImg)" />
+                                    </div>
+                                    <label
+                                        ng-if="current_appointment_date_obj.is_editable"
+                                        class="bg_icon_images notes_img_upload_btn cursor_pointer pull-right" 
+                                        ng-click='openPatientFile("patientReportFile2")'   ></label>
+                                    <input type="file" key="clinical_notes" pass="2"
+                                           ng-file-select-patient-report="onFileSelect($files)" 
+                                           class="hide" 
+                                           id="patientReportFile2" accept="image/*" /> 
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <a data-toggle="collapse" href="" data-target="#collapseFour" class="accordion-toggle" aria-expanded="true" ng-click="closeTooltip()">
+                        <div class="panel-heading">
+                            <h2>Add Diagnosis</h2>
+                        </div>
+                    </a>
+                    <div id="collapseFour" class="panel-collapse collapse in" aria-expanded="true">
+                        <div class="panel-body">
+                            <div class="rich_text_ul">
+                                <ul class="rich_text_ul common_hr">
+                                    <li ng-repeat="(key, test) in testDiagnosis track by $index">
+                                        <span class="pull-left dash_span">-</span>
+                                        <input custom-autofocus="$index == focusIndex[3]" 
+                                               id="note_{{key}}" 
+                                               client-auto-complete dirtype='10' 
+                                               key="{{ key}}" 
+                                               type="text" 
+                                               class="common_input pull-left" 
+                                               name="similarbrand"  
+                                               ng-keyup="appendNote(key, $event, testDiagnosis, 3)"  
+                                               placeholder="{{key==0  ? 'Enter Diagnosis':''}}"
+                                               ng-model="test.search" 
+                                               />          
+                                        <div class="pull-right  right_icon cursor_pointer" 
+                                             ng-if="!test.autoID && test.search"
+                                             ng-click="addClinicalNotesMain(key, 3); test.isAdded = true;">
+                                            <i class="glyphicon glyphicon-ok  cursor_pointer"
+                                               ng-if="!test.autoID && test.search"
+                                               data-toggle="tooltip" title="Click on the icon to add to local catalog."
+                                               data-placement="left"                                            
+                                               ng-class="test.isAdded ? 'green_class' : ''"
+                                               id="testChiefRight_3_{{key}}"
+                                               ></i>
+                                        </div>
+                                        <div class="pull-right  right_icon cursor_pointer" 
+                                             ng-if="!test.autoID && test.search"
+                                             ng-click="removeClinicalNote(key, 3)">
+                                            <i class="glyphicon glyphicon-remove  tooltip_custom"
+                                               id="testChiefRight_1_{{key}}"
+                                               ></i>                                        
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </li>
+                                </ul>
+                                <div class="notes-images ">
+                                    <div class="pull-left">
+                                        <img 
+                                            ng-repeat="tempImg in diagnosis_images" 
+                                            ng-src="{{tempImg.images_thumb_url}}"
+                                            class="clinical_image cursor_pointer"
+                                            ng-click="openImageForDelete(tempImg)"
+                                            >
+                                    </div>
+                                    <label
+                                        ng-if="current_appointment_date_obj.is_editable" 
+                                        class="bg_icon_images notes_img_upload_btn cursor_pointer pull-right" 
+                                        ng-click='openPatientFile("patientReportFile3")'   ></label>
+                                    <input type="file" key="clinical_notes" pass="3"
+                                           ng-file-select-patient-report="onFileSelect($files)" 
+                                           class="hide" 
+                                           id="patientReportFile3" accept="image/*"> 
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <a data-toggle="collapse" href="" data-target="#collapseFive"  class="accordion-toggle" aria-expanded="true" ng-click="closeTooltip()">
+                        <div class="panel-heading">
+                            <h2>Add Personal notes</h2>
+                        </div>
+                    </a>
+                    <div id="collapseFive" class="panel-collapse collapse in" aria-expanded="true">
+                        <div class="panel-body">
+                            <div class="rich_text_ul">
+                                <ul class="rich_text_ul common_hr">
+                                    <li ng-repeat="(key, test) in testNotes track by $index">
+                                        <span class="pull-left dash_span">-</span>
+                                        <input custom-autofocus="$index == focusIndex[4]" 
+                                               id="note_{{key}}" 
+                                               client-auto-complete dirtype='11' 
+                                               key="{{ key}}" 
+                                               type="text" 
+                                               class="common_input pull-left" 
+                                               name="similarbrand"  
+                                               ng-keyup="appendNote(key, $event, testNotes, 4)"  
+                                               placeholder="{{key==0  ? 'Enter Notes':''}}"
+                                               ng-model="test.search" 
+                                               />   
+                                        <div class="pull-right  right_icon cursor_pointer" 
+                                             ng-if="!test.autoID && test.search"
+                                             ng-click="addClinicalNotesMain(key, 4); test.isAdded = true;">
+                                            <i class="glyphicon glyphicon-ok  cursor_pointer"
+                                               ng-if="!test.autoID && test.search"
+                                               data-toggle="tooltip" title="Click on the icon to add to local catalog."
+                                               data-placement="left"                                              
+                                               ng-class="test.isAdded ? 'green_class' : ''"
+                                               id="testChiefRight_4_{{key}}"
+                                               ></i>
+                                        </div>
+                                        <div class="pull-right  right_icon cursor_pointer" 
+                                             ng-if="!test.autoID && test.search"
+                                             ng-click="removeClinicalNote(key, 4)">
+                                            <i class="glyphicon glyphicon-remove  tooltip_custom"
+                                               id="testChiefRight_1_{{key}}"
+                                               ></i>                                        
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </li>
+                                </ul>
+                                <div class="notes-images " >
+                                    <div class="pull-left">
+                                        <img 
+                                            ng-repeat="tempImg in notes_images" 
+                                            ng-src="{{tempImg.images_thumb_url}}"
+                                            class="clinical_image cursor_pointer"
+                                            ng-click="openImageForDelete(tempImg)"
+                                            >
+                                    </div>
+                                    <label ng-if="current_appointment_date_obj.is_editable"
+                                           class="bg_icon_images notes_img_upload_btn cursor_pointer pull-right" 
+                                           ng-click='openPatientFile("patientReportFile4")'   ></label>
+                                    <input type="file" key="clinical_notes" pass="4"
+                                           ng-file-select-patient-report="onFileSelect($files)" 
+                                           class="hide" 
+                                           id="patientReportFile4" accept="image/*"> 
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                                             
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="button_container" ng-if="current_appointment_date_obj.is_editable && role[CLINICAL_NOTES_MODULE][ADD] == 'on'">
+                <input type="submit" value="Save" class="new_common_button btn_properties" />
+                <input type="button" value="Cancel" ng-click="getPatientReportDetail();" class="new_common_button_1 btn_properties" />
+            </div>
+        </form>
+    </div>
+    <div ng-if="clinical_notes_reports_id != undefined && !common.isClinicalForEdit && (checkPermission(CLINICAL_NOTES_MODULE, VIEW))" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_light">
+          <div class="clinical-notes-wrap">
+              <p>K/C/O</p>                  
+              <div class="clinical-notes-text" ng-repeat="(key, test) in testKCO track by $index">
+                 <span ng-if="test.search != '' && test.search != undefined">- {{test.search}}</span>
+              </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="clinical-notes-wrap">
+              <p>Complaints</p>                  
+              <div class="clinical-notes-text" ng-repeat="(key, test) in testChief track by $index">
+                 <span ng-if="test.search != '' && test.search != undefined">- {{test.search}}</span>
+              </div>
+              <div class="pull-left">
+                  <img 
+                      ng-repeat="tempImg in chief_images" 
+                      ng-src="{{tempImg.images_thumb_url}}"
+                      class="clinical_image cursor_pointer"
+                      ng-click="openImageForDelete(tempImg)" />
+              </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="clinical-notes-wrap">
+              <p>Observations</p>                  
+              <div class="clinical-notes-text" ng-repeat="(key, test) in testObservation track by $index">
+                 <span ng-if="test.search != '' && test.search != undefined">- {{test.search}}</span>
+              </div>
+              <div class="pull-left">
+                  <img 
+                      ng-repeat="tempImg in obs_images" 
+                      ng-src="{{tempImg.images_thumb_url}}"
+                      class="clinical_image cursor_pointer"
+                      ng-click="openImageForDelete(tempImg)" />
+              </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="clinical-notes-wrap">
+              <p>Diagnosis</p>                  
+              <div class="clinical-notes-text" ng-repeat="(key, test) in testDiagnosis track by $index">
+                 <span ng-if="test.search != '' && test.search != undefined">- {{test.search}}</span>
+              </div>
+              <div class="pull-left">
+                  <img 
+                      ng-repeat="tempImg in diagnosis_images" 
+                      ng-src="{{tempImg.images_thumb_url}}"
+                      class="clinical_image cursor_pointer"
+                      ng-click="openImageForDelete(tempImg)" />
+              </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="clinical-notes-wrap">
+              <p>Personal Notes</p>                  
+              <div class="clinical-notes-text" ng-repeat="(key, test) in testNotes track by $index">
+                 <span ng-if="test.search != '' && test.search != undefined">- {{test.search}}</span>
+              </div>
+              <div class="pull-left">
+                  <img 
+                      ng-repeat="tempImg in notes_images" 
+                      ng-src="{{tempImg.images_thumb_url}}"
+                      class="clinical_image cursor_pointer"
+                      ng-click="openImageForDelete(tempImg)" />
+              </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="button_container">
+              <input type="button" value="Edit" ng-if="current_appointment_date_obj.is_editable && role[CLINICAL_NOTES_MODULE][EDIT] == 'on'" class="new_common_button btn_properties" ng-click="openEditForm(2)" />
+              </a>           
+          </div>
+    </div>
+    <div ng-if="!(checkPermission(CLINICAL_NOTES_MODULE, VIEW))" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_light font_color_5">
+        <div class="text-center gotham_book font_size_20 m_top_20">
+            <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+        </div>
+    </div>
+</div>

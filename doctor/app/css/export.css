@@ -1,0 +1,38 @@
+.new_common_button_3.btn_export{
+    width: 128px;
+}
+/*-----------------------Modal PoPUp Add Staff Css--------------------*/
+.modal-dialog.modal_dialog_width {
+    margin: 0 auto;
+    padding: 30px;
+    width: 1367px;
+}
+#modal_export .modal-backdrop.in {
+    overflow-x: auto;
+    min-width: 1367px !important;
+}
+#modal_export{
+    overflow-x: auto;
+}
+.modal-content{
+    border: none !important;
+    border-radius: 0;
+    height: 750px;
+}
+.modal-title.modaltitle_m{
+    /* margin: 15px !important; */
+}
+.modal-footer{
+    border: none;
+}
+.big_text_placeholder {
+    background-color: #F1F1F1;
+    height: 80px;
+    width: 88%;
+    padding: 15px;
+    border: 2px solid #EBEBEB;
+    border-radius: 5px;
+    line-height: 24px;
+    margin: 10px auto;
+}
+/*-----------------------Modal PoPUp Add Staff Css--------------------*/

@@ -1,0 +1,58 @@
+<div ng-include="'app/views/common/header.html?'+getVer(2)"></div>
+<link rel="stylesheet" ng-href="app/css/block_calendar.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/calender_patientdetails_popup.css?{{getVer(3)}}" />
+<div ng-cloak ui-view="" autoscroll="false" class="content-wrapper"></div>
+<!-- Modal -->
+<div id="autologout_modal" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content no_padding">
+            <div class="modal-header common_title background_color_1 white_color text-center">
+                <h3 class="modal-title modaltitle_m">OTP verification</h3>        
+            </div>
+            <form id="login_form" method="post" role="form" name="againLoginForm" ng-submit="checkOtpLogin(againLoginForm)" novalidate="">
+                <div class="form-group">
+                    <div class="forgot_password_label" >Please enter your verification code. <br /> Which you have received to login.</div>
+                    <input type="text" name="send_register_otp" id="send_register_otp" tabindex="1" class="form-control login_input" placeholder="Enter OTP" value="" required="" ng-model="login.otp">
+                    <p ng-show="(againLoginForm.send_register_otp.$touched || submitted) && againLoginForm.send_register_otp.$error.required" class="error" style="text-align: center">* Required.</p>
+                </div>
+                <div class="form-group m_top_30 text-center">
+                    <input type="submit" name="login-submit" id="login-submit" class="btn_properties new_common_button" value="Submit"/>
+                </div>               
+                <div class="form-group m_top_15">
+                    <a href="#/app/login"><div class="login_again font_color_2 cursor_pointer" id="login_again" >Back To Login</div></a>
+                    <div class="clearfix"></div>
+                    <div class="forgot_password_label hide" >If you didn't receive a code you can</div>
+                    <div class="otp_again margin_0_auto font_color_2 cursor_pointer " ng-show="is_send_button_visible" ng-click="resend()">SEND</div>
+                    <div class="otp_again margin_0_auto font_color_2 cursor_pointer" ng-show="is_send_timer_visible"  ng-init="settick()" >{{ resendWaiting | date:'mm:ss' }}</div>
+                </div>
+            </form>            
+        </div>
+    </div>
+</div>
+<div id="term_condition_modal" class="modal fade in" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal_dialog_width modal-lg">
+		<div class="modal-content no_padding">
+			<div class="modal-header common_title background_color_1 white_color text-center">                           
+				<h3 class="modal-title modaltitle_m">Terms & Condition </h3>                            
+			</div>
+			<form id="terms_form" method="post" role="form" name="termsForm" ng-submit="acceptTerms(termsForm)" novalidate="">
+				<div class="col-md-12">
+				<!-- Contain Start -->
+				<div ng-bind-html="terms_condition_contain"></div>
+				<br/>
+				<!-- Contain end -->
+					<div class="form-group padding_left_0 common_checbox">
+						<input type="checkbox" id="terms_checkbox"
+								name="terms_condition"
+								ng-model="login.terms_condition" required />    
+						<label for="terms_checkbox" class="disclose"> I Agree</label>
+						<p ng-show="(termsForm.terms_condition.$touched || submitted) && termsForm.terms_condition.$error.required" class="error">{{ terms_condition}}</p>
+					</div>
+				</div>
+				<div class="form-group m_top_30 text-center">
+					<input type="submit" name="login-submit" id="login-submit" class="btn_properties new_common_button" value="Submit"/>
+				</div>               
+			</form>            
+		</div>
+	</div>
+</div>

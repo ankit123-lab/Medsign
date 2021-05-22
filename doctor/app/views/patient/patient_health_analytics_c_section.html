@@ -1,0 +1,124 @@
+<div class="col-md-12 col-sm-12 col-xs-12 padding_0 text-center m_top_10">
+    <ul class="nav nav-pills medicine_details" role="tablist" ng-if="patient_health_data.length > 0">
+        <li class="nav-item" ng-class="healthObj.patient_analytics_analytics_id == active_analytics_id ? 'active' : ''" role="presentation" ng-repeat="healthObj in patient_health_data track by $index">
+            <a class="nav-link" ng-click="show_analytic_chart(healthObj.patient_analytics_analytics_id)" title="{{healthObj.patient_analytics_name}}" data-toggle="pill" href="">{{healthObj.patient_analytics_name_precise}}</a>
+        </li>
+    </ul>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12 padding_0 m_top_10">
+    <div class="col-md-8 col-sm-9 col-xs-9">
+        <ul class="nav nav-pills gotham_medium tabs_items font_color_1" role="tablist">
+            <li class="nav-item active" role="presentation">
+                <a class="nav-link" data-toggle="pill" ng-click="healthAnalyticTab(1)" data-target="#app_table_1" href="">Table</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" data-toggle="pill" ng-click="healthAnalyticTab(2)" data-target="#app_graph_1" href="">Graph</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a ng-if="patient_report_tab_index == 2" class="nav-link btnfc" href="javascript:void(0);" onclick="setFullScreenMode('patient-analytics-fullscreen-mode',this);">Full Screen</a>
+                <a ng-if="patient_report_tab_index == 6 || patient_report_tab_index == 7 || patient_report_tab_index == 8" class="nav-link btnfc" href="javascript:void(0);" onclick="setFullScreenMode('reports-healthanalytics-fullscreen-mode',this);">Full Screen</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-4 col-sm-3 col-xs-3 text-right" ng-show="isShowHealthAnalyticPagination">
+        <ul class="pagination no_margin">
+            <li><a href="" ng-click="getTableDataHealthAnalytics(false, 'prev')"><img alt="previous"
+                        src="app/images/prev_arrow.png"></a></li>
+            <li><a href="" ng-click="getTableDataHealthAnalytics(false, 'next')"><img alt="previous"
+                        src="app/images/next_arrow.png"></a></li>
+        </ul>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="common_hr m_top_10"></div>
+<div class="tab-content m_left_25">
+    <div id="app_table_1" class="tab-pane fade in active">
+        <div class="col-md-12 col-sm-12 col-xs-12 padding_0 m_top_10">
+            <div class="table-responsive" style="overflow-x: auto">
+                <table class="table table-bordered font_color_3 gotham_light" ng-if="patient_health_analysis_data.length > 0">
+                    <thead class="background_color_3 font_color_1">
+                        <tr>
+                            <th class="text-center"></th>
+                            <th class="text-center" ng-repeat="healthAnalysisObj in patient_health_analysis_data track by $index" title="{{((healthAnalysisObj.user_type==2) ? docPrefix : '') + healthAnalysisObj.user_name}}">{{healthAnalysisObj.health_analytics_report_date
+                                | date:'dd'}}-{{healthAnalysisObj.health_analytics_report_date
+                                | date:'MMM'}}<br />({{
+                                healthAnalysisObj.health_analytics_report_date | date:'y'}})</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="healthObj in patient_health_data track by $index">
+                            <td class="font_color_1"><span class="cursor_pointer" title="{{healthObj.patient_analytics_name}}">
+                            {{healthObj.patient_analytics_name_precise}} <i ng-show="healthObj.min != '' && healthObj.max != ''" style="float: right;margin-top: 4px;" class="fa fa-info-circle" title="Normal Range: {{healthObj.min}} - {{healthObj.max}}"></i>
+                            <i ng-show="healthObj.min == '' && healthObj.max == '' && healthObj.range != undefined && healthObj.range != ''" style="float: right;margin-top: 4px;" class="fa fa-info-circle" title="{{healthObj.range}}"></i>
+                            </span></td>
+                            <td class="text-center" ng-repeat="healthAnalysisObj in patient_health_analysis_data track by $index">
+                                <span ng-repeat="valueObj in healthAnalysisObj.health_analytics_report_data_array track by $index">
+                                    <span ng-class="[healthAnalysisObj.user_type == 1 ? 'patient_added_record' : 'doctor_added_record', (valueObj.value < healthObj.min || valueObj.value > healthObj.max) && healthObj.min != '' && healthObj.max != '' ? 'abnormal-val' : '']"
+                                        ng-if="valueObj.id == healthObj.patient_analytics_analytics_id">{{valueObj.value}}</span>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p ng-if="patient_health_analysis_data.length == 0" class="m_top_20 title1 text-center"> No record found</p>
+                <!-- <table class="table table-bordered font_color_3 gotham_light" ng-if="patient_health_data.length > 0">
+                    <thead class="background_color_3 font_color_1">
+                        <tr>
+                            <th class="text-center"></th>
+                            <th class="text-center" ng-repeat="healthObj in patient_health_data track by $index">
+                                {{ healthObj.patient_analytics_name}}
+                            </th>                                                
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="healthAnalysisObj in patient_health_analysis_data track by $index">
+                            <td>{{ healthAnalysisObj.health_analytics_report_date | date: 'dd' }}-{{ healthAnalysisObj.health_analytics_report_date | date:'MMM' }}</td>
+                            <td ng-repeat="healthObj in patient_health_data track by $index">
+                                <span ng-repeat="valueObj in healthAnalysisObj.health_analytics_report_data_array">
+                                    <span ng-if="valueObj.id == healthObj.patient_analytics_analytics_id">
+                                        {{ valueObj.value}} 
+                                    </span>
+                                </span>
+                            </td>
+                        </tr>                                                                                       
+                    </tbody>
+                </table> -->
+            </div>
+        </div>
+    </div>
+    <div id="app_graph_1" class="tab-pane fade">
+        <div id="health-analytics-line-chart" ng-init="renderHealthAnalyticsLineChart(patient_health_analysis_data, '')" class="col-md-12 col-sm-12 col-xs-12 padding_0 text-center m_top_10">
+            <div ng-if="isHealthAnalyticsChartActive" class="col-md-12 col-sm-12 col-xs-12 padding_0">
+                <div class="text-right" style="margin-right: 10px;">
+                    <ul ng-if="active_analytics_id==308" class="nav nav-pills gotham_medium tabs_items font_color_1" role="tablist">
+                        <li class="nav-item " ng-class="graphType==1 ? 'active':''" role="presentation">
+                            <a class="nav-link" ng-click="uas7Graph(1)" data-toggle="pill" href="">Daily</a>
+                        </li>
+                        <li class="nav-item" ng-class="graphType==2 ? 'active':''" role="presentation">
+                            <a class="nav-link" ng-click="uas7Graph(2)" data-toggle="pill" href="">Weekly</a>
+                        </li>
+                    </ul>
+                    <label style="font-size: 16px;font-weight: bold;">Zoom</label>
+                    <i style="font-size: 18px;" class="fa fa-search-plus font_color_1 cursor_pointer" ng-click="analytic_chart_add_dataset()"></i>
+                    <i style="font-size: 18px;" class="fa fa-search-minus font_color_1 cursor_pointer" ng-click="analytic_chart_remove_dataset()"></i>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div ng-if="isHealthAnalyticsChartActive" class="panel panel-default">
+                <div class="panel-heading"><b>{{analytics_chart_heading}}</b></div>
+                <div class="panel-body">
+                    <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-click="onClick" chart-hover="onHover" height="100%" chart-series="series" chart-options="options" chart-dataset-override="datasetOverride" chart-colors="colors"></canvas>
+                    
+                    <div style="width: 45%;float: left;">&nbsp;</div>
+                    <div style="width: 55%;float: left;">
+                        <p class="text-left m_top_20 title1">x-axis: Days</p>
+                        <p ng-show="analytics_min != '' && analytics_max != ''" style="color: #30aca5;" class="text-left m_top_20 title1">Normal Range: {{analytics_min}} - {{analytics_max}}</p>
+                        <!-- <p style="color: #30aca5;" class="text-left m_top_20 title1" ng-repeat="chartRangeAnotation in chartRangeAnotationObj" ng-if="chartRangeAnotationObj.length > 0 && chartRangeAnotation.type=='line'">{{chartRangeAnotation.label.content}}</p>   -->  
+                    </div>
+                </div>
+            </div>
+            <p ng-if="!isHealthAnalyticsChartActive" class="m_top_20 title1"> No record found</p>
+        </div>
+        
+    </div>
+</div>

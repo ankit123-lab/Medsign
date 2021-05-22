@@ -1,0 +1,106 @@
+<link rel="stylesheet" ng-href="app/css/health_advice.css?{{getVer(3)}}" />
+<div class="modal-body no_padding health-advice-modal">
+	<div class="container container_width top_header background_color_1 white_color text-center">
+        <button type="button" class="close" ng-click="cancel()" data-dismiss="modal">X</button>
+        <h3>Health Advice</h3>                                    
+    </div>
+    <div class="container container_width middle_content"> 
+    	<div class="row">
+            <form name="addPatientHealthAdviceForm" novalidate="" ng-submit="addPatientHealthAdvice(addPatientHealthAdviceForm)">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_top_20">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4 class="font_color_1">Select name for Health Advice</h4>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row common_hr m_top_10" ng-repeat="(key, healthAdviceGroupsObj) in health_advice_groups" ng-class="healthAdviceGroupsObj.is_assigned==true ? 'health-advice-disabled' : ''">
+                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                                            {{healthAdviceGroupsObj.health_advice_group_name}}
+                                        </div>
+                                        <div class="text-right common_radio col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                                            <input type="radio" name="health_advice_group_id" id="health_advice_{{healthAdviceGroupsObj.health_advice_group_id}}" ng-value="healthAdviceGroupsObj.health_advice_group_id" ng-model="patients_health_advice_data.health_advice_group_id" ng-disabled="healthAdviceGroupsObj.is_assigned" ng-change="getHealthAdvice(healthAdviceGroupsObj.health_advice_group_id)" required="">
+                                            <label for="health_advice_{{healthAdviceGroupsObj.health_advice_group_id}}" class="disclose font-15">&nbsp;</label>
+                                        </div>
+                                    </div>
+                                    <p ng-show="submitted && addPatientHealthAdviceForm.health_advice_group_id.$error.required" class="error">* Required</p>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row m_top_10" ng-if="health_advice_assigned != ''">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 font_color_1">
+                                            Already receiving health advice from other Dr.
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            {{health_advice_assigned}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4 class="font_color_1">Active Health Advice from other</h4>
+                                <div ng-if="health_advice.total_advice > 0" class="row common_hr m_top_10">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        {{health_advice.health_advice_group_name}} ({{health_advice.total_advice}})
+                                    </div>
+                                </div>
+                                <div ng-if="health_advice.total_advice > 0" class="row common_hr m_top_10">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 padding_left_0 common_checbox">
+                                            <input type="checkbox" id="ha_email_checkbox" ng-model="patients_health_advice_data.is_send_email" ng-true-value="'1'" ng-false-value="'2'">    
+                                            <label for="ha_email_checkbox">Email</label>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 padding_left_0 common_checbox">
+                                            <input type="checkbox" id="ha_sms_checkbox" ng-model="patients_health_advice_data.is_send_sms" ng-true-value="'1'" ng-false-value="'2'">    
+                                            <label for="ha_sms_checkbox">SMS</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group selection_bx m_top_10 m_bottom_10">                   
+                                            <select
+                                                name='patient_health_advice_schedule'
+                                                chosen
+                                                allow-single-deselect="true"
+                                                placeholder_text_single="'Schedule'"
+                                                ng-model="patients_health_advice_data.patient_health_advice_schedule" required="" 
+                                                ng-change=""
+                                                ng-options="values.value as values.name for values in healthAdviceSchedule"
+                                                >
+                                            </select>
+                                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                        </div>
+                                        <p ng-show="submitted && addPatientHealthAdviceForm.patient_health_advice_schedule.$error.required" class="error">* Required</p>
+                                    </div>
+                                    <div ng-show="patients_health_advice_data.patient_health_advice_schedule==2" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group selection_bx m_top_10 m_bottom_10">                   
+                                            <select
+                                                name='patient_health_advice_send_day'
+                                                chosen
+                                                allow-single-deselect="true"
+                                                placeholder_text_single="'Select Day'"
+                                                ng-model="patients_health_advice_data.patient_health_advice_send_day" ng-required="patients_health_advice_data.patient_health_advice_schedule==2" 
+                                                ng-change=""
+                                                ng-options="values.value as values.name for values in healthAdviceSendDay"
+                                                >
+                                            </select>
+                                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                        </div>
+                                        <p ng-show="submitted && addPatientHealthAdviceForm.patient_health_advice_send_day.$error.required" class="error">* Required</p>
+                                    </div>
+                                </div>
+                                <div ng-if="health_advice.total_advice > 0" class="row m_top_20">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center m_bottom_10">
+                                        <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+    </div>
+</div>

@@ -1,0 +1,488 @@
+<link rel="stylesheet" ng-href="app/css/calender.css?{{getVer(3)}}" />
+<div class="">
+    <div class="common_hr clearfix calendar_main_div">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{app.all_clinic_label}}</span>
+                </button>
+                <!-- <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForAvailibiliy(clinic)" ><a href="">{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="second_width common_heading_height ">
+            <div class="col-lg-11 col-md-10 col-sm-10 col-xs-8 no_padding  margin_left_-4">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 m_bottom_15">
+                    <h4 class="m_top_22 page_title pull-left">Settings</h4>
+                </div>                
+                <!-- <div class="col-lg-3 col-md-5 col-sm-5 hidden-xs">
+                    <p class="m_top_20 font_size_13 title2">Default Appointment Duration</p>                    
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 hidden-xs">
+                    <div class="form-group selection_bx m_top_10 m_bottom_10">                   
+                        <select
+                            name='duration'
+                            id="duration"
+                            chosen
+                            allow-single-deselect="true"
+                            placeholder_text_single="'Duration'"
+                            ng-model="current_clinic.doctor_clinic_mapping_duration" required="" 
+                            ng-change="changeClinicDuration()"
+                            ng-options="duration.value as duration.name for duration in calendarDuration"
+                            ng-disabled="role[SETTING_CLINIC][EDIT] != 'on'"
+                            >
+							</select>
+                        <span><i class="fa fa-angle-down fa-2x"></i></span>
+                    </div>
+                </div>  -->
+                <div class="col-lg-2 col-md-2 col-sm-2 hidden-xs text-right">
+                    <p class="m_top_20 font_size_13 title2">Set Hour Format</p>                    
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 hidden-xs">
+                    <div class="form-group selection_bx m_top_10 m_bottom_10">                   
+                        <select
+                            name='hour_format'
+                            id="hour_format"
+                            chosen
+                            allow-single-deselect="true"
+                            placeholder_text_single="'Hour Format'"
+                            ng-model="currentUser.hour_format" required="" 
+                            ng-change="changeHourFormat()"
+                            ng-options="values.value as values.name for values in hoursFormat"
+                            >
+                            </select>
+                        <span><i class="fa fa-angle-down fa-2x"></i></span>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5 hidden-xs text-right">
+                         
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+                <!-- <ul class="" style="padding-left: 0; margin-bottom: 0;">
+                    <li class="navigation_li">
+                        <label  class="bg_icon_images play_video_btn custom_div_mar" data-toggle="modal"  data-target='#video_help_modal'></label>
+                    </li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-if="current_clinic" ng-init="getDoctorAvailibility()">
+        <div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 float_right calender-box" ng-repeat="(key,clinicDataObj) in clinic_data">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <h3 class="font_color_1 gotham_medium title1">Calendar for {{clinicDataObj.clinic_name | capitalize}}</h3>
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                <div class="col-lg-4 col-md-4 col-sm-4 hidden-xs">
+                    <p class="m_top_20 font_size_13 title2">Appointment Bookings</p>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5 hidden-xs">
+                    <p class="m_top_20 font_size_13 title2">Set Appointment Duration</p>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 hidden-xs">
+                    <div class="form-group selection_bx m_top_10 m_bottom_10">                   
+                        <select
+                            name='duration'
+                            id="duration"
+                            chosen
+                            allow-single-deselect="true"
+                            placeholder_text_single="'Duration'"
+                            ng-model="clinic_data[key].doctor_clinic_mapping_duration" required="" 
+                            ng-change="changeClinicDuration(key)"
+                            ng-options="duration.value as duration.name for duration in calendarDuration"
+                            ng-disabled="role[SETTING_CLINIC][EDIT] != 'on'"
+                            >
+                            </select>
+                        <span><i class="fa fa-angle-down fa-2x"></i></span>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-responsive min_width_767" ng-if="role[SETTING_CALENDAR][VIEW] == 'on'">
+                <thead class="row font_color_3 gotham_light common_tb_border font_size_18 common_p_b">
+                    <tr>                                
+                        <th width="15%">Clinic and Doctors</th>
+                        <th width="13%">Type of Consultation</th>
+                        <th width="20%">Days & Timing</th>
+                        <th width="7%">Edit</th>                                    
+                        <th width="20%" ng-if="checkPermission(DOCTOR_AVAILIBILITY, EDIT)">All Bookings- Status<br>(Both by Dr & Patients) </th>
+                        <th width="25%" class="text-center">Online Booking- Status<br>( By Patients thru MedSign App)</th>
+                    </tr>
+                </thead>
+                <tbody class="font_size_14 common_p_b">
+                    <tr class="common_tb_border">
+                        <td>{{clinicDataObj.clinic_name | capitalize}}</td>
+                        <td></td>
+                        <td>
+                            <span ng-repeat="(clinicKey, ca) in clinic_availibility_data[clinicDataObj.clinic_id]">&nbsp;{{DAYS[ca.clinic_availability_week_day - 1].name}}<span ng-if="clinicKey != (clinic_availibility_data[clinicDataObj.clinic_id].length - 1)">,</span></span><p class="font_color_5 gotham_light no_margin"></p>
+                        </td>
+                        <td class="">                                    
+                            <a href="" ng-click="getDetailClinicAvailibility(clinic_availibility_data[clinicDataObj.clinic_id],clinicDataObj.clinic_id)">
+                                <img src="app/images/edit_icon.png" alt="edit_icon" id="edit_icon" >
+                            </a>                                                            
+                        </td>
+                        <td></td>
+                        <td ng-if="checkPermission(DOCTOR_AVAILIBILITY, EDIT)"></td>
+                    </tr>
+                    <tr class="b_padding" ng-repeat="(keyAvai, doctor_avail) in doctor_availibility_data">
+                        <td ng-if="keyAvai == 0">
+                            {{(doctor_list) ? docPrefix +" "+doctor_list[0].user_first_name +" "+doctor_list[0].user_last_name  : ''}}    
+                        </td>
+                        <td ng-if="keyAvai != 0"></td>                       
+                        <td>{{(APPOINTMENT_TYPE|filter:{id:doctor_avail.doctor_availability_appointment_type})[0].name}}</td>
+                        <td>
+                            <span ng-repeat="(innerKey, day) in doctor_avail.data[clinicDataObj.clinic_id]">&nbsp;{{DAYS[day.doctor_availability_week_day - 1].name}}<span ng-if="innerKey != (doctor_avail.data[clinicDataObj.clinic_id].length - 1)">,</span></span>
+                        </td>
+                        <td class="">
+                            <a href="" ng-if="checkPermission(DOCTOR_AVAILIBILITY, EDIT)" ng-click="getDetailAvailibility(doctor_avail.data, clinicDataObj.clinic_id, doctor_avail.doctor_availability_appointment_type)"><img src="app/images/edit_icon.png" alt="edit_icon"></a>
+                            <a href="" ng-if="!checkPermission(DOCTOR_AVAILIBILITY, EDIT)" ng-click="getDetailAvailibility(doctor_avail.data, clinicDataObj.clinic_id, doctor_avail.doctor_availability_appointment_type)"><i style="color:#30aca5" class="fa-2x fa fa-eye primary"></i></a>
+                        </td>
+                        <td ng-if="checkPermission(DOCTOR_AVAILIBILITY, EDIT)">
+                            <label class="switch">
+                                <input type="checkbox"
+                                       ng-model="doctor_avail.data[clinicDataObj.clinic_id][0].doctor_availability_status"
+                                       ng-true-value="'1'"
+                                       ng-false-value="'2'"
+                                       ng-change="changeAvailibilityStatus(doctor_avail,clinicDataObj.clinic_id,key)"
+                                       ng-disabled="!doctor_avail.data[clinicDataObj.clinic_id]"
+                                       >
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
+                        <td class="text-center" ng-if="doctor_avail.doctor_availability_appointment_type==1">
+                            <label ng-if="checkPermission(DOCTOR_AVAILIBILITY, EDIT)" class="switch">
+                                <input type="checkbox"
+                                       ng-model="clinicDataObj.online_in_clinic"
+                                       ng-true-value="'1'"
+                                       ng-false-value="'2'"
+                                       ng-disabled="doctor_avail.data[clinicDataObj.clinic_id][0].doctor_availability_status=='2'"
+                                       ng-change="updateBookingStatus(clinicDataObj)"
+                                       >
+                                <span class="slider round"></span>
+                            </label>
+                            <span ng-if="!checkPermission(DOCTOR_AVAILIBILITY, EDIT)">
+                                {{clinicDataObj.online_in_clinic==1?'Yes':'No'}}
+                            </span>
+                        </td>
+                        <td class="text-center" ng-if="doctor_avail.doctor_availability_appointment_type==5">
+                            <label ng-if="checkPermission(DOCTOR_AVAILIBILITY, EDIT)" class="switch">
+                                <input type="checkbox"
+                                       ng-model="clinicDataObj.online_tele_clinic"
+                                       ng-true-value="'1'"
+                                       ng-false-value="'2'"
+                                       ng-disabled="doctor_avail.data[clinicDataObj.clinic_id][0].doctor_availability_status=='2'"
+                                       ng-change="updateBookingStatus(clinicDataObj)"
+                                       >
+                                <span class="slider round"></span>
+                            </label>
+                            <span ng-if="!checkPermission(DOCTOR_AVAILIBILITY, EDIT)">
+                                {{clinicDataObj.online_tele_clinic=='1'?'Yes':'No'}}
+                            </span>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <div ng-if="!(checkPermission(SETTING_CALENDAR, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+                <div class="unauthorised-css">{{ app.unauthorised_msg}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="edit_doctor_timing" class="modal fade in"  role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content">
+            <div class="modal-header common_title background_color_1 white_color text-center">                                        
+                <h3 class="modal-title modaltitle_m">Edit {{(doctor_list) ? docPrefix +" "+doctor_list[0].user_first_name +" "+doctor_list[0].user_last_name  : ''}} Timings</h3>                            
+            </div>
+            <div class="modal-body padding_body text-left">
+                <form name="editAvailibilityForm" id="editAvailibilityForm" novalidate="" ng-submit="checkPermission(DOCTOR_AVAILIBILITY, EDIT) ? editAvailibility(editAvailibilityForm) : 'javascript:void(0)' ">
+                    <div class="font_color_4 gotham_light placeholder_class" ng-repeat="(key, edit_availibility) in availibility">
+                        <ng-form name="innerAvailibilityForm">
+                            <div class="row common_tb_border">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <h4 class="required title2 color_black">Session 1</h4>
+                                </div>
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                    <h4 class="title2 color_black">Session 2</h4>
+                                </div>
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 m_top_12 text-right" ng-if="key != 0">
+                                    <a href="" ng-click="removeTiming(key)" ><img src="app/images/popup_remove.png" alt="delete_icon"></a>
+                                </div>                                      
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                        <div class="form-group">                                                                                    
+                                            <p class="input-group login_input m_top_20">
+                                                <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" datetime-picker="HH:mm"  is-open="doctordatepicker1[$index]" enable-date="false" close-on-selection="true"  name="session_1_start" button-bar="startPicker.buttonBar" ng-model="edit_availibility.doctor_availability_session_1_new_start_time" required="" placeholder="Session Start Time" readonly=""/>
+                                                <span class="input-group-btn login_input">
+                                                    <button type="button" class="btn btn-default login_input clock_button" ng-click="openDoctorPicker($event, edit_availibility, $index, 1)"><i class="fa fa-clock-o"></i></button>
+                                                </span>
+                                            </p>
+                                            <p ng-show="(innerAvailibilityForm.session_1_start.$touched || submitted) && innerAvailibilityForm.session_1_start.$error.required" class="error" >{{clinic_session_required}}</p>
+                                        </div>                                                               
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                        <div class="form-group">                                                
+                                            <p class="input-group login_input m_top_20">
+                                                <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" datetime-picker="HH:mm" is-open="doctordatepicker2[$index]" enable-date="false" close-on-selection="true"  name="session_1_end"  button-bar="startPicker.buttonBar" ng-model="edit_availibility.doctor_availability_session_1_new_end_time" required="" placeholder="Session End Time" readonly=""/>
+                                                <span class="input-group-btn login_input">
+                                                    <button type="button" class="btn btn-default login_input clock_button" ng-click="openDoctorPicker($event, edit_availibility, $index, 2)"><i class="fa fa-clock-o"></i></button>
+                                                </span>
+                                            </p>
+                                            <p ng-show="(innerAvailibilityForm.session_1_end.$touched || submitted) && innerAvailibilityForm.session_1_end.$error.required" class="error" >{{clinic_session_required}}</p>
+                                        </div>                                                               
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                        <div class="form-group">                                                                                    
+                                            <p class="input-group login_input m_top_20">
+                                                <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" datetime-picker="HH:mm"   is-open="doctordatepicker3[$index]" enable-date="false" close-on-selection="true"  name="session_2_start" button-bar="startPicker.buttonBar" ng-model="edit_availibility.doctor_availability_session_2_new_start_time" placeholder="Session Start Time" readonly=""/>
+                                                <span class="input-group-btn login_input">
+                                                    <button type="button" class="btn btn-default login_input clock_button" ng-click="openDoctorPicker($event, edit_availibility, $index, 3)"><i class="fa fa-clock-o"></i></button>
+                                                </span>
+                                            </p>
+                                            <p ng-show="(innerAvailibilityForm.session_2_start.$touched || submitted) && innerAvailibilityForm.session_2_start.$error.required" class="error" >{{clinic_session_required}}</p>
+                                        </div>                                                               
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                        <div class="form-group">                                                
+                                            <p class="input-group login_input m_top_20">
+                                                <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" datetime-picker="HH:mm"  is-open="doctordatepicker4[$index]" enable-date="false" close-on-selection="true"  name="session_2_end"  button-bar="startPicker.buttonBar" ng-model="edit_availibility.doctor_availability_session_2_new_end_time" ng-required="edit_availibility.doctor_availability_session_2_new_start_time" placeholder="Session End Time" readonly=""/>
+                                                <span class="input-group-btn login_input">        
+                                                    <button type="button" class="btn btn-default login_input clock_button" ng-click="openDoctorPicker($event, edit_availibility, $index, 4)"><i class="fa fa-clock-o"></i></button>
+                                                </span>
+                                            </p>
+                                            <p ng-show="(innerAvailibilityForm.session_2_end.$touched || submitted) && innerAvailibilityForm.session_2_end.$error.required" class="error" >{{clinic_session_required}}</p>
+                                        </div>                                                               
+                                    </div>
+                                </div>                        
+                            </div>
+                            <div class="row">  
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                                    <ul class="list-inline list_inline_m_left">
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['1']" ng-model="edit_availibility.days['1']" ng-change="checkAnotherChecked(edit_availibility, 1)" name="dayCheck[0]" />    
+                                                <label for="{{key}}_edit_availibility.days['1']" class="disclose">Monday</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['2']"  ng-model="edit_availibility.days['2']" ng-change="checkAnotherChecked(edit_availibility, 2)" name="dayCheck[1]" />    
+                                                <label for="{{key}}_edit_availibility.days['2']" class="disclose">Tuesday</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['3']"  ng-model="edit_availibility.days['3']" ng-change="checkAnotherChecked(edit_availibility, 3)" name="dayCheck[2]" />    
+                                                <label for="{{key}}_edit_availibility.days['3']" class="disclose">Wednesday</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['4']"  ng-model="edit_availibility.days['4']" ng-change="checkAnotherChecked(edit_availibility, 4)" name="dayCheck[3]" />    
+                                                <label for="{{key}}_edit_availibility.days['4']" class="disclose">Thursday</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['5']"  ng-model="edit_availibility.days['5']" ng-change="checkAnotherChecked(edit_availibility, 5)" name="dayCheck[4]" />    
+                                                <label for="{{key}}_edit_availibility.days['5']" class="disclose">Friday</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['6']"  ng-model="edit_availibility.days['6']" ng-change="checkAnotherChecked(edit_availibility, 6)" name="dayCheck[5]"  />    
+                                                <label for="{{key}}_edit_availibility.days['6']" class="disclose">Saturday</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['7']"  ng-model="edit_availibility.days['7']" ng-change="checkAnotherChecked(edit_availibility, 7)" name="dayCheck[6]"  />    
+                                                <label for="{{key}}_edit_availibility.days['7']" class="disclose">Sunday</label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </ng-form>
+                    </div>
+                    <div class="row" ng-if="checkPermission(DOCTOR_AVAILIBILITY, EDIT)">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <a ng-click="addMoreTiming(1)" ng-if="availibility.length < 7" name="addtime" class="btn common_button btn_pop_instruction float_right font_color_1 title2">Add More Timings</a>                                 
+                        </div>
+                    </div>
+                    <div class="m_top_40 clearfix" ng-if="checkPermission(DOCTOR_AVAILIBILITY, EDIT)">  
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>                                 
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input data-dismiss="modal" type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties" />                                                                                                                  
+                        </div>  
+                    </div>
+                    <div class="m_top_40 clearfix" ng-if="!checkPermission(DOCTOR_AVAILIBILITY, EDIT)">  
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                            <input data-dismiss="modal" type="reset" value="Close" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties" />
+                        </div>  
+                    </div>
+                         
+                </form>
+            </div>                        
+        </div>
+    </div>
+</div>
+
+<div id="edit_clinic_timing" class="modal fade in"  role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content">
+            <div class="modal-header common_title background_color_1 white_color text-center">                                        
+                <h3 class="modal-title modaltitle_m">Edit {{edit_time_clinic_name | capitalize}} Timings</h3>                            
+            </div>
+            <div class="modal-body padding_body text-left">
+                <form name="editClinicAvailibilityForm" id="editAvailibilityForm" novalidate="" ng-submit="editClinicAvailibility(editClinicAvailibilityForm)">
+                    <div class="font_color_4 gotham_light placeholder_class" ng-init="custom_key = '1'" ng-repeat="(key, edit_availibility) in availibility">
+                        <ng-form name="innerAvailibilityForm">
+                            <div class="row common_tb_border">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <h4 class="required title2 color_black">Session 1</h4>
+                                </div>
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                    <h4 class="title2 color_black">Session 2</h4>
+                                </div>
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 m_top_12 text-right" ng-if="key != 0">
+                                    <a href="" ng-click="removeTiming(key)" ><img src="app/images/popup_remove.png" alt="delete_icon"></a>
+                                </div>                                
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                        <div class="form-group">                                                                                    
+                                            <p class="input-group login_input m_top_20">
+                                                <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" datetime-picker="HH:mm"  is-open="datepicker1[$index]" enable-date="false" close-on-selection="true"  name="session_1_start" button-bar="startPicker.buttonBar" ng-model="edit_availibility.clinic_availability_session_1_new_start_time" required="" placeholder="Session Start Time" readonly=""/>
+                                                <span class="input-group-btn login_input">
+                                                    <button type="button" class="btn btn-default login_input clock_button" ng-click="openPicker($event, edit_availibility, $index, 1)"><i class="fa fa-clock-o"></i></button>
+                                                </span>
+                                            </p>
+                                            <p ng-show="(innerAvailibilityForm.session_1_start.$touched || submitted) && innerAvailibilityForm.session_1_start.$error.required" class="error" >{{clinic_session_required}}</p>
+                                        </div>                                                               
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                        <div class="form-group">                                                
+                                            <p class="input-group login_input m_top_20">
+                                                <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" datetime-picker="HH:mm" is-open="datepicker2[$index]" enable-date="false" close-on-selection="true"  name="session_1_end"  button-bar="startPicker.buttonBar" ng-model="edit_availibility.clinic_availability_session_1_new_end_time" required="" placeholder="Session End Time" readonly=""/>
+                                                <span class="input-group-btn login_input">
+                                                    <button type="button" class="btn btn-default login_input clock_button" ng-click="openPicker($event, edit_availibility, $index, 2)"><i class="fa fa-clock-o"></i></button>
+                                                </span>
+                                            </p>
+                                            <p ng-show="(innerAvailibilityForm.session_1_end.$touched || submitted) && innerAvailibilityForm.session_1_end.$error.required" class="error" >{{clinic_session_required}}</p>
+                                        </div>                                                               
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                        <div class="form-group">                                                                                    
+                                            <p class="input-group login_input m_top_20">
+                                                <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" datetime-picker="HH:mm" is-open="datepicker3[$index]" enable-date="false" close-on-selection="true"  name="session_2_start" button-bar="startPicker.buttonBar" ng-model="edit_availibility.clinic_availability_session_2_new_start_time" placeholder="Session Start Time" readonly="" />
+                                                <span class="input-group-btn login_input">
+                                                    <button type="button" class="btn btn-default login_input clock_button" ng-click="openPicker($event, edit_availibility, $index, 3)"><i class="fa fa-clock-o"></i></button>
+                                                </span>
+                                            </p>
+                                            <p ng-show="(innerAvailibilityForm.session_2_start.$touched || submitted) && innerAvailibilityForm.session_2_start.$error.required" class="error" >{{clinic_session_required}}</p>
+                                        </div>                                                               
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                        <div class="form-group">                                                
+                                            <p class="input-group login_input m_top_20">
+                                                <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" datetime-picker="HH:mm"  is-open="datepicker4[$index]" enable-date="false" close-on-selection="true"  name="session_2_end"  button-bar="startPicker.buttonBar" ng-model="edit_availibility.clinic_availability_session_2_new_end_time" ng-required="edit_availibility.clinic_availability_session_2_new_start_time" placeholder="Session End Time" readonly=""/>
+                                                <span class="input-group-btn login_input">        
+                                                    <button type="button" class="btn btn-default login_input clock_button" ng-click="openPicker($event, edit_availibility, $index, 4)"><i class="fa fa-clock-o"></i></button>
+                                                </span>
+                                            </p>
+                                            <p ng-show="(innerAvailibilityForm.session_2_end.$touched || submitted) && innerAvailibilityForm.session_2_end.$error.required" class="error" >{{clinic_session_required}}</p>
+                                        </div>                                                               
+                                    </div>
+                                </div>                        
+                            </div>
+                            <div class="row">  
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+
+                                    <ul class="list-inline list_inline_m_left">
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['1']" ng-model="edit_availibility.days['1']" ng-change="checkAnotherChecked(edit_availibility, 1)" name="dayCheck[0]" />    
+                                                <label for="{{key}}_edit_availibility.days['1']" class="disclose">Monday</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['2']"  ng-model="edit_availibility.days['2']" ng-change="checkAnotherChecked(edit_availibility, 2)" name="dayCheck[1]" />    
+                                                <label for="{{key}}_edit_availibility.days['2']" class="disclose">Tuesday</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['3']"  ng-model="edit_availibility.days['3']" ng-change="checkAnotherChecked(edit_availibility, 3)" name="dayCheck[2]" />    
+                                                <label for="{{key}}_edit_availibility.days['3']" class="disclose">Wednesday</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['4']"  ng-model="edit_availibility.days['4']" ng-change="checkAnotherChecked(edit_availibility, 4)" name="dayCheck[3]" />    
+                                                <label for="{{key}}_edit_availibility.days['4']" class="disclose">Thursday</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['5']"  ng-model="edit_availibility.days['5']" ng-change="checkAnotherChecked(edit_availibility, 5)" name="dayCheck[4]" />    
+                                                <label for="{{key}}_edit_availibility.days['5']" class="disclose">Friday</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['6']"  ng-model="edit_availibility.days['6']" ng-change="checkAnotherChecked(edit_availibility, 6)" name="dayCheck[5]"  />    
+                                                <label for="{{key}}_edit_availibility.days['6']" class="disclose">Saturday</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="padding_left_0 common_checbox m_top_12">
+                                                <input type="checkbox" id="{{key}}_edit_availibility.days['7']"  ng-model="edit_availibility.days['7']" ng-change="checkAnotherChecked(edit_availibility, 7)" name="dayCheck[6]"  />    
+                                                <label for="{{key}}_edit_availibility.days['7']" class="disclose">Sunday</label>
+                                            </div>
+                                        </li>                                       
+
+                                    </ul>
+
+                                </div>
+                            </div>  
+                        </ng-form>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <a ng-click="addMoreTiming(2)" ng-if="availibility.length < 7" name="addtime" class="btn common_button btn_pop_instruction float_right font_color_1 title2">Add More Timings</a>                                 
+                        </div>
+                    </div>
+                    <div class="m_top_40 clearfix">  
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>                                 
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input data-dismiss="modal" type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties" />                                                                                                                  
+                        </div>  
+                    </div> 
+                </form>
+            </div>                        
+        </div>
+    </div>
+</div>

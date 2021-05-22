@@ -1,0 +1,122 @@
+<link rel="stylesheet" ng-href="app/css/brandcatalog.css?{{getVer(3)}}" />
+<div class="tab-pane fade in comman_css_brand" id="report">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_light font_color_5" ng-class="(current_appointment_date_obj.is_editable || rx_upload_pre.edit) ? '' : 'disabled-wrap'">
+      <div ng-if="!current_appointment_date_obj.is_editable && !rx_upload_pre.edit" class="overlap-wrap" style="width: 82%;left: 5px;"></div>        
+        <div ng-repeat="(key, report) in uploadedRxObj track by $index" ng-if="role[RX_UPLOAD_MODULE][VIEW] == 'on'">
+            <div class="row">
+                <div class="col-lg-7 col-md-6 col-sm-7 col-xs-7 test1">
+                    <div class="form-group">
+                        <label class="m_bottom_15">Prescription</label>
+                        <input type="text"
+                               class="form-control common_input"
+                               placeholder=""
+                               name="rx_upload_name"
+                               ng-model="uploadedRxObj[key].rx_upload_name"                     
+                               readonly="" />
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-3 col-xs-3">
+                    <div class="form-group">
+                        <label class="m_bottom_15" for="report_date">Date Of Prescription</label>
+                        <p class="input-group login_input dropup">
+                            <input type="text" 
+                                   class="form-control login_input" 
+                                   ng-model="uploadedRxObj[key].rx_upload_date" 
+                                   placeholder="DD / MM / YYYY" 
+                                   name="report_date" 
+                                   readonly="" 
+                                   disabled="" 
+                                   />
+                            <span class="input-group-btn login_input"><button type="button" class="btn btn-default login_input"><i class="fa fa-calendar"></i></button></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 col-sm-2 col-xs-2 ">
+                    <div class="m_top_25">                             
+                        <div class="pull-left remove-img-div" >
+                            <img ng-if="uploadedRxObj[key].is_pdf == 2" ng-src="{{uploadedRxObj[key].rx_upload_report_image_thumb_url}}" 
+                                  ng-click="openFullImageModal(uploadedRxObj[key].rx_upload_report_image_url)"
+                                  name="user" class="doc_image cursor_pointer"/>
+                            <a title="Download" target="_blank" ng-if="uploadedRxObj[key].is_pdf == 1" href="{{ uploadedRxObj[key].rx_upload_report_image_url}}"><img class="doc_image cursor_pointer" src="app/images/pdf_icon.png" /></a>
+                        </div>
+                        <img src="app/images/remove.png"  ng-if="current_appointment_date_obj.is_editable || uploadedRxObj[key].is_edit" class="doc_image doc_image_add cursor_pointer" 
+                             ng-click="removeRxUploadObj(key)" />                                
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form class="report-tab-add-buttons" name="uploadRxForm" id="uploadRxForm" novalidate="">
+            <div ng-repeat="(key, tempReport) in rxUploadObj track by $index" ng-if="role[RX_UPLOAD_MODULE][ADD] == 'on'">
+                
+                    <div class="row">
+                        <div class="col-lg-7 col-md-6 col-sm-7 col-xs-7 test">
+                            <div class="form-group">
+                                <label class="m_bottom_15 required">Prescription</label>
+                                <input type="text"
+                                       class="form-control common_input"
+                                       placeholder="Enter Name Of Prescription"
+                                       name="rx_upload_name"
+                                       ng-model="rxUploadObj[key].rx_upload_name"
+                                       required
+                                       />
+                                <p ng-show="(submitted) && uploadRxForm.rx_upload_name.$error.required" class="error" >* Required</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-3 col-xs-3">
+                            <div class="form-group">
+                                <label class="m_bottom_15 required" for="rx_upload_date">Date Of Prescription</label>
+                                <p class="input-group login_input dropup">
+                                    <input type="text"
+                                           class="form-control login_input"  
+                                           datetime-picker="dd/MM/yyyy"
+                                           datepicker-options="report_picker.datepickerOptions"
+                                           enable-time="false"
+                                           ng-model="rxUploadObj[key].rx_upload_date" 
+                                           is-open="date_of_birth.open"
+                                           required  placeholder="DD/MM/YYYY"
+                                           name="rx_upload_date"  
+                                           ui-mask="99/99/9999"
+                                           />
+                                    <span class="input-group-btn login_input">
+                                        <button type="button" class="btn btn-default login_input" 
+                                                ng-click="date_of_birth.open = true"><i class="fa fa-calendar"></i></button>
+                                    </span>
+                                </p>
+                                <p ng-show="(submitted) && uploadRxForm.rx_upload_date.$error.required" class="error" >* Required</p>
+                                <p ng-show="(submitted && rxUploadObj[key].rx_upload_date == undefined)" class="error" >{{invalid_date}}</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-2 col-xs-2">
+                            <div class="m_top_25 d-flex flex-wrap">
+                                <img src="app/images/upload_image.png"
+                                     ng-if="current_appointment_date_obj.is_editable || rx_upload_pre.edit"
+                                     class="doc_image cursor_pointer" 
+                                     ng-click='openPatientFile("patientReportFile")' ng-hide="rxUploadObj[key].temp_img" />
+                                <div class="pull-left remove-img-div"   ng-show="rxUploadObj[key].temp_img">
+                                    <img ng-src="{{ rxUploadObj[key].temp_img}}" name="user"  class="doc_image" />
+                                    <img src="app/images/popup_remove_red.png" ng-click="removePatientReportImg(key)" class="delete_report_icon" />
+                                </div>
+                                <input type="hidden" ng-model="rxUploadObj[key].temp_img" required="" name="temp_img" />
+                                <i class="fa fa-floppy-o report-save-icon" title="Save" ng-if="current_appointment_date_obj.is_editable || rx_upload_pre.edit" ng-click="saveRxUploadObj(uploadRxForm,key)"></i>
+                                <input type="file" key="{{key}}"
+                                       ng-file-select-patient-report="onFileSelect($files)" 
+                                       class="hide" 
+                                       id="patientReportFile" accept="application/pdf, image/*">
+                                <p ng-show="(submitted) && uploadRxForm.temp_img.$error.required" class="error this-error-bottom" >* Required</p>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+            <div class="clearfix"></div>
+            <div class="button_container">
+                <a href="" class="pull-right" ng-if="!current_appointment_date_obj.is_editable && checkPermission(RX_UPLOAD_MODULE, ADD)" style="position: relative;">
+                  <input type="button" style="padding: 0 15px;height: 32px;position: absolute;right: 0;top: 7px;" value="Upload Previous Rx" name="btn_previous_vitals" class="new_common_button no_top_margin" ng-click="uploadPreviousRx()" data-toggle="modal">
+                </a>
+            </div>
+        </form>
+        <div ng-if="(!(checkPermission(RX_UPLOAD_MODULE, VIEW)) && !(checkPermission(RX_UPLOAD_MODULE, ADD)))" class="text-center gotham_book font_size_20 m_top_20">
+            <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+        </div>
+    </div>
+</div>

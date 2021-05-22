@@ -1,0 +1,86 @@
+<div ng-include="'app/views/common/header.html?'+getVer(2)"></div>
+<div class="survey_div col-lg-12 common_padding_all" ng-init="getSurveyData()">
+    <h2 class="title1">Market Research Survey</h2>
+    <div class="content">
+       	<div ng-repeat="surveylst in survey_data_list track by $index">
+			<h3 class="title1">{{$index+1}}. {{surveylst.survey_title}}</h3>
+			<span class="title3" ng-bind-html="surveylst.survey_description"></span>
+			<div class="clearfix"></div>
+            <div class="button_container text-center">
+				<span ng-if="surveylst.survey_type_data && surveylst.survey_type_data.length > 0">
+					<span ng-repeat="surveyTypeList in surveylst.survey_type_data track by $index">
+						<input ng-if="surveyTypeList.survey_file_path != ''" ng-click="setSurveyDocVideoUrls(surveylst.survey_id, surveyTypeList);" data-toggle="modal" data-target="#survey_content_modal" type="button" value="Go Through Document Of {{surveyTypeList.title}}" class="new_common_button" />
+						<input ng-if="surveyTypeList.survey_videourl != ''" ng-click="setSurveyDocVideoUrls(surveylst.survey_id, surveyTypeList);" data-toggle="modal" data-target="#survey_content_modal" type="button" value="Watch Video Of {{surveyTypeList.title}}" class="new_common_button" />
+					</span>
+				</span>
+                <input ng-if="surveylst.is_submitted != 1" type="button" ng-click="getSurveyContent(surveylst);" data-toggle="modal" data-target="#take_survey_modal" value="Take Survey" class="new_common_button" />
+            </div>
+			<div class="common_hr"></div>
+		</div>
+		<div ng-if="survey_data_list.length <= 0">
+			<h3 class="title1 text-center">No any active survey.</h3>
+		</div>
+    </div>
+</div>
+
+<!-- Start Survey Content modal-->
+<div id="survey_content_modal" class="modal fade in" role="dialog" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">                        
+            <div class="modal-header">
+                <button ng-click="unSetSurveyDocVideoUrls();" type="button" class="close" data-dismiss="modal">&times;</button>                
+                <h4>{{current_survey_title}}</h4>
+            </div>
+            <div class="model-body">
+				<iframe style="width:100%;height:500px;" ng-src="{{current_survey_url | trustThisUrl}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Survey Content modal-->
+
+<!-- Start Take Survey modal-->
+<div id="take_survey_modal" class="modal fade in" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content">
+			<form id="surveyForm" name="surveyForm" novalidate="">
+			<div class="modal-header">
+                <button ng-click="unSetActiveSurveyDetails();" type="button" class="close" data-dismiss="modal">&times;</button>                
+                <h4>{{active_survey.survey_title}}</h4>
+            </div>
+            <div class="modal-body">
+				<div ng-if="!active_survey.is_consent_accept" class="row no_margin">
+					<span class="title3" ng-bind-html="active_survey.survey_description"></span>
+					<div class="clearfix"></div>
+					<h3 class="title1 text-center">Consent for participating the survey</h3>
+					<span class="title3" ng-bind-html="active_survey.survey_consent"></span>
+					<div class="clearfix"></div>
+				</div>
+				<div ng-init="active_survey.answerData = [];" ng-if="active_survey.is_consent_accept" class="row no_margin">
+					<span style="display:block;text-decoration:underline;" class="title1 text-center">Kindly tick the appropriate answer for the following survey questionnaire.</span>
+						<div class="col-lg-12" ng-repeat="(indxQl,surveyQesLst) in active_survey.questions_data">
+							<h3 ng-init="active_survey.answerData[indxQl] = {'question_id':surveyQesLst.survey_question_id,'survey_type':surveyQesLst.survey_type,'options':{}};" class="title2">{{indxQl+1}}. {{surveyQesLst.question_description}}</h3>
+							<div class="col-lg-12">
+								<span ng-repeat="(indxQol,surveyQesOptionsLst) in surveyQesLst.options" ng-repeat="surveyQesOptionsLst in surveyQesLst.options track by " ng-init="active_survey.answerData[indxQl].options[indxQol] = {'option_txt':surveyQesOptionsLst.survey_option_description,'status':false}" class="title3" style="display:block;">
+									<label style="margin-bottom:0px !important;" ng-if="surveyQesLst.survey_type == '2'"><input type="checkbox" name="questionid_{{surveyQesLst.survey_question_id}}" value="{{surveyQesOptionsLst.survey_option_description}}" ng-model="active_survey.answerData[indxQl].options[indxQol].status" ng-required="!validateChkGrpSelected(active_survey.answerData[indxQl].options)" />&nbsp;{{surveyQesOptionsLst.survey_option_description}}</label>
+									<label style="margin-bottom:0px !important;" ng-if="surveyQesLst.survey_type == '1'"><input type="radio" name="questionid_{{surveyQesLst.survey_question_id}}" value="{{surveyQesOptionsLst.survey_option_description}}" ng-model="active_survey.answerData[indxQl].answer" ng-required="!active_survey.answerData[indxQl].answer" />&nbsp;{{surveyQesOptionsLst.survey_option_description}}</label>
+								</span>
+								<p ng-show="(surveyFormSubmit) && surveyForm.questionid_{{surveyQesLst.survey_question_id}}.$error.required == true" class="error">Please choose atleast one option.</p>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+				</div>
+            </div>
+			<div class="modal-footer">
+				<div ng-if="!active_survey.is_consent_accept" class="button_container text-center">
+					<input type="button" ng-click="setSurveyConsentAccept(active_survey.survey_id)" value="Accept" class="new_common_button" />
+				</div>
+				<div ng-if="active_survey.is_consent_accept" class="button_container text-center">
+					<input type="button" ng-click="saveSurveyData();" value="Submit" class="new_common_button" />
+				</div>
+			</div>
+			</form>
+        </div>
+    </div>
+</div>
+<!-- End Take Survey modal-->

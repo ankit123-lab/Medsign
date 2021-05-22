@@ -1,0 +1,12 @@
+/*
+.common_checbox [type="checkbox"]:checked + label::before, 
+.common_checbox [type="checkbox"]:not(:checked) + label::before {
+    top: -14px;
+    left: 7px;
+}
+.common_checbox [type="checkbox"]:checked + label::after, 
+.common_checbox [type="checkbox"]:not(:checked) + label::after{
+    top: -15px;
+    left: 7px;
+}
+*/

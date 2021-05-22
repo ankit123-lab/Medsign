@@ -1,0 +1,810 @@
+<div class="tab-pane fade in" id="clinic" ng-init="getUsersClinicList()">
+    <div class="m_top_30 text-right col-lg-3 col-lg-offset-8">
+        <input value="Add Clinic" class="new_common_button_1 complete_profile" type="button"  data-toggle="modal"  data-target='#add_clinic_modal'   ng-click="clearEditedData()" ng-if="clinic_data.length == 0 && checkPermission(SETTING_CLINIC, ADD)" >
+    </div>
+    <div class="clearfix"></div>
+    <div class="container gotham_medium m_top_40">
+        <div class="row">
+            <div  ng-repeat="(key, clinic) in clinic_data" ng-if="checkPermission(SETTING_CLINIC, VIEW)">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="col_properties position_relative clearfix">
+                        <div class="icon_edit">                            
+                            <img src="app/images/edit_icon.png" alt="edit_icon" ng-if="checkPermission(SETTING_CLINIC, EDIT)" ng-click="getClinicDetailForEdit(clinic.clinic_id)" data-toggle='modal' data-target='#edit_clinic_modal'>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 m_top_20">
+                            <h3 class="font_color_1 text-uppercase no_margin">{{ clinic.clinic_name}} Clinic</h3>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 m_top_70">
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 padding_0 m_bottom_15">
+                                <span class="title">
+                                    Email: 
+                                </span>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 m_bottom_15">
+                                <span>
+                                    {{ clinic.clinic_email | trimString: 18 }}
+                                </span>
+                            </div>  
+                            <div class="clearfix"></div>
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 padding_0 m_bottom_15">
+                                <span class="title">
+                                    Phone:
+                                </span>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 m_bottom_15">
+                                <span>
+                                    {{ clinic.clinic_contact_number}}
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 padding_0 m_bottom_15">
+                                <span class="title">
+                                    Address : 
+                                </span>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 m_bottom_15">                                
+                                <p class="breakword_css">{{ clinic.address_name_one}}</p>
+                                <p class="breakword_css">{{ clinic.address_name}}</p>                                         
+                            </div>                     
+                            <div class="clearfix"></div>
+                        </div>  
+                    </div>
+                </div>
+                <div class="clearfix" ng-if="(key + 1) % 3 == 0"></div>
+            </div>
+            <div ng-if="!(checkPermission(SETTING_CLINIC, EDIT))" class="text-center gotham_book font_size_20 m_top_20">
+                <div class="unauthorised-css">{{ app.unauthorised_msg}}</div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+<!--add clinic modal-->
+<div id="add_clinic_modal" class="modal fade in help_modal" role="dialog" data-backdrop="static" data-keyboard="false" ng-controller="UserController" ng-init="getCountry()" >
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content">                        
+            <div class="modal-body no_padding">
+                <div class="container container_width common_title background_color_1 white_color text-center gotham_medium">
+                    <h3>Add Clinic</h3>                                    
+                </div>
+                <form name="clinicFormAddressRegister" ng-submit="addClinic(true)" novalidate="">
+                    <div class="container container_width middle_content gotham_light">            
+                        <div class="row">
+                            <div class=" col-md-11  col-xs-12 ">
+                                <div class="col-md-2 col-sm-2 col-xs-2 margin_0_auto">
+                                    <div class=" profile_pic_div" ng-class="(clinicImageSrc != '' && clinicImageSrc != undefined) ? 'big_image_without_placeholder' : 'big_image_placeholder'">
+                                        <img src="app/images/placeholder_hospital.png" class="img-responsive placeholder_image"  ng-hide="clinicImageSrc">
+                                        <img ng-src="{{ clinicImageSrc}}" ng-show="clinicImageSrc" class="img-responsive placeholder_image">                                         
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 m_top_10 text-center">
+                                        <a href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center required" ng-click="openFile('clinicImageFile')">Upload Image</a>                                                                                   
+                                        <p class="error" ng-show="submitted && clinicFormAddressRegister.clinicImageSrc.$error.required" style="text-align: center">* Required</p>
+                                        <input type="file" obj="clinic_image" ng-file-select="onFileSelect($files)" class="hide" ng-model="other.clinic_image" id="clinicImageFile"  accept="image/*">                                                                               
+                                        <input type="hidden" name="clinicImageSrc" ng-model="clinicImageSrc" required="">
+                                    </div>
+                                </div>
+                                <div class="col-md-10  col-sm-10 col-xs-10">
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required" >Clinic Name</div>
+                                            <input type="text" name="clinic_name" id="clinic_name" tabindex="1" class="form-control login_input" placeholder="Enter clinic name" value="" required="" ng-model="other.clinic_name">
+                                            <p ng-show="(clinicFormAddressRegister.clinic_name.$touched || submitted) && clinicFormAddressRegister.clinic_name.$error.required" class="error" >* Required.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required" >Clinic number</div>
+                                            <input type="text" name="clinic_number" id="clinic_number" tabindex="1" class="form-control login_input" placeholder="Enter clinic mobile number" value="" required="" ng-model="other.clinic_number" ng-pattern="/^[0-9]{10,12}$/" maxlength="12" ng-keypress="checkMobileKey($event)">
+                                            <p ng-show="(clinicFormAddressRegister.clinic_number.$touched || submitted) && clinicFormAddressRegister.clinic_number.$error.required" class="error" >* Required.</p>                                                                                        
+                                            <p ng-show="(clinicFormAddressRegister.clinic_number.$touched || submitted) && clinicFormAddressRegister.clinic_number.$error.pattern" class="error" > Invalid Number.</p> 
+                                        </div>                                       
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required" >Clinic email address</div>
+                                            <input type="email" name="clinic_email" id="clinic_email" tabindex="1" class="form-control login_input" placeholder="Enter clinic email address" value="" required="" ng-model="other.clinic_email" ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/">
+                                            <p ng-show="(clinicFormAddressRegister.clinic_email.$touched || submitted) && clinicFormAddressRegister.clinic_email.$error.required" class="error">* Required.</p>
+                                            <p ng-show="(clinicFormAddressRegister.clinic_email.$touched || submitted) && clinicFormAddressRegister.clinic_email.$error.pattern" class="error" > Invalid Email. </p>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required" >Clinic {{ app.address_label}}</div>
+                                            <textarea class="form-control login_input resize_none" name="clinic_address1" rows="3" placeholder="{{ app.address_placeholder}}" id="clinic_address1" ng-model="other.clinic_address1"  required=""></textarea>                                            
+                                            <p ng-show="(clinicFormAddressRegister.clinic_address1.$touched || submitted) && clinicFormAddressRegister.clinic_address1.$error.required" class="error" >* Required.</p>
+                                        </div>
+                                    </div>                                    
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required" >Clinic {{ app.landmark_label}}</div>
+                                            <textarea class="form-control login_input resize_none" name="clinic_address" rows="3" placeholder="{{ app.landmark_placeholder}}" id="clinic_address" gm-places-autocomplete ng-model="other.clinic_address"  required=""></textarea>
+                                            <span ng-click="copyDoctorAddressFromClinicPage()" class="font_color_1 cursor_pointer">Copy address from doctor details</span><a href="http://maps.google.com/" class="pull-right font_color_1" target="_blank">Google map</a>
+                                            <p ng-show="(clinicFormAddressRegister.clinic_address.$touched || submitted) && clinicFormAddressRegister.clinic_address.$error.required" class="error" >* Required.</p>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <div class="form-group selection_bx">
+                                            <div class="f_label required">Country</div>                                            
+                                            <select
+                                                name='clinic_country'
+                                                id="country"
+                                                chosen
+                                                allow-single-deselect="true"
+                                                placeholder_text_single="'Select Country'"                                                                
+                                                ng-options="value.country_id as value.country_name for value in other.country"
+                                                style="width:100% !important;"                                                                                                                                
+                                                ng-model="other.selected_clinic_country" ng-change="getState(other.selected_clinic_country)"  required>
+
+                                                <option value=""></option>                                                                 
+                                            </select>
+                                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                        </div>
+                                        <p ng-show="(clinicFormAddressRegister.clinic_country.$touched || submitted) && clinicFormAddressRegister.clinic_country.$error.required" class="error" >* Required.</p>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <div class="form-group selection_bx">
+                                            <div class="f_label required">State</div>
+
+                                            <select
+                                                name="clinic_state" 
+                                                chosen
+                                                allow-single-deselect="true"
+                                                placeholder_text_single="'Select State'"                                                                
+                                                ng-options="value.state_id as value.state_name for value in other.state"
+                                                style="width:100% !important;"                                                                
+                                                ng-model="other.selected_clinic_state" ng-change="getCity(other.selected_clinic_state)" required
+                                                >
+                                                <option value=""></option>                                                                 
+                                            </select>
+                                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                        </div>
+                                        <p ng-show="(clinicFormAddressRegister.clinic_state.$touched || submitted) && clinicFormAddressRegister.clinic_state.$error.required" class="error" >* Required.</p>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">                                    
+                                        <div class="form-group selection_bx">
+                                            <div class="f_label required">City</div>
+                                            <select
+                                                name="clinic_city" 
+                                                chosen
+                                                allow-single-deselect="true"
+                                                placeholder_text_single="'Select City'"                                                                
+                                                ng-options="value.city_id as value.city_name for value in other.city"
+                                                style="width:100% !important;"                                                                
+                                                ng-model="other.selected_clinic_city" required
+                                                >
+                                                <option value=""></option>                                                                 
+                                            </select>
+                                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                            <p ng-show="(clinicFormAddressRegister.clinic_city.$touched || submitted) && clinicFormAddressRegister.clinic_city.$error.required" class="error" >* Required.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required">Locality</div>
+                                            <input type="text" name="clinic_locality" id="clinic_locality" class="form-control login_input" placeholder="Enter locality" ng-model="other.clinic_locality" required/>
+                                            <p ng-show="(clinicFormAddressRegister.clinic_locality.$touched || submitted) && clinicFormAddressRegister.clinic_locality.$error.required" class="error" >* Required.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required"> Pin code</div>
+                                            <input type="text" name="clinic_zipcode" id="clinic_zipcode" class="form-control login_input" placeholder="Enter  Pin code" ng-model="other.clinic_zipcode" required="" ng-pattern="/^[0-9]{6}$/" />
+                                            <p ng-show="(clinicFormAddressRegister.clinic_zipcode.$touched || submitted) && clinicFormAddressRegister.clinic_zipcode.$error.required" class="error" >* Required.</p>
+                                            <p ng-show="(clinicFormAddressRegister.clinic_zipcode.$touched || submitted) && clinicFormAddressRegister.clinic_zipcode.$error.pattern" class="error" >Invalid  Pin code.</p>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_0 add_more_clinic_services_div" >                                                                                            
+
+                                            <div  ng-repeat="(key, service) in other.clinic_service">
+                                                <ng-form name="innerClinicServiceForm">
+                                                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                        <div class="form-group">
+                                                            <div class="f_label required" ng-if="key == 0" >Clinic services</div>
+                                                            <input type="text" name="clinic_service" id="clinic_service" tabindex="1" class="form-control login_input" placeholder="Write clinic services" value="" required="" ng-model="other.clinic_service[key].text" >
+                                                            <p ng-show="(innerClinicServiceForm.clinic_service.$touched || submitted) && innerClinicServiceForm.clinic_service.$error.required" class="error" >* Required.</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-2 col-xs-2 add_more_button">
+                                                        <div class="form-group ">
+                                                            <div class="f_label" ng-if="key == 0"></div>
+                                                            <img src="app/images/add_button.png" class=""  ng-class="key == 0 ? 'add_button_image' : 'add_remove_image'"  ng-click="addClinicService(1)" ng-if="key == 0">                                                                                                        
+                                                            <img src="app/images/remove.png" class="remove_edu_qualification" ng-class="key == 0 ? 'add_button_image' : 'add_remove_image'"  ng-click="removeClinicservice(1, key)" ng-if="key != 0">                                        
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </ng-form>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_0">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                                <div class="form-group selection_bx">
+                                                    <div class="f_label required" for="duration">Consultation duration </div>
+
+                                                    <select
+                                                        name='duration'
+                                                        id="duration"
+                                                        chosen
+                                                        allow-single-deselect="true"
+                                                        placeholder_text_single="'Duration'"                                                                                                                                              
+                                                        style="width:100% !important;"                                                                                                                                
+                                                        ng-model="other.clinic_duration" required="" 
+                                                        ng-change="checkSessionTiming()"
+                                                        >
+                                                        <option value=""></option>                      
+                                                        <option ng-repeat="duration in calendarDuration" value="{{duration.value}}">{{duration.name}}</option>
+                                                    </select>
+                                                    <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                                </div>
+                                                <p ng-show="(clinicFormAddressRegister.duration.$touched || submitted) && clinicFormAddressRegister.duration.$error.required" class="error" >* Required.</p>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                                <div class="form-group selection_bx">
+                                                    <div class="clearfix"></div>
+
+                                                    <div class="f_label required">Consultation charges</div>   
+                                                    <div class="INR_div">
+                                                        <p class="pull-left">INR</p>
+                                                        <input type="text" name="clinicCharge" id="clinic_consultation_charges" tabindex="1" class="form-control login_input" placeholder="Select Charges" value="" required="" ng-model="other.clinicCharge" ng-pattern="/^[0-9]{1,7}(\.[0-9]+)?$/" >
+                                                        <p ng-show="(clinicFormAddressRegister.clinicCharge.$touched || submitted) && clinicFormAddressRegister.clinicCharge.$error.required" class="error" >* Required.</p>
+                                                        <p ng-show="(clinicFormAddressRegister.clinicCharge.$touched || submitted) && clinicFormAddressRegister.clinicCharge.$error.pattern" class="error" >* Invalid value.</p>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 add_more_session_time_of_clinic_div">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                            <div class="form-group ">
+                                                <div class="f_label required">Session time of clinic</div>                                                                                            
+                                                <p class="input-group login_input">
+                                                    <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" datetime-picker="HH:mm" save-as="true"  is-open="startPicker.open" enable-date="false" close-on-selection="true"  name="clinic_start_time" button-bar="startPicker.buttonBar" ng-model="other.clinic_start_time" required="" placeholder="Session start time" readonly="" 
+                                                           when-closed="checkSessionTiming()"
+                                                           />
+                                                    <span class="input-group-btn login_input">
+                                                        <button type="button" class="btn btn-default login_input clock_button" ng-click="startPicker.open = true"><i class="fa fa-clock-o"></i></button>
+                                                    </span>
+                                                </p>
+                                                <p ng-show="(clinicFormAddressRegister.clinic_start_time.$touched || submitted) && clinicFormAddressRegister.clinic_start_time.$error.required" class="error" >* Required.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                            <div class="form-group ">
+                                                <div class="f_label">&nbsp;</div>                                                                                         
+                                                <p class="input-group login_input">
+                                                    <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" datetime-picker="HH:mm" save-as="true"  is-open="endPicker.open" enable-date="false" close-on-selection="true"  name="clinic_end_time"  button-bar="startPicker.buttonBar" ng-model="other.clinic_end_time" required="" placeholder="Session end time" readonly="" 
+                                                           when-closed="checkSessionTiming()"
+                                                           />
+                                                    <span class="input-group-btn login_input">
+                                                        <button type="button" class="btn btn-default login_input clock_button" ng-click="endPicker.open = true"><i class="fa fa-clock-o"></i></button>
+                                                    </span>
+                                                </p>
+                                                <p ng-show="(clinicFormAddressRegister.clinic_end_time.$touched || submitted) && clinicFormAddressRegister.clinic_end_time.$error.required" class="error" >* Required.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 col-xs-2 add_more_button">
+                                            <div class="form-group ">
+                                                <div class="f_label"></div>
+                                                <img src="app/images/add_button.png" class="add_more_session_time_of_clinic add_button_image" ng-click="secondsession = true">
+                                            </div>
+                                        </div>  
+                                        <div class="clearfix"></div>
+                                        <div ng-if="secondsession">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                                <div class="form-group ">                                                                                            
+                                                    <p class="input-group login_input">
+                                                        <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" datetime-picker="HH:mm" save-as="true"  is-open="startPickerSecond.open" enable-date="false" close-on-selection="true"  name="clinic_start_time2" ng-model="other.clinic_start_time2" button-bar="startPicker.buttonBar" required="" placeholder="Session start time" readonly="" 
+                                                               when-closed="checkSessionTiming()"
+                                                               />
+                                                        <span class="input-group-btn login_input">
+                                                            <button type="button" class="btn btn-default login_input clock_button" ng-click="startPickerSecond.open = true"><i class="fa fa-clock-o"></i></button>
+                                                        </span>
+                                                    </p>
+                                                    <p ng-show="(clinicFormAddressRegister.clinic_start_time2.$touched || submitted) && clinicFormAddressRegister.clinic_start_time2.$error.required" class="error" >* Required.</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                                <div class="form-group ">                                                                                                                                                                                
+                                                    <p class="input-group login_input">
+                                                        <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" datetime-picker="HH:mm" save-as="true"  is-open="endPickerSecond.open" enable-date="false" close-on-selection="true" name="clinic_end_time2" ng-model="other.clinic_end_time2" required="" button-bar="startPicker.buttonBar" placeholder="Session end time" readonly="" 
+                                                               when-closed="checkSessionTiming()"
+                                                               />
+                                                        <span class="input-group-btn login_input">
+                                                            <button type="button" class="btn btn-default login_input clock_button" ng-click="endPickerSecond.open = true"><i class="fa fa-clock-o"></i></button>
+                                                        </span>
+                                                    </p>
+                                                    <p ng-show="(clinicFormAddressRegister.clinic_end_time2.$touched || submitted) && clinicFormAddressRegister.clinic_end_time2.$error.required" class="error" >* Required.</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-sm-2 col-xs-2 add_more_button">
+                                                <div class="form-group ">                                                                                            
+                                                    <img src="app/images/remove.png" class="remove_edu_qualification add_remove_image"  ng-click="hideSecondSession()" >                                        
+                                                </div>
+                                            </div>  
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div> 
+
+                                    <div class="clearfix"></div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <div class="form-group">
+                                                <div class="f_label required" >Add outside area</div>
+                                                <div class="" ng-class="(clinicOutsideImageSrc != '' && clinicOutsideImageSrc != undefined) ? 'big_image_without_placeholder' : 'big_image_placeholder'">
+                                                    <img src="app/images/placeholder_hospital.png" class="img-responsive placeholder_image" ng-hide="clinicOutsideImageSrc" ng-click="openFile('clinicOutsidePicFile')">                                                                                                
+                                                    <img ng-src="{{ clinicOutsideImageSrc}}" ng-show="clinicOutsideImageSrc" class="img-responsive placeholder_image" ng-click="openFile('clinicOutsidePicFile')">
+                                                    <input type="file" obj="clinic_outside" ng-file-select="onFileSelect($files)" class="hide" ng-model="other.clinic_outside" id="clinicOutsidePicFile"  accept="image/*">                                                                               
+                                                    <input type="hidden" name="clinicOutsideImageSrc" ng-model="clinicOutsideImageSrc" required="">
+
+                                                </div>
+                                                <p class="error" ng-show="submitted && clinicFormAddressRegister.clinicOutsideImageSrc.$error.required">* Required</p>
+                                                <a href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center required" ng-click="openFile('clinicOutsidePicFile')">Upload Image</a>                                                                                   
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <div class="form-group">
+                                                <div class="f_label required" >Add waiting area</div>
+                                                <div class="" ng-class="(clinicWaitingImageSrc != '' && clinicWaitingImageSrc != undefined) ? 'big_image_without_placeholder' : 'big_image_placeholder'">
+                                                    <img src="app/images/placeholder_hospital.png" class="img-responsive placeholder_image" ng-hide="clinicWaitingImageSrc"  ng-click="openFile('clinicWaitingPicFile')">                                                                                           
+                                                    <img ng-src="{{ clinicWaitingImageSrc}}" ng-show="clinicWaitingImageSrc" class="img-responsive placeholder_image" ng-click="openFile('clinicWaitingPicFile')">
+                                                    <input type="file" obj="clinic_waiting" ng-file-select="onFileSelect($files)" class="hide" ng-model="other.clinic_outside" id="clinicWaitingPicFile"  accept="image/*">                                                                               
+                                                    <input type="hidden" name="clinicWaitingImageSrc" ng-model="clinicWaitingImageSrc" required="">
+                                                </div>
+                                                <p class="error" ng-show="submitted && clinicFormAddressRegister.clinicWaitingImageSrc.$error.required">* Required</p>
+                                                <a href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center required" ng-click="openFile('clinicWaitingPicFile')">Upload Image</a>                                                                                   
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <div class="form-group">
+                                                <div class="f_label required" >Add reception area</div>
+                                                <div class="" ng-class="(clinicReceptionImageSrc != '' && clinicReceptionImageSrc != undefined) ? 'big_image_without_placeholder' : 'big_image_placeholder'">
+                                                    <img src="app/images/placeholder_hospital.png" class="img-responsive placeholder_image" ng-click="openFile('clinicReceptionPicFile')" ng-hide="clinicReceptionImageSrc">                                                                                                
+                                                    <img ng-src="{{ clinicReceptionImageSrc}}" ng-show="clinicReceptionImageSrc" class="img-responsive ree placeholder_image" ng-click="openFile('clinicReceptionPicFile')"> 
+                                                    <input type="file" obj="clinic_reception" ng-file-select="onFileSelect($files)" class="hide" ng-model="other.clinic_reception" id="clinicReceptionPicFile"  accept="image/*">                                                                               
+                                                    <input type="hidden" name="clinicReceptionImageSrc" ng-model="clinicReceptionImageSrc" required="">
+                                                </div>                                                
+                                                <p class="error" ng-show="submitted && clinicFormAddressRegister.clinicReceptionImageSrc.$error.required">* Required</p>
+                                                <a href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center required" ng-click="openFile('clinicReceptionPicFile')">Upload Image</a>                                                                                   
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <div class="form-group">
+                                                <div class="f_label required" >Add address proof</div>
+                                                <div class="" ng-class="(clinicAddressImageSrc != '' && clinicAddressImageSrc != undefined) ? 'big_image_without_placeholder' : 'big_image_placeholder'">
+                                                    <img src="app/images/placeholder_hospital.png" class="img-responsive placeholder_image" ng-click="openFile('clinicAddressImageSrcFile')" ng-hide="clinicAddressImageSrc">                                                                                                
+                                                    <img ng-src="{{ clinicAddressImageSrc}}" class="img-responsive placeholder_image register_img_class" ng-click="openFile('clinicAddressImageSrcFile')" ng-click="showFullImage(clinicAddressImageSrc)" ng-show="clinicAddressImageSrc"> 
+
+                                                    <input type="file" obj="clinic_address_proof" ng-file-select="onFileSelect($files)" class="hide" ng-model="other.clinic_address_proof" id="clinicAddressImageSrcFile"  accept="image/*">                                                                               
+                                                    <input type="hidden" name="clinicAddressImageSrc" ng-model="clinicAddressImageSrc" required="">
+                                                </div>
+                                                <p href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center clinic_img_msg" ng-click="openFile('clinicAddressImageSrcFile')">Upload Image</p>
+                                                <p class="error clinic_img_msg" ng-show="submitted && clinicFormAddressRegister.clinicAddressImageSrc.$error.required">* Required</p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="m_top_10 m_bottom_30 clearfix">  
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <input type="submit" value="Done" name="save" class="btn new_common_button btn_properties float_right" />
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <input data-dismiss="modal" type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties" ng-click="init()" />
+                                </div>  
+                            </div>    
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- add clinic modal end -->
+
+<!-- edit clinic modal-->
+<div id="edit_clinic_modal" class="modal fade in help_modal" role="dialog" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content">                        
+            <div class="modal-body no_padding">
+                <div class="container container_width common_title background_color_1 white_color text-center gotham_medium">
+                    <h3>Edit Clinic</h3>                                    
+                </div>
+                <form name="clinicFormAddressRegister" ng-submit="editClinic(clinicFormAddressRegister)" novalidate="">
+                    <div class="container container_width middle_content gotham_light">            
+                        <div class="row">
+                            <div class=" col-md-11  col-xs-12 ">
+                                <div class="col-md-2 col-sm-2 col-xs-2 margin_0_auto">
+                                    <div class=" profile_pic_div" ng-class="clinicImageSrc != undefined ? 'big_image_without_placeholder' : 'big_image_placeholder'">
+                                        <img src="app/images/placeholder_hospital.png" class="img-responsive placeholder_image"  ng-hide="clinicImageSrc">
+                                        <img ng-src="{{ clinicImageSrc}}" class="img-responsive placeholder_image">                                        
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 m_top_10 text-center">
+                                        <a href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center required" ng-click="openFile('clinicImageFileEdit')">Upload Image</a>                                                                                   
+                                        <p class="error" ng-show="submitted && clinicFormAddressRegister.clinicImageSrc.$error.required" style="text-align: center">* Required</p>
+                                        <input type="file" obj="clinic_image" ng-file-select="onFileSelect($files)" class="hide" ng-model="other.clinic_image11" id="clinicImageFileEdit"  accept="image/*">                                                                               
+                                        <input type="hidden" name="clinicImageSrc" ng-model="clinicImageSrc" required="">
+                                    </div>
+                                </div>
+                                <div class="col-md-10  col-sm-10 col-xs-10">
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required" >Clinic Name</div>
+                                            <input type="text" name="clinic_name" id="clinic_name" tabindex="1" class="form-control login_input" placeholder="Enter clinic name" value="" required="" ng-model="other.clinic_name">
+                                            <p ng-show="(clinicFormAddressRegister.clinic_name.$touched || submitted) && clinicFormAddressRegister.clinic_name.$error.required" class="error" >* Required.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required" >Clinic number</div>
+                                            <input type="text" name="clinic_number" id="clinic_number" tabindex="1" class="form-control login_input" placeholder="Enter clinic mobile number" value="" required="" ng-model="other.clinic_number" ng-pattern="/^[0-9]{10,12}$/" maxlength="12" ng-keypress="checkMobileKey($event)">
+                                            <p ng-show="(clinicFormAddressRegister.clinic_number.$touched || submitted) && clinicFormAddressRegister.clinic_number.$error.required" class="error" >* Required.</p>                                                                                        
+                                            <p ng-show="(clinicFormAddressRegister.clinic_number.$touched || submitted) && clinicFormAddressRegister.clinic_number.$error.pattern" class="error" > Invalid Number.</p> 
+                                            <!--  
+                                            <p ng-if="other.clinic_phone_verified == 2" class="cursor_pointer error text-right"
+                                               ng-click="resendOtpForClinicVerification(1)"
+                                               >
+                                                Unverified
+                                            </p>
+                                            -->
+                                        </div>
+
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required" >Clinic email address</div>
+                                            <input type="email" name="clinic_email" id="clinic_email" tabindex="1" class="form-control login_input" placeholder="Enter clinic email address" value="" required="" ng-model="other.clinic_email" ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/">
+                                            <p ng-show="(clinicFormAddressRegister.clinic_email.$touched || submitted) && clinicFormAddressRegister.clinic_email.$error.required" class="error">* Required.</p>
+                                            <p ng-show="(clinicFormAddressRegister.clinic_email.$touched || submitted) && clinicFormAddressRegister.clinic_email.$error.pattern" class="error" > Invalid Email. </p>
+                                            <p ng-if="other.clinic_email_verified == 2" class="cursor_pointer error text-right"
+                                               ng-click="resendOtpForClinicVerification(2)"
+                                               >
+                                                Unverified
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>                                   
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required" >Clinic {{ app.address_label}}</div>
+                                            <textarea class="form-control login_input resize_none" name="clinic_address1" rows="3" placeholder="{{ app.address_placeholder}}" id="clinic_address1" ng-model="other.clinic_address1"  required=""></textarea>                                            
+                                            <p ng-show="(clinicFormAddressRegister.clinic_address1.$touched || submitted) && clinicFormAddressRegister.clinic_address1.$error.required" class="error" >* Required.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required" >Clinic {{ app.landmark_label}}</div>
+                                            <textarea class="form-control login_input resize_none" name="clinic_address" rows="3" placeholder="Search {{ app.landmark_placeholder}}" id="clinic_address" gm-places-autocomplete ng-model="other.clinic_address"  required=""></textarea>
+                                            <span ng-click="copyDoctorAddressFromClinicPage()" class="font_color_1 cursor_pointer">Copy address from doctor details</span><a href="http://maps.google.com/" class="pull-right font_color_1" target="_blank">Google map</a>
+                                            <p ng-show="(clinicFormAddressRegister.clinic_address.$touched || submitted) && clinicFormAddressRegister.clinic_address.$error.required" class="error" >* Required.</p>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <div class="form-group selection_bx">
+                                            <div class="f_label required">Country</div>                                            
+                                            <select
+
+                                                name='clinic_country'
+                                                id="country"
+                                                chosen
+                                                allow-single-deselect="true"
+                                                placeholder_text_single="'Select Country'"                                                                
+                                                ng-options="value.country_id as value.country_name for value in other.country"
+                                                style="width:100% !important;"                                                                                                                                
+                                                ng-model="other.selected_clinic_country" ng-change="getState(other.selected_clinic_country)"  required>
+
+                                                <option value=""></option>                                                                 
+                                            </select>
+                                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                        </div>
+                                        <p ng-show="(clinicFormAddressRegister.clinic_country.$touched || submitted) && clinicFormAddressRegister.clinic_country.$error.required" class="error" >* Required.</p>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <div class="form-group selection_bx">
+                                            <div class="f_label required">State</div>                                          
+                                            <select
+
+                                                name="clinic_state" 
+                                                chosen
+                                                allow-single-deselect="true"
+                                                placeholder_text_single="'Select State'"                                                                
+                                                ng-options="value.state_id as value.state_name for value in other.state"
+                                                style="width:100% !important;"                                                                
+                                                ng-model="other.selected_clinic_state" ng-change="getCity(other.selected_clinic_state)" required
+                                                >
+                                                <option value=""></option>                                                                 
+                                            </select>
+                                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                        </div>
+                                        <p ng-show="(clinicFormAddressRegister.clinic_state.$touched || submitted) && clinicFormAddressRegister.clinic_state.$error.required" class="error" >* Required.</p>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <div class="form-group selection_bx">
+                                            <div class="f_label required">City</div>                                           
+                                            <select
+                                                name="clinic_city" 
+                                                chosen
+                                                allow-single-deselect="true"
+                                                placeholder_text_single="'Select City'"                                                                
+                                                ng-options="value.city_id as value.city_name for value in other.city"
+                                                style="width:100% !important;"                                                                
+                                                ng-model="other.selected_clinic_city" required
+                                                >
+                                                <option value=""></option>                                                                 
+                                            </select>
+                                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                            <p ng-show="(clinicFormAddressRegister.clinic_city.$touched || submitted) && clinicFormAddressRegister.clinic_city.$error.required" class="error" >* Required.</p>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required">Locality</div>
+                                            <input type="text" name="clinic_locality" id="clinic_locality" class="form-control login_input" placeholder="Enter locality" ng-model="other.clinic_locality" required/>
+                                            <p ng-show="(clinicFormAddressRegister.clinic_locality.$touched || submitted) && clinicFormAddressRegister.clinic_locality.$error.required" class="error" >* Required.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            <div class="f_label required"> Pin code</div>
+                                            <input type="text" name="clinic_zipcode" id="clinic_zipcode" class="form-control login_input" placeholder="Enter  Pin code" ng-model="other.clinic_zipcode" required="" ng-pattern="/^[0-9]{6}$/" />
+                                            <p ng-show="(clinicFormAddressRegister.clinic_zipcode.$touched || submitted) && clinicFormAddressRegister.clinic_zipcode.$error.required" class="error" >* Required.</p>
+                                            <p ng-show="(clinicFormAddressRegister.clinic_zipcode.$touched || submitted) && clinicFormAddressRegister.clinic_zipcode.$error.pattern" class="error" >Invalid  Pin code.</p>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_0 add_more_clinic_services_div" >                                                                                            
+
+                                            <div  ng-repeat="(key, service) in other.clinic_service">
+                                                <ng-form name="innerClinicServiceForm">
+                                                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                        <div class="form-group">
+                                                            <div class="f_label required" ng-if="key == 0" >Clinic services</div>
+                                                            <input type="text" name="clinic_service" id="clinic_service" tabindex="1" class="form-control login_input" placeholder="Write clinic services" value="" required="" ng-model="other.clinic_service[key].text" >
+                                                            <p ng-show="(innerClinicServiceForm.clinic_service.$touched || submitted) && innerClinicServiceForm.clinic_service.$error.required" class="error" >* Required.</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-2 col-xs-2 add_more_button">
+                                                        <div class="form-group ">
+                                                            <div class="f_label" ng-if="key == 0"></div>
+                                                            <img src="app/images/add_button.png" class=""  ng-class="key == 0 ? 'add_button_image' : 'add_remove_image'"  ng-click="addClinicService(1)" ng-if="key == 0">                                                                                                        
+                                                            <img src="app/images/remove.png" class="remove_edu_qualification" ng-class="key == 0 ? 'add_button_image' : 'add_remove_image'"  ng-click="removeClinicservice(1, key)" ng-if="key != 0">                                        
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </ng-form>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_0">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                                <div class="form-group selection_bx">
+                                                    <div class="f_label required" for="duration">Consultation duration </div>
+
+                                                    <select
+                                                        name='duration'
+                                                        id="duration"
+                                                        chosen
+                                                        allow-single-deselect="true"
+                                                        placeholder_text_single="'Duration'"                                                                                                                                              
+                                                        style="width:100% !important;"                                                                                                                                
+                                                        ng-model="other.clinic_duration" required="" 
+                                                        ng-change="checkSessionTimingEdit()"
+                                                        >
+                                                        <option ng-repeat="duration in calendarDuration" value="{{duration.value}}">{{duration.name}}</option>
+                                                    </select>
+                                                    <span><i class="fa fa-angle-down fa-2x"></i></span>
+                                                </div>
+                                                <p ng-show="(clinicFormAddressRegister.duration.$touched || submitted) && clinicFormAddressRegister.duration.$error.required" class="error" >* Required.</p>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                                <div class="form-group selection_bx">
+                                                    <div class="f_label required">Consultation charges</div>                                                                                                
+                                                    <div class="INR_div">
+                                                        <p class="pull-left">INR</p>
+                                                        <input type="text" name="clinicCharge" id="clinic_consultation_charges" tabindex="1" class="form-control login_input" placeholder="Select Charges" value="" required="" ng-model="other.clinicCharge" ng-pattern="/^[0-9]{1,7}(\.[0-9]+)?$/" >
+                                                        <p ng-show="(clinicFormAddressRegister.clinicCharge.$touched || submitted) && clinicFormAddressRegister.clinicCharge.$error.required" class="error" >* Required.</p>
+                                                        <p ng-show="(clinicFormAddressRegister.clinicCharge.$touched || submitted) && clinicFormAddressRegister.clinicCharge.$error.pattern" class="error" >* Invalid value.</p>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 add_more_session_time_of_clinic_div">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                            <div class="form-group ">
+                                                <div class="f_label required">Session time of clinic </div>                                                                                            
+                                                <p class="input-group login_input">
+                                                    <input type="text" class="form-control login_input"  timepicker-options="startPicker.timepickerOptions" button-bar="startPicker.buttonBar" datetime-picker="HH:mm"  is-open="startPicker.open" enable-date="false" close-on-selection="true"  name="clinic_start_time" ng-model="other.clinic_start_time" required="" placeholder="Session start time" readonly="" 
+                                                           when-closed="checkSessionTimingEdit()"
+                                                           />
+                                                    <span class="input-group-btn login_input">
+                                                        <button type="button" class="btn btn-default login_input clock_button" ng-click="startPicker.open = true"><i class="fa fa-clock-o"></i></button>
+                                                    </span>
+                                                </p>
+                                                <p ng-show="(clinicFormAddressRegister.clinic_start_time.$touched || submitted) && clinicFormAddressRegister.clinic_start_time.$error.required" class="error" >* Required.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                            <div class="form-group ">
+                                                <div class="f_label">&nbsp;</div>                                                                                         
+                                                <p class="input-group login_input">
+                                                    <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" button-bar="startPicker.buttonBar" datetime-picker="HH:mm"  is-open="endPicker.open" enable-date="false" close-on-selection="true"  name="clinic_end_time" ng-model="other.clinic_end_time" required="" placeholder="Session end time" readonly=""   
+                                                           when-closed="checkSessionTimingEdit()"                                                           
+                                                           />
+                                                    <span class="input-group-btn login_input">
+                                                        <button type="button" class="btn btn-default login_input clock_button" ng-click="endPicker.open = true"><i class="fa fa-clock-o"></i></button>
+                                                    </span>
+                                                </p>
+                                                <p ng-show="(clinicFormAddressRegister.clinic_end_time.$touched || submitted) && clinicFormAddressRegister.clinic_end_time.$error.required" class="error" >* Required.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 col-xs-2 add_more_button">
+                                            <div class="form-group ">
+                                                <div class="f_label"></div>
+                                                <img src="app/images/add_button.png" class="add_more_session_time_of_clinic add_button_image" ng-click="other.secondsession = true">
+                                            </div>
+                                        </div>  
+                                        <div class="clearfix"></div>
+                                        <div ng-if="other.secondsession">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                                <div class="form-group ">                                                                                            
+                                                    <p class="input-group login_input">
+                                                        <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" button-bar="startPicker.buttonBar" datetime-picker="HH:mm"  is-open="startPickerSecond.open" enable-date="false" close-on-selection="true"  name="clinic_start_time2" ng-model="other.clinic_start_time2" required="" placeholder="Session start time" readonly="" 
+                                                               when-closed="checkSessionTimingEdit()"
+                                                               />
+                                                        <span class="input-group-btn login_input">
+                                                            <button type="button" class="btn btn-default login_input clock_button" ng-click="startPickerSecond.open = true"><i class="fa fa-clock-o"></i></button>
+                                                        </span>
+                                                    </p>
+                                                    <p ng-show="(clinicFormAddressRegister.clinic_start_time2.$touched || submitted) && clinicFormAddressRegister.clinic_start_time2.$error.required" class="error" >* Required.</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                                <div class="form-group ">                                                                                                                                                                                
+                                                    <p class="input-group login_input">
+                                                        <input type="text" class="form-control login_input" timepicker-options="startPicker.timepickerOptions" button-bar="startPicker.buttonBar" datetime-picker="HH:mm" is-open="endPickerSecond.open" enable-date="false" close-on-selection="true" name="clinic_end_time2" ng-model="other.clinic_end_time2" required="" placeholder="Session end time" readonly=""
+                                                               when-closed="checkSessionTimingEdit()"/>
+                                                        <span class="input-group-btn login_input">
+                                                            <button type="button" class="btn btn-default login_input clock_button" ng-click="endPickerSecond.open = true"><i class="fa fa-clock-o"></i></button>
+                                                        </span>
+                                                    </p>
+                                                    <p ng-show="(clinicFormAddressRegister.clinic_end_time2.$touched || submitted) && clinicFormAddressRegister.clinic_end_time2.$error.required" class="error" >* Required.</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-sm-2 col-xs-2 add_more_button">
+                                                <div class="form-group ">                                                                                            
+                                                    <img src="app/images/remove.png" class="remove_edu_qualification add_remove_image"  ng-click="hideSecondSession()" >                                        
+                                                </div>
+                                            </div>  
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div> 
+
+                                    <div class="clearfix"></div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <div class="form-group">
+                                                <div class="f_label required" >Add outside area</div>
+                                                <div class="" ng-class="clinicOutsideImageSrc != undefined ? 'big_image_without_placeholder' : 'big_image_placeholder'">
+                                                    <img src="app/images/placeholder_hospital.png" class="img-responsive placeholder_image" ng-hide="clinicOutsideImageSrc" ng-click="openFile('clinicOutsidePicFileEdit')">                                                                                                
+                                                    <img ng-src="{{ clinicOutsideImageSrc}}" class="img-responsive placeholder_image" ng-click="openFile('clinicOutsidePicFileEdit')">
+                                                    <input type="file" obj="clinic_outside" ng-file-select="onFileSelect($files)" class="hide" ng-model="other.clinic_outside11" id="clinicOutsidePicFileEdit"  accept="image/*">                                                                               
+                                                    <input type="hidden" name="clinicOutsideImageSrc" ng-model="clinicOutsideImageSrc" required="">
+                                                </div>
+
+                                                <p class="error" ng-show="submitted && clinicFormAddressRegister.clinicOutsideImageSrc.$error.required">* Required</p>
+                                                <a href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center required" ng-click="openFile('clinicOutsidePicFileEdit')">Upload Image</a>                                                                                   
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <div class="form-group">
+                                                <div class="f_label required" >Add waiting area</div>
+                                                <div class="" ng-class="clinicWaitingImageSrc != undefined ? 'big_image_without_placeholder' : 'big_image_placeholder'">
+                                                    <img src="app/images/placeholder_hospital.png" class="img-responsive placeholder_image" ng-hide="clinicWaitingImageSrc"  ng-click="openFile('clinicWaitingPicFileEdit')">                                                                                           
+                                                    <img ng-src="{{ clinicWaitingImageSrc}}" class="img-responsive placeholder_image" ng-click="openFile('clinicWaitingPicFileEdit')">
+                                                    <input type="file" obj="clinic_waiting" ng-file-select="onFileSelect($files)" class="hide" ng-model="other.clinic_outside11" id="clinicWaitingPicFileEdit"  accept="image/*">                                                                               
+                                                    <input type="hidden" name="clinicWaitingImageSrc" ng-model="clinicWaitingImageSrc" required="">
+                                                </div>
+                                                <p class="error" ng-show="submitted && clinicFormAddressRegister.clinicWaitingImageSrc.$error.required">* Required</p>
+                                                <a href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center required" ng-click="openFile('clinicWaitingPicFileEdit')">Upload Image</a>                                                                                   
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <div class="form-group">
+                                                <div class="f_label required" >Add reception area</div>
+                                                <div class="" ng-class="clinicReceptionImageSrc != undefined ? 'big_image_without_placeholder' : 'big_image_placeholder'">
+                                                    <img src="app/images/placeholder_hospital.png" class="img-responsive placeholder_image" ng-click="openFile('clinicReceptionPicFileEdit')" ng-hide="clinicReceptionImageSrc">                                                                                                
+                                                    <img ng-src="{{ clinicReceptionImageSrc}}" class="img-responsive placeholder_image" ng-click="openFile('clinicReceptionPicFileEdit')"> 
+
+                                                    <input type="file" obj="clinic_reception" ng-file-select="onFileSelect($files)" class="hide" ng-model="other.clinic_reception11" id="clinicReceptionPicFileEdit"  accept="image/*">                                                                               
+                                                    <input type="hidden" name="clinicReceptionImageSrc" ng-model="clinicReceptionImageSrc" required="">
+                                                </div>
+                                                <p class="error" ng-show="submitted && clinicFormAddressRegister.clinicReceptionImageSrc.$error.required">* Required</p>
+                                                <a href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center required" ng-click="openFile('clinicReceptionPicFileEdit')">Upload Image</a>                                                                                   
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <div class="form-group">
+                                                <div class="f_label required" >Add address proof</div>
+                                                <div class="" ng-class="clinicAddressImageSrc != undefined ? 'big_image_without_placeholder' : 'big_image_placeholder'">
+                                                    <img src="app/images/placeholder_hospital.png" class="img-responsive placeholder_image" ng-click="openFile('clinicAddressImageSrcFileEdit')" ng-hide="clinicAddressImageSrc">                                                                                                
+                                                    <img ng-src="{{ clinicAddressImageSrc}}" class="img-responsive placeholder_image register_img_class" ng-click="openFile('clinicAddressImageSrcFileEdit')" ng-click="showFullImage(clinicAddressImageSrc)" ng-show="clinicAddressImageSrc"> 
+
+                                                    <input type="file" obj="clinic_address_proof" ng-file-select="onFileSelect($files)" class="hide" ng-model="other.clinic_address_proof" id="clinicAddressImageSrcFileEdit"  accept="image/*">                                                                               
+                                                    <input type="hidden" name="clinicAddressImageSrc" ng-model="clinicAddressImageSrc" required="">
+                                                </div>
+                                                <p href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center clinic_img_msg" ng-click="openFile('clinicAddressImageSrcFileEdit')">Upload Image</p>
+                                                <p class="error clinic_img_msg" ng-show="submitted && clinicFormAddressRegister.clinicAddressImageSrc.$error.required">* Required</p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="m_top_10 m_bottom_30 clearfix">  
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <input type="submit" value="Done" name="save" class="btn new_common_button btn_properties float_right" />                                 
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <input data-dismiss="modal" type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties"  />                                                                                                                  
+                                </div>  
+                            </div>    
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div id="clinic_otp_modal" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content no_padding">
+            <div class="modal-header common_title background_color_1 white_color text-center">                           
+                <h3 class="modal-title modaltitle_m">OTP verification </h3>                            
+            </div>
+            <form id="profileOTPForm" method="post" role="form" name="profileOTPForm" ng-submit="verifyOtpForClinic(profileOTPForm)" novalidate="">
+                <div class="form-group">
+                    <div class="forgot_password_label" >Please enter your verification code. <br /> Which you have received.</div>
+                    <input type="text" name="send_register_otp" id="send_register_otp" tabindex="1" class="form-control login_input" placeholder="Enter OTP" value="" required="" ng-model="other.clinic_otp">
+                    <p ng-show="(profileOTPForm.send_register_otp.$touched || submitted) && profileOTPForm.send_register_otp.$error.required" class="error" style="text-align: center">* Required.</p>
+                </div>
+                <div class="form-group m_top_30 text-center">
+                    <input type="submit" name="login-submit" id="login-submit" class="btn_properties new_common_button" value="Submit"/>
+                    <input type="reset" name=""  class="btn_properties new_common_button_1 cancel_patient" value="Close" data-dismiss="modal"/>
+                </div>                               
+            </form>            
+        </div>
+    </div>
+</div>

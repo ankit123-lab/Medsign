@@ -1,0 +1,72 @@
+Options -Indexes
+
+RewriteEngine On
+ExpiresActive On
+
+RewriteRule ^invoice/?(.*)$ /pdf_preview/web/pdf_preview.php?charting_url=$1 [L]
+RewriteRule ^prescription/?(.*)$ /pdf_preview/web/pdf_preview.php?charting_url=$1 [L]
+RewriteRule ^qrcode/?(.*)$ /pdf_preview/web/pdf_preview.php?charting_url=$1 [L]
+
+RewriteRule ^patient/(.*)$ https://medsign.care/$1 [R=301,NC,L]
+RewriteRule ^pt/(.*)$ https://medsign.care/pt/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^.*medeasy.\co\.in$ [NC]
+RewriteRule ^(.*)$ https://www.medsign.in/$1 [R=301,L]
+
+RewriteCond %{HTTP_HOST} ^admin\.medsign\.in$ [NC]
+RewriteRule ^((?!admin/).*)$ /admin/$1 [L,NC]
+
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\. [OR]
+RewriteCond %{HTTP_HOST} ^medsign\.in$ [NC]
+RewriteRule ^ https://www.medsign.in%{REQUEST_URI} [R=301,L,NE]
+
+RewriteCond %{THE_REQUEST} ^[A-Z]+\ /index\.php(/[^\ ]*)?\ HTTP/ 
+RewriteRule ^index\.php(/(.*))?$ medsign.in/$2 [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+# send an Expires: header for each of these mimetypes (as defined by server)
+ExpiresByType image/png "access plus 1 month"
+ExpiresByType image/gif "access plus 1 month"
+ExpiresByType image/jpeg "access plus 1 month"
+
+# css/js may change a bit sometimes, so define shorter expiration
+ExpiresByType text/css "access plus 1 month"
+ExpiresByType text/css "access plus 1 month"
+
+# Images
+ExpiresByType image/jpeg "access plus 1 month"
+ExpiresByType image/gif "access plus 1 month"
+ExpiresByType image/png "access plus 1 month"
+ExpiresByType image/webp "access plus 1 month"
+ExpiresByType image/svg+xml "access plus 1 month"
+ExpiresByType image/x-icon "access plus 1 month"
+
+# Video
+ExpiresByType video/webm "access plus 1 month"
+ExpiresByType video/mp4 "access plus 1 month"
+ExpiresByType video/mpeg "access plus 1 month"
+
+# Fonts
+ExpiresByType font/ttf "access plus 1 month"
+ExpiresByType font/otf "access plus 1 month"
+ExpiresByType font/woff "access plus 1 month"
+ExpiresByType font/woff2 "access plus 1 month"
+ExpiresByType application/font-woff "access plus 1 month"
+
+# CSS, JavaScript
+ExpiresByType text/css "access plus 1 month"
+ExpiresByType text/javascript "access plus 1 month"
+ExpiresByType application/javascript "access plus 1 month"
+
+# Others
+ExpiresByType application/pdf "access plus 1 month"
+ExpiresByType image/vnd.microsoft.icon "access plus 1 month"
+
+<Files env.ini>
+    Order allow,deny
+    Deny from all
+</Files>

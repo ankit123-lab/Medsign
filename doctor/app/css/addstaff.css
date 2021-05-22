@@ -1,0 +1,52 @@
+.modal-dialog.modal_dialog_width {
+  margin: 0 auto;
+  padding: 30px;
+  width: 1367px;
+}
+#modal_add_staff .modal-backdrop.in {
+    overflow-x: auto;
+    min-width: 1367px !important;
+}
+#modal_add_staff{
+    overflow-x: auto;
+}
+.modal-content{
+    border: none !important;
+    border-radius: 0;
+    height: 750px;
+}
+.modal-title.modaltitle_m{
+    /* margin: 15px !important; */
+}
+
+.f_label.p_lable{
+    padding: 17px 0px;
+}
+.row_padding_35{
+    padding: 35px;
+}
+
+li.tabs_last
+{
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+}
+li.tabs_first
+{
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+}
+.btn_properties.btn_done{
+    width: 148px;
+    height: 38px;
+}
+/*==============================Media Query=====================================*/
+/*@media screen and (max-width: 1367px)
+{
+    .addstaff
+    {
+        width: 1367px;
+        overflow: auto;
+    }
+}*/
+

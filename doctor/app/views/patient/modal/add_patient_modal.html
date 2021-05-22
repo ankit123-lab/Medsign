@@ -1,0 +1,951 @@
+<style type="text/css">
+    .chosen-container-multi ul.chosen-choices {height: auto !important;}
+    .no_border>tbody>tr>td {border: none !important;}
+</style>
+<div class="modal-body no_padding add_patient_modal" id="patient_modal">
+    <div class="reg_patient container container_width no_padding">                               
+        <div class="container container_width top_header background_color_1 white_color text-center">
+            <button type="button" class="close" ng-click="cancel()" data-dismiss="modal">X</button>
+            <h3 ng-if="patient.patient_id == ''">New Patient Registration</h3>                                    
+            <h3 ng-if="patient.patient_id != ''">Edit Patient Details</h3>                                    
+        </div>
+        <form action="" method='post' id="patientreg_form" class="font_color_5 placeholder_class" name="patientRegisterForm" novalidate="">
+            <div class="container container_width middle_content">            
+                <div class="row no_margin">  
+                    <div class="m_top_10 clearfix">
+                        <div class="gotham_medium text-center">
+                            <ul class="nav nav-pills tabs_items font_color_1" role="tablist">
+                                <li class="nav-item active" role="presentation" style="border-right-width: 0;" ng-class="(patient.current_patient_details_tab == 4) ? 'active' : ''"> 
+                                    <a class="nav-link" data-toggle="pill" href="" ng-click="changePatientDetailsTab(4)">General</a>
+                                </li>
+                                <li class="nav-item" role="presentation" ng-class="(patient.current_patient_details_tab == 1) ? 'active' : ''"> 
+                                    <a class="nav-link" data-toggle="pill" href="" ng-click="changePatientDetailsTab(1)">Personal</a>
+                                </li>
+                                <li class="nav-item tabs_last" role="presentation" ng-class="(patient.current_patient_details_tab == 3) ? 'active' : ''">
+                                    <a class="nav-link" data-toggle="pill" href="" ng-click="changePatientDetailsTab(3)">Lifestyle</a>
+                                </li>
+                                <li class="nav-item" role="presentation" ng-class="(patient.current_patient_details_tab == 2) ? 'active' : ''">
+                                    <a class="nav-link" data-toggle="pill" href="" ng-click="changePatientDetailsTab(2)">Family History</a>
+                                </li>                                
+                                <li class="nav-item" role="presentation" ng-class="(patient.current_patient_details_tab == 5) ? 'active' : ''">
+                                    <a class="nav-link" data-toggle="pill" href="" ng-click="changePatientDetailsTab(5)">Allergies</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div ng-show="patient.current_patient_details_tab == 4" class="col_width_left left_col m_top_26" style="margin: 0 auto;width: 134px;display: block;margin-top: 15px;">
+                        <div class="profile_bckgrnd">                            
+                            <img src="app/images/add_image.png" name="user" alt="User" class="text-center placeholder_image" ng-hide='patient.patient_img_temp' ng-click='openPatientFile("patientProfFile")' ng-if="patient.patient_img_thumb == ''" />
+                            <img ng-src="{{ patient.patient_img_thumb}}" name="user"  class="img-responsive" style="height:100%;width:100%" ng-if="patient.patient_img_temp == '' && patient.patient_img_thumb != ''"  />
+                            <img ng-src="{{ patient.patient_img_temp}}" name="user"  class="img-responsive" ng-click='openPatientFile("patientProfFile")' style="height:100%;width:100%" ng-show="patient.patient_img_temp" ng-if="patient.patient_img_temp"  />
+                            <input type="file" key="patient" ng-file-select-patient="onFileSelect($files)" class="hide" id="patientProfFile" accept="image/*">                                                                               
+                            <div ng-show="patient.patient_img_temp">
+                                <img src="app/images/popup_remove_red.png" ng-click="removeProfile(1)" class="display_remove_icon" style="top: -10px;right: -10px;" />
+                            </div>
+                        </div>                        
+                        <p href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center" ng-click="openPatientFile('patientProfFile')">Upload Image</p>
+                        <!-- <p class="error" ng-show="submitted && !patient.patient_img_temp">{{image_required}}</p> -->
+                    </div>
+                    <div class="col_width_right m_top_26">
+                        <div class="m_top_10" ng-show="patient.current_patient_details_tab == 4">
+                            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="fname" class="m_bottom_15 required">First Name</label><br>
+                                            <input type="text" class="form-control common_input" id="fname" placeholder="Enter First Name " name="fname" required="required" ng-model="patient.patient_first_name" ng-pattern="/^[a-zA-Z\. ]*$/"  ng-maxlength="30">
+                                            <p ng-show="(submitted) && patientRegisterForm.fname.$error.required" class="error">{{fname_required}}</p>
+                                            <p ng-show="(submitted) && patientRegisterForm.fname.$error.pattern" class="error">Only characters allowed.</p>
+                                            <p ng-show="(submitted) && patientRegisterForm.fname.$error.maxlength" class="error">Only 30 characters allowed.</p>
+                                        </div>  
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="lname" class="m_bottom_15">Last Name</label><br>
+                                            <input type="text" class="form-control common_input" id="lname" placeholder="Enter Last Name " name="lname" ng-model="patient.patient_last_name"  ng-pattern="/^[a-zA-Z\. ]*$/"  ng-maxlength="30">
+                                            <p ng-show="(submitted) && patientRegisterForm.lname.$error.required" class="error">{{lname_required}}</p>
+                                            <p ng-show="(submitted) && patientRegisterForm.lname.$error.pattern" class="error">Only characters allowed.</p>
+                                            <p ng-show="(submitted) && patientRegisterForm.lname.$error.maxlength" class="error">Only 30 characters allowed.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="mobile" class="m_bottom_15" ng-class="patient.patient_type=='1' ? 'required' : ''">Mobile Number</label><br>
+                                            <input type="text" class="form-control common_input" id="mobile" placeholder="Enter Mobile Number" name="mobile" ng-required="patient.patient_type=='1'" ng-model="patient.patient_mob_number" ng-pattern="/^[0-9]{10}$/" maxlength="10" ng-keypress="checkMobileKey($event)" ng-readonly="patient.is_mobile_read_only">
+                                            <p ng-show="(submitted) && patientRegisterForm.mobile.$error.required" class="error">{{phone_required}}</p>
+                                            <p ng-show="(submitted) && patientRegisterForm.mobile.$error.pattern" class="error"> Invalid number.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7 col-md-7 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="email" class="m_bottom_15">Email Address</label><br />
+                                            <input type="email" class="form-control common_input" id="email" placeholder="Enter Email Address" name="email" ng-model="patient.patient_email" ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/" ng-readonly="patient.is_email_read_only">
+                                            <!-- <p ng-show="(submitted) && patientRegisterForm.email.$error.required" class="error">{{email_required}}</p> -->
+                                            <p ng-show="(submitted) && patientRegisterForm.email.$error.pattern" class="error"> Invalid email.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="m_top_10 clearfix" ng-show="patient.current_patient_details_tab == 4">
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 ">
+                                <div class="row">
+                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 ">
+                                        <label for="gender" class="m_bottom_15 required">Gender</label><br>
+                                        <div class="row no_margin_bottom">
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 input_gender" gender="male" ng-click="changeGender(1,false)">
+                                                <img ng-src="{{patient.gender==1?'app/images/male_image.png':'app/images/unselect_male_image.png'}}" alt="Male" />
+                                                <label for="male" class="m_top_10">Male</label>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 input_gender" gender="female" ng-click="changeGender(2,false)">
+                                                <img ng-src="{{patient.gender==2 ?'app/images/select_female_image.png':'app/images/unselect_female_image.png'}}" alt="Female" />
+                                                <label for="female" class="m_top_10">Female</label>
+                                            </div>
+                                            <div class="col-lg-3  col-md-3 col-sm-3 col-xs-3 input_gender" gender="other" ng-click="changeGender(3,false)">
+                                                <img ng-src="{{patient.gender==3 ?'app/images/select_other_image.png':'app/images/other_image.png'}}"  alt="Other Image" />
+                                                <label for="other" class="m_top_10">Other</label>
+                                            </div>
+                                            <input type="hidden" name="gender" value="" ng-model="patient.gender" id="gender" ng-required="!patient.share_status">
+                                        </div>
+                                        <p ng-show="(submitted) && patientRegisterForm.gender.$error.required" class="error">* Select Gender</p>
+                                    </div>
+                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="date" class="m_bottom_15 required">Date Of Birth</label><br>
+                                            <p class="input-group login_input">
+                                                <span class="input-group-btn login_input">
+                                                    <button type="button" class="btn btn-default login_input" ng-click="date_of_birth.open = true"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                                <input type="text" class="form-control login_input"  datetime-picker="dd/MM/yyyy"  datepicker-options="date_of_birth.datepickerOptions" enable-time="false" ng-model="patient.patient_bdate" is-open="date_of_birth.open" ui-mask="99/99/9999" required="" placeholder="DD/MM/YYYY" name="patient_bdate"/>
+                                            </p>
+                                            <p ng-show="(submitted) && patientRegisterForm.patient_bdate.$error.required" class="error">{{dob_required}}</p>
+                                            <p ng-show="(submitted) && patient.patient_bdate == undefined" class="error">{{invalid_date}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+                                <div class="row">
+                                    
+                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="date" class="m_bottom_15 required">Age</label><br> <label style="position: absolute;left: -10px;top: 38px;">OR</label>
+                                            <input type="text" class="form-control common_input" ng-model="patient.patient_age" ng-required="false" placeholder="Age" ng-pattern="/^[0-9]*$/" maxlength="3" ng-keyup="updatePatientBirthDate()" name="patient_age"/>
+                                            <p ng-show="(submitted) && patientRegisterForm.patient_age.$error.required" class="error">Please Enter Age</p>
+                                            <p ng-show="(submitted) && patientRegisterForm.patient_age.$error.pattern" class="error"> Invalid Age.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="form-group">
+                                                    <label for="user_patient_id" class="m_bottom_15">Patient Id</label><br>
+                                                    <input type="text" class="form-control common_input" id="user_patient_id" placeholder="Enter Patient Id" name="user_patient_id" ng-model="patient.user_patient_id"  ng-pattern="/^[a-zA-Z0-9 ]*$/" 
+                                                    ng-maxlength="20" maxlength="20">
+                                                    <p ng-show="(submitted) && patientRegisterForm.user_patient_id.$error.required" class="error">* Please Enter Patient Id</p>
+                                                    <p ng-show="(submitted) && patientRegisterForm.user_patient_id.$error.pattern" class="error">Only alphanumeric allowed.</p>
+                                                    <p ng-show="(submitted) && patientRegisterForm.user_patient_id.$error.maxlength" class="error">Only 20 characters allowed.</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="form-group" >
+                                                    <label for="refby" class="m_bottom_15">Referred By</label><br>
+                                                    <input client-auto-complete dirtype='4' type="text" class="form-control common_input" id="refby" placeholder="Write a Name" name="refby"  ng-keyup="globalSearchForRefferedBy()" ng-model="patient.search_patient_keyword">
+                                                    <input  type="hidden" class="form-control common_input" name="refby_id" ng-model="patient.refby">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m_top_10 clearfix" ng-show="patient.current_patient_details_tab == 4">  
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                <div class="padding_left_0 common_checbox m_top_12">
+                                    <input type="checkbox" id="gender_checkbox" ng-model="patient.share_status" ng-change="patienDontDisclose()" />    
+                                    <label for="gender_checkbox" class="disclose">Patient does not want to disclose</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 m_top_12">
+                                <div class="row">
+                                    <div ng-if="patient.patient_id == ''" class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                        <div class="form-group">
+                                            <div class="common_radio col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 m_bottom_12">
+                                                <input id="patient_type_self" name="patient_type" type="radio" ng-model="patient.patient_type" value="1">
+                                                <label for="patient_type_self" class="no_margin">Self</label>
+                                                <input id="patient_type_caretaker" name="patient_type" type="radio" ng-model="patient.patient_type" value="2">
+                                                <label for="patient_type_caretaker" class="no_margin">Caregiver</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="patient.current_patient_details_tab == 4" ng-if="patient.patient_type=='2'" class="m_top_10 panel panel-default">
+                            <div class="panel-body">
+                                <!-- Caregiver First row -->
+                                <div ng-if="patient.patient_id == ''" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding">
+                                    <div ng-if="patient.patient_type=='2'" class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="caretaker_mobile" class="m_bottom_15 required">Caregiver Mobile Number</label><br>
+                                                <input client-auto-complete dirtype='21' autocomplete="off" ng-keyup="searchCaretaker();" type="text" class="form-control common_input" id="caretaker_mobile" placeholder="Enter Caregiver Mobile Number" name="caretaker_mobile" ng-model="patient.caretaker_mobile" maxlength="10" ng-keypress="checkMobileKey($event)" required>
+                                                <p ng-show="(submitted) && patientRegisterForm.caretaker_mobile.$error.required" class="error">{{phone_required}}</p>
+                                                <p ng-show="(submitted) && patient.is_invalid_caretaker_number" class="error"> Invalid number.</p>
+                                            </div>
+                                        </div>
+                                        <div ng-if="patient.patient_type=='2' && patient.patient_id == '' && patient.caretaker_user_id != undefined && patient.caretaker_user_id != ''" class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="caretakerfname" class="m_bottom_15 required">Caregiver First Name</label><br>
+                                                <input type="text" class="form-control common_input" id="caretakerfname" placeholder="Enter Caregiver First Name " name="caretakerfname" required="required" ng-model="patient.caretaker_first_name" ng-pattern="/^[a-zA-Z\. ]*$/"  
+                                                ng-readonly="patient.caretaker_user_id > 0"
+                                                ng-maxlength="30">
+                                                <p ng-show="(submitted) && patientRegisterForm.caretakerfname.$error.required" class="error">{{fname_required}}</p>
+                                                <p ng-show="(submitted) && patientRegisterForm.caretakerfname.$error.pattern" class="error">Only characters allowed.</p>
+                                                <p ng-show="(submitted) && patientRegisterForm.caretakerfname.$error.maxlength" class="error">Only 30 characters allowed.</p>
+                                            </div>  
+                                        </div>
+                                        <div ng-if="patient.patient_type=='2' && patient.patient_id == '' && patient.caretaker_user_id != undefined && patient.caretaker_user_id != ''" class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="caretakerlname" class="m_bottom_15">Caregiver Last Name</label><br>
+                                                <input type="text" class="form-control common_input" id="caretakerlname" placeholder="Enter Caregiver Last Name " name="caretakerlname" ng-model="patient.caretaker_last_name"  ng-pattern="/^[a-zA-Z\. ]*$/" 
+                                                ng-readonly="patient.caretaker_user_id > 0" 
+                                                ng-maxlength="30">
+                                                <p ng-show="(submitted) && patientRegisterForm.caretakerlname.$error.required" class="error">{{lname_required}}</p>
+                                                <p ng-show="(submitted) && patientRegisterForm.caretakerlname.$error.pattern" class="error">Only characters allowed.</p>
+                                                <p ng-show="(submitted) && patientRegisterForm.caretakerlname.$error.maxlength" class="error">Only 30 characters allowed.</p>
+                                            </div>
+                                        </div>
+                                        <div ng-if="patient.caretaker_user_id == '0'" class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="email" class="m_bottom_15">Caregiver Email Address</label><br />
+                                                <input type="email" class="form-control common_input" id="caregiver_email" placeholder="Enter Caregiver Email Address" name="caregiver_email" ng-model="patient.caregiver_patient_email" ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/" >
+                                                <p ng-show="(submitted) && patientRegisterForm.caregiver_email.$error.pattern" class="error"> Invalid email.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Caregiver First row -->
+                                <!-- Caregiver Second row -->
+                                <div ng-if="patient.patient_type=='2' && patient.patient_id == '' && patient.caretaker_user_id != undefined && patient.caretaker_user_id != ''" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="no_margin form-group">
+                                                <label for="caretakerlname" class="m_bottom_15 required">Caregiver relation with patient</label><br> 
+                                                <select
+                                                    name='caretaker_relation'
+                                                    placeholder="'Relation'"
+                                                    style="width:100% !important;padding: 8px;" required="" 
+                                                    ng-model="patient.caretaker_relation" 
+                                                    ng-disabled="patient.patient_id != '' ? true : false" 
+                                                    ng-options="relation.id as relation.name for relation in familyRelation">
+                                                    <option value="">Select Relation</option>
+                                                </select>
+                                            </div>
+                                            <p ng-show="(submitted) && patientRegisterForm.caretaker_relation.$error.required" class="error">{{relation_required}}</p>
+                                        </div>
+                                        <div ng-if="patient.caretaker_user_id == '0'" class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <label for="gender" class="m_bottom_15 required">Caregiver Gender</label><br>
+                                            <div class="row no_margin_bottom">
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 input_gender caretaker_gender" gender="male" ng-click="changeGender(1,true)">
+                                                    <img ng-src="{{patient.caretaker_gender==1?'app/images/male_image.png':'app/images/unselect_male_image.png'}}" alt="Male" />
+                                                    <label for="male" class="m_top_10">Male</label>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 input_gender caretaker_gender" gender="female" ng-click="changeGender(2,true)">
+                                                    <img ng-src="{{patient.caretaker_gender==2 ?'app/images/select_female_image.png':'app/images/unselect_female_image.png'}}" alt="Female" />
+                                                    <label for="female" class="m_top_10">Female</label>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="caretaker_gender" value="" ng-model="patient.caretaker_gender" ng-required="true" id="caretaker_gender">
+                                            <p ng-show="(submitted) && patientRegisterForm.caretaker_gender.$error.required" class="error">Select Gender</p>
+                                        </div>
+                                        <div ng-if="patient.caretaker_user_id == '0'" class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <label for="gender" class="m_bottom_15 required">Caregiver Age</label><br>
+                                            <input type="text" class="form-control common_input" ng-model="patient.caretaker_age" ng-required="true" placeholder="Age" ng-pattern="/^[0-9]*$/" maxlength="3" name="caretaker_age"/>
+                                            <p ng-show="(submitted) && patientRegisterForm.caretaker_age.$error.required" class="error">Please Enter Age</p>
+                                            <p ng-show="(submitted) && patientRegisterForm.caretaker_age.$error.pattern" class="error"> Invalid Age.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Caregiver Second row -->
+
+                                <!-- Caregiver list -->
+                                <div ng-if="patient.patient_type=='2' && patient.caretaker_data.length > 0" ng-repeat="(key, caretakerObj) in patient.caretaker_data" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding">
+                                    <div ng-if="patient.patient_type=='2'" class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label ng-if="key==0" for="mobile" class="m_bottom_15 required">Caregiver Mobile Number</label>
+                                                <input type="text" class="form-control common_input" placeholder="Enter Caregiver Mobile Number" name="caretaker_mobile" ng-model="caretakerObj.user_phone_number"  maxlength="10" required readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label ng-if="key==0" for="caretakerfname" class="m_bottom_15 required">Caregiver First Name</label>
+                                                <input type="text" class="form-control common_input" placeholder="Enter Caregiver First Name " name="caretakerfname"
+                                                ng-model="caretakerObj.user_first_name" readonly 
+                                                ng-maxlength="30">
+                                            </div>  
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label ng-if="key==0" for="caretakerlname" class="m_bottom_15">Caregiver Last Name</label>
+                                                <input type="text" class="form-control common_input" placeholder="Enter Caregiver Last Name " name="caretakerlname" ng-model="caretakerObj.user_last_name" 
+                                                readonly 
+                                                ng-maxlength="30">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label ng-if="key==0" class="m_bottom_15 required">Relation with patient</label>
+                                                <select
+                                                name='caretaker_relation'
+                                                placeholder="'Relation'"
+                                                style="width:100% !important;padding: 8px;" required="" 
+                                                ng-model="caretakerObj.mapping_relation" 
+                                                ng-disabled="true" 
+                                                ng-options="relation.id as relation.name for relation in familyRelation">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Caregiver list -->
+                            </div>
+                        </div>
+                        <div ng-show="patient.current_patient_details_tab == 1" class="m_top_10 clearfix">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div class="form-group ">
+                                            <label for="language" class="m_bottom_15">Language Preference</label><br/>
+                                            <div class="position_relative">
+                                                <select name='language' id="language" ng-options="value.language_id as value.language_name for value in languages" style="width:100% !important;" ng-model="patient.patient_languages" class="common_input form-control">
+                                                    <option value="">Select Language</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="height" class="m_bottom_15">Height (cm)</label><br/>
+                                            <input type="text"
+                                                   ng-change="heightValidation(patientRegisterForm, 1)"
+                                                   class="form-control common_input" 
+                                                   id="height" 
+                                                   placeholder="Enter Height (cm)" 
+                                                   name="height" 
+                                                   ng-model="patient.patient_height" ng-pattern="/^[0-9]{1,3}?$/">
+                                            <p ng-show="(submitted) && patientRegisterForm.height.$error.pattern" class="error">Height can not be less then 1 nor greater than 333 CM.</p>
+                                        </div>                                                    
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="weight" class="m_bottom_15">Weight (kg)</label><br/>
+                                            <input type="text" 
+                                                   ng-change="heightValidation(patientRegisterForm, 2)"
+                                                   class="form-control common_input" id="weight" placeholder="Enter Weight (kg)" name="weight" ng-model="patient.patient_weight" ng-pattern="/^[0-9]{1,7}(\.[0-9]+)?$/" />
+                                            <p ng-show="(submitted) && patientRegisterForm.weight.$error.pattern" class="error" >Weight can not be less then 1 nor greater than 200 KG.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="bgroup" class="m_bottom_15">Blood Group</label><br/>
+                                            <div class="position_relative">
+                                                <select name='bgroup' id="bgroup" placeholder="'None'" ng-options="value for value in blood_groups" style="width:100% !important;" ng-model="patient.patient_blood_group" class="common_input form-control"><option value="">None</option></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="patient.current_patient_details_tab == 1" class="m_top_10 clearfix">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="staddress1" class="m_bottom_15">{{app.address_label}}</label><br/>
+                                    <textarea type="text" class="form-control common_input" id="staddress1" placeholder="{{app.address_placeholder}}" name="staddress1" ng-model="patient.patient_address1" ></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="staddress" class="m_bottom_15">{{app.landmark_label}}</label><br/>
+                                    <textarea type="text" class="form-control common_input" id="patient_address" placeholder="Search {{app.landmark_placeholder}}" name="patient_address" gm-places-autocomplete ng-model="patient.patient_address"></textarea>
+                                    <a href="http://maps.google.com/" class="pull-right font_color_1" target="_blank" tabindex="-1">Google map</a>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group selection_bx">
+                                            <label for="state" class="m_bottom_15">State</label>
+                                            <br/>
+                                            <div class="position_relative">
+                                                <select
+                                                    name='state' 
+                                                    id="state" 
+                                                    chosen 
+                                                    allow-single-deselect="true" 
+                                                    placeholder_text_single="'Select State'" 
+                                                    ng-options="value.state_id as value.state_name for value in states" 
+                                                    style="width:100% !important;" 
+                                                    ng-model="patient.patient_state" class="common_input form-control" ng-change="getPatientCity(patient.patient_state)" >
+                                                    <option value=""></option>
+                                                </select>                                    
+                                                <span><img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right"/></span>
+                                            </div>
+                                        </div>  
+                                    </div> 
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group selection_bx">
+                                            <label for="city" class="m_bottom_15">City</label><br/>
+                                            <div class="position_relative">
+                                                <select
+                                                    name='city' 
+                                                    id="city" 
+                                                    chosen                                          
+                                                    allow-single-deselect="true" 
+                                                    no-results-text="'Select City'" 
+                                                    placeholder_text_single="'Select City'" 
+                                                    ng-options="value.city_id as value.city_name for value in patient.cities"
+                                                    style="width:100% !important;" 
+                                                    ng-model="patient.patient_city" class="common_input form-control"  >
+                                                    <option value=""></option>
+                                                </select>
+                                                <span>
+                                                    <img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="locality" class="m_bottom_15">Locality</label><br/>
+                                            <input type="text" class="form-control common_input" id="locality" placeholder="Enter Locality" name="locality" ng-model='patient.locality' />
+                                        </div>                                
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="pincode" class="m_bottom_15">Pin Code</label><br>
+                                            <input type="text" class="form-control common_input" id="pincode" placeholder="Pincode" name="pincode" ng-model="patient.patient_picode" ng-pattern="/^[0-9]{6}$/">
+                                            <p ng-show="(submitted) && patientRegisterForm.pincode.$error.pattern" class="error">Invalid Pin Code.</p> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="emergency_contact_name" class="m_bottom_15">Emergency Contact Name</label><br/>
+                                            <input type="text" class="form-control common_input" id="emergency_contact_name" placeholder="Emergency Contact Name" name="emergency_contact_name" ng-model='patient.emergency_contact_name'/>
+                                        </div>                                
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="emergency_contact_number" class="m_bottom_15">Emergency Contact Number</label><br/>
+                                            <input type="text" class="form-control common_input" id="emergency_contact_number" placeholder="Emergency Contact Number" name="emergency_contact_number" ng-model='patient.emergency_contact_number' ng-pattern="/^[0-9]{10}$/" maxlength="10" ng-keypress="checkMobileKey($event)"/>
+                                            <p ng-show="(submitted) && patientRegisterForm.emergency_contact_number.$error.pattern" class="error"> Invalid number.</p>
+                                        </div>                                
+                                    </div>
+                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="" class="m_bottom_15">Marital Status</label><br/>
+                                            <div class="common_radio col-lg-12 col-md-12 col-sm-12 col-xs-12 padding_0 m_bottom_12">
+                                                
+                                                     
+                                                    <input id="marital_status_single" name="dummy_radio_button" type="radio" ng-model="patient.marital_status" value="2" checked="">
+                                                    <label for="marital_status_single" class="no_margin">Single</label>
+                                                
+                                                    
+                                                    <input id="marital_status_married" name="dummy_radio_button" type="radio" ng-model="patient.marital_status" value="1">
+                                                    <label for="marital_status_married" class="no_margin">Married</label>
+                                            </div>
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="emergency_contact_name" class="m_bottom_15">Select ID Proof</label><br/>
+                                            <div class="position_relative">
+                                                <select name='id_proof_type' placeholder="'None'" ng-options="value for value in id_proof_list" style="width:100% !important;" ng-model="patient.id_proof_type" class="common_input form-control" ng-required="is_required_id_type()">
+                                                    <option value="">None</option>
+                                                </select>
+                                            </div>
+                                            <p ng-show="(submitted) && patientRegisterForm.id_proof_type.$error.required" class="error">Please Select ID Proof</p>
+                                        </div>                                
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="id_proof_detail" class="m_bottom_15">ID Proof Detail</label><br/>
+                                            <input ng-if="patient.id_proof_type=='' || patient.id_proof_type==null || patient.id_proof_type==undefined" type="text" class="form-control common_input" id="id_proof_detail" placeholder="ID Proof Detail" name="id_proof_detail" ng-model='patient.id_proof_detail' maxlength="12"/>
+
+                                            <input ng-if="patient.id_proof_type=='Aadhar card'" type="text" class="form-control common_input" id="id_proof_detail" placeholder="ID Proof Detail" name="id_proof_detail" ng-model='patient.id_proof_detail' maxlength="12" ng-pattern="/^[0-9]{12}$/"/>
+
+                                            <input ng-if="patient.id_proof_type=='Passport'" type="text" class="form-control common_input" id="id_proof_detail" placeholder="ID Proof Detail" name="id_proof_detail" ng-model='patient.id_proof_detail' maxlength="8" ng-pattern="/^([a-zA-Z]){1}([0-9]){7}?$/"/>
+
+                                            <input ng-if="patient.id_proof_type=='Driving License'" type="text" class="form-control common_input" id="id_proof_detail" placeholder="ID Proof Detail" name="id_proof_detail" ng-model='patient.id_proof_detail' maxlength="15" ng-pattern="/^([a-zA-Z]){2}([0-9]){13}?$/"/>
+
+                                            <input ng-if="patient.id_proof_type=='Pan Card'" type="text" class="form-control common_input" id="id_proof_detail" placeholder="ID Proof Detail" name="id_proof_detail" ng-model='patient.id_proof_detail' maxlength="10" ng-pattern="/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/"/>
+
+                                            <p ng-show="(submitted) && patientRegisterForm.id_proof_detail.$error.pattern" class="error"> Invalid detail</p>
+                                        </div>                                
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="id_proof_detail" class="m_bottom_15">ID Proof Image</label><br/>
+                                            <img src="app/images/upload_image.png" ng-click="openFileObject('IdProofImage')" class="add_button_image add_button_image_custom">
+                                            <input type="file" obj="edu" ng-file-select-id-proof="onFileSelect($files)" class="hide" ng-model="doctor.edu_object[key].img" id="IdProofImage" accept="image/*">
+
+                                            <img ng-if="patient.id_proof_img_temp == '' && patient.id_proof_image" ng-src="{{patient.id_proof_image_thumb}}" class="m_left_16 add_button_image add_button_image_custom common_btn_radius" ng-click="showFullImage(patient.id_proof_image)">
+
+                                            <img ng-show="patient.id_proof_img_temp" ng-src="{{patient.id_proof_img_temp}}" class="m_left_16 add_button_image add_button_image_custom common_btn_radius">
+                                            <img src="app/images/popup_remove_red.png" ng-if="patient.id_proof_img_temp" ng-click="removeIdProofImage()" class="display_remove_icon id_proof_remove_icon" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="patient.current_patient_details_tab == 2" class="m_top_10 clearfix">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="" class="m_bottom_15"><b>Add family health history</b></label>
+                                            <table class="table min_width_767 no_border">
+                                                <thead class="row font_color_3 gotham_light font_size_18 previous_vitals_head">
+                                                    <tr>                                
+                                                        <th width="12%" class="text-center">Relation</th>
+                                                        <th width="20%" class="text-center">Condition</th>
+                                                        <th width="12%" class="text-center">Since when</th>
+                                                        <th width="12%" class="text-center">Comments</th>
+                                                        <th width="8%" class="text-center"></th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <body>
+                                                    <tr ng-repeat="(key,historyObj) in patient.patient_family_history">
+                                                        <td colspan="5" style="padding: 0;">
+                                                            <ng-form name="innerFamilyHistoryForm">
+                                                                <table class="table min_width_767 no_margin no_border">
+                                                                    <tr>
+                                                                        <td width="12%">      
+                                                                            <div class="no_margin form-group"> 
+                                                                            <select
+                                                                            name='relation'
+                                                                            placeholder="'Relation'"
+                                                                            style="width:100% !important;"
+                                                                            class="common_input form-control"
+                                                                            ng-required = "isFamHisRequired(patient.patient_family_history,key)" 
+                                                                            ng-model="historyObj.relation"  ng-options="relation.id as relation.name for relation in familyRelation">
+                                                                            <option value="">Select Relation</option>
+                                                                            </select>
+                                                                            </div>
+                                                                            <p ng-show="(innerFamilyHistoryForm.relation.$touched || submitted) && innerFamilyHistoryForm.relation.$error.required" class="error">{{relation_required}}</p>
+                                                                            
+                                                                        </td>
+                                                                        <td width="20%">
+                                                                            <div class="no_margin form-group"> 
+                                                                            <select
+                                                                            name='medical_condition' multiple
+                                                                            chosen
+                                                                            allow-single-deselect="true"
+                                                                            placeholder_text_multiple="'Conditions'"
+                                                                            style="width:100% !important;" ng-required = "isFamHisRequired(patient.patient_family_history,key)" 
+                                                                            class="common_input form-control ng-valid localytics-chosen ng-touched ng-dirty ng-valid-parse"
+                                                                            ng-model="historyObj.medical_condition"  ng-options="conditions.medical_condition_name as conditions.medical_condition_name for conditions in medical_conditions">
+                                                                            </select>
+                                                                            </div>
+                                                                            <p ng-show="(innerFamilyHistoryForm.medical_condition.$touched || submitted) && innerFamilyHistoryForm.medical_condition.$error.required" class="error">{{medical_condition_required}}</p>
+                                                                        </td>
+                                                                        <td width="12%">
+                                                                            <p class="input-group login_input">
+                                                                            <input type="text" class="form-control login_input ng-pristine ng-untouched ng-valid-required ng-invalid ng-invalid-datetime ng-invalid-required ng-valid-datetime" datepicker-options="family_his_date.datepickerOptions" ng-model="historyObj.history_date" datetime-picker="dd/MM/yyyy" enable-time="false" is-open="family_his_date[key].open" placeholder="DD / MM / YYYY" name="family_history_date" readonly="" ng-required = "isFamHisRequired(patient.patient_family_history,key)" >
+                                                                            <span class="input-group-btn login_input"><button type="button" class="btn btn-default login_input" ng-click="family_his_date[key].open = true"><i class="fa fa-calendar"></i></button></span>
+                                                                            </p>
+                                                                            <p ng-show="(innerFamilyHistoryForm.family_history_date.$touched || submitted) && innerFamilyHistoryForm.family_history_date.$error.required" class="error">{{date_required}}</p>
+                                                                            <p ng-show="(innerFamilyHistoryForm.family_history_date.$touched || submitted) && innerFamilyHistoryForm.family_history_date.$error.datetime" class="error">Invalid date</p>
+                                                                        </td>
+                                                                        <td width="12%">
+                                                                            <input type="text" class="form-control common_input" placeholder="Comments" ng-model='historyObj.comments'/>
+                                                                        </td>
+                                                                        <td width="8%">
+                                                                            <img src="app/images/add_icon.png" 
+                                                                             ng-if="key == (patient.patient_family_history.length - 1)"
+                                                                             class="cursor_pointer"
+                                                                             ng-click="addMoreFamilyHistory(true)" />
+                                                                            <img src="app/images/remove_icon.png" 
+                                                                             ng-if="key != (patient.patient_family_history.length - 1)"
+                                                                             class="cursor_pointer"
+                                                                             ng-click="addMoreFamilyHistory(false, key)" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </ng-form>
+                                                        </td>
+                                                    </tr>
+                                                </body>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="" class="m_bottom_15">Chronic diseases</label>
+                                            <div class="form-group"> 
+                                            <select
+                                            name='chronic_diseases' multiple
+                                            chosen
+                                            allow-single-deselect="true"
+                                            placeholder_text_multiple="'Conditions'"
+                                            style="width:100% !important;" 
+                                            class="common_input form-control ng-valid localytics-chosen ng-touched ng-dirty ng-valid-parse"
+                                            ng-model="patient.chronic_diseases_data" ng-options="conditions.medical_condition_name as conditions.medical_condition_name for conditions in medical_conditions">
+                                            </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="" class="m_bottom_15">Injuries</label>
+                                            <div class="m_bottom_10 clearfix" ng-repeat="(key,injuriesObj) in patient.patient_injuries_arr">
+                                                <ng-form name="innerInjuriesAllergiesForm">
+                                                    <div class="no_padding col-lg-11 col-md-11 col-sm-11 col-xs-12">
+                                                        <input type="text" class="form-control common_input" placeholder="Injuries" name="injuries_allergies" ng-model='injuriesObj.value' ng-pattern="/^[a-zA-Z\s]*$/"/>
+                                                        <p ng-show="(submitted) && innerInjuriesAllergiesForm.injuries_allergies.$error.pattern" class="error">{{only_alphabet}}</p>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <img src="app/images/add_icon.png" 
+                                                         ng-if="key == (patient.patient_injuries_arr.length - 1)"
+                                                         class="cursor_pointer"
+                                                         ng-click="addMoreInjuries(true)" />
+                                                        <img src="app/images/remove_icon.png" 
+                                                         ng-if="key != (patient.patient_injuries_arr.length - 1)"
+                                                         class="cursor_pointer"
+                                                         ng-click="addMoreInjuries(false, key)" />
+                                                    </div>
+                                                </ng-form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="" class="m_bottom_15">Surgeries</label>
+                                            <div class="m_bottom_10 clearfix" ng-repeat="(key,surgeriesObj) in patient.patient_surgeries_arr">
+                                                <ng-form name="innerSurgeriesAllergiesForm">
+                                                    <div class="no_padding col-lg-11 col-md-11 col-sm-11 col-xs-12">
+                                                        <input type="text" class="form-control common_input" placeholder="Surgeries" name="surgeries_allergies" ng-model='surgeriesObj.value' ng-pattern="/^[a-zA-Z\s]*$/"/>
+                                                        <p ng-show="(submitted) && innerSurgeriesAllergiesForm.surgeries_allergies.$error.pattern" class="error">{{only_alphabet}}</p>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <img src="app/images/add_icon.png" 
+                                                         ng-if="key == (patient.patient_surgeries_arr.length - 1)"
+                                                         class="cursor_pointer"
+                                                         ng-click="addMoreSurgeries(true)" />
+                                                        <img src="app/images/remove_icon.png" 
+                                                         ng-if="key != (patient.patient_surgeries_arr.length - 1)"
+                                                         class="cursor_pointer"
+                                                         ng-click="addMoreSurgeries(false, key)" />
+                                                    </div>
+                                                </ng-form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="patient.current_patient_details_tab == 3" class="m_top_10 clearfix">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="" class="m_bottom_15">Smoking habits</label>
+                                            <div class="form-group"> 
+                                                <select
+                                                name='smoking_habits'
+                                                placeholder="'Smoking Habits'"
+                                                style="width:100% !important;" 
+                                                class="common_input form-control"
+                                                ng-model="patient.smoking_habits" ng-options="smokObj.id as smokObj.name for smokObj in patient.patient_smoke_habits">
+                                                <option value="">Select Smoking Habits</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="" class="m_bottom_15">Alcohol consumption</label>
+                                            <div class="form-group"> 
+                                                <select
+                                                name='alcohol'
+                                                placeholder="'Alcohol'"
+                                                style="width:100% !important;" 
+                                                class="common_input form-control"
+                                                ng-model="patient.alcohol" ng-options="alcoholObj.id as alcoholObj.name for alcoholObj in patient.patient_alcohol">
+                                                <option value="">Select Alcohol</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="" class="m_bottom_15">Food preference</label>
+                                            <div class="form-group"> 
+                                                <select
+                                                name='food_preference'
+                                                allow-single-deselect="true"
+                                                placeholder="'Food preference'"
+                                                style="width:100% !important;" 
+                                                class="common_input form-control"
+                                                ng-model="patient.food_preference" ng-options="foodObj.id as foodObj.name for foodObj in foodPreference">
+                                                <option value="">Select Food preference</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="occupation" class="m_bottom_15">Occupation</label><br/>
+                                            <div class="position_relative">
+                                                <select
+                                                    name='occupation' 
+                                                    id="occupation" 
+                                                    placeholder="'Select Occupation'" 
+                                                    ng-options="value.text as value.text for value in occupations" 
+                                                    style="width:100% !important;" 
+                                                    ng-model="patient.occupation" class="common_input form-control">
+                                                    <option value="">Select Occupation</option>
+                                                </select>
+                                            </div>
+                                            <input type="text"
+                                                   name="occupation_other" 
+                                                   class="form-control common_input m_top_10" 
+                                                   ng-if="patient.occupation.id == '5'" 
+                                                   ng-model="patient.occupation_other"
+                                                   placeholder="Enter Other Occupation" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="" class="m_bottom_15"><b>Activity Level</b></label>
+                                            <table class="table min_width_767 no_border">
+                                                <thead class="row font_color_3 gotham_light font_size_18 previous_vitals_head">
+                                                    <tr>                                
+                                                        <th width="12%" class="text-center">Activity</th>
+                                                        <th width="20%" class="text-center">Number of days/week</th>
+                                                        <th width="12%" class="text-center">Number of minutes</th>
+                                                        <th width="8%" class="text-center"></th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <body>
+                                                    <tr ng-repeat="(key,historyObj) in patient.patient_activity_levels">
+                                                        <td colspan="4" style="padding: 0;">
+                                                            <ng-form name="innerActivityLevelsForm">
+                                                                <table class="table min_width_767 no_margin no_border">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td width="12%">
+                                                                                <div class="form-group"> 
+                                                                                <select
+                                                                                name='activity_levels'
+                                                                                placeholder="'Activity Level'" ng-required = "isActLevRequired(patient.patient_activity_levels,key)"
+                                                                                style="width:100% !important;" 
+                                                                                class="common_input form-control"
+                                                                                ng-model="historyObj.activity_levels" ng-options="activity.name as activity.name for activity in activityLevels">
+                                                                                <option value="">Select Activity Level</option>
+                                                                                </select>
+                                                                                </div>
+                                                                                <p ng-show="(innerActivityLevelsForm.activity_levels.$touched || submitted) && innerActivityLevelsForm.activity_levels.$error.required" class="error">{{activity_required}}</p>
+                                                                            </td>
+                                                                            <td width="20%">
+                                                                                <div class="form-group"> 
+                                                                                <select
+                                                                                name='activity_days' ng-required = "isActLevRequired(patient.patient_activity_levels,key)"
+                                                                                placeholder="'Days'"
+                                                                                style="width:100% !important;" 
+                                                                                class="common_input form-control"
+                                                                                ng-model="historyObj.activity_days" >
+                                                                                <option value="">Select Days</option>
+                                                                                <option>1</option>
+                                                                                <option>2</option>
+                                                                                <option>3</option>
+                                                                                <option>4</option>
+                                                                                <option>5</option>
+                                                                                <option>6</option>
+                                                                                <option>7</option>
+                                                                                </select>
+                                                                                </div>
+                                                                                <p ng-show="(innerActivityLevelsForm.activity_days.$touched || submitted) && innerActivityLevelsForm.activity_days.$error.required" class="error">{{days_required}}</p>
+                                                                            </td>
+                                                                            <td width="12%">
+                                                                                <div class="form-group"> 
+                                                                                <select
+                                                                                name='activity_hours' ng-required = "isActLevRequired(patient.patient_activity_levels,key)"
+                                                                                placeholder="'Min'"
+                                                                                style="width:100% !important;" 
+                                                                                class="common_input form-control"
+                                                                                ng-model="historyObj.activity_hours" >
+                                                                                <option value="">Select Min</option>
+                                                                                <option>15</option>
+                                                                                <option>30</option>
+                                                                                <option>45</option>
+                                                                                <option>60</option>
+                                                                                <option>75</option>
+                                                                                <option>90</option>
+                                                                                <option>105</option>
+                                                                                <option>120</option>
+                                                                                </select>
+                                                                                </div>
+                                                                                <p ng-show="(innerActivityLevelsForm.activity_hours.$touched || submitted) && innerActivityLevelsForm.activity_hours.$error.required" class="error">{{minutes_required}}</p>
+                                                                            </td>
+                                                                            <td width="8%">
+                                                                                <img src="app/images/add_icon.png" 
+                                                                                 ng-if="key == (patient.patient_activity_levels.length - 1)"
+                                                                                 class="cursor_pointer"
+                                                                                 ng-click="addMoreActivityLevel(true)" />
+                                                                                <img src="app/images/remove_icon.png" 
+                                                                                 ng-if="key != (patient.patient_activity_levels.length - 1)"
+                                                                                 class="cursor_pointer"
+                                                                                 ng-click="addMoreActivityLevel(false, key)" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </ng-form>
+                                                        </td>
+                                                    </tr>
+                                                </body>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="patient.current_patient_details_tab == 5" class="m_top_10 clearfix">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="" class="m_bottom_15">Food Allergies</label>
+                                            <div class="m_bottom_10 clearfix" ng-repeat="(key,foodObj) in patient.food_allergies_arr">
+                                                <ng-form name="innerFoodAllergiesForm">
+                                                    <div class="no_padding col-lg-11 col-md-11 col-sm-11 col-xs-12">
+                                                        <input type="text" class="form-control common_input" placeholder="Food Allergy" name="food_allergies" ng-pattern="/^[a-zA-Z\s]*$/" ng-model='foodObj.value'/>
+                                                        <p ng-show="(submitted) && innerFoodAllergiesForm.food_allergies.$error.pattern" class="error">{{only_alphabet}}</p>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <img src="app/images/add_icon.png" 
+                                                         ng-if="key == (patient.food_allergies_arr.length - 1)"
+                                                         class="cursor_pointer"
+                                                         ng-click="addMoreFoodAllergy(true)" />
+                                                        <img src="app/images/remove_icon.png" 
+                                                         ng-if="key != (patient.food_allergies_arr.length - 1)"
+                                                         class="cursor_pointer"
+                                                         ng-click="addMoreFoodAllergy(false, key)" />
+                                                    </div>
+                                                </ng-form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="" class="m_bottom_15">Medicine Allergies</label>
+                                            <div class="m_bottom_10 clearfix" ng-repeat="(key,medicineObj) in patient.medicine_allergies_arr">
+                                                <ng-form name="innerMedicineAllergiesForm">
+                                                    <div class="no_padding col-lg-11 col-md-11 col-sm-11 col-xs-12">
+                                                        <input type="text" class="form-control common_input" placeholder="Medicine Allergy" name="medicine_allergies" ng-model='medicineObj.value' ng-pattern="/^[a-zA-Z\s]*$/"/>
+                                                        <p ng-show="(submitted) && innerMedicineAllergiesForm.medicine_allergies.$error.pattern" class="error">{{only_alphabet}}</p>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <img src="app/images/add_icon.png" 
+                                                         ng-if="key == (patient.medicine_allergies_arr.length - 1)"
+                                                         class="cursor_pointer"
+                                                         ng-click="addMoreMedicineAllergy(true)" />
+                                                        <img src="app/images/remove_icon.png" 
+                                                         ng-if="key != (patient.medicine_allergies_arr.length - 1)"
+                                                         class="cursor_pointer"
+                                                         ng-click="addMoreMedicineAllergy(false, key)" />
+                                                    </div>
+                                                </ng-form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="" class="m_bottom_15">Others Allergies</label>
+                                            <div class="m_bottom_10 clearfix" ng-repeat="(key,othersObj) in patient.others_allergies_arr">
+                                                <ng-form name="innerOthersAllergiesForm">
+                                                    <div class="no_padding col-lg-11 col-md-11 col-sm-11 col-xs-12">
+                                                        <input type="text" class="form-control common_input" placeholder="Other Allergy" name="others_allergies" ng-model='othersObj.value' ng-pattern="/^[a-zA-Z\s]*$/"/>
+                                                        <p ng-show="(submitted) && innerOthersAllergiesForm.others_allergies.$error.pattern" class="error">{{only_alphabet}}</p>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <img src="app/images/add_icon.png" 
+                                                         ng-if="key == (patient.others_allergies_arr.length - 1)"
+                                                         class="cursor_pointer"
+                                                         ng-click="addMoreOthersAllergy(true)" />
+                                                        <img src="app/images/remove_icon.png" 
+                                                         ng-if="key != (patient.others_allergies_arr.length - 1)"
+                                                         class="cursor_pointer"
+                                                         ng-click="addMoreOthersAllergy(false, key)" />
+                                                    </div>
+                                                </ng-form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m_top_10 m_bottom_30 clearfix">  
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="button" value="Save" name="save" class="btn new_common_button btn_properties float_right" ng-click="addEditPatient()" />                   
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input data-dismiss="modal" type="reset" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties" ng-click="cancel()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

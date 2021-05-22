@@ -1,0 +1,26 @@
+<link rel="stylesheet" ng-href="app/plugins/signature_pad/css/signature-pad.css?{{getVer(3)}}" />
+<div class="modal-body no_padding user-signature-modal">
+	<div class="container container_width top_header background_color_1 white_color text-center">
+        <button type="button" class="close close-sign-popup" ng-click="cancel()" data-dismiss="modal">X</button>
+        <h3>Signature</h3>                                    
+    </div>
+    <div class="container container_width middle_content" style="height: 400px;"> 
+        <div id="signature-pad" class="signature-pad">
+            <div class="signature-pad--body">
+                <canvas></canvas>
+            </div>
+            <div class="signature-pad--footer">
+	            <div class="description"><h4>Sign above</h4></div>
+	            <div class="signature-pad--actions">
+		            <div>
+			            <button type="button" class="button clear signature-btn" data-action="clear">Clear</button>
+			            <button type="button" class="button signature-btn" data-action="undo">Undo</button>
+		            </div>
+		            <div>
+			            <button type="button" class="button save signature-btn" data-action="save-png">Save</button>
+		            </div>
+	            </div>
+            </div>
+        </div>
+    </div>
+</div>

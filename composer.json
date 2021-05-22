@@ -1,0 +1,9 @@
+{
+    "require": {
+        "razorpay/razorpay": "2.*",
+        "twilio/sdk": "^5.42",
+        "opentok/opentok": "4.4.*",
+        "mpdf/mpdf": "7.1.0",
+        "mpdf/qrcode": "^1.0"
+    }
+}

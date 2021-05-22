@@ -1,0 +1,322 @@
+<style type="text/css">
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+#msform {
+	width: 100%;
+	margin: 35px auto;
+	text-align: center;
+	/*position: relative;*/
+	padding: 0;
+}
+#msform fieldset {
+	background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	/*stacking fieldsets above each other*/
+	position: relative;
+}
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+	display: none;
+}
+/*inputs*/
+#msform input, #msform textarea {
+	padding: 15px;
+	border: 0px;
+	width: 100%;
+	box-sizing: border-box;
+	font-family: montserrat;
+	color: #2C3E50;
+	font-size: 13px;
+	text-align: center;
+}
+#msform select{
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	width: 100%;
+	box-sizing: border-box;
+	font-family: montserrat;
+	color: #2C3E50;
+	font-size: 13px;
+}
+/*buttons*/
+#msform .action-button {
+	width: 100px;
+	background: #30ACA4;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 1px;
+	cursor: pointer;
+	padding: 10px 5px;
+	margin: 10px 5px;
+}
+#msform .action-button:hover, #msform .action-button:focus {
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #30ACA4;
+}
+/*headings*/
+.fs-title {
+	font-size: 15px;
+	text-transform: uppercase;
+	color: #2C3E50;
+	margin-bottom: 10px;
+}
+.fs-subtitle {
+	font-weight: normal;
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 20px;
+}
+/*progressbar*/
+#progressbar {
+	padding: 0px;
+	margin-bottom: 30px;
+	overflow: hidden;
+	/*CSS counters to number the steps*/
+	counter-reset: step;
+}
+#progressbar li {
+	list-style-type: none;
+	color: black;
+	text-transform: uppercase;
+	font-size: 14px;
+	width: 50%;
+	float: left;
+	position: relative;
+}
+#progressbar li:before {
+	content: counter(step);
+	counter-increment: step;
+	width: 20px;
+	line-height: 20px;
+	display: block;
+	font-size: 15px;
+	color: #333;
+	background: #d7f9f6;
+	border-radius: 3px;
+	margin: 0 auto 5px auto;
+	z-index: 2;
+}
+/*progressbar connectors*/
+#progressbar li:after {
+	content: '';
+	width: 100%;
+	height: 2px;
+	background: #d7f9f6;
+	position: absolute;
+	left: -50%;
+	top: 9px;
+	z-index: -1; /*put it behind the numbers*/
+}
+#progressbar li:first-child:after {
+	/*connector not needed before the first step*/
+	content: none; 
+}
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+#progressbar li.active:before,  #progressbar li.active:after{
+	background: #30ACA4;
+	color: white;
+	z-index: inherit;
+}
+.cls-common-slider{
+	margin-top: 5px;
+	float: right;
+	width: 50%; 
+	background-color: #d7f9f6;
+}
+.cls-common-slider > .ui-slider-range{
+	background-color: #30ACA4;
+}
+.cls-common-slider > .ui-slider-handle{
+	background-color: #30ACA4;
+	border-color: #30ACA4;
+}
+#weekdateInline{
+  text-align:center;
+}
+#weekdateInline .ui-datepicker {
+  display:inline-block !important;
+}
+</style>
+<!-- multistep form -->
+<div class="row">
+	<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+		<form id="msform">
+		  <!-- progressbar -->
+		  <ul id="progressbar">
+		    <li class="active">Date</li>
+		    <li>UAS7</li>
+		  </ul>
+		  <!-- fieldsets -->
+		  <fieldset>
+		    <h2 class="fs-title">Date</h2>
+		    <h3 class="fs-subtitle">Select a last date of week.</h3>
+			    <div class="col-lg-12 text-center">
+			    	<div id="weekdateInline" class="col-lg-12 text-center"></div>
+			   	</div>
+			   	<input type="text" name="selectedDateIs" id="selectedDateIs" value="">
+		  	<input type="button" onclick="fnDrawStep2()" name="next" class="next action-button" value="Next" />
+		  </fieldset>
+		  <fieldset>
+		    <h2 class="fs-title">UAS7</h2>
+		    <h3 class="fs-subtitle">Urticaria Activity Score summed over 7 days (UAS7) assesses the itch severity and hive count in chronic spontaneous urticaria (CSU) using once a day upto 7 days.</h3>
+		    	<div class="col-lg-12 text-left">
+			    	<table id="uas7step2" class="table m_bottom_0">
+						<thead><tr> <th width="20%">Date</th> <th width="40%">Wheal count</th> <th width="40%">Pruritus</th> </tr> </thead>
+					</table>
+			    </div>
+		    <input type="button" name="previous" class="previous action-button" value="Previous" />
+		    <input type="submit" name="submit" ng-click="saveUAS7Data();" class="submit action-button" value="UAS7" />
+		  </fieldset>
+		</form>
+	</div>
+	<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 padding_left_0">
+		<div class="col-lg-12 text-center m_top_60 padding_0">
+			<label style="padding: 10px; border: 1px solid; border-color:#30ACA4;" class="page_title">
+				UAS7 = <span id="UAS7_lbl" class="font_color_1">0</span>
+				<br/>
+				<table class="table m_bottom_0 text-left">
+					<thead>
+						<tr><th>Total 7 days score</th><th>Wheals plus Pruritus daily x 7days</th></tr>
+					</thead>
+					<tbody>
+						<tr><td>0</td><td>Itch and hive free</td></tr>
+						<tr><td>1 to 6</td><td>Well-controlled urticaria</td></tr>
+						<tr><td>7 to 15</td><td>Mild urticaria</td></tr>
+						<tr><td>16 to 27</td><td>Moderate activity urticaria</td></tr>
+						<tr><td>28 to 42</td><td>Severe activity urticaria</td></tr>
+					</tbody>
+				</table>
+			</label>
+			<input type="hidden" id="UAS7" name="UAS7" value="0" />
+		</div>
+		<!-- <img src="app/images/clac/UAS7.jpg" class="image-responsive m_top_26" /> -->
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#weekdateInline").datepicker({maxDate: "-0D", altField: "#selectedDateIs",
+      altFormat: "DD, d MM, yy"});
+});
+var current_fs, next_fs, previous_fs; //fieldsets
+var left, opacity, scale; //fieldset properties which we will animate
+var animating; //flag to prevent quick multi-click glitches
+var modelHeightExtend = true;
+$(".next").click(function(){
+	if(animating) return false;
+	animating = true;
+	current_fs = $(this).parent();
+	next_fs = $(this).parent().next();
+	//activate next step on progressbar using the index of next_fs
+	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+	//show the next fieldset
+	next_fs.show(); 
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+		step: function(now, mx) {
+			//as the opacity of current_fs reduces to 0 - stored in "now"
+			//1. scale current_fs down to 80%
+			scale = 1 - (1 - now) * 0.2;
+			//2. bring next_fs from the right(50%)
+			left = (now * 50)+"%";
+			//3. increase opacity of next_fs to 1 as it moves in
+			opacity = 1 - now;
+			current_fs.css({
+				'transform': 'scale('+scale+')',
+				'position': 'absolute'
+			});
+			next_fs.css({'left': left, 'opacity': opacity});
+		}, 
+		duration: 500, 
+		complete: function(){
+			current_fs.hide().css({'position': 'inherit'});
+			animating = false;
+		}, 
+		//this comes from the custom easing plugin
+		easing: 'easeInOutBack'
+	});
+});
+$(".previous").click(function(){
+	if(animating) return false;
+	animating = true;
+	current_fs = $(this).parent();
+	previous_fs = $(this).parent().prev();
+	//de-activate current step on progressbar
+	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+	//show the previous fieldset
+	previous_fs.css({'position':'absolute'}).show(); 
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+		step: function(now, mx) {
+			//as the opacity of current_fs reduces to 0 - stored in "now"
+			//1. scale previous_fs from 80% to 100%
+			scale = 0.8 + (1 - now) * 0.2;
+			//2. take current_fs to the right(50%) - from 0%
+			left = ((1-now) * 50)+"%";
+			//3. increase opacity of previous_fs to 1 as it moves in
+			opacity = 1 - now;
+			current_fs.css({'left': left});
+			previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
+		}, 
+		duration: 500, 
+		complete: function(){
+			previous_fs.css({'position':'inherit'});
+			current_fs.hide().css({'position': 'inherit'});
+			animating = false;
+		}, 
+		//this comes from the custom easing plugin
+		easing: 'easeInOutBack'
+	});
+});
+$(".submit").click(function(){
+	calculate_uas7();
+	return false;
+});
+function fnDrawStep2(){
+	$("#uas7step2").empty();
+	$("#uas7step2").append('<thead><tr> <th width="20%">Date</th> <th width="40%">Wheal count</th> <th width="40%">Pruritus</th> </tr> </thead>');
+	var date = $("#weekdateInline").datepicker('getDate');
+	for (var i = 1; i<=7; i++) {
+		var tblRow = '<tr><td>'+date.toDateString()+'<input type="hidden" value="' + date.getFullYear() + '-' + pad((date.getMonth() + 1)) + '-' + date.getDate() + '" name="uas7_date_'+ i +'" id="uas7_date_' + i + '"></td><td><select name="wheal_count_'+i+'" id="wheal_count_'+i+'"><option value="0">NONE</option> <option value="1">MILD - <20 Wheals/24h</option> <option value="2">MODERATE - 20-50 Wheals/24h</option> <option value="3">INTENSE - >50 Wheals/24h</option> <option value="3">Large confluent areas of wheals</option> </select> </td> <td> <select name="pruritus_count_'+i+'" id="pruritus_count_'+i+'"> <option value="0">No prutitus</option> <option value="1">MILD - Present but not annoying or troublesome</option> <option value="2">MODERATE - Troublesome but does not interfere with normal daily activity or sleep</option> <option value="3">SEVERE - Troublesome to interfere with normal daily activity or sleep</option> </select> </td> </tr>'; 
+		$("#uas7step2").append(tblRow);
+		if(date){ date.setDate(date.getDate()-1); }
+	}
+
+	if(modelHeightExtend){
+		modelHeightExtend = false;
+		setTimeout( function () {
+			var modal_height = $('#modal_patient_health_analytic_calculator .modal-content').height();
+			var backdrop_height = $('#modal_patient_health_analytic_calculator .modal-backdrop').height();
+			if($('#modal_patient_health_analytic_calculator') && modal_height > backdrop_height)
+			  $('#modal_patient_health_analytic_calculator .modal-backdrop').height(modal_height + 300);
+		},100);
+	}
+}
+function pad(num) {
+    if(num < 10) num = "0" + num;
+    return num;
+}
+function calculate_uas7(){
+	var valA1, valA2, valA3, valA4, valA5, valA6, valA7 = 0;
+	valA1 = parseInt($('#wheal_count_1').val()) + parseInt($('#pruritus_count_1').val());
+	valA2 = parseInt($('#wheal_count_2').val()) + parseInt($('#pruritus_count_2').val());
+	valA3 = parseInt($('#wheal_count_3').val()) + parseInt($('#pruritus_count_3').val());
+	valA4 = parseInt($('#wheal_count_4').val()) + parseInt($('#pruritus_count_4').val());
+	valA5 = parseInt($('#wheal_count_5').val()) + parseInt($('#pruritus_count_5').val());
+	valA6 = parseInt($('#wheal_count_6').val()) + parseInt($('#pruritus_count_6').val());
+	valA7 = parseInt($('#wheal_count_7').val()) + parseInt($('#pruritus_count_7').val());
+	var uas7 = valA1 + valA2 + valA3 + valA4 + valA5 + valA6 + valA7;
+	$('#UAS7').val(uas7);
+	$('#UAS7_lbl').html(uas7.toFixed(2));
+	var analytics_val = $('#analytics_id_308');
+    analytics_val.val(uas7.toFixed(2));
+    analytics_val.trigger('input');
+    analytics_val.trigger('change'); 
+}
+</script>

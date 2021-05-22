@@ -1,0 +1,96 @@
+<div class="tab-pane fade in" id="procedure">
+    <form name="addProcedureForm" ng-submit="addProcedure(addProcedureForm)" id="addProcedureForm" novalidate="">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_light font_color_5" 
+             ng-if="(addedProcedureObj.length <= 0 || common.isProcOpen == true) && role[PROC_MODULE][ADD] == 'on'" ng-class="current_appointment_date_obj.is_editable ? '' : 'disabled-wrap'">
+             <div ng-if="!current_appointment_date_obj.is_editable" class="overlap-wrap" style="width: 99%; left: 4px;"></div>
+            <div class="row margin_padding_0">
+                <div ng-repeat="(key, proc) in procedureObj track by $index">
+                    <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 margin_padding_0" >
+                        <ng-form name="innerAddProcedureForm">
+                            <div class="form-group">
+                                <label class="m_bottom_15 required" ng-if="key == 0">Procedure</label>
+                                <input type="text"
+                                       class="form-control common_input" 
+                                       placeholder="Enter Procedure Name"
+                                       ng-keyup="getProcedureList(key)"
+                                       client-auto-complete dirtype='15' 
+                                       ng-model="proc.text"
+                                       ng-change="prescriptionOnchangeFlag()"
+                                       required=""
+                                       name="proc_text"
+                                       />
+                                <p class="error" ng-show="submitted && innerAddProcedureForm.proc_text.$error.required" >{{procedure_required}}</p>
+                            </div>
+                        </ng-form>
+                    </div>
+                    <div class=" col-lg-1 col-md-1 col-sm-1 col-xs-1 margin_padding_0" ng-class="key == 0 ? 'm_top_35imp' : ''">
+                        <img src="app/images/add_icon.png" 
+                             ng-if="key == (procedureObj.length - 1)"
+                             class="cursor_pointer"
+                             ng-click="addMoreProcedure(true)" />
+                        <img src="app/images/remove_icon.png" 
+                             ng-if="key != (procedureObj.length - 1)"
+                             class="cursor_pointer"
+                             ng-click="addMoreProcedure(false, key)" />
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 margin_padding_0">
+                    <div class="form-group">
+                        <label class="m_bottom_15">Add Note</label>
+                        <textarea type="text" 
+                                  class="form-control common_input"
+                                  placeholder="Write Note"
+                                  ng-change="prescriptionOnchangeFlag()" 
+                                  ng-model="procedure.note"
+                                  ></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="button_container"  ng-if="current_appointment_date_obj.is_editable">
+                <input type="submit" value="Save" class="new_common_button btn_properties" />
+                <input type="button" value="Cancel" 
+                       ng-click="cancelBtnRX()"
+                       class="new_common_button_1 btn_properties" />
+            </div>
+        </div>
+    </form>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 font_color_7" 
+         ng-if="addedProcedureObj.length > 0 && common.isProcOpen == false">
+        <div ng-if="role[PROC_MODULE][VIEW] == 'on'">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <p class="gotham_medium title2">Procedure</p>
+                        <p class="font_size_18 gotham_light title3" 
+                           ng-repeat="(key, proc) in addedProcedureObj track by $index">
+                            {{ key + 1}}. {{ proc}}
+                        </p>
+                    </div>
+                </div>                                                                                
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <p class="gotham_medium title2">Note</p>
+                        <p class="font_size_18 gotham_light title3" >
+                            {{ addedProcedure.note}}
+                        </p>
+                    </div>
+                </div>                                                                                
+            </div>
+            <div class="clearfix"></div>
+            <div class="button_container new_btn_container"                
+                 ng-if="current_appointment_date_obj.is_editable && role[PROC_MODULE][EDIT] == 'on'">                                                    
+                <input type="button" value="Edit"
+                       ng-click="openEditForm(5)"
+                       class="new_common_button btn_properties new_btn_width" />
+            </div>
+        </div>
+    </div>
+    <div ng-if="role[PROC_MODULE][VIEW] != 'on'" class="text-center gotham_book font_size_20 m_top_20">
+        <div class="unauthorised-css">{{ app.unauthorised_msg}}</div>
+    </div>
+</div>

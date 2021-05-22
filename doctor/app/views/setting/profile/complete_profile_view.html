@@ -1,0 +1,50 @@
+<div ng-include="'app/views/common/header.html?'+getVer(2)"></div>
+<link rel="stylesheet" ng-href="app/css/profile.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/complete_profile.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/circle.css?{{getVer(3)}}" />
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_padding_all" ng-controller="UserController" >
+    <div class="main-sticky-class">
+        <div class="common_hr clearfix">
+            <div class="first_width gotham_medium font_color_1">
+                <h3 class="m_bottom_25 m_top_22 font_size_20 dr_title" ><span ng-if="currentUser.user_first_name">{{docPrefix}}{{currentUser.user_first_name}} {{ currentUser.user_last_name}}</span></h3>  
+            </div>
+            <div class="second_width">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_bottom_15">
+                    <h4 class="m_top_24"><b>Complete your profile</b></h4>
+                </div>                
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center gotham_light" ng-init="getPercentage()">
+                    <div class="col-lg-2 col-lg-offset-6 col-md-2 col-md-offset-6 col-sm-2 col-sm-offset-6 col-xs-2 col-xs-offset-6 padding_right_0">
+                        <!--<div class="margin_0_auto progress_bar">
+                                                <p class="m_top_15">{{ profile_per}}%</p>
+                                            </div>-->
+                        <div class="margin_0_auto c100 p{{ Model.profile_per}} small">
+                            <span>{{ Model.profile_per}}%</span>
+                            <div class="slice">
+                                <div class="bar"></div>
+                                <div class="fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 padding_0 text-left gotham_medium">
+                        <h4 class="m_top_24">Profile Complete</h4>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="top-common-padding">
+        <div class="list_group_property">
+            <div ng-include="'app/views/profile/doctor_sidebar.html?'+getVer(2)"></div>
+            <div ui-view="" autoscroll="false"  class="content-wrapper"></div>
+            <!-- Main body data in this section-->
+        </div>
+        <!-- The full screen image Modal -->
+        <div id="fullscreen_img_modal" class="modal fade in" role="dialog"  data-backdrop="static" data-keyboard="false">
+            <!-- The Close Button -->
+            <span class="close" ng-click="closeFullImgModal()" >&times;</span>
+            <!-- Modal Content (The Image) -->
+            <img class="modal-content" id="my_img" ng-src="{{ Model.currentImg}}" />
+        </div>
+    </div>
+</div>

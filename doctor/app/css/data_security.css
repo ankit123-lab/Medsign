@@ -1,0 +1,18 @@
+.common_checbox [type="checkbox"]:checked + label::before, 
+.common_checbox [type="checkbox"]:not(:checked) + label::before{
+    top: 4px;
+}
+.common_checbox [type="checkbox"]:checked + label::after,
+.common_checbox [type="checkbox"]:not(:checked) + label::after{
+    top: 4px;
+}
+.para_factor_authanticate{
+    margin-left: 10px;
+    line-height: 24px;
+}
+.m_left_36{
+    margin-left: 36px;
+}
+.m_bottom_40{
+    margin-bottom: 40px;
+}

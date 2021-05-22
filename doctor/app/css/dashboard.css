@@ -1,0 +1,1033 @@
+.custom_dashboard_navbar.navbar-inverse {
+    height: 70px;
+    margin-bottom: 0;
+}
+
+.custom_dashboard_navbar .main_logo_section {
+    padding: 0 !important;
+    margin: 0 auto !important;
+}
+
+.custom_dashboard_navbar .navbar-collapse .navbar-left {
+    width: 25%;
+    margin-top: 15px;
+    margin-left: 0;
+}
+
+.custom_dashboard_navbar .navbar-collapse .navbar-right {
+    margin: 15px 0 5px;
+}
+
+.custom_dashboard_navbar .navigation_li {
+    padding: 0px 6px;
+}
+
+.info_image {
+    background: rgba(0, 0, 0, 0) url("../images/info_icon.png") no-repeat scroll 106% 0;
+}
+
+.info_image:hover {
+    background: rgba(48, 172, 165, 1) url("../images/info_icon.png") no-repeat scroll -7% 0;
+}
+
+.list_image {
+    background: rgba(0, 0, 0, 0) url("../images/list_icon.png") no-repeat scroll 106% 0;
+}
+
+.list_image:hover {
+    background: rgba(48, 172, 165, 1) url("../images/list_icon.png") no-repeat scroll -7% 0;
+}
+
+.calendar_image {
+    background: rgba(0, 0, 0, 0) url("../images/calender_icon.png") no-repeat scroll 106% 0;
+}
+
+.main-menu ul li:hover .calendar_image,
+.main-menu ul li.active .calendar_image {
+    background: rgba(48, 172, 165, 1) url("../images/calender_icon.png") no-repeat scroll -2% 0;
+}
+
+.patient_image {
+    background: rgba(0, 0, 0, 0) url("../images/patients_icon.png") no-repeat scroll 106% 0;
+}
+
+.main-menu ul li:hover .patient_image,
+.main-menu ul li.active .patient_image {
+    background: rgba(48, 172, 165, 1) url("../images/patients_icon.png") no-repeat scroll -6% 0;
+}
+
+.refer_image {
+    background: rgba(0, 0, 0, 0) url("../images/refer_icon.png") no-repeat scroll 106% 0;
+}
+
+.main-menu ul li:hover .refer_image {
+    background: rgba(48, 172, 165, 1) url("../images/refer_icon.png") no-repeat scroll -8% 0;
+}
+
+.communications_image {
+    background: rgba(0, 0, 0, 0) url("../images/communications_icon.png") no-repeat scroll 106% 0;
+}
+
+.main-menu ul li:hover .communications_image,
+.main-menu ul li.active .communications_image {
+    background: rgba(48, 172, 165, 1) url("../images/communications_icon.png") no-repeat scroll -8% 0;
+}
+
+.teleconsultation_image {
+    background: rgba(0, 0, 0, 0) url("../images/teleconsultation_icon.png") no-repeat scroll 106% 0;
+}
+
+.main-menu ul li:hover .teleconsultation_image,
+.main-menu ul li.active .teleconsultation_image {
+    background: rgba(48, 172, 165, 1) url("../images/teleconsultation_icon.png") no-repeat scroll -8% 0;
+}
+
+.reports_image {
+    background: rgba(0, 0, 0, 0) url("../images/reports_icon.png") no-repeat scroll 106% 0;
+}
+
+.main-menu ul li:hover .reports_image,
+.main-menu ul li.active .reports_image {
+    background: rgba(48, 172, 165, 1) url("../images/reports_icon.png") no-repeat scroll -8% 0;
+}
+
+.setting_image {
+    background: rgba(0, 0, 0, 0) url("../images/settings_icon.png") no-repeat scroll 106% 0;
+}
+
+.main-menu ul li:hover .setting_image,
+.main-menu ul li.active .setting_image {
+    background: rgba(48, 172, 165, 1) url("../images/settings_icon.png") no-repeat scroll -8% 0;
+}
+
+.integration_image {
+    background: rgba(0, 0, 0, 0) url("../images/integrations_icon.png") no-repeat scroll 106% 0;
+}
+
+.main-menu ul li:hover .integration_image,
+.main-menu ul li.active .integration_image {
+    background: rgba(48, 172, 165, 1) url("../images/integrations_icon.png") no-repeat scroll -8% 0;
+}
+
+.back_image {
+    background: rgba(0, 0, 0, 0) url("../images/back_office_icon.png") no-repeat scroll 106% 0;
+}
+
+.main-menu ul li:hover .back_image,
+.main-menu ul li.active .back_image {
+    background: rgba(48, 172, 165, 1) url("../images/back_office_icon.png") no-repeat scroll -15% 0;
+}
+
+.bg_icon_images {
+    border: 1px solid #30aca4;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
+    margin-bottom: 0 !important;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.bg_icon_images:hover {
+    border: 1px solid #30aca4;
+    cursor: pointer;
+}
+
+.print_icon_images {
+    border: 1px solid #30aca4;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 38px;
+    width: 40px;
+    margin-bottom: 0 !important;
+    display: inline-block;
+    vertical-align: baseline;
+    background: rgba(0, 0, 0, 0) url("../images/print_icon.png") no-repeat scroll 109% 0;
+}
+
+.print_icon_images:hover {
+    border: 1px solid #30aca4;
+    cursor: pointer;
+    background: rgba(48, 172, 165, 1) url("../images/print_icon.png") no-repeat scroll -5% 0;
+}
+
+.custom_toggle {
+    cursor: pointer;
+    margin-left: 50px;
+    padding: 0 13px 0 4px !important;
+}
+
+.bg_icon_arrow {
+    background: #30aca5 url("../images/down_arrow.png") no-repeat scroll 11px 30px;
+    height: 70px;
+    position: absolute;
+    right: 69px;
+    top: -15px;
+    width: 39px;
+    cursor: pointer;
+}
+
+.header_dropdown {
+    min-width: 120px !important;
+    top: 55px;
+    padding: 0 !important;
+}
+
+.header_dropdown li a {
+    color: #000000;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 7px 10px;
+}
+
+.header_dropdown .divider {
+    margin: 0px;
+}
+
+.custom_toggle:hover,
+.custom_toggle:active {
+    background: none !important;
+}
+
+.custom_dashboard_navbar .navbar-nav>.open>.custom_toggle,
+.custom_dashboard_navbar .navbar-nav>.active>.custom_toggle,
+.custom_dashboard_navbar .navbar-nav>.open>.custom_toggle:hover,
+.custom_dashboard_navbar .navbar-nav>.open>.custom_toggle:focus {
+    background-color: transparent !important;
+    color: #ffffff;
+    background-image: none !important;
+    background-repeat: no-repeat;
+    box-shadow: none !important;
+}
+
+.custom_dashboard_navbar .main_navigation {
+    padding: 0;
+    margin: 0 auto !important;
+}
+
+.custom_dashboard_navbar .navbar-right {
+    float: right !important;
+    margin-right: 0;
+}
+
+.custom_sidebar_section {
+    margin-top: 70px;
+    margin-left: 0;
+    background-color: rgb(48, 172, 165);
+    width: 190px;
+}
+
+.custom_sidebar {
+    padding: 0;
+}
+
+.custom_sidebar li {
+    display: block;
+}
+
+.custom_sidebar a>span {
+    color: rgb(255, 255, 255);
+    float: right;
+    /* font-family: gotham_medium; */
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 46px 0 0;
+}
+
+.custom_dashboard_navbar .site_logo {
+    height: 70px;
+    width: 190px;
+    padding: 0 !important;
+}
+
+/********************** LEFT SIDE MENUBAR *************************/
+.main-menu:hover,
+nav.main-menu.expanded {
+    width: 190px;
+    overflow: visible;
+}
+
+.main-menu:hover li span {
+    opacity: 1;
+}
+
+.main-menu {
+    background: rgb(48, 172, 165);
+    border-top: 1px solid #e5e5e5;
+    position: absolute;
+    top: 70px;
+    bottom: 0;
+    height: calc(100vh - 70px);
+    left: 0;
+    width: 66px;
+    overflow: hidden;
+    z-index: 1001;
+    position: fixed;
+    transform: translateZ(0) scale(1, 1);
+    -webkit-transform: translateZ(0) scale(1, 1);
+    -webkit-transition: all .3s linear;
+    transition: all .3s linear;
+}
+
+.main-menu>ul {
+    background: rgb(48, 172, 165) none repeat scroll 0 0;
+    margin: 0 auto;
+    padding: 3px 13px 19px 16px !important;
+
+}
+
+.main-menu li {
+    display: block;
+    padding: 10px 0 8px;
+    position: relative;
+    width: 170px;
+}
+
+.main-menu li span {
+    opacity: 0;
+    transition: all .5s linear;
+}
+
+.custom_dashboard_navbar .navigation_li .new_common_button_1 {
+    font-size: 14px;
+    text-transform: none;
+}
+
+.custom_dashboard_navbar .navbar-form .input-group-btn .btn-default {
+    text-shadow: 0 !important;
+    box-shadow: none !important;
+}
+
+.main-menu li>a {
+    position: relative;
+    display: table;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: #8be6dd;
+    /* font-family: "gotham_medium"; */
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transform: translateZ(0) scale(1, 1);
+    -webkit-transform: translateZ(0) scale(1, 1);
+    -webkit-transition: all .7s linear;
+    transition: all .7s linear;
+}
+
+.main-menu .nav-icon {
+    position: relative;
+    display: table-cell;
+    width: 60px;
+    height: 36px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 18px;
+}
+
+.main-menu .nav-text {
+    display: table-cell;
+    padding-left: 10px;
+    position: relative;
+    vertical-align: middle;
+    width: 190px;
+}
+
+
+.main-menu>ul.full-screen {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding-bottom: 5px !important;
+}
+
+.main-menu>ul.full-screen .nav-text {
+    width: 180px;
+}
+
+.main-menu li>a .full-screen {
+    color: #8be6dd !important;
+    text-align: center;
+    line-height: 40px;
+    font-size: 24px;
+}
+
+.main-menu li>a:hover .full-screen {
+    color: #fff !important;
+}
+
+a:hover,
+a:focus {
+    text-decoration: none;
+}
+
+nav {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+nav ul,
+nav li {
+    outline: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.main-menu li:hover>a,
+nav.main-menu li.active>a,
+.dashboard-page nav.dashboard-menu ul li.active a {
+    color: #fff;
+}
+
+.main-menu .divider {
+    background-color: rgb(139, 230, 221);
+    height: 1px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 0;
+    text-align: center;
+    width: 100%;
+}
+
+.clinic_listing {
+    border-radius: 0;
+    font-size: 14px;
+    height: 60px;
+    padding: 0 6px;
+    width: 100%;
+    text-align: left;
+}
+
+.clinic_listing span+span {
+    margin-left: 10px;
+    float: right;
+}
+
+.clinic_drop_down {
+    width: 218px;
+    border-radius: 0px;
+}
+
+.clinic_drop_down .divider {
+    margin: 5px 0;
+}
+
+/* calendar start */
+.today_date {
+    border-radius: 5px;
+    font-size: 14px;
+    height: 40px;
+    margin-top: 15px;
+    padding: 8px;
+    width: 100px;
+    float: left;
+}
+
+.rotate_image {
+    margin: 0 20px 0 35px;
+    transform: rotate(180deg);
+}
+
+.date_container {
+    float: left;
+    margin-left: 15px;
+    margin-top: 15px;
+}
+
+.date_container .image_left {
+    margin-right: 35px;
+}
+
+.date_container .date {
+    font-size: 20px;
+}
+
+.block_calendar_container {
+    /* padding: 15px; */
+    /* border-bottom: 1px solid #d1d1d1; */
+    text-align: center;
+}
+
+.new_common_buttoncalendar {
+    width: 100%;
+    padding: 10px;
+    background-color: #d8faf6;
+    color: #30aca5;
+    border: 0;
+    text-align: left;
+    font-size: 12px;
+}
+
+.block_calendar_container .new_common_button {
+    white-space: normal;
+    height: auto;
+}
+
+.left-doctor_list {
+    display: flex;
+}
+
+.doctor_listing {
+    border-right: 1px solid #d1d1d1;
+    /*    height: calc(100vh - 142px);*/
+}
+
+.doctor_title {
+    /* font-family: "gotham_medium"; */
+    font-weight: 700;
+    font-size: 14px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 10px 20px 10px 5px;
+    /* text-transform: uppercase; */
+}
+
+.doctor_name_listing {
+    font-size: 12px;
+    list-style-type: none;
+    padding: 0px;
+}
+
+.doctor_name_listing .active {
+    font-size: 14px;
+    margin-bottom: 10px;
+    padding: 10px 0 10px 7px;
+}
+
+.doctor_name_listing li {
+    padding: 0 0 0 6px;
+}
+
+.doctor_status {
+    border-radius: 50%;
+    display: inline-block;
+    height: 12px;
+    margin: 5px 5px 0 0;
+    width: 12px;
+}
+
+.clinic_status {
+    border-radius: 50%;
+    display: inline-block;
+    height: 12px;
+    margin: 11px 5px 0 0;
+    width: 12px;
+    float: left;
+}
+
+.total_appointment {
+    float: right;
+    margin: 5px 10px 0 0;
+    color: #30aca5;
+}
+
+.doctor_total_appointment {
+    float: right;
+    margin: 5px 10px 0 0;
+    color: #8b8b8b;
+}
+
+.print_image {
+    background: rgba(0, 0, 0, 0) url("../images/print_icon.png") no-repeat scroll 109% 0;
+    margin-right: 74%;
+}
+
+.print_image:hover {
+    background: rgba(48, 172, 165, 1) url("../images/print_icon.png") no-repeat scroll -5% 0;
+}
+
+.date_container .tabs_items li a {
+    padding: 9px 35px;
+    text-transform: uppercase;
+}
+
+.display_time {
+    color: #8b8b8b;
+}
+
+.appointment_table {
+    position: relative;
+}
+
+.appointment_heading {
+    height: 60px;
+}
+
+.appointment_heading>th {
+    border-right: 1px solid #d1d1d1;
+    font-size: 16px;
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.appointment_table>tbody>tr>td {
+    border-right: 1px solid #d1d1d1;
+    text-align: center;
+    vertical-align: middle !important;
+    height: 40px;
+    border-bottom: 1px solid #d1d1d1;
+    border-top: none;
+}
+
+.appointment_table .day_appointment_book {
+    background: #faf3eb none repeat scroll 0 0;
+    border-left: 3px solid #cc8632 !important;
+    text-align: left !important;
+    vertical-align: top !important;
+    position: relative;
+    padding-left: 15px;
+    cursor: pointer;
+}
+
+.appointment_table_week {
+    position: relative;
+}
+
+.appointment_heading_week {
+    height: 60px;
+}
+
+.appointment_heading_week>th {
+    border-right: 1px solid #d1d1d1;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.appointment_table_week>tbody>tr>td {
+    border-right: 1px solid #d1d1d1;
+    text-align: center;
+    vertical-align: middle !important;
+    height: 95px;
+    border-bottom: 1px solid #d1d1d1;
+    border-top: none;
+}
+
+.appointment_table_week .day_appointment_book {
+    background: #faf3eb none repeat scroll 0 0;
+    border-left: 3px solid #cc8632 !important;
+    text-align: left !important;
+    vertical-align: top !important;
+    position: relative;
+    padding-left: 15px;
+    cursor: pointer;
+}
+
+.appointment_table_week .day_appointment_book .appointment_details {
+    width: 70%;
+}
+
+.appointment_table_month {
+    position: relative;
+}
+
+.appointment_heading_month {
+    height: 60px;
+}
+
+.appointment_heading_month>th {
+    border-right: 1px solid #d1d1d1;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.appointment_table_month>tbody>tr>td {
+    border-bottom: 1px solid #d1d1d1;
+    border-right: 1px solid #d1d1d1;
+    border-top: medium none;
+    font-size: 20px;
+    height: 100px;
+    padding: 10px 20px 0 0;
+    text-align: right;
+}
+
+.appointment_table_month .day_appointment_book {
+    background: #faf3eb none repeat scroll 0 0;
+    border-left: 3px solid #cc8632 !important;
+    text-align: left !important;
+    vertical-align: top !important;
+    position: relative;
+    padding-left: 15px;
+    font-size: 14px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 55px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.appointment_table_month .day_appointment_book h4 {
+    font-size: 14px;
+}
+
+.appointment_table_month .day_appointment_book .appointment_details {
+    width: 70%;
+}
+
+
+.day_appointment_book .person_name {
+    margin: 0px;
+    /* font-family: "gotham_medium"; */
+    font-weight: 600;
+}
+
+.doctor_visit {
+    position: absolute;
+    right: 25px;
+    top: 8px;
+    cursor: pointer;
+}
+
+.appointment_table_week .doctor_visit {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+}
+
+.appointment_table_month .doctor_visit {
+    position: absolute;
+    right: 10px;
+    top: 0px;
+    cursor: pointer;
+}
+
+.add_new_appointment {
+    width: 40px;
+    bottom: 4%;
+    position: fixed;
+    right: 2%;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.add_appointment-custom {
+    float: right;
+    position: static;
+    width: 40px;
+    height: 40px;
+    margin: 2px;
+}
+
+/*
+.table-responsive {
+  overflow-x: unset;
+  overflow-y: unset;
+}
+*/
+
+/* Play video css added by reena */
+.play_video_btn {
+    background: rgba(0, 0, 0, 0) url("../images/learn_icon.png") no-repeat scroll 106% 0;
+}
+
+.play_video_btn:hover {
+    background: rgba(48, 172, 165, 1) url("../images/learn_icon.png") no-repeat scroll -7% 0;
+}
+
+.add_patient {
+    background: rgba(0, 0, 0, 0) url("../images/add_patient.png") no-repeat left top;
+}
+
+.add_patient:hover {
+    background: rgba(48, 172, 165, 1) url("../images/add_patient.png") no-repeat right top;
+}
+
+.refresh_btn {
+    background: rgba(0, 0, 0, 0) url("../images/refresh_icon.png") no-repeat scroll 103% 0;
+}
+
+.refresh_btn:hover {
+    background: rgba(48, 172, 165, 1) url("../images/refresh_icon.png") no-repeat scroll -7% 0;
+}
+
+.notes_img_upload_btn {
+    background: rgba(0, 0, 0, 0) url("../images/image_upload.png") no-repeat scroll 110% 0;
+}
+
+.notes_img_upload_btn:hover {
+    background: rgba(48, 172, 165, 1) url("../images/image_upload.png") no-repeat scroll -7% 0;
+}
+
+#video_help_modal .modal-content {
+    width: 90%;
+    margin: auto;
+	height: auto;
+}
+
+#video_help_modal video {
+    width: 100%;
+    height: 80%;
+    margin: auto
+}
+
+/******************** END OF LEFT SIDE MENUBAR *****************/
+@media(max-width:991px) {
+    .custom_dashboard_navbar .navbar-collapse .navbar-left {
+        margin-left: 0;
+        margin-top: 15px;
+        width: 20%;
+    }
+
+    .custom_dashboard_navbar .navbar-collapse .navbar-right {
+        margin: 15px 5px 0 0;
+    }
+
+    .custom_toggle {
+        cursor: pointer;
+        margin-left: 42px;
+        padding: 0 15px !important;
+    }
+
+    .custom_dashboard_navbar .navigation_li {
+        padding: 0 2px;
+    }
+
+    .custom_toggle {
+        margin-left: 29px;
+    }
+
+    .new_input_width {
+        width: 159px !important;
+    }
+}
+
+@media(max-width:832px) {
+    .custom_dashboard_navbar .navbar-collapse .navbar-left {
+        margin-left: 0;
+        margin-top: 15px;
+        padding-right: 0;
+        width: 20%;
+    }
+
+    .custom_dashboard_navbar .navigation_li {
+        padding: 0 2px;
+    }
+
+    .custom_dashboard_navbar .navigation_li .new_common_button_1 {
+        width: 125px
+    }
+}
+
+@media(max-width:767px) {
+    .new_input_width {
+        width: 100% !important;
+    }
+
+    .custom_dashboard_navbar .navbar-collapse {
+        background: rgb(48, 172, 165) none repeat scroll 0 0;
+        border-top: 0 none;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+        overflow-x: visible;
+        padding-left: 20px;
+        padding-right: 15px;
+    }
+
+    .custom_dashboard_navbar .navbar-header {
+        height: 70px;
+    }
+
+    .custom_dashboard_navbar .navbar-toggle {
+        margin-top: 20px;
+    }
+
+    .custom_dashboard_navbar .navbar-form {
+        box-shadow: 0 !important;
+    }
+
+    .custom_dashboard_navbar .navbar-collapse .navbar-left {
+        border: 0 none !important;
+        float: right;
+        margin: 15px 0 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    .navbar-right .bg_icon_images {
+        border: 1px solid rgb(255, 255, 255);
+    }
+
+    .custom_dashboard_navbar .navbar-right {
+        float: right !important;
+        margin-right: 0;
+        width: 100%;
+    }
+
+    .custom_dashboard_navbar .navbar-right .dropdown.navigation_li {
+        background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+        float: right;
+        height: 70px;
+        margin: 0 auto !important;
+        padding: 0;
+        position: absolute;
+        right: 22px;
+        top: 153px;
+        width: 200px;
+    }
+
+    .custom_toggle {
+        margin: 0 auto !important;
+        padding: 0 !important;
+        position: relative;
+        text-align: center !important;
+        float: right;
+    }
+
+    .custom_dashboard_navbar .navbar-right .navigation_li {
+        display: block;
+        float: left;
+        padding: 10px 5px;
+        width: 100%;
+    }
+
+    .bg_icon_arrow {
+        background: rgb(48, 172, 165) url("../images/down_arrow.png") no-repeat scroll 11px 30px;
+        cursor: pointer;
+        height: 70px;
+        position: absolute;
+        right: 47px;
+        top: -13px;
+        width: 39px;
+    }
+
+    .info_image:hover {
+        background: rgba(255, 255, 255, 1) url("../images/info_icon.png") no-repeat scroll 108% 0;
+    }
+
+    .info_image {
+        background: rgba(48, 172, 165, 1) url("../images/info_icon.png") no-repeat scroll -5% 0;
+    }
+
+    .play_video_btn:hover {
+        background: rgba(255, 255, 255, 1) url("../images/learn_icon.png") no-repeat scroll 108% 0;
+    }
+
+    .play_video_btn {
+        background: rgba(48, 172, 165, 1) url("../images/learn_icon.png") no-repeat scroll -5% 0;
+    }
+
+    .list_image:hover {
+        background: rgba(255, 255, 255, 1) url("../images/list_icon.png") no-repeat scroll 108% 0;
+    }
+
+    .list_image {
+        background: rgba(48, 172, 165, 1) url("../images/list_icon.png") no-repeat scroll -5% 0;
+    }
+
+    .custom_dashboard_navbar .navigation_li .new_common_button_1 {
+        width: 160px;
+    }
+
+    .custom_dashboard_navbar .navigation_li .new_common_button_1 {
+        color: rgb(255, 255, 255);
+        border: 1px solid rgb(255, 255, 255);
+        background: rgb(48, 172, 165);
+
+    }
+
+    .custom_dashboard_navbar .navigation_li .new_common_button_1:hover {
+        color: rgb(48, 172, 165);
+        border: 1px solid rgb(48, 172, 165);
+        background: rgb(255, 255, 255);
+    }
+
+    .navigation_li a {
+        color: #fff !important;
+        padding: 0px !important;
+    }
+
+    .navigation_li {
+        padding: 5px 0px !important;
+    }
+
+}
+
+
+#autologout_modal .modal-dialog.modal_dialog_width {
+    width: 700px !important;
+}
+
+#autologout_modal .modal-content {
+    height: auto;
+    padding-bottom: 10px;
+}
+
+#autologout_modal .modal-backdrop.in {
+    overflow-x: auto;
+    min-width: 700px !important;
+}
+
+#autologout_modal.modal .modal-dialog {
+    min-width: 700px !important;
+}
+
+#autologout_modal {
+    overflow-x: auto;
+}
+
+.custom_favorite_margin {
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+@media(max-width:1024px) {
+
+    .total_appointment,
+    .doctor_total_appointment {
+        margin-right: 5px;
+    }
+
+    .doctor_name_listing li {
+        padding-left: 5px;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    .doctor_name_listing .active {
+        padding-left: 5px;
+    }
+
+    .doctor_status {
+        height: 5px;
+        margin: 0px 0px 0 0;
+        width: 5px;
+        vertical-align: middle;
+    }
+}
+
+@media(max-width:1450px) {
+    .clinic_listing {
+        width: 230px;
+    }
+}
+
+@media(max-width:1400px) {
+    .clinic_listing {
+        width: 100%;
+    }
+}
+
+@media(max-width:767px) {
+    .custom_div_mar {
+        margin-top: 10px;
+    }
+
+    .custom_favorite_margin {
+        margin-top: 24px;
+        margin-bottom: 10px;
+    }
+
+    .custom_add_doctor_btn {
+        margin: 10px 0 !important;
+    }
+
+    .add_new_appointment {
+        width: 13%;
+    }
+}

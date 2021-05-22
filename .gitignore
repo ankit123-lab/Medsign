@@ -1,0 +1,11 @@
+/uploads/
+/application/logs/
+/application/third_party/google_api/
+/application/api/betaptv1/logs/
+/application/api/betadcv1/logs/
+/application/api/betaptv1/cache/
+/application/api/betadcv1/cache/
+/vendor/
+/admin/
+/captcha/
+env.ini

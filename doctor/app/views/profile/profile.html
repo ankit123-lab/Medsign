@@ -1,0 +1,25 @@
+<div ng-include="'app/views/common/header.html?'+getVer(2)"></div>
+<link rel="stylesheet" ng-href="app/css/profile.css?{{getVer(3)}}" />
+<div class="clearfix"></div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_padding_top profile">
+    <div class="text-center" ng-if="checkPermission(MY_ACCOUNT,ADD)">
+        <ul role="tablist" class="nav nav-pills gotham_medium m_top_15 font_color_1 tabs_items">
+            <li role="presentation" class="nav-item " ng-class="getClassActive('/app/profile/my_profile_view')">
+                <a href="#/app/profile/my_profile_view" data-toggle="pill" class="nav-link">PROFILE</a>
+            </li>
+            <li role="presentation" class="nav-item" ng-class="getClassActive('/app/profile/clinic_view')">
+                <a href="#/app/profile/clinic_view" data-toggle="pill" class="nav-link">CLINIC</a>
+            </li>
+            <li role="presentation" class="nav-item hide" ng-class="getClassActive('/app/profile/setting_view')">
+                <a href="#/app/profile/setting_view" data-toggle="pill" class="nav-link">SETTING</a>
+            </li>
+        </ul>
+    </div>
+    <div class="clearfix"></div>
+    <div>
+        <div class="tab-content">
+            <div ui-view="" autoscroll="false"  class="content-wrapper">
+            </div>
+        </div>
+    </div>
+</div>

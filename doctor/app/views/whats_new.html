@@ -1,0 +1,11 @@
+<div ng-include="'app/views/common/header.html?'+getVer(2)"></div>
+<div class="whats_new_div col-lg-12 common_padding_all" ng-init="getWhatsNewData()">
+    <h2 class="gotham_medium">Product news</h2>
+    <div class="content gotham_book">
+        <div ng-repeat="whats in whatsdata" >
+            <h3 class="gotham_medium">{{whats.news_title}}</h3>
+            <span ng-bind-html="whats.news_description"></span>
+            <div class="common_hr"></div>
+        </div>
+    </div>
+</div>

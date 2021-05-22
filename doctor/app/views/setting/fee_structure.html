@@ -1,0 +1,252 @@
+<link rel="stylesheet" ng-href="app/css/clinic_staff.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/fee_structure.css?{{getVer(3)}}" />
+<div class="">
+    <div class="common_hr clearfix billing_main_div " ng-init="getTaxSetting()">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span ng-if="current_clinic">{{current_clinic.clinic_name | capitalize}}</span>
+                    <span><img src="app/images/down_arrow.png" /></span>
+                </button>
+                <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForFee(clinic)" ><a href="" >{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul>
+            </div>
+        </div>
+        <div class="second_width common_heading_height" ng-if="current_clinic" ng-init="getFeesList()">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding  margin_left_-4">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-4 m_bottom_15">
+                    <h4 class="m_top_22 page_title pull-left"><b>Settings</b></h4>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-8 text-right  gotham_light">
+                    <!-- <ul class="pull-right">
+                        <li class="navigation_li">
+                            <label class="bg_icon_images play_video_btn custom_div_mar" data-toggle="modal" data-target='#video_help_modal'></label>
+                        </li>
+                    </ul> -->
+                    <!-- Trigger the modal with a button -->
+                    <a href="" class="pull-right m_top_15" ng-if="checkPermission(SETTING_FEE, ADD)">                                
+                        <input type="button" value="Add Services" name="btn_addDetails" class="new_common_button new_common_button_3 no_top_margin" id="addDetails" data-toggle="modal" data-target="#modal_add_fee_details"/>
+                    </a>
+                    <div class="clearfix"></div>
+                    <!-- Modal -->
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="">
+    <div class="list_group_property" ng-if="current_clinic">
+        <div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+            <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">Fee Structure</h3>
+            <table class="table table-responsive fee_table min_width_767" ng-if="checkPermission(SETTING_FEE, VIEW)">
+                <thead class="row font_color_3 gotham_light common_tb_border font_size_18 common_p_b">
+                    <tr>                                
+                        <th class="width_th_22">Services</th>
+                        <th class="width_th_22">Basic Cost</th>
+                        <th class="width_th_17">Taxes</th>
+                        <th class="width_th_23">Total Cost(Inclusive Of Taxes)</th>
+                        <th class="width_th_17"></th>                                  
+                    </tr>
+                </thead>
+                <tbody class="font_size_14 common_p_b">
+                    <tr ng-repeat="(key, feeObj) in fees_list">
+                        <td>{{ feeObj.pricing_catalog_name | capitalize}}</td>
+                        <td>{{ feeObj.pricing_catalog_cost}}</td>
+                        <td>
+                            <span ng-repeat="(innerkey, tx) in feeObj.tax_name_arr">
+                                {{ fees_list[key].tax_value_arr[innerkey]}}
+                                <span ng-if="fees_list[key].tax_value_arr[innerkey]">% </span>
+                                {{ fees_list[key].tax_name_arr[innerkey] | capitalize}}
+
+                                <span ng-if="innerkey != feeObj.tax_name_arr.length - 1">,</span>
+                            </span>                                
+                        </td>                            
+                        <td class="text-center">{{ feeObj.final_amount}}</td>
+                        <td>
+                            <a ng-if="checkPermission(SETTING_FEE, EDIT)" href="" ng-click="detailFee(key)"><img src="app/images/edit_icon.png" alt="edit_icon" class="m_lr_23"></a>
+                            <a ng-if="checkPermission(SETTING_FEE, DELETE)" href="" ng-click="deleteFee(feeObj.pricing_catalog_id)"><img src="app/images/delete_icon.png" alt="delete_icon"></a>
+                        </td>                                
+                    </tr>                        
+                </tbody>
+            </table>           
+            <div ng-if="!(checkPermission(SETTING_FEE, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+                <div class="unauthorised-css">{{ app.unauthorised_msg}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal_add_fee_details" role="dialog" data-backdrop="static" data-keyboard="false">
+        <form name="addFeeStructureForm" novalidate="" ng-submit="addFee(addFeeStructureForm)" >
+            <div class="modal-dialog modal_dialog_width modal-lg">
+                <div class="modal-content no_padding">
+                    <div class="modal-header common_title background_color_1 white_color text-center">                            
+                        <h3 class="modal-title modaltitle_m">Add Services</h3>                            
+                    </div>
+                    <div class="modal-body padding_body_details">                            
+                        <table class="table table-responsive font_color_4 ">
+                            <thead class="font_size_18 common_tb_border font_size_18 common_p_b">
+                                <tr class="gotham_light">
+                                    <th class="th_width1 required">Services Name</th>
+                                    <th class="th_width2 required">Basic Cost</th>
+                                    <th class="th_width1">Taxes</th>
+                                    <th class="th_width1 text-center">Total cost(inclusive of Taxes)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="font_size_14 common_p_b">
+                                <tr>
+                                    <td>                                                        
+                                        <div class="form-group">   
+                                            <input type="text" class="form-control common_input m_top_20" id="taxname" placeholder="Enter Name " name="service_name" required="required" ng-model="current_fee.service_name" ng-maxlength="200" ng-pattern="/^[a-z A-Z 0-9]*$/">
+                                            <p ng-show="(submitted) && addFeeStructureForm.service_name.$error.required" class="error" >{{service_required}}</p>
+                                            <p ng-show="(submitted) && addFeeStructureForm.service_name.$error.maxlength" class="error" > Maximum 200 characters are allowed.</p>
+                                            <p ng-show="(submitted) && addFeeStructureForm.service_name.$error.pattern" class="error" > Only characters and numeric are allowed</p>
+                                        </div>                                                               
+                                    </td>
+                                    <td>
+                                        <div class="form-group">                                            
+                                            <input type="text" class="form-control common_input m_top_20 input_width3" id="basicCost" placeholder="0" name="basic_cost" required="required"   ng-model="current_fee.basic_cost" ng-pattern="/^[0-9]{1,7}([.][0-9]{0,2})?$/" ng-keyup="calculateFees()">
+                                            <p ng-show="(submitted) && addFeeStructureForm.basic_cost.$error.required" class="error" >{{basic_cost_required}}</p>
+                                            <p ng-show="(submitted) && addFeeStructureForm.basic_cost.$error.pattern" class="error" > Invalid number.</p>
+                                        </div>  
+                                    </td>
+                                    <td>
+                                        <div class="form-group text-left m_top_15">                                                        
+                                            <div class="position_relative multiple_selection_box">
+                                                <select
+                                                    name='tax_id'
+                                                    id="tax_id"
+                                                    chosen                                                                
+                                                    multiple=""
+                                                    allow-single-deselect="true"
+                                                    no-results-text="'None'"
+                                                    placeholder_text_multiple="'None'"         
+                                                    ng-options="value.tax_name for value in taxes"                                                                
+                                                    ng-model="current_fee.tax_id"
+                                                    ng-change="calculateFees()"
+                                                    class="common_input form-control"  >
+                                                    <option value=""></option>                                                                 
+                                                </select>                                                                                        
+                                            </div>
+                                            <p ng-show="(submitted) && addFeeStructureForm.tax_id.$error.required" class="error" >* Required.</p>
+                                        </div>
+                                    </td>
+                                    <td><p class="text-center m_top_20 final_amount font-16" >{{current_fee.final_amount}}</p></td>
+                                </tr>
+                            </tbody>
+                        </table>    
+                        <div class="row">
+                            <div class="col-md-6 text-left">
+                                <button ng-click="add_instruction = true" name="addinstruction" type="button" class="btn common_button btn_pop_instruction  font_color_1 no_padding no_margin title2">Add Instruction</button>
+                            </div>
+                        </div>  
+                        <div class="row">
+                            <div class="col-md-12 text-left">                                            
+                                <textarea ng-if="add_instruction == true" type="text" class="form-control" rows="5" style="width:100%;" id="taxname" placeholder="Instruction" name="instruction"  ng-model="current_fee.instruction" maxlength="200"></textarea>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="modal-footer m_top_20">
+                        <div class="row">                                       
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input type="reset" ng-click="clearFeeObj()" data-dismiss="modal" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties float_left" />          
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="modal_edit_fee_details" role="dialog" data-backdrop="static" data-keyboard="false" >
+    <form name="editFeeStructureForm" novalidate="" ng-submit="editFee(editFeeStructureForm)" >
+        <div class="modal-dialog modal_dialog_width modal-lg">
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">                            
+                    <h3 class="modal-title modaltitle_m">Edit Services</h3>                            
+                </div>
+                <div class="modal-body padding_body_details">                            
+                    <table class="table table-responsive font_color_4 ">
+                        <thead class="font_size_18 common_tb_border font_size_18 common_p_b">
+                            <tr class="gotham_light">
+                                <th class="th_width1 required">Services Name</th>
+                                <th class="th_width2 required">Basic Cost</th>
+                                <th class="th_width1">Taxes</th>
+                                <th class="text-center">Total Cost (inclusive of Taxes)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="font_size_14 common_p_b">
+                            <tr>
+                                <td>                                                        
+                                    <div class="form-group">   
+                                        <input type="text" class="form-control common_input m_top_20" id="taxname" placeholder="Enter Name " name="service_name" required="required" ng-model="current_fee.service_name" ng-maxlength="200" ng-pattern="/^[a-z A-Z 0-9]*$/">
+                                        <p ng-show="(submitted) && editFeeStructureForm.service_name.$error.required" class="error" >{{service_required}}</p>
+                                        <p ng-show="(submitted) && editFeeStructureForm.service_name.$error.maxlength" class="error" > Maximum 200 characters are allowed.</p>
+                                        <p ng-show="(submitted) && editFeeStructureForm.service_name.$error.pattern" class="error" > Only characters and are allowed</p>
+                                    </div>                                                               
+                                </td>
+                                <td>
+                                    <div class="form-group">                                            
+                                        <input type="text" class="form-control common_input m_top_20 input_width3" id="basicCost" placeholder="0" name="basic_cost" required="required"   ng-model="current_fee.basic_cost" ng-pattern="/^[0-9]{1,7}([.][0-9]{0,2})?$/" ng-keyup="calculateFeesForEdit()">
+                                        <p ng-show="(submitted) && editFeeStructureForm.basic_cost.$error.required" class="error" >{{basic_cost_required}}</p>
+                                        <p ng-show="(submitted) && editFeeStructureForm.basic_cost.$error.pattern" class="error" > Invalid number.</p>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="form-group text-left m_top_15">                                                        
+                                        <div class="position_relative multiple_selection_box">                                            
+                                            <select                                      
+                                                name='tax_id' 
+                                                id="tax_id1" 
+                                                chosen                                                           
+                                                multiple="" 
+                                                allow-single-deselect="true" 
+                                                no-results-text="'None'" 
+                                                placeholder_text_multiple="'None'" 
+                                                ng-options="value.tax_id as value.tax_name for value in taxes" 
+                                                ng-model="current_fee.tax_id"
+                                                ng-change="calculateFeesForEdit()"
+                                                class="common_input form-control">
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><p class="text-center m_top_20 final_amount font-16" >{{current_fee.final_amount}}</p></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--                    <div class="col_width_btn_instruction">
+                                            <button ng-click="add_instruction = true" name="addinstruction" type="button" class="pull-right btn common_button btn_pop_instruction float_right font_color_1">Add Instruction</button>                                 
+                                            <textarea ng-if="add_instruction == true" type="text" class=" pull-right m_top_20 " rows="5" cols="50" id="taxname" placeholder="Instruction" name="instruction"  ng-model="current_fee.instruction" maxlength="200"></textarea>                                        
+                                        </div>  -->
+                    <div class="row">
+                        <div class="col-md-6 text-left">
+                            <button ng-click="add_instruction = true" name="addinstruction" type="button" class="btn common_button btn_pop_instruction  font_color_1 no_padding no_margin title2">Add Instruction</button>
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <div class="col-md-12 text-left">                                            
+                            <textarea ng-if="add_instruction == true" type="text" class="form-control" rows="5" cols="50" id="taxname" placeholder="Instruction" name="instruction"  ng-model="current_fee.instruction" maxlength="200"></textarea>
+                        </div>
+                    </div>  
+                </div>
+                <div class="modal-footer m_top_20">
+                    <div class="row">                                       
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right"/>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" ng-click="clearFeeObj()" data-dismiss="modal" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties float_left" />                                                                                                                  
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </form>
+</div>

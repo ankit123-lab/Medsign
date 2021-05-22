@@ -1,0 +1,446 @@
+<link rel="stylesheet" ng-href="app/css/fee_structure.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/billing.css?{{getVer(3)}}" />
+<link rel="stylesheet" ng-href="app/css/clinic_staff.css?{{getVer(3)}}" />
+<div class="">
+    <div class="common_hr clearfix billing_main_div" ng-init="getPaymentTypes()">
+        <div class="first_width" ng-init="getClinics()">
+            <div class="dropdown">
+                <button class="new_common_button clinic_listing dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span>{{app.all_clinic_label}}</span>
+                </button>
+                <!-- <ul class="dropdown-menu clinic_drop_down">             
+                    <li ng-repeat-start="clinic in clinic_data" ng-click="changeCurrentClinicForBilling(clinic)" ><a href="">{{clinic.clinic_name | capitalize}}</a></li>
+                    <li class='divider' ng-repeat-end></li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="second_width common_heading_height">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 no_padding  margin_left_-4">
+                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 m_bottom_15">
+                    <h4 class="m_top_22 page_title pull-left">Settings</h4>
+                </div>                
+                <div class="col-lg-5 col-md-5 hidden-sm hidden-xs text-center" ng-if="checkPermission(SETTING_BILLING, VIEW)">
+                    <ul class="nav nav-pills gotham_medium m_top_15 tabs_items font_color_1" role="tablist">
+                        <li class="nav-item active" role="presentation">
+                            <a class="nav-link" data-toggle="pill" href="" ng-click="changeTaxTab(2)">Payment Modes</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="pill" href="" ng-click="changeTaxTab(1)">Tax Catalog</a>
+                        </li>                                
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-8 col-xs-8 text-right  gotham_light">
+                    <!-- <ul class="pull-right" style="padding-left: 5px;">
+                        <li class="navigation_li">
+                            <label  class="bg_icon_images play_video_btn custom_div_mar" data-toggle="modal"  data-target='#video_help_modal'></label>
+                        </li>
+                    </ul> -->
+                    <!-- Trigger the modal with a button -->
+                    <a href="" ng-if="current_tax_tab == 1 && checkPermission(SETTING_BILLING, ADD)" class="pull-right m_top_15">                                
+                        <input type="button" value="Add Tax" name="btn_add_tax" class="new_common_button new_common_button_3 no_top_margin" id="btn_add_tax" data-toggle="modal" data-target="#modal_add_tax"/>
+                    </a>
+                    <a href="" ng-if="current_tax_tab == 2 && checkPermission(SETTING_BILLING, ADD)" class="pull-right m_top_15">                                
+                        <input type="button" value="Add Mode" name="btn_add_tax" class="new_common_button new_common_button_3 no_top_margin" id="btn_add_tax" data-toggle="modal" data-target="#modal_add_mode"/>
+                    </a>
+                    <div class="clearfix"></div>
+                    <!-- Modal -->
+
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="">
+    
+    <div class="list_group_property" ng-if="current_clinic" ng-init="getPaymentModes()">
+        <div ng-include="'app/views/setting/setting_sidebar.html?'+getVer(2)"></div>
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+            <div class="col-sm-12 col-md-12 visible-sm visible-xs text-center" ng-if="checkPermission(SETTING_BILLING, VIEW)">
+                <ul class="nav nav-pills gotham_medium m_top_15 tabs_items font_color_1" role="tablist">
+                    <li class="nav-item active" role="presentation">
+                        <a class="nav-link" data-toggle="pill" href="" ng-click="changeTaxTab(2)">Payment Modes</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-toggle="pill" href="" ng-click="changeTaxTab(1)">Tax Catalog</a>
+                    </li>
+                </ul>
+            </div>
+            <h3 class="font_color_1 gotham_medium m_bottom_10 m_top_10 title1">{{ (current_tax_tab == 1) ? 'Billing' : 'Payment Modes' }}</h3>
+            <div class="tab-content">
+                <div id="tax_catalouge" class="tab-pane " ng-class="current_tax_tab == 1 ? 'active' : ''" ng-if="checkPermission(SETTING_BILLING, VIEW)">
+                    <table class="table table-responsive min_width_767">
+                        <thead class="row font_color_3 gotham_light common_tb_border font_size_18 common_p_b">
+                            <tr>                                
+                                <th class="width_th_20">Tax Name</th>
+                                <th class="width_th_48">Tax Value(%)</th>                               
+                                <th class="width_th_17"></th>                                  
+                            </tr>
+                        </thead>
+                        <tbody class="font_size_14 common_p_b">
+                            <tr ng-repeat="(key, taxObj) in taxes">
+                                <td>{{taxObj.tax_name | capitalize}}</td>
+                                <td>{{taxObj.tax_value}}</td>                                                               
+                                <td class="text-right">
+                                    <a href="" ng-if="checkPermission(SETTING_BILLING, EDIT)" ng-click="taxDetail(key)"><img src="app/images/edit_icon.png" alt="edit_icon" class="m_lr_10"></a>
+                                    <a href="" ng-if="checkPermission(SETTING_BILLING, DELETE)" ng-click="deleteTax(key)"><img src="app/images/delete_icon.png" alt="delete_icon"></a>
+                                </td>                                
+                            </tr>                               
+                        </tbody>
+                    </table>
+                </div>                        
+                <div id="payment_modes" class="tab-pane " ng-class="current_tax_tab == 2 ? 'active' : ''" ng-if="checkPermission(SETTING_BILLING, VIEW)">
+                    <table class="table table-responsive min_width_767">
+                        <thead class="row font_color_3 gotham_light common_tb_border font_size_18 common_p_b">
+                            <tr>                                
+                                <th class="width_th_20">Mode Name</th>
+                                <th class="width_th_17">Type</th>     
+                                <th class="width_th_13 text-center">Vendor Fee(%)</th>
+                                <th class="width_th_48 text-center"></th>                                  
+                            </tr>
+                        </thead>
+                        <tbody class="font_size_14 common_p_b">
+                            <tr ng-repeat="(key, mode) in payment_modes">
+                                <td>{{ mode.payment_mode_name | capitalize}}</td>
+                                <td>{{ mode.payment_type_name}}</td>                                    
+                                <td class="text-center">{{ mode.payment_mode_vendor_fee}}</td>
+                                <td class="text-right">
+                                    <a href="" ng-if="checkPermission(SETTING_BILLING, EDIT)" ng-click="detailMode(key)"><img src="app/images/edit_icon.png" alt="edit_icon" class="m_lr_10"></a>
+                                    <a href="" ng-if="checkPermission(SETTING_BILLING, DELETE)" ng-click="deleteMode(mode.payment_mode_id)"><img src="app/images/delete_icon.png" alt="delete_icon"></a>
+                                </td>                                
+                            </tr>                                                                                                    
+                        </tbody>
+                    </table>
+                </div>
+                <div ng-if="!(checkPermission(SETTING_BILLING, VIEW) && checkPermission(SETTING_BILLING, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+                    <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+                </div>
+            </div>                
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="modal_edit_tax" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <form name="editTaxForm" id="editTaxForm" novalidate="" method="post" ng-submit="editTax(editTaxForm)">
+        <div class="modal-dialog modal_dialog_width modal-lg">
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">
+                    <h3 class="modal-title modaltitle_m">Edit Tax</h3>                            
+                </div>
+                <div class="modal-body padding_body text-left">
+                    <div class="font_color_4 gotham_light placeholder_class">
+                        <div class="row common_tb_border">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                    <h4 class="required title2 color_black">Name</h4>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <h4 class="required title2 color_black">Value(%)</h4>
+                                </div>
+                            </div>                                            
+                        </div>
+                        <div class="row">
+                            <ng-form name="innerTaxEditForm">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 m_top_12 m_bottom_12 padding_0">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                        <div class="form-group">                                                        
+                                            <input type="text" class="form-control common_input" id="taxname" placeholder="Enter Name " name="taxname" required="required" ng-model="tax.tax_name" ng-maxlength="250" ng-pattern="/^[a-z A-Z 0-9]*$/">
+                                            <p ng-show="(submitted) && innerTaxEditForm.taxname.$error.required" class="error" >{{name_required}}</p>
+                                            <p ng-show="(submitted) && innerTaxEditForm.taxname.$error.maxlength" class="error" > Maximum 250 characters are allowed.</p>
+                                            <p ng-show="(submitted) && innerTaxEditForm.taxname.$error.pattern" class="error" > Only characters and numeric are allowed</p>
+                                        </div>  
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">                                                        
+                                            <input type="text" class="form-control common_input" id="taxvalue" placeholder="Enter Value" name="taxvalue" required="required"  ng-change="validate_percentage(key,innerTaxEditForm,2)" ng-model="tax.tax_value"  ng-pattern="/^[0-9]{1,3}([.][0-9]{0,2})?$/">
+                                            <p ng-show="(submitted) && innerTaxEditForm.taxvalue.$error.required" class="error" >{{value_required}}</p>
+                                            <p ng-show="(submitted) && innerTaxEditForm.taxvalue.$error.pattern" class="error" > Invalid number.</p>
+                                        </div>
+                                    </div>
+                                </div>  
+                            </ng-form>
+                        </div>
+                    </div>                                                                        
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right" />
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" ng-click="cancleTaxBtn()" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties float_left" data-dismiss="modal" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="modal_add_tax" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <form name="addTaxForm" id="add_Tax_Form" novalidate="" method="post" ng-submit="addTax(addTaxForm)">
+        <div class="modal-dialog modal-lg modal_dialog_width">
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">                           
+                    <h3 class="modal-title modaltitle_m">Add Tax</h3>                            
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12" ng-repeat="(key, tax) in taxObj">
+                        <ng-form name="innerTaxForm">
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                <div class="form-group">
+                                    <div class="f_label required" ng-if="key == 0">Tax Name</div>  
+                                    <input ng-keyup="addTaxObj()" type="text" class="form-control login_input" id="taxname" placeholder="Enter Tax Name " name="taxname" ng-required="isTaxObjRequired(key)" ng-model="tax.tax_name" ng-maxlength="250" ng-pattern="/^[a-z A-Z 0-9]*$/">
+                                    <p ng-show="(submitted) && innerTaxForm.taxname.$error.required" class="error" >{{name_required}}</p>
+                                    <p ng-show="(submitted) && innerTaxForm.taxname.$error.maxlength" class="error" > Maximum 250 characters are allowed.</p>
+                                    <p ng-show="(submitted) && innerTaxEditForm.taxname.$error.pattern" class="error" > Only characters and numeric are allowed</p>
+                                </div>  
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                <div class="form-group">
+                                    <div class="f_label required" ng-if="key == 0">Tax Value</div>  
+                                    <input type="text" class="form-control login_input" id="taxvalue" placeholder="Enter Tax Value " name="taxvalue" ng-required="isTaxObjRequired(key)"  ng-change="validate_percentage(key,innerTaxForm,1)" ng-model="tax.tax_value" ng-pattern="/^[0-9]{1,3}([.][0-9]{1,2})?$/">
+                                    <p ng-show="(submitted) && innerTaxForm.taxvalue.$error.required" class="error" >{{value_required}}</p>
+                                    <p ng-show="(submitted) && innerTaxForm.taxvalue.$error.pattern" class="error" > Invalid number.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                <div class="form-group">
+                                    <div class="f_label" ng-if="key == 0">&nbsp;</div>
+                                    <!-- <img src="app/images/add_button.png" class="btn-width-40 cursor_pointer"
+                                            ng-click="addTaxObj()" ng-if="key == (taxObj.length - 1)" /> -->
+                                    <img src="app/images/remove.png" class="btn-width-40 cursor_pointer" 
+                                            ng-click="removeTaxObj(key)" ng-if="(!!taxObj[key].tax_name && taxObj[key].tax_name != '')" />    
+                                </div>
+                            </div>
+                        </ng-form>
+                    </div>
+                    <!-- <div class="font_color_4 gotham_light placeholder_class">
+                        <div class="row common_tb_border">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_top_12 m_bottom_12">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                    <h4 class="required">Name</h4>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <h4 class="required">Value(%)</h4>
+                                </div>
+                            </div>                                            
+                        </div>
+                        <div class="row" ng-repeat="(key, tax) in taxObj">
+                            <ng-form name="innerTaxForm">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 m_top_12 m_bottom_12 padding_0">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 padding_left_0">
+                                        <div class="form-group">                                                        
+                                            <input type="text" class="form-control common_input" id="taxname" placeholder="Enter Name " name="taxname" required="required" ng-model="tax.tax_name" ng-maxlength="20" ng-pattern="/^[a-z A-Z 0-9]*$/" 
+                                                   ng-disabled="key != (taxObj.length - 1)"
+                                                   >
+                                            <p ng-show="(submitted) && innerTaxForm.taxname.$error.required" class="error" >{{name_required}}</p>
+                                            <p ng-show="(submitted) && innerTaxForm.taxname.$error.maxlength" class="error" > Maximum 20 characters are allowed.</p>
+                                            <p ng-show="(submitted) && innerTaxForm.taxname.$error.pattern" class="error" > Only characters are allowed</p>
+                                        </div>  
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">                                                        
+                                            <input type="text" class="form-control common_input" id="taxvalue" placeholder="Enter Value " name="taxvalue" required="required"  ng-model="tax.tax_value" ng-pattern="/^[0-9]{1,3}([.][0-9]{0,2})?$/"
+                                                   ng-disabled="key != (taxObj.length - 1)"                                                                   
+                                                   >
+                                            <p ng-show="(submitted) && innerTaxForm.taxvalue.$error.required" class="error" >{{value_required}}</p>
+                                            <p ng-show="(submitted) && innerTaxForm.taxvalue.$error.pattern" class="error" > Invalid number.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                    <div class="m_top_12">                                                                                                                
+                                        <img src="app/images/add_button.png" class="doc_image doc_image_add cursor_pointer"
+                                             ng-click="addTaxObj(key, innerTaxForm)" ng-if="key == (taxObj.length - 1)" />                                                        
+                                        <img src="app/images/remove.png" class="doc_image doc_image_add cursor_pointer" 
+                                             ng-click="removeTaxObj(key)" ng-if="key != (taxObj.length - 1)" />                                
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div> -->                                                                        
+                </div>
+                <div class="modal-footer">
+                    <div class="row">                                       
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-0">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 text-center">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties"/>
+                            <input type="reset" ng-click="cancleTaxBtn()" value="Cancel" name="Cancel" class="btn new_common_button_1 btn_properties" data-dismiss="modal" />
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="modal_add_mode" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <form name="addModeForm" id="addModeForm" novalidate="" method="post" ng-submit="addMode(addModeForm)">
+        <div class="modal-dialog modal_dialog_width modal-lg">
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">                           
+                    <h3 class="modal-title modaltitle_m">Add Payment Modes</h3>                            
+                </div>
+                <div class="modal-body padding_body text-left">
+                    <div class="font_color_4 gotham_light placeholder_class">
+                        <div class="row common_tb_border m_bottom_20">
+
+                            <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3">
+                                <h4 class="required title2 color_black">Name</h4>
+                            </div>
+                            <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3">
+                                <h4 class="required title2 color_black">Payment Type</h4>
+                            </div>
+
+                            <div class="col-lg-2 col-md-3 col-sm-2 col-xs-2">
+                                <h4 class="required title2 color_black">Vendor Fee (%)</h4>
+                            </div>                                                
+
+                        </div>
+                        <div class="row" ng-repeat="(key, current_mode) in modeObj">
+                            <ng-form name="innerModeForm">
+                                <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3">
+                                    <div class="form-group">                                                        
+                                        <input type="text" class="form-control common_input vendor_input" id="taxname" placeholder="Enter Name " name="name" ng-required="isPaymentModeObjRequired(key)" ng-model="current_mode.name" ng-maxlength="250" ng-pattern="/^[a-z A-Z 0-9]*$/"
+                                               ng-keyup="addPaymentModeObj()"
+                                               >
+                                        <p ng-show="(submitted) && innerModeForm.name.$error.required" class="error" >{{name_required}}</p>
+                                        <p ng-show="(submitted) && innerModeForm.name.$error.maxlength" class="error" > Maximum 250 characters are allowed.</p>
+                                        <p ng-show="(submitted) && innerModeForm.name.$error.pattern" class="error" > Invalid name.</p>
+                                    </div>  
+                                </div>
+                                <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3">
+                                    <div class="form-group selection_bx selection_bx-mx">                                                        
+                                        <div class="position_relative">
+                                            <select
+                                                name='payment_type'
+                                                id="payment_type"
+                                                chosen 
+                                                allow-single-deselect="true" 
+                                                ng-options="value.payment_type_id as value.payment_type_name for value in payment_types" 
+                                                style="width:100% !important;" 
+                                                ng-model="current_mode.payment_type" class="common_input form-control" 
+                                                ng-required="isPaymentModeObjRequired(key)"
+                                                >
+                                                <option value=""></option>
+                                            </select>
+                                            <span>
+                                                <img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right icon_image_payment"/>
+                                            </span>
+                                        </div>
+                                        <p ng-show="(submitted) && innerModeForm.payment_type.$error.required" class="error" >{{payment_type_required}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                    <div class="form-group">                                                        
+                                        <input type="text" class="form-control common_input vendor_input" id="taxname" placeholder="00" name="fee" ng-change="validate_percentage(key,innerModeForm,3)" ng-required="isPaymentModeObjRequired(key)" ng-model="current_mode.fee" ng-pattern="/^[0-9]{1,3}([.][0-9]{0,2})?$/" >
+                                        <p ng-show="(submitted) && innerModeForm.fee.$error.required" class="error" >{{payment_fee_required}}</p>                                                        
+                                        <p ng-show="(submitted) && innerModeForm.fee.$error.pattern" class="error" > Invalid number.</p>
+                                    </div>  
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                    <div class="">                                                                                
+                                        <!-- <img src="app/images/add_button.png" class="doc_image doc_image_add cursor_pointer"
+                                             ng-click="addPaymentMode(key, innerModeForm)" ng-if="key == (modeObj.length - 1)" /> -->
+                                        <img src="app/images/remove.png" class="btn-width-40 cursor_pointer" 
+                                             ng-click="removePaymentModeObj(key)" ng-if="(!!modeObj[key].name && modeObj[key].name != '')" />
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>                                                                        
+                </div>
+                <div class="modal-footer">
+                    <div class="row">                                       
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties"/>
+                            <input type="reset" ng-click="cancleModeBtn()" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties" data-dismiss="modal" />
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="modal_edit_mode" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <form name="editModeForm" id="editModeForm" novalidate="" method="post" ng-submit="editMode(editModeForm)">
+        <div class="modal-dialog modal_dialog_width modal-lg">
+            <div class="modal-content no_padding">
+                <div class="modal-header common_title background_color_1 white_color text-center">                           
+                    <h3 class="modal-title modaltitle_m">Edit Payment Modes</h3>                            
+                </div>
+                <div class="modal-body padding_body text-left">
+                    <div class="font_color_4 gotham_light placeholder_class">
+                        <div class="row common_tb_border m_bottom_20">
+                            <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3">
+                                <h4 class="required title2 color_black">Name</h4>
+                            </div>
+                            <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3">
+                                <h4 class="required title2 color_black">Payment Type</h4>
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-sm-2 col-xs-2">
+                                <h4 class="required title2 color_black">Vendor Fee (%)</h4>
+                            </div>                                                
+                        </div>
+                        <div class="row">
+                            <ng-form name="innerEditModeForm">
+                                <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3 ">
+                                    <div class="form-group">                                                        
+                                        <input type="text" class="form-control common_input" id="taxname" placeholder="Enter Name " name="name" required="required" ng-model="current_mode.name" ng-maxlength="250" ng-pattern="/^[a-z A-Z 0-9]*$/">
+                                        <p ng-show="(submitted) && innerEditModeForm.name.$error.required" class="error" >{{name_required}}</p>
+                                        <p ng-show="(submitted) && innerEditModeForm.name.$error.maxlength" class="error" > Maximum 250 characters are allowed.</p>
+                                        <p ng-show="(submitted) && innerEditModeForm.name.$error.pattern" class="error" > Invalid name.</p>
+                                    </div>  
+                                </div>
+                                <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3 ">
+                                    <div class="form-group selection_bx">                                                        
+                                        <div class="position_relative">
+                                            <select
+                                                name='payment_type'
+                                                id="payment_type"
+                                                chosen                                                                
+                                                allow-single-deselect="true"                                                                
+                                                ng-options="value.payment_type_id as value.payment_type_name for value in payment_types"
+                                                style="width:100% !important;"                 
+                                                ng-model="current_mode.payment_type" required  class="common_input form-control">
+                                                <option value=""></option>
+                                            </select>
+                                            <span>
+                                                <img src="app/images/drop_down_arrow.png" alt="dropdown" class="icon_image_right" />
+                                            </span>
+                                        </div>
+                                        <p ng-show="(submitted) && innerEditModeForm.payment_type.$error.required" class="error" >{{payment_type_required}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                    <div class="form-group">                                                        
+                                        <input type="text" class="form-control common_input vendor_input" id="taxname" placeholder="00" name="fee" required="required" ng-change="validate_percentage(key,innerEditModeForm,4)" ng-model="current_mode.fee" ng-pattern="/^[0-9]{1,3}([.][0-9]{0,2})?$/" >
+                                        <p ng-show="(submitted) && innerEditModeForm.fee.$error.required" class="error" >{{payment_fee_required}}</p>
+                                        <p ng-show="(submitted) && innerEditModeForm.fee.$error.pattern" class="error" > Invalid number.</p>
+                                    </div>  
+                                </div>
+                            </ng-form>
+                        </div>
+                    </div>                                                                        
+                </div>
+                <div class="modal-footer">
+                    <div class="row">                                       
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_properties float_right" />
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="reset" ng-click="cancleModeBtn()" value="Cancel" name="Cancel" class="btn new_common_button_1 cancel_patient btn_properties float_left" data-dismiss="modal" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

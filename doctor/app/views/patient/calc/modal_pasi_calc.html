@@ -1,0 +1,495 @@
+<style type="text/css">
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+#msform {
+	width: 100%;
+	margin: 35px auto;
+	text-align: center;
+	/*position: relative;*/
+	padding: 0;
+}
+#msform fieldset {
+	background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	/*stacking fieldsets above each other*/
+	position: relative;
+}
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+	display: none;
+}
+/*inputs*/
+#msform input, #msform textarea {
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	width: 100%;
+	box-sizing: border-box;
+	font-family: montserrat;
+	color: #2C3E50;
+	font-size: 13px;
+}
+#msform select{
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 5px;
+	width: 60%;
+	box-sizing: border-box;
+	font-family: montserrat;
+	color: #2C3E50;
+	font-size: 13px;
+}
+/*buttons*/
+#msform .action-button {
+	width: 100px;
+	background: #30ACA4;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 1px;
+	cursor: pointer;
+	padding: 10px 5px;
+	margin: 10px 5px;
+}
+#msform .action-button:hover, #msform .action-button:focus {
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #30ACA4;
+}
+/*headings*/
+.fs-title {
+	font-size: 15px;
+	text-transform: uppercase;
+	color: #2C3E50;
+	margin-bottom: 10px;
+}
+.fs-subtitle {
+	font-weight: normal;
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 20px;
+}
+/*progressbar*/
+#progressbar {
+	padding: 0px;
+	margin-bottom: 30px;
+	overflow: hidden;
+	/*CSS counters to number the steps*/
+	counter-reset: step;
+}
+#progressbar li {
+	list-style-type: none;
+	color: black;
+	text-transform: uppercase;
+	font-size: 14px;
+	width: 24.99%;
+	float: left;
+	position: relative;
+}
+#progressbar li:before {
+	content: counter(step);
+	counter-increment: step;
+	width: 20px;
+	line-height: 20px;
+	display: block;
+	font-size: 15px;
+	color: #333;
+	background: #d7f9f6;
+	border-radius: 3px;
+	margin: 0 auto 5px auto;
+	z-index: 2;
+}
+/*progressbar connectors*/
+#progressbar li:after {
+	content: '';
+	width: 100%;
+	height: 2px;
+	background: #d7f9f6;
+	position: absolute;
+	left: -50%;
+	top: 9px;
+	z-index: -1; /*put it behind the numbers*/
+}
+#progressbar li:first-child:after {
+	/*connector not needed before the first step*/
+	content: none; 
+}
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+#progressbar li.active:before,  #progressbar li.active:after{
+	background: #30ACA4;
+	color: white;
+	z-index: inherit;
+}
+.cls-common-slider{
+	margin-top: 5px;
+	float: right;
+	width: 50%; 
+	background-color: #d7f9f6;
+}
+.cls-common-slider > .ui-slider-range{
+	background-color: #30ACA4;
+}
+.cls-common-slider > .ui-slider-handle{
+	background-color: #30ACA4;
+	border-color: #30ACA4;
+}
+</style>
+<!-- multistep form -->
+<div class="row">
+	<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+		<form id="msform">
+		  <!-- progressbar -->
+		  <ul id="progressbar">
+		    <li class="active">Head and Neck</li>
+		    <li>Upper Limbs (Arms)</li>
+		    <li>Trunk</li>
+		    <li>Lower Limbs (Legs)</li>
+		  </ul>
+		  <!-- fieldsets -->
+		  <fieldset>
+		    <h2 class="fs-title">Head and Neck</h2>
+		    <h3 class="fs-subtitle">Enter skin area involved as well as severity of erythema, induration and desquamation for the head and neck.</h3>
+			    <div class="col-lg-12 text-left">
+			    	<!-- <label> Head and neck <span id="area_head_and_neck_lbl" class="font_color_1">0%</span></label>&nbsp;<div class="area_head_and_neck cls-common-slider"></div>
+			    	<input type="hidden" id="area_head_and_neck" name="area_head_and_neck" value="0" /> -->
+					<label><i class="fa fa-arrow-right font_color_1" aria-hidden="true"></i> Head and neck</label>
+			    	<select class="float_right" name="area_head_and_neck" id="area_head_and_neck">
+			    		<option value="0">0% - None</option>
+			    		<option value="1">< 10%</option>
+			    		<option value="2">10-29%</option>
+			    		<option value="3">30-49%</option>
+			    		<option value="4">50-69%</option>
+			    		<option value="5">70-89%</option>
+			    		<option value="6">90-100%</option>
+			    	</select>
+			   	</div>
+				<div class="col-lg-12 text-left">
+			    	<label>1. Erythema (redness)</label>
+			    	<select class="float_right" name="intensity_head_and_neck_erythema" id="intensity_head_and_neck_erythema">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Mild</option>
+			    		<option value="2">2 - Moderate</option>
+			    		<option value="3">3 - Severe</option>
+			    		<option value="4">4 - Very severe</option>
+			    	</select>
+			   	</div>
+			   	<div class="col-lg-12 text-left">
+			    	<label>2. Induration (thickness)</label>
+			    	<select class="float_right" name="intensity_head_and_neck_induration" id="intensity_head_and_neck_induration">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Mild</option>
+			    		<option value="2">2 - Moderate</option>
+			    		<option value="3">3 - Severe</option>
+			    		<option value="4">4 - Very severe</option>
+			    	</select>
+			   	</div>
+			   	<div class="col-lg-12 text-left">
+			    	<label>3. Desquamation <br/>(scaling)</label>
+			    	<select class="float_right" name="intensity_head_and_neck_desquamation" id="intensity_head_and_neck_desquamation">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Mild</option>
+			    		<option value="2">2 - Moderate</option>
+			    		<option value="3">3 - Severe</option>
+			    		<option value="4">4 - Very severe</option>
+			    	</select>
+			   	</div>
+		  	<input type="button" name="next" class="next action-button" value="Next" />
+		  </fieldset>
+		  <fieldset>
+		    <h2 class="fs-title">Upper Limbs (Arms)</h2>
+		    <h3 class="fs-subtitle">Enter skin area involved as well as severity of erythema, induration and desquamation for the Upper Limbs (Arms).</h3>
+			    <div class="col-lg-12 text-left">
+			    	<!-- <label> Upper Limbs (Arms) <span id="area_arms_lbl" class="font_color_1">0%</span></label>&nbsp;<div class="area_arms cls-common-slider"></div>
+			    	<input type="hidden" id="area_arms" name="area_arms" value="0" /> -->
+			    	<label><i class="fa fa-arrow-right font_color_1" aria-hidden="true"></i> Upper Limbs (Arms)</label>
+			    	<select class="float_right" name="area_arms" id="area_arms">
+			    		<option value="0">0% - None</option>
+			    		<option value="1">< 10%</option>
+			    		<option value="2">10-29%</option>
+			    		<option value="3">30-49%</option>
+			    		<option value="4">50-69%</option>
+			    		<option value="5">70-89%</option>
+			    		<option value="6">90-100%</option>
+			    	</select>
+			   	</div>
+				<div class="col-lg-12 text-left">
+			    	<label>1. Erythema (redness)</label>
+			    	<select class="float_right" name="intensity_arms_erythema" id="intensity_arms_erythema">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Mild</option>
+			    		<option value="2">2 - Moderate</option>
+			    		<option value="3">3 - Severe</option>
+			    		<option value="4">4 - Very severe</option>
+			    	</select>
+			   	</div>
+			   	<div class="col-lg-12 text-left">
+			    	<label>2. Induration (thickness)</label>
+			    	<select class="float_right" name="intensity_arms_induration" id="intensity_arms_induration">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Mild</option>
+			    		<option value="2">2 - Moderate</option>
+			    		<option value="3">3 - Severe</option>
+			    		<option value="4">4 - Very severe</option>
+			    	</select>
+			   	</div>
+			   	<div class="col-lg-12 text-left">
+			    	<label>3. Desquamation <br/>(scaling)</label>
+			    	<select class="float_right" name="intensity_arms_desquamation" id="intensity_arms_desquamation">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Mild</option>
+			    		<option value="2">2 - Moderate</option>
+			    		<option value="3">3 - Severe</option>
+			    		<option value="4">4 - Very severe</option>
+			    	</select>
+			   	</div>
+		    <input type="button" name="previous" class="previous action-button" value="Previous" />
+		    <input type="button" name="next" class="next action-button" value="Next" />
+		  </fieldset>
+		  <fieldset>
+		    <h2 class="fs-title">Trunk</h2>
+		    <h3 class="fs-subtitle">Enter skin area involved as well as severity of erythema, induration and desquamation for the Trunk.</h3>
+			    <div class="col-lg-12 text-left">
+			    	<!-- <label> Trunk <span id="area_trunk_lbl" class="font_color_1">0%</span></label>&nbsp;<div class="area_trunk cls-common-slider"></div>
+			    	<input type="hidden" id="area_trunk" name="area_trunk" value="0" /> -->
+			    	<label><i class="fa fa-arrow-right font_color_1" aria-hidden="true"></i> Trunk</label>
+			    	<select class="float_right" name="area_trunk" id="area_trunk">
+			    		<option value="0">0% - None</option>
+			    		<option value="1">< 10%</option>
+			    		<option value="2">10-29%</option>
+			    		<option value="3">30-49%</option>
+			    		<option value="4">50-69%</option>
+			    		<option value="5">70-89%</option>
+			    		<option value="6">90-100%</option>
+			    	</select>
+			   	</div>
+				<div class="col-lg-12 text-left">
+			    	<label>1. Erythema (redness)</label>
+			    	<select class="float_right" name="intensity_trunk_erythema" id="intensity_trunk_erythema">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Mild</option>
+			    		<option value="2">2 - Moderate</option>
+			    		<option value="3">3 - Severe</option>
+			    		<option value="4">4 - Very severe</option>
+			    	</select>
+			   	</div>
+			   	<div class="col-lg-12 text-left">
+			    	<label>2. Induration (thickness)</label>
+			    	<select class="float_right" name="intensity_trunk_induration" id="intensity_trunk_induration">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Mild</option>
+			    		<option value="2">2 - Moderate</option>
+			    		<option value="3">3 - Severe</option>
+			    		<option value="4">4 - Very severe</option>
+			    	</select>
+			   	</div>
+			   	<div class="col-lg-12 text-left">
+			    	<label>3. Desquamation <br/>(scaling)</label>
+			    	<select class="float_right" name="intensity_trunk_desquamation" id="intensity_trunk_desquamation">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Mild</option>
+			    		<option value="2">2 - Moderate</option>
+			    		<option value="3">3 - Severe</option>
+			    		<option value="4">4 - Very severe</option>
+			    	</select>
+			   	</div>
+		    <input type="button" name="previous" class="previous action-button" value="Previous" />
+		    <input type="button" name="next" class="next action-button" value="Next" />
+		  </fieldset>
+		  <fieldset>
+		    <h2 class="fs-title">Lower Limbs (Legs)</h2>
+		    <h3 class="fs-subtitle">Enter skin area involved as well as severity of erythema, induration and desquamation for the Lower Limbs (Legs).</h3>
+			    <div class="col-lg-12 text-left">
+			    	<!-- <label> Lower Limbs (Legs) <span id="area_legs_lbl" class="font_color_1">0%</span></label>&nbsp;<div class="area_legs cls-common-slider"></div>
+			    	<input type="hidden" id="area_legs" name="area_legs" value="0" /> -->
+			    	<label><i class="fa fa-arrow-right font_color_1" aria-hidden="true"></i> Lower Limbs (Legs)</label>
+			    	<select class="float_right" name="area_legs" id="area_legs">
+			    		<option value="0">0% - None</option>
+			    		<option value="1">< 10%</option>
+			    		<option value="2">10-29%</option>
+			    		<option value="3">30-49%</option>
+			    		<option value="4">50-69%</option>
+			    		<option value="5">70-89%</option>
+			    		<option value="6">90-100%</option>
+			    	</select>
+			   	</div>
+				<div class="col-lg-12 text-left">
+			    	<label>1. Erythema (redness)</label>
+			    	<select class="float_right" name="intensity_legs_erythema" id="intensity_legs_erythema">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Mild</option>
+			    		<option value="2">2 - Moderate</option>
+			    		<option value="3">3 - Severe</option>
+			    		<option value="4">4 - Very severe</option>
+			    	</select>
+			   	</div>
+			   	<div class="col-lg-12 text-left">
+			    	<label>2. Induration (thickness)</label>
+			    	<select class="float_right" name="intensity_legs_induration" id="intensity_legs_induration">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Mild</option>
+			    		<option value="2">2 - Moderate</option>
+			    		<option value="3">3 - Severe</option>
+			    		<option value="4">4 - Very severe</option>
+			    	</select>
+			   	</div>
+			   	<div class="col-lg-12 text-left">
+			    	<label>3. Desquamation <br/>(scaling)</label>
+			    	<select class="float_right" name="intensity_legs_desquamation" id="intensity_legs_desquamation">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Mild</option>
+			    		<option value="2">2 - Moderate</option>
+			    		<option value="3">3 - Severe</option>
+			    		<option value="4">4 - Very severe</option>
+			    	</select>
+			   	</div>
+		    <input type="button" name="previous" class="previous action-button" value="Previous" />
+		    <input type="submit" name="submit" class="submit action-button" value="PASI" />
+		  </fieldset>
+		</form>
+	</div>
+	<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+		<div class="col-lg-12 text-center m_top_40">
+			<label style="padding: 10px; border: 1px solid; border-color:#30ACA4;" class="page_title">
+				PASI = <span id="PASI_lbl" class="font_color_1">0</span>
+				<!-- <br/>
+				<table class="table m_bottom_0">
+					<thead>
+						<tr><th>Severity</th><th>SCORAD Index</th></tr>
+					</thead>
+					<tbody>
+						<tr><td>Mild</td><td> < 25 </td></tr>
+						<tr><td>Moderate</td><td>25 - 50</td></tr>
+						<tr><td>Severe</td><td> > 50</td></tr>
+					</tbody>
+				</table> -->
+			</label>
+			<input type="hidden" id="PASI" name="PASI" value="0" />
+		</div>
+		<div class="col-lg-12 text-center m_top_40">
+			<img src="app/images/clac/PASI-01.jpg" class="img img0" />
+			<img src="app/images/clac/PASI-02.jpg" class="img img1 hide" />
+			<img src="app/images/clac/PASI-03.jpg" class="img img2 hide" />
+			<img src="app/images/clac/PASI-04.jpg" class="img img3 hide" />
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+/*$('.area_head_and_neck').slider({ range: "min", min: 0, max: 100, values: areaPerData, animate: true, slide: function(event, ui) {$("#area_head_and_neck_lbl").html(ui.value + '%'); $("#area_head_and_neck").val(ui.value); } });
+$('.area_arms').slider({ range: "min", min: 0, max: 100, animate: true, slide: function(event, ui) {$("#area_arms_lbl").html(ui.value +  + '%'); $("#area_arms").val(ui.value); } });
+$('.area_trunk').slider({ range: "min", min: 0, max: 100, animate: true, slide: function(event, ui) {$("#area_trunk_lbl").html(ui.value + '%'); $("#area_trunk").val(ui.value); } });
+$('.area_legs').slider({ range: "min", min: 0, max: 100, animate: true, slide: function(event, ui) {$("#area_legs_lbl").html(ui.value + '%'); $("#area_legs").val(ui.value); } });*/
+
+var current_fs, next_fs, previous_fs; //fieldsets
+var left, opacity, scale; //fieldset properties which we will animate
+var animating; //flag to prevent quick multi-click glitches
+
+$(".next").click(function(){
+	if(animating) return false;
+	animating = true;
+	current_fs = $(this).parent();
+	next_fs = $(this).parent().next();
+	//activate next step on progressbar using the index of next_fs
+	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+	$(".img").hide();
+	$(".img"+$("fieldset").index(next_fs)).removeClass('hide').show(600);
+	//show the next fieldset
+	next_fs.show();
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+		step: function(now, mx) {
+			//as the opacity of current_fs reduces to 0 - stored in "now"
+			//1. scale current_fs down to 80%
+			scale = 1 - (1 - now) * 0.2;
+			//2. bring next_fs from the right(50%)
+			left = (now * 50)+"%";
+			//3. increase opacity of next_fs to 1 as it moves in
+			opacity = 1 - now;
+			current_fs.css({
+				'transform': 'scale('+scale+')',
+				'position': 'absolute'
+			});
+			next_fs.css({'left': left, 'opacity': opacity});
+		}, 
+		duration: 500, 
+		complete: function(){
+			current_fs.hide().css({'position': 'inherit'});
+			animating = false;
+		}, 
+		//this comes from the custom easing plugin
+		easing: 'easeInOutBack'
+	});
+});
+$(".previous").click(function(){
+	if(animating) return false;
+	animating = true;
+	current_fs = $(this).parent();
+	previous_fs = $(this).parent().prev();
+	//de-activate current step on progressbar
+	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+	$(".img").hide();
+	$(".img"+parseInt($("fieldset").index(current_fs)-1)).removeClass('hide').show(600);
+
+	//show the previous fieldset
+	previous_fs.css({'position':'absolute'}).show(); 
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+		step: function(now, mx) {
+			//as the opacity of current_fs reduces to 0 - stored in "now"
+			//1. scale previous_fs from 80% to 100%
+			scale = 0.8 + (1 - now) * 0.2;
+			//2. take current_fs to the right(50%) - from 0%
+			left = ((1-now) * 50)+"%";
+			//3. increase opacity of previous_fs to 1 as it moves in
+			opacity = 1 - now;
+			current_fs.css({'left': left});
+			previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
+		}, 
+		duration: 500, 
+		complete: function(){
+			previous_fs.css({'position':'inherit'});
+			current_fs.hide().css({'position': 'inherit'});
+			animating = false;
+		}, 
+		//this comes from the custom easing plugin
+		easing: 'easeInOutBack'
+	});
+});
+$(".submit").click(function(){
+	calculate_pasi();
+	return false;
+});
+function calculate_pasi(){
+	var valA1, valA2, valA3, valA4 = 0;
+	valA1 = parseInt($('#intensity_head_and_neck_erythema').val()) + parseInt($('#intensity_head_and_neck_induration').val()) + parseInt($('#intensity_head_and_neck_desquamation').val()); 
+	valA2 = parseInt($('#intensity_arms_erythema').val()) + parseInt($('#intensity_arms_induration').val()) + parseInt($('#intensity_arms_desquamation').val()); 
+	valA3 = parseInt($('#intensity_trunk_erythema').val()) + parseInt($('#intensity_trunk_induration').val()) + parseInt($('#intensity_trunk_desquamation').val()); 
+	valA4 = parseInt($('#intensity_legs_erythema').val()) + parseInt($('#intensity_legs_induration').val()) + parseInt($('#intensity_legs_desquamation').val());
+
+	var valB1, valB2, valB3, valB4 = 0;
+	valB1 = valA1*0.1;
+	valB2 = valA2*0.2;
+	valB3 = valA3*0.3;
+	valB4 = valA4*0.4;
+
+	var valC1, valC2, valC3, valC4 = 0;
+	valC1 = valB1*parseInt($('#area_head_and_neck').val());
+	valC2 = valB2*parseInt($('#area_arms').val());
+	valC3 = valB3*parseInt($('#area_trunk').val());
+	valC4 = valB4*parseInt($('#area_legs').val());
+
+	var pasi = 	valC1 + valC2 + valC3 + valC4;
+	$('#PASI').val(pasi.toFixed(2));
+	$('#PASI_lbl').html(pasi.toFixed(2));
+	var analytics_val = $('#analytics_id_306');
+    analytics_val.val(pasi.toFixed(2));
+    analytics_val.trigger('input');
+    analytics_val.trigger('change');
+}
+</script>

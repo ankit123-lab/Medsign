@@ -1,0 +1,73 @@
+.new_common_button.btn_save {
+    height: 40px;
+    border-radius: 5px;
+}
+
+.btn_properties.btn_save {
+    width: 40%;
+}
+
+.list_group_property.border_top {
+    border-top: 1px #ddd solid;
+}
+
+.progress_bar {
+    height: 60px;
+    width: 60px;
+    border: 5px #30ACA5 solid;
+    border-radius: 50%;
+    margin-top: 5px;
+}
+
+.m_top_35per {
+    margin-top: 35%;
+}
+
+.profile_pic_div {
+    background-color: #F1F1F1;
+    height: 120px;
+    width: 120px;
+    padding: 10px;
+    border: 2px solid #EBEBEB;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.profile_pic_div img {
+/*
+    width: 100%;
+    height: 100%;
+*/
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.dr_title {
+    font-size: 20px;
+    margin-left: 20px;
+}
+
+.selection_bx select {
+    -moz-appearance: none;
+    cursor: pointer;
+    font-size: 14px;
+    height: 45px !important;
+    padding: 6px 40px 6px 12px;
+    position: relative;
+    text-transform: capitalize;
+    width: 100%;
+    border: 1px solid #cccccc !important;
+    background: none !important;
+}
+
+.selection_bx .form-control:focus {
+    border: 1px solid #cccccc;
+}
+
+#register_personal_info_form {
+    width: 100%;
+    overflow: hidden;
+}

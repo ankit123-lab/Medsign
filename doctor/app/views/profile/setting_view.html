@@ -1,0 +1,123 @@
+<div class="tab-pane fade in gotham_medium" id="staff">
+    <link rel="stylesheet" ng-href="app/css/patient_visit.css?{{getVer(3)}}" />
+    <link rel="stylesheet" ng-href="app/css/communication.css?{{getVer(3)}}" />
+    <link rel="stylesheet" ng-href="app/css/profile.css?{{getVer(3)}}" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <div class="main_patient_div setting-tab-view col-lg-12 col-md-12 col-sm-12 col-xs-12 common_padding_all " ng-init="getSettingData()" >
+        <div class="container" ng-if="checkPermission(SETTING_ALERT, VIEW)">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <h3 class="setting_title">Communication</h3>
+                </div>
+            </div>
+            <div class="row font_color_1">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 padding_0">
+                        <h3 class="setting_title mar_li">New Appointment</h3> 
+                        <ul class="list-inline m_top_40 font_size_18 gotham_book margin_t_b">
+                            <li class="m_right_50">SMS
+                                <div class="padding_left_0 common_checbox m_top_20"
+                                     ng-repeat="alertObj in notify track by $index" ng-if="alertObj.id == 1"
+                                     >                                                                               
+                                    <input id="sms_checkbox" type="checkbox"
+                                           ng-model="alertObj.status"
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"
+                                           >    
+                                    <label for="sms_checkbox" class="disclose"></label>
+                                </div>
+                            </li>
+                            <li>Email
+                                <div class="padding_left_0 common_checbox m_top_20"
+                                     ng-repeat="alertObj in notify track by $index" ng-if="alertObj.id == 2"
+                                     >                                            
+                                    <input id="email_checkbox" type="checkbox"
+                                           ng-model="alertObj.status"
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"
+                                           >    
+                                    <label for="email_checkbox" class="disclose"></label>
+                                </div>
+                            </li>                                    
+                        </ul>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-6 col-xs-12 padding_0">
+                        <h3 class="setting_title mar_li">Reschedule Appointment</h3>
+                        <ul class="list-inline m_top_40 font_size_18 gotham_book margin_t_b"> <!-- margin_t_b_1 -->
+                            <li class="m_right_50">SMS
+                                <div class="padding_left_0 common_checbox m_top_20"
+                                     ng-repeat="alertObj in notify track by $index" ng-if="alertObj.id == 7"
+                                     >                                                                               
+                                    <input id="sms_checkbox_1" type="checkbox"
+                                           ng-model="alertObj.status"
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"
+                                           >    
+                                    <label for="sms_checkbox_1" class="disclose"></label>
+                                </div>
+                            </li>
+                            <li>Email
+                                <div class="padding_left_0 common_checbox m_top_20"
+                                     ng-repeat="alertObj in notify track by $index" ng-if="alertObj.id == 8"
+                                     >                                            
+                                    <input id="email_checkbox_1" type="checkbox"
+                                           ng-model="alertObj.status"
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"
+                                           >    
+                                    <label for="email_checkbox_1" class="disclose"></label>
+                                </div>
+                            </li>                                    
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m_top_30 hide">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <h3 class="setting_title">Doctor Setting</h3>                             
+                </div>
+            </div>
+            <div class="row font_color_1 hide">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 padding_0">
+                        <h3 class="setting_title mar_li">Instant</h3>                                
+                        <ul class="list-inline m_top_40 font_size_18 margin_t_b">
+                            <li class="">                                
+                                <div class="padding_left_0 common_checbox"  ng-repeat="alertObj in notify track by $index" ng-if="alertObj.id == 5">
+                                    <input id="instant_checkbox" type="checkbox"
+                                           ng-model="alertObj.status"
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"
+                                           >    
+                                    <label for="instant_checkbox" class="disclose"></label>
+                                </div>
+                            </li>                                 
+                        </ul>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                        <h3 class="setting_title mar_li">Call Button</h3>
+                        <ul class="list-inline m_top_40 font_size_18 margin_t_b">
+                            <li class="">
+                                <div class="padding_left_0 common_checbox" ng-repeat="alertObj in notify track by $index" ng-if="alertObj.id == 6">
+                                    <input id="call_checkbox" type="checkbox"
+                                           ng-model="alertObj.status"
+                                           ng-true-value="'1'"
+                                           ng-false-value="'2'"
+                                           >
+                                    <label for="call_checkbox" class="disclose"></label>
+                                </div>
+                            </li>                                    
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 text-right no_padding">
+                <input type="button" ng-if="checkPermission(SETTING_ALERT, EDIT)" class="new_common_button_1" value="Save" ng-click="saveNotificationStatus()"/>
+            </div>
+        </div>
+        <div ng-if="!(checkPermission(SETTING_ALERT, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+            <div class="unauthorised-css">{{ app.unauthorised_msg}}</div>
+        </div>
+    </div>
+</div>

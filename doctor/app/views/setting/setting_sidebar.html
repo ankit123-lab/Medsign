@@ -1,0 +1,60 @@
+<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 no_padding font_color_5 settings_menu hidden-xs">
+    <ul class="list-group">
+        <li class="list-group-item"        
+            ng-class="getClassActive('/app/dashboard/setting/clinic_details')"><a href="#/app/dashboard/setting/clinic_details">Clinic Details</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SETTING_STAFF, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/clinic_staff')"><a href="#/app/dashboard/setting/clinic_staff">Clinic Staff</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SETTING_CALENDAR, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/calendar')"><a href="#/app/dashboard/setting/calendar">Calendar & Appointments</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SETTING_ALERT, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/alert')"><a href='#/app/dashboard/setting/alert'>Alerts</a></li>
+        <li class="list-group-item"
+            ng-if="checkPermission(SETTING_FEE, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/fees')"><a href="#/app/dashboard/setting/fees">Fee's Structure</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SETTING_BILLING, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/billing')"><a href="#/app/dashboard/setting/billing">Billing & Payment Modes</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SETTING_PAYMENT_MODE, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/payment_mode')"><a href="#/app/dashboard/setting/payment_mode">Tele-consultation Payment</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SETTING_PATIENT_GROUPS, VIEW) && currentUser.sub_plan_setting.promotional_messages_communication != undefined && currentUser.sub_plan_setting.promotional_messages_communication == '1'"
+            ng-class="getClassActive('/app/dashboard/setting/patient_groups')"><a href="#/app/dashboard/setting/patient_groups">Patient Groups</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SETTING_DATA, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/security')"><a href="#/app/dashboard/setting/security">Data Security</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SETTING_CLINICAL_NOTES, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/clinical')"><a href="#/app/dashboard/setting/clinical">Clinical Notes Catalog</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SETTING_DIET_INSTRUCTION, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/diet_instruction')"><a href="#/app/dashboard/setting/diet_instruction">Instructions & Investigation</a></li>
+        <li class="list-group-item"
+            ng-if="checkPermission(SETTING_BRAND, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/brand')"><a href="#/app/dashboard/setting/brand">Brand Catalog</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SETTING_DS, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/template')"><a href="#/app/dashboard/setting/template">Diseases Template</a></li>
+        <li class="list-group-item"
+            ng-if="checkPermission(PRINTOUTS, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/printouts')"><a href="#/app/dashboard/setting/printouts">Rx Print Settings</a></li>
+        <li class="list-group-item hide"><a href="javascript:void(0);">Emails</a></li>
+        <li class="list-group-item hide"><a href="">Export</a></li>
+        <li class="list-group-item hide"><a href="">Laboratory List</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SETTING_SHARE, VIEW)"
+            ng-class="getClassActiveSettingMenu('/app/dashboard/setting/share')"><a href="#/app/dashboard/setting/share">Share Record</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SHARE_LINK, VIEW)"
+            ng-class="getClassActiveSettingMenu('/app/dashboard/setting/share_link')"><a href="#/app/dashboard/setting/share_link">Patient Registration Link</a></li>
+        <li class="list-group-item" 
+            ng-if="checkPermission(SETTING_FAV, VIEW)"
+            ng-class="getClassActive('/app/dashboard/setting/favdoctor')"><a href="#/app/dashboard/setting/favdoctor">Favorite Doctors</a></li>
+        <li class="list-group-item"
+            ng-if="checkPermission(SETTING_FAV, VIEW)" 
+            ng-class="getClassActive('/app/dashboard/setting/import')"><a href="#/app/dashboard/setting/import">Import</a></li>
+    </ul>
+</div>

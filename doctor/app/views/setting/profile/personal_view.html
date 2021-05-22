@@ -1,0 +1,215 @@
+<div class="second_width common_left_border" ng-controller="UserController" ng-init="getDoctorWholeDetail()">
+    <form id="register_personal_info_form" method="post" role="form" style="display: block;" name="updatePersonalForm" ng-submit="updatePersonalDetail()" novalidate="">
+        <div class="">
+            <div class="col-md-12 col-xs-12 margin_padding_0 ">
+                <div class="col-md-2 col-sm-2 col-xs-2 m_top_30">
+                    <div class="profile_pic_div">
+                        <img src="app/images/placeholder_user.png" class="img-responsive placeholder_image" ng-hide='doctor.user_photo_filepath'>
+                        <img ng-src="{{doctor.user_photo_filepath}}" class="image_class" ng-if="doctor.user_photo_filepath && imageSrc == undefined" ng-click="showFullImage(doctor.user_photo_filepath)" />
+                        <input type="hidden" name="imageSrc" ng-model="doctor.user_photo_filepath" required="">
+                        <img ng-src="{{imageSrc}}" class="" ng-click="showFullImage(imageSrc)" ng-show="imageSrc" >
+                    </div>
+
+                    <div class="col-md-12 col-sm-12 col-xs-12 m_top_10 text-center">
+                        <a href="javascript:void(0);" class="font_color_1 margin_0_auto cursor_pointer text-center" ng-click="openFile('profilePicFile')">Upload photo</a>
+                        <input type="file" obj="profile" ng-file-select="onFileSelect($files)" class="hide" ng-model="other.profile" id="profilePicFile" accept="image/*">                                                                                                       
+                    </div>
+                    <p ng-show="(submitted) && updatePersonalForm.imageSrc.$error.required" class="error" style="text-align: center" >* Required.</p>
+                </div>
+                <div class="col-md-10 col-sm-10 col-xs-10 m_top_15">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <div class="f_label required">First Name</div>
+                            <input name="first_name" id="first_name" class="form-control login_input" placeholder="Enter first name" value="" type="text" ng-model="doctor.user_first_name" required="">
+                            <p ng-show="(updatePersonalForm.first_name.$touched || submitted) && updatePersonalForm.first_name.$error.required" class="error" >* Required.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <div class="f_label required">Last Name</div>
+                            <input name="last_name" id="last_name" class="form-control login_input" placeholder="Enter last name" value="" type="text" ng-model='doctor.user_last_name' required="">
+                            <p ng-show="(updatePersonalForm.last_name.$touched || submitted) && updatePersonalForm.last_name.$error.required" class="error" >* Required.</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <div class="f_label required">Email ID</div>
+                            <input name="email_id" id="email_id" class="form-control login_input" placeholder="Enter email id" value="" type="email" ng-model='doctor.user_email' required="" ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/" >
+                            <p ng-show="(updatePersonalForm.email_id.$touched || submitted) && updatePersonalForm.email_id.$error.required" class="error" >* Required.</p>
+                            <p ng-show="(updatePersonalForm.email_id.$touched || submitted) && updatePersonalForm.email_id.$error.pattern" class="error" >* Invalid Email.</p>
+                            <p ng-if="doctor.user_email_verified == 2" class="cursor_pointer error text-right"
+                               ng-click="resendMailForDoctor(1)"
+                               >
+                                Unverified</p>
+                        </div>                                                        
+                    </div>    
+                    <div class="col-md-6 col-sm-6 col-xs-6">                            
+                        <div class="form-group">
+                            <div class="f_label required">Mobile Number </div>                            
+                            <input type="text" name="phone_number" id="phone_number" class="form-control login_input" placeholder="Enter mobile number" value="" ng-model="doctor.user_phone_number" ng-pattern="/^[0-9]{10}$/" required=""   maxlength="10" ng-keypress="checkMobileKey($event)">
+                            <p ng-show="(updatePersonalForm.phone_number.$touched || submitted) && updatePersonalForm.phone_number.$error.required" class="error" >* Required.</p>
+                            <p ng-show="(updatePersonalForm.phone_number.$touched || submitted) && updatePersonalForm.phone_number.$error.pattern" class="error" >* Invalid Number.</p>
+                            <p ng-if="doctor.user_phone_verified == 2" class="cursor_pointer error text-right"
+                               ng-click="resendMailForDoctor(2)"
+                               >
+                                Unverified</p>
+                        </div>
+                    </div>    
+                    <div class="clearfix"></div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="f_label required">Gender</div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 input_gender" gender="male" ng-click="changeGender(1)" style="margin-left: 0px;">
+                            <img ng-src="{{doctor.gender==1?'app/images/male_image.png':'app/images/unselect_male_image.png'}}" alt="Male" />
+                            <label for="male" class="m_top_10">Male</label>                                        
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 input_gender" gender="female" ng-click="changeGender(2)">
+                            <img ng-src="{{doctor.gender==2 ?'app/images/select_female_image.png':'app/images/unselect_female_image.png'}}" alt="Female" />
+                            <label for="female" class="m_top_10">Female</label>                                        
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 input_gender" gender="other" ng-click="changeGender(3)">
+                            <img ng-src="{{doctor.gender==3 ?'app/images/select_other_image.png':'app/images/other_image.png'}}"  alt="Other Image" />
+                            <label for="other" class="m_top_10">Other</label>                                        
+                        </div>
+                        <input name="gender" value="" id="gender" type="hidden">
+                    </div> 
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <div class="f_label required">Language</div>
+                            <select
+                                name='language'
+                                id="country"
+                                chosen
+                                multiple=""
+                                allow-single-deselect="true"
+                                placeholder_text_multiple="'Select Language'" 
+                                ng-options="value.language_id as value.language_name for value in other.languages" 
+                                style="width:100% !important;" 
+                                ng-model="doctor.language" required >
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <p ng-show="(updatePersonalForm.language.$touched || submitted) && updatePersonalForm.language.$error.required" class="error" >* Required.</p>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <div class="f_label required">{{app.address_label}}</div>
+                            <textarea class="form-control login_input resize_none" rows="3" placeholder="{{ app.address_placeholder}}"  id="user_address1" ng-model="doctor.address_name_one" required="" name="user_address1"></textarea>                            
+                            <p ng-show="(updatePersonalForm.user_address1.$touched || submitted) && updatePersonalForm.user_address1.$error.required" class="error" >* Required.</p>
+                        </div>
+                    </div>                        
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <div class="f_label required">{{app.landmark_label}}</div>
+                            <textarea class="form-control login_input resize_none" rows="3" gm-places-autocomplete placeholder="Search {{ app.landmark_placeholder}}" id="comment" ng-model="doctor.address_name" required="" name="user_address"></textarea>
+                            <a href="http://maps.google.com/" class="pull-right font_color_1" target="_blank">Google map</a>
+                            <p ng-show="(updatePersonalForm.user_address.$touched || submitted) && updatePersonalForm.user_address.$error.required" class="error" >* Required.</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="form-group selection_bx">
+                            <div class="f_label required">Country</div>
+                            <select
+                                name='selected_country' 
+                                id="country" 
+                                chosen 
+                                allow-single-deselect="true" 
+                                placeholder_text_single="'Select Country'"                            
+                                ng-options="value.country_id as value.country_name for value in other.country" 
+                                style="width:100% !important;" 
+                                ng-model="doctor.address_country_id" ng-change="getState(doctor.address_country_id)" required>
+								<option value=""></option>                                                                 
+                            </select>
+                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                        </div>
+                        <p ng-show="(updatePersonalForm.selected_country.$touched || submitted) && updatePersonalForm.selected_country.$error.required" class="error" >* Required.</p>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="form-group selection_bx">
+                            <div class="f_label required">State</div>
+                            <select
+                                name="selected_state" 
+                                chosen 
+                                allow-single-deselect="true" 
+                                placeholder_text_single="'Select State'" 
+                                ng-options="value.state_id  as value.state_name for value in other.state" 
+                                style="width:100% !important;"                     
+                                ng-model="doctor.address_state_id" ng-change="getCity(doctor.address_state_id)" required
+                                >
+                                <option value=""></option>                                                                 
+                            </select>
+                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                        </div>
+                        <p ng-show="(updatePersonalForm.selected_state.$touched || submitted) && updatePersonalForm.selected_state.$error.required" class="error" >* Required.</p>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="form-group selection_bx">
+                            <div class="f_label required">City</div>
+                            <select
+                                name="selected_city" 
+                                chosen
+                                allow-single-deselect="true"
+                                placeholder_text_single="'Select City'"                                                                
+                                ng-options="value.city_id as value.city_name for value in other.city"
+                                style="width:100% !important;"                                                                
+                                ng-model="doctor.address_city_id" required
+                                >
+                                <option value=""></option>                                                                 
+                            </select>
+                            <span><i class="fa fa-angle-down fa-2x"></i></span>
+                        </div>
+                        <p ng-show="(updatePersonalForm.selected_city.$touched || submitted) && updatePersonalForm.selected_city.$error.required" class="error" >* Required.</p>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="form-group">
+                            <div class="f_label required">Locality</div>
+                            <input name="locality" id="locality" class="form-control login_input" placeholder="Enter locality" type="text" required="" ng-model="doctor.address_locality">
+                            <p ng-show="(updatePersonalForm.locality.$touched || submitted) && updatePersonalForm.locality.$error.required" class="error" >* Required.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="form-group">
+                            <div class="f_label required"> Pin code</div>
+                            <input name="zipcode" id="zipcode" class="form-control login_input" placeholder="Enter  Pin code" type="text" ng-model="doctor.address_pincode" required="" ng-pattern="/^[0-9]{6}$/" />
+                            <p ng-show="(updatePersonalForm.zipcode.$touched || submitted) && updatePersonalForm.zipcode.$error.required" class="error" >* Required.</p>
+                            <p ng-show="(updatePersonalForm.zipcode.$touched || submitted) && updatePersonalForm.zipcode.$error.pattern" class="error" >Invalid Pin code.</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>  
+                    <div class="m_top_40 m_bottom_30 clearfix">  
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <input type="submit" value="Save" name="save" class="btn new_common_button btn_save btn_properties float_right" />
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <a href=""><input type="button" ng-click="updatePersonalDetail(true)" value="Next" name="next" class="btn new_common_button_1 btn_save btn_properties" /></a>
+                        </div>
+                    </div>                                                
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Modal -->
+<div id="otp_modal" class="modal fade in" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg">
+        <div class="modal-content no_padding">
+            <div class="modal-header common_title background_color_1 white_color text-center">                           
+                <h3 class="modal-title modaltitle_m">OTP verification </h3>                            
+            </div>
+            <form id="profileOTPForm" method="post" role="form" name="profileOTPForm" ng-submit="verifyOtpForDoctor(profileOTPForm)" novalidate="">
+                <div class="form-group">
+                    <div class="forgot_password_label" >Please enter your verification code. <br /> Which you have received.</div>
+                    <input type="text" name="send_register_otp" id="send_register_otp" tabindex="1" class="form-control login_input" placeholder="Enter OTP" value="" required="" ng-model="doctor.otp">
+                    <p ng-show="(profileOTPForm.send_register_otp.$touched || submitted) && profileOTPForm.send_register_otp.$error.required" class="error" style="text-align: center">* Required.</p>
+                </div>
+                <div class="form-group m_top_30 text-center">
+                    <input type="submit" name="login-submit" id="login-submit" class="btn_properties new_common_button" value="Submit"/>
+                    <input type="reset" name=""  class="btn_properties new_common_button_1 cancel_patient" value="Close" data-dismiss="modal"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

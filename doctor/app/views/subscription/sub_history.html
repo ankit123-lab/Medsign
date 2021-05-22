@@ -1,0 +1,62 @@
+<div ng-include="'app/views/common/header.html?'+getVer(2)"></div>
+<link rel="stylesheet" ng-href="app/css/subscription.css?{{getVer(3)}}"/>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_padding_all" ng-if="role[SUBSCRIPTION][VIEW] == 'on'">
+    <div ng-include="'app/views/subscription/sub_left_menu.html?'+getVer(2)"></div>
+    <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 padding_0">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_hr common_heading_height">
+            <h4 class="m_top_22 page_title pull-left">Subscriptions history</h4>
+        </div>
+        <div class="col-lg-12 col-lg-12 col-md-12 col-sm-10 col-xs-12" ng-init="getSubscriptionHistory()">
+            <table ng-if="subscription_history_data.length > 0" class="table table-responsive min_width_767">
+                <thead class="row font_color_3 gotham_light common_tb_border font_size_18 common_p_b">
+                    <tr>                                
+                        <th style="width:20%">Subscription Name</th>
+                        <th style="width:12%">Plan</th>
+                        <th style="width:12%">Start Date</th>
+                        <th style="width:12%">Expiry Date</th>
+                        <th style="width:12%">Invoice No</th>
+                        <th style="width:12%">Amount Rs.</th>
+                        <th style="width:20%">Action</th>
+                        <th></th>                                    
+                    </tr>
+                </thead>
+                <tbody class="font_size_14 common_p_b">
+                    <tr ng-repeat="historyObj in subscription_history_data">
+                        <td>{{historyObj.sub_plan_name}}</td>
+                        <td>{{historyObj.sub_plan_validity}}</td>
+                        <td>{{historyObj.plan_start_date}}</td>
+                        <td>{{historyObj.plan_end_date}}</td>
+                        <td>{{historyObj.invoice_no}}</td>
+                        <td>{{historyObj.paid_amount | number:'2'}}</td>
+                        <td ng-show="historyObj.receipt_url != null">
+                            <a href="javascript:void(0);" ng-click="viewInvoice(historyObj.receipt_url)"><i class="fa fa-eye icon-color"></i></a> | 
+                            <a href="javascript:void(0);" ng-click="invoiceDownload(historyObj.payment_id);"><i class="fa fa-download icon-color"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div ng-if="subscription_history_data.length == 0" class="unauthorised-css text-center" ng-bind-html="sub_history_no_data"></div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 common_padding_all" ng-if="role[SUBSCRIPTION][VIEW] != 'on'">
+    <div class="unauthorised-css text-center">{{ app.unauthorised_msg}}</div>
+</div>
+<!-- Start invoice view Modal -->
+<div class="modal fade" id="modal_invoice_view" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal_dialog_width modal-lg appointment_paients">
+        <div class="modal-content no_padding modal_content_height model_content_style">
+            <div class="modal-header common_title background_color_1 white_color text-center">                        
+                <button type="button" class="close" data-dismiss="modal">X</button>
+                <h3 class="modal-title modaltitle_m">Invoice</h3>
+            </div>
+            <div class="modal-body">        
+                <div class="row">
+                    <div class="invoice-padding col-lg-12 col-lg-12 col-md-12 col-sm-10 col-xs-12">
+                        <iframe width="100%" height="700" ng-src="{{invoice_url | trustThisUrl}}"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>

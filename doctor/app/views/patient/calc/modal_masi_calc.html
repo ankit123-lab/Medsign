@@ -1,0 +1,424 @@
+<style type="text/css">
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+#msform {
+	width: 100%;
+	margin: 35px auto;
+	text-align: center;
+	/*position: relative;*/
+	padding: 0;
+}
+#msform fieldset {
+	background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	/*stacking fieldsets above each other*/
+	position: relative;
+}
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+	display: none;
+}
+/*inputs*/
+#msform input, #msform textarea {
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	width: 100%;
+	box-sizing: border-box;
+	font-family: montserrat;
+	color: #2C3E50;
+	font-size: 13px;
+}
+#msform select{
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 5px;
+	width: 60%;
+	box-sizing: border-box;
+	font-family: montserrat;
+	color: #2C3E50;
+	font-size: 13px;
+}
+/*buttons*/
+#msform .action-button {
+	width: 100px;
+	background: #30ACA4;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 1px;
+	cursor: pointer;
+	padding: 10px 5px;
+	margin: 10px 5px;
+}
+#msform .action-button:hover, #msform .action-button:focus {
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #30ACA4;
+}
+/*headings*/
+.fs-title {
+	font-size: 15px;
+	text-transform: uppercase;
+	color: #2C3E50;
+	margin-bottom: 10px;
+}
+.fs-subtitle {
+	font-weight: normal;
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 20px;
+}
+/*progressbar*/
+#progressbar {
+	padding: 0px;
+	margin-bottom: 30px;
+	overflow: hidden;
+	/*CSS counters to number the steps*/
+	counter-reset: step;
+}
+#progressbar li {
+	list-style-type: none;
+	color: black;
+	text-transform: uppercase;
+	font-size: 14px;
+	width: 24.99%;
+	float: left;
+	position: relative;
+}
+#progressbar li:before {
+	content: counter(step);
+	counter-increment: step;
+	width: 20px;
+	line-height: 20px;
+	display: block;
+	font-size: 15px;
+	color: #333;
+	background: #d7f9f6;
+	border-radius: 3px;
+	margin: 0 auto 5px auto;
+	z-index: 2;
+}
+/*progressbar connectors*/
+#progressbar li:after {
+	content: '';
+	width: 100%;
+	height: 2px;
+	background: #d7f9f6;
+	position: absolute;
+	left: -50%;
+	top: 9px;
+	z-index: -1; /*put it behind the numbers*/
+}
+#progressbar li:first-child:after {
+	/*connector not needed before the first step*/
+	content: none; 
+}
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+#progressbar li.active:before,  #progressbar li.active:after{
+	background: #30ACA4;
+	color: white;
+	z-index: inherit;
+}
+.cls-common-slider{
+	margin-top: 5px;
+	float: right;
+	width: 50%; 
+	background-color: #d7f9f6;
+}
+.cls-common-slider > .ui-slider-range{
+	background-color: #30ACA4;
+}
+.cls-common-slider > .ui-slider-handle{
+	background-color: #30ACA4;
+	border-color: #30ACA4;
+}
+</style>
+<!-- multistep form -->
+<div class="row">
+	<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+		<form id="msform">
+		  <!-- progressbar -->
+		  <ul id="progressbar">
+		    <li class="active">Forehead</li>
+		    <li>Right Malar</li>
+		    <li>Left Malar</li>
+		    <li>Chin</li>
+		  </ul>
+		  <!-- fieldsets -->
+		  <fieldset>
+		    <h2 class="fs-title">Forehead</h2>
+		    <h3 class="fs-subtitle">Enter the values for Area of Forehead Lesion (0-6), Darkness of Forehead lesion(0-4) and Homogeneity of Forehead lesion (0-4).</h3>
+			    <div class="col-lg-12 text-left">
+			    	<label>1. Area of Involvment <br/>of melasma</label>
+			    	<select class="float_right" name="area_forehead" id="area_forehead">
+			    		<option value="0">No involvement</option>
+			    		<option value="1">< 10%</option>
+			    		<option value="2">10-29%</option>
+			    		<option value="3">30-49%</option>
+			    		<option value="4">50-69%</option>
+			    		<option value="5">70-89%</option>
+			    		<option value="6">90-100%</option>
+			    	</select>
+			   	</div>
+				<div class="col-lg-12 text-left">
+			    	<label>2. Darkness <br/>of pigmentation</label>
+			    	<select class="float_right" name="darkness_forehead" id="darkness_forehead">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Slight</option>
+			    		<option value="2">2 - Mild</option>
+			    		<option value="3">3 - Marked</option>
+			    		<option value="4">4 - Maximum</option>
+			    	</select>
+			   	</div>
+			   	<div class="col-lg-12 text-left">
+			    	<label>3. Homogenecity</label>
+			    	<select class="float_right" name="homogenecity_forehead" id="homogenecity_forehead">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Slight</option>
+			    		<option value="2">2 - Mild</option>
+			    		<option value="3">3 - Marked</option>
+			    		<option value="4">4 - Maximum</option>
+			    	</select>
+			   	</div>
+		  	<input type="button" name="next" class="next action-button" value="Next" />
+		  </fieldset>
+		  <fieldset>
+		    <h2 class="fs-title">Right Malar</h2>
+		    <h3 class="fs-subtitle">Enter the value for Area of Right Malar Lesion (0-6), Darkness of Right Malar lesion(0-4) and Homogeneity of Right Malar lesion (0-4).</h3>
+			    <div class="col-lg-12 text-left">
+			    	<label>1. Area of Involvment <br/>of melasma</label>
+			    	<select class="float_right" name="area_right_malar" id="area_right_malar">
+			    		<option value="0">No involvement</option>
+			    		<option value="1">< 10%</option>
+			    		<option value="2">10-29%</option>
+			    		<option value="3">30-49%</option>
+			    		<option value="4">50-69%</option>
+			    		<option value="5">70-89%</option>
+			    		<option value="6">90-100%</option>
+			    	</select>
+			   	</div>
+				<div class="col-lg-12 text-left">
+			    	<label>2. Darkness <br/>of pigmentation</label>
+			    	<select class="float_right" name="darkness_right_malar" id="darkness_right_malar">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Slight</option>
+			    		<option value="2">2 - Mild</option>
+			    		<option value="3">3 - Marked</option>
+			    		<option value="4">4 - Maximum</option>
+			    	</select>
+			   	</div>
+			   	<div class="col-lg-12 text-left">
+			    	<label>3. Homogenecity</label>
+			    	<select class="float_right" name="homogenecity_right_malar" id="homogenecity_right_malar">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Slight</option>
+			    		<option value="2">2 - Mild</option>
+			    		<option value="3">3 - Marked</option>
+			    		<option value="4">4 - Maximum</option>
+			    	</select>
+			   	</div>
+		    <input type="button" name="previous" class="previous action-button" value="Previous" />
+		    <input type="button" name="next" class="next action-button" value="Next" />
+		  </fieldset>
+		  <fieldset>
+		    <h2 class="fs-title">Left Malar</h2>
+		    <h3 class="fs-subtitle">Enter the value for Area of Left Malar Lesion (0-6), Darkness of Left Malar lesion(0-4) and Homogeneity of Left Malar lesion (0-4).</h3>
+			    <div class="col-lg-12 text-left">
+			    	<label>1. Area of Involvment <br/>of melasma</label>
+			    	<select class="float_right" name="area_left_malar" id="area_left_malar">
+			    		<option value="0">No involvement</option>
+			    		<option value="1">< 10%</option>
+			    		<option value="2">10-29%</option>
+			    		<option value="3">30-49%</option>
+			    		<option value="4">50-69%</option>
+			    		<option value="5">70-89%</option>
+			    		<option value="6">90-100%</option>
+			    	</select>
+			   	</div>
+				<div class="col-lg-12 text-left">
+			    	<label>2. Darkness <br/>of pigmentation</label>
+			    	<select class="float_right" name="darkness_left_malar" id="darkness_left_malar">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Slight</option>
+			    		<option value="2">2 - Mild</option>
+			    		<option value="3">3 - Marked</option>
+			    		<option value="4">4 - Maximum</option>
+			    	</select>
+			   	</div>
+			   	<div class="col-lg-12 text-left">
+			    	<label>3. Homogenecity</label>
+			    	<select class="float_right" name="homogenecity_left_malar" id="homogenecity_left_malar">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Slight</option>
+			    		<option value="2">2 - Mild</option>
+			    		<option value="3">3 - Marked</option>
+			    		<option value="4">4 - Maximum</option>
+			    	</select>
+			   	</div>
+		    <input type="button" name="previous" class="previous action-button" value="Previous" />
+		    <input type="button" name="next" class="next action-button" value="Next" />
+		  </fieldset>
+		  <fieldset>
+		    <h2 class="fs-title">Chin</h2>
+		    <h3 class="fs-subtitle">Enter the value for Area of Chin Lesion (0-6), Darkness of Chin lesion (0-4) and Homogeneity of Chin lesion (0-4).</h3>
+			    <div class="col-lg-12 text-left">
+			    	<label>1. Area of Involvment <br/>of melasma</label>
+			    	<select class="float_right" name="area_chin" id="area_chin">
+			    		<option value="0">No involvement</option>
+			    		<option value="1">< 10%</option>
+			    		<option value="2">10-29%</option>
+			    		<option value="3">30-49%</option>
+			    		<option value="4">50-69%</option>
+			    		<option value="5">70-89%</option>
+			    		<option value="6">90-100%</option>
+			    	</select>
+			   	</div>
+				<div class="col-lg-12 text-left">
+			    	<label>2. Darkness <br/>of pigmentation</label>
+			    	<select class="float_right" name="darkness_chin" id="darkness_chin">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Slight</option>
+			    		<option value="2">2 - Mild</option>
+			    		<option value="3">3 - Marked</option>
+			    		<option value="4">4 - Maximum</option>
+			    	</select>
+			   	</div>
+			   	<div class="col-lg-12 text-left">
+			    	<label>3. Homogenecity</label>
+			    	<select class="float_right" name="homogenecity_chin" id="homogenecity_chin">
+			    		<option value="0">0 - Absent</option>
+			    		<option value="1">1 - Slight</option>
+			    		<option value="2">2 - Mild</option>
+			    		<option value="3">3 - Marked</option>
+			    		<option value="4">4 - Maximum</option>
+			    	</select>
+			   	</div>
+		    <input type="button" name="previous" class="previous action-button" value="Previous" />
+		    <input type="submit" name="submit" class="submit action-button" value="MASI" />
+		  </fieldset>
+		</form>
+	</div>
+	<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+		<div class="col-lg-12 text-center m_top_40">
+			<label style="padding: 10px; border: 1px solid; border-color:#30ACA4;" class="page_title">
+				MASI = <span id="MASI_lbl" class="font_color_1">0</span>
+			</label>
+			<input type="hidden" id="MASI" name="MASI" value="0" />
+		</div>
+		<div class="col-lg-12 text-center m_top_40">
+			<img src="app/images/clac/MASI.jpg" class="img-responsive" />
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var current_fs, next_fs, previous_fs; //fieldsets
+var left, opacity, scale; //fieldset properties which we will animate
+var animating; //flag to prevent quick multi-click glitches
+
+$(".next").click(function(){
+	if(animating) return false;
+	animating = true;
+	current_fs = $(this).parent();
+	next_fs = $(this).parent().next();
+	//activate next step on progressbar using the index of next_fs
+	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+	
+	//show the next fieldset
+	next_fs.show();
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+		step: function(now, mx) {
+			//as the opacity of current_fs reduces to 0 - stored in "now"
+			//1. scale current_fs down to 80%
+			scale = 1 - (1 - now) * 0.2;
+			//2. bring next_fs from the right(50%)
+			left = (now * 50)+"%";
+			//3. increase opacity of next_fs to 1 as it moves in
+			opacity = 1 - now;
+			current_fs.css({
+				'transform': 'scale('+scale+')',
+				'position': 'absolute'
+			});
+			next_fs.css({'left': left, 'opacity': opacity});
+		}, 
+		duration: 500, 
+		complete: function(){
+			current_fs.hide().css({'position': 'inherit'});
+			animating = false;
+		}, 
+		//this comes from the custom easing plugin
+		easing: 'easeInOutBack'
+	});
+});
+$(".previous").click(function(){
+	if(animating) return false;
+	animating = true;
+	current_fs = $(this).parent();
+	previous_fs = $(this).parent().prev();
+	//de-activate current step on progressbar
+	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+	//show the previous fieldset
+	previous_fs.css({'position':'absolute'}).show(); 
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+		step: function(now, mx) {
+			//as the opacity of current_fs reduces to 0 - stored in "now"
+			//1. scale previous_fs from 80% to 100%
+			scale = 0.8 + (1 - now) * 0.2;
+			//2. take current_fs to the right(50%) - from 0%
+			left = ((1-now) * 50)+"%";
+			//3. increase opacity of previous_fs to 1 as it moves in
+			opacity = 1 - now;
+			current_fs.css({'left': left});
+			previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
+		}, 
+		duration: 500, 
+		complete: function(){
+			previous_fs.css({'position':'inherit'});
+			current_fs.hide().css({'position': 'inherit'});
+			animating = false;
+		}, 
+		//this comes from the custom easing plugin
+		easing: 'easeInOutBack'
+	});
+});
+$(".submit").click(function(){
+	calculate_masi();
+	return false;
+});
+function calculate_masi(){
+	var valA1, valA2, valA3, valA4 = 0;
+	valA1 = parseInt($('#area_forehead').val());
+	valA2 = parseInt($('#area_right_malar').val());
+	valA3 = parseInt($('#area_left_malar').val());
+	valA4 = parseInt($('#area_chin').val());
+
+	var valD1, valD2, valD3, valD4 = 0;
+	valD1 = parseInt($('#darkness_forehead').val());
+	valD2 = parseInt($('#darkness_right_malar').val());
+	valD3 = parseInt($('#darkness_left_malar').val());
+	valD4 = parseInt($('#darkness_chin').val());
+
+	var valH1, valH2, valH3, valH4 = 0;
+	valH1 = parseInt($('#homogenecity_forehead').val());
+	valH2 = parseInt($('#homogenecity_right_malar').val());
+	valH3 = parseInt($('#homogenecity_left_malar').val());
+	valH4 = parseInt($('#homogenecity_chin').val());
+
+	var masi = (0.3*valA1*(valD1+valH1)) + (0.3*valA2*(valD2+valH2)) + (0.3*valA3*(valD3+valH3)) + (0.1*valA4*(valD4+valH4));
+	var analytics_val = $('#analytics_id_307');
+    analytics_val.val(masi.toFixed(2));
+    analytics_val.trigger('input');
+    analytics_val.trigger('change'); 
+	$('#MASI').val(masi.toFixed(2));
+	$('#MASI_lbl').html(masi.toFixed(2));
+}
+</script>

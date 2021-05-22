@@ -1,0 +1,1512 @@
+.patient_visit p {
+    margin: 0px;
+}
+
+.patient_detail_container {
+    height: 100%;
+}
+
+.user_image_header {
+    height: 40px;
+    margin: 0px 15px 0 0;
+    width: 40px;
+}
+
+.user_image_header img {
+    width: 100%;
+    height: 100%;
+}
+
+.patient_name_container h4 {
+    margin: 0px;
+    /* font-family: "gotham_medium"; */
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.patient_name_container {
+    border-right: 1px solid #d3d3d3;
+    height: 100%;
+    padding: 10px 10px 0 0;
+    width: 22%;
+}
+
+.patient_description {
+    width: 52%;
+    padding: 10px 10px 0 10px;
+}
+
+.appointment_description_container {
+    width: 26%;
+    border-left: 1px solid #d3d3d3;
+    height: 100%;
+    display: flex;
+}
+
+.appointment_description {
+    margin: 10px 0 0 10px;
+    font-size: 12px;
+}
+
+.call_image {
+    background: rgba(0, 0, 0, 0) url("../images/call_icon.png") no-repeat scroll 106% 0;
+}
+.call_image_disable {
+    background: rgba(0, 0, 0, 0) url("../images/call_icon.png") no-repeat scroll 106% 0;
+    opacity: 0.5;
+}
+.active_call_image {
+    background: rgba(0, 0, 0, 0) url("../images/call_icon.png") no-repeat scroll -7% 0;
+    background-color: #ff0000;
+}
+.call_image:hover {
+    background: #30aca5 url("../images/call_icon.png") no-repeat scroll -7% 0;
+}
+.video_call_image {
+    background: rgba(0, 0, 0, 0) url("../images/call_icon.png") no-repeat scroll 106% 0;
+}
+.video_call_image_disable {
+    background: rgba(0, 0, 0, 0) url("../images/call_icon.png") no-repeat scroll 106% 0;
+    opacity: 0.5;
+}
+.active_video_call_image {
+    background: rgba(0, 0, 0, 0) url("../images/call_icon.png") no-repeat scroll -7% 0;
+    background-color: #ff0000;
+    border: 1px solid #ff0000;
+}
+.video_call_image:hover {
+    background: #30aca5 url("../images/call_icon.png") no-repeat scroll -7% 0;
+}
+.call_visit {
+    background: rgba(0, 0, 0, 0) url("../images/contact_ico.jpg") no-repeat center;
+    background-size: 30px;
+}
+
+.call_home {
+    background: rgba(0, 0, 0, 0) url("../images/home_ico.jpg") no-repeat center;
+    background-size: 30px;
+}
+.call_button {
+    border-radius: 5px;
+    font-size: 12px;
+    height: 40px;
+    margin-right: 5px;
+}
+
+.appointment_list_width {
+    width: 58px;
+    /*    float: left;*/
+}
+
+.appointment_graph_width {
+    width: 35%;
+    /* margin-left: 1%; */
+    float: right;
+    position: sticky;
+    top: 70px;
+    height: calc(100vh - 71px);
+    overflow: hidden;
+    border-top: 0 !important;
+}
+
+.patient_list_width {
+    border-right: 1px solid #d1d1d1;
+    float: left;
+    font-size: 14px;
+    /*  padding: 16px 0px;*/
+    /* font-weight: 700; */
+    text-transform: capitalize;
+    /*    //height: calc(100vh - 30px);*/
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    z-index: 5;
+    background: #fff;
+    height: calc(100% - 140px);
+}
+
+.patient_list_width:hover {
+    width: 16%;
+}
+
+.patient_list_width .nav-text {
+    position: absolute;
+    top: 12px;
+    vertical-align: middle;
+    width: 100%;
+    min-width: 200px;
+    padding-left: 45px !important;
+    cursor: pointer;
+    text-align: left;
+    display: none;
+    font-size: 12px;
+}
+
+.patient_list_width:hover .nav-text {
+    display: block;
+}
+
+.appointment_title {
+    /* font-family: "gotham_medium"; */
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.appointment_width {
+    /*    float: left; */
+    width: calc(100% - 58px);
+    /* padding-left: 15px; */
+}
+
+.appointment_header_container {
+    height: 100%;
+    border-bottom: 1px solid #d2d2d2;
+    background-color: #fff;
+}
+
+.new_appointment_button {
+    border-radius: 5px;
+    /* font-family: gotham_book; */
+    font-size: 14px;
+    height: 40px;
+    padding: 10px 17px;
+    text-transform: none;
+    float: right;
+    margin: 0 5px 0 0;
+}
+
+.vertical_bar {
+    border: 1px solid;
+    font-size: 20px;
+    margin: 0 30px;
+}
+
+.display_information {
+    border-top: 1px solid #d2d2d2;
+    position: relative;
+    text-align: center;
+}
+
+.user_side_image {
+    height: 40px;
+    width: 40px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.user_side_image img {
+    width: 100%;
+    height: 100%;
+}
+
+.appointment_title_container {
+    background: #d8faf6;
+    /* border-left: 1px solid #d2d2d2; */
+    border-bottom: 1px solid #d2d2d2;
+    /* border-right: 1px solid #d2d2d2; */
+    color: #30aca5;
+    height: 45px;
+    text-align: center;
+}
+
+.recent_list_all {
+    display: none;
+}
+
+.recent_list_single,
+.recent_list_all {
+    padding: 15px 0 15px 5px;
+}
+
+.recent_list_all .bar {
+    margin: 0 4px;
+}
+
+.visit_date_width {
+    float: left;
+    margin-right: 10px;
+    width: 24%;
+}
+
+.calendar_width {
+    width: 58%;
+    float: left;
+}
+
+.isReceptionist .calendar_width {
+    width: 64%;
+}
+
+.pagination li a.list_items.listdate {
+    width: 40px !important;
+    /* font-family: gotham_medium !important; */
+    line-height: 12px !important;
+    padding: 5px 3px !important;
+    text-align: center !important;
+}
+
+.list_items .month {
+    /* font-family: gotham_book; */
+    font-size: 14px;
+    margin-top: 3px;
+}
+
+.share_image:hover {
+    background: #30aca5 url("../images/share_icon.png") no-repeat scroll -7% 0;
+}
+
+.share_image {
+    background: rgba(0, 0, 0, 0) url("../images/share_icon.png") no-repeat scroll 106% 0;
+}
+
+.icon_container {
+    border-left: 1px solid #d1d1d1;
+    float: left;
+}
+
+.icon_container .bg_icon_images {
+    margin: 5px 0 5px 10px !important;
+}
+
+.add_appointment_details {
+    border: 1px solid #d2d2d2;
+    /*    margin-top: 10px;*/
+    /*    //height: calc(100vh - 30px);*/
+    /*    height: 100vh;*/
+    border-bottom: 0px;
+    border-right: 0;
+    padding-bottom: 10px;
+    border-left: 0;
+}
+
+.template_container {
+    /* font-family: gotham_medium; */
+    /* font-weight: 600; */
+    list-style-type: none;
+    padding: 0;
+    text-transform: capitalize;
+    margin-bottom: 0;
+}
+
+.template_container li {
+    border: 1px solid #30aca5;
+    border-radius: 4px;
+    color: #30aca5;
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 5px 7px;
+    cursor: pointer;
+}
+
+
+.template_container li a {
+    color: #30aca5;
+    font-size: 14px;
+}
+
+.medicine_details>li.active>a,
+.medicine_details>li.active>a:hover,
+.medicine_details>li.active>a:focus {
+    background-color: #30ACA4;
+    color: #fff;
+}
+
+.medicine_details li {
+    background: #d7f9f6 none repeat scroll 0 0;
+    border-radius: 4px;
+    margin: 0 5px 10px !important;
+}
+
+#appointment_list .template_container li:first-child,
+#appointment_list .medicine_details li:first-child {
+    margin-left: 10px !important;
+}
+
+.medicine_details>li>a:hover,
+.medicine_details>li>a:focus {
+    background-color: #d7f9f6;
+    text-decoration: none;
+}
+
+.medicine_details li a {
+    color: #30aca5;
+    padding: 7px 9px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.add_appointment_details .heading {
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.button_container .btn_properties {
+    width: 22%;
+    margin-right: 10px;
+}
+
+.button_container {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.button_container.new_btn_container {
+    text-align: right;
+}
+
+.button_container .btn_properties.new_btn_width {
+    width: 16%;
+}
+
+.button_container.m_top_30per {
+    margin-top: 30%;
+}
+
+#report .doc_image {
+    height: 40px;
+    width: 40px;
+}
+
+#report .doc_image_add {
+    margin-left: 10px;
+}
+
+#report .remove-img-div {
+    position: relative;
+}
+
+#report .remove-img-div .delete_report_icon {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    width: 17px;
+}
+
+#clinical_notes .panel-default {
+    border-top: 1px solid #d2d2d2;
+    border-bottom: 1px solid #d2d2d2;
+    border-right: none;
+    border-left: none;
+    border-radius: 0px;
+}
+
+#clinical_notes .panel-group .panel {
+    border-top: 0;
+    margin-top: 0;
+    box-shadow: none;
+}
+
+#clinical_notes .panel-default a {
+    color: #000;
+    display: block;
+}
+
+#clinical_notes .panel-heading {
+    padding: 10px 2px 10px 0;
+}
+
+#clinical_notes .panel-heading h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+#clinical_notes .panel-heading h2::after {
+    content: url("../images/up_arrow_color.png");
+    float: right;
+    margin-top: -5px;
+}
+
+#clinical_notes .accordion-toggle.collapsed .panel-heading h2::after {
+    content: url("../images/down_arrow_color.png");
+    margin-top: -5px;
+
+}
+
+/*=============================
+       Left Side Content
+===============================*/
+/*--============================Start Modal style============================--*/
+
+.patient_visit_page .modal-dialog.modal_dialog_width {
+    /*
+    margin: 0 auto !important;
+    padding: 30px !important;
+    width: 1367px !important;
+*/
+}
+
+.patient_visit_page .modal_dialog_width.appointment_paients {
+    /*    width: 910px !important;*/
+}
+
+.patient_visit_page .modal-dialog .modal-content.model_content_style {
+    border: none !important;
+    border-radius: 0px !important;
+}
+
+.patient_visit_page .modal-content.modal_content_height {
+    height: auto;
+}
+
+.patient_visit_page .modal-title.modaltitle_m {
+    /* margin: 5px 15px !important; */
+}
+
+.patient_visit_page .modal-title .close {
+    margin-top: -10px;
+}
+
+.patient_visit_page .modal-body.appointment_paients_padding {
+    padding: 40px 45px !important;
+}
+
+.patient_visit_page .list-group.list_group_shadow {
+    box-shadow: none ! important;
+}
+
+.patient_visit_page .list-group-item.list_item {
+    border-top: 1px solid #000 !important;
+    border-bottom: 1px solid #000 !important;
+    border: none;
+    border-radius: 0px !important;
+    padding: 7px 0px;
+    font-size: 12px !important;
+}
+
+.patient_visit_page .create_health_custom .list-group-item.list_item {
+    line-height: 24px;
+}
+
+.patient_visit_page .btn_properties.btn_width_60 {
+    width: 50% !important;
+}
+
+.patient_visit_page .m_top_62per {
+    margin-top: 62%;
+}
+
+.patient_visit_page .common_health_p_h {
+    padding: 10px 20px;
+    /*    height: 600px ;*/
+    height: 100%;
+}
+
+.patient_visit_page .common_health_p_h.health_advice_h {
+    height: 485px;
+}
+
+.patient_visit_page .btn_properties.btn_witdth {
+    width: 100% !important;
+}
+
+/*---------------------Radio Button-----------------------------*/
+.patient_visit_page .common_radio_1 [type="radio"]:checked+label::after,
+.patient_visit_page .common_radio_1 [type="radio"]:not(:checked)+label::after {
+    left: 5px;
+    top: -5px;
+}
+
+.patient_visit_page .common_radio_1 [type="radio"]:checked+label::before,
+.patient_visit_page .common_radio_1 [type="radio"]:not(:checked)+label::before {
+    top: -10px;
+}
+
+.patient_visit_page .common_checbox [type="checkbox"]:checked+label,
+.patient_visit_page .common_checbox [type="checkbox"]:not(:checked)+label {
+    padding-left: 35px;
+}
+
+.patient_visit_page .common_checbox [type="checkbox"]:checked+label::before,
+.patient_visit_page .common_checbox [type="checkbox"]:not(:checked)+label::before {
+    top: 2px;
+}
+
+.patient_visit_page .common_checbox [type="checkbox"]:checked+label::after,
+.patient_visit_page .common_checbox [type="checkbox"]:not(:checked)+label::after {
+    top: 2px;
+}
+
+/*---------------------DS Template-----------------------------*/
+.patient_visit_page #modal_dstemplate .modal-backdrop.in {
+    /*
+    overflow-x: auto !important;
+    min-width: 1367px !important;
+*/
+}
+
+.patient_visit_page #modal_dstemplate {
+    /*    overflow-x: auto !important;*/
+}
+
+/*-------------------Save Template----------------------------*/
+.patient_visit_page #modal_savetemplate .modal-backdrop.in {
+    /*
+    overflow-x: auto !important;
+    min-width: 1367px !important;
+*/
+}
+
+.patient_visit_page #modal_savetemplate {
+    /*    overflow-x: auto !important;*/
+}
+
+.patient_visit_page .modal_dialog_width.savetemplate_width {
+    width: 610px !important;
+}
+
+.patient_visit_page .modal-body.savetemplate_padding {
+    padding: 30px 60px !important;
+}
+
+.patient_visit_page .savetemplate_width.m_top_12 {
+    margin-top: 12% !important;
+}
+
+/*-------------------Health Analytics---------------------------------*/
+.patient_visit_page #modal_health_analytics .modal-backdrop.in {
+    /*    overflow-x: auto !important;*/
+    /*    min-width: 1367px !important;*/
+}
+
+.patient_visit_page #modal_health_analytics {
+    /*    overflow-x: auto !important;*/
+}
+
+/*
+.patient_visit_page .modal_dialog_width.health_analytics{
+    width: 1165px !important;
+}
+*/
+.patient_visit_page .new_common_button_1.btn_health_analytics {
+    width: 180px;
+}
+
+.patient_visit_page .modal-body.health_analytics_padding {
+    padding: 40px 45px 99px;
+}
+
+.patient_visit_page #modal_health_analytics .modal-body .checkbox_width {
+    /*    margin-top: 1px;*/
+}
+
+.patient_visit_page #modal_health_analytics .list_item.list_item_parameter {
+    padding: 10px 0px !important;
+}
+
+/*-----------------Health Advice-------------------------------------*/
+/*
+.patient_visit_page #modal_health_advice .modal-backdrop.in {
+    overflow-x: auto !important;
+    min-width: 1367px !important;
+}
+*/
+/*
+.patient_visit_page #modal_health_advice{
+    overflow-x: auto !important;
+}
+*/
+.patient_visit_page #modal_health_advice .health_analytics .modal-body .m_top_130 {
+    margin-top: 130px;
+}
+
+/*-------------------Refer Template-----------------------------*/
+/*
+.patient_visit_page #modal_refer .modal-backdrop.in {
+    overflow-x: auto !important;
+    min-width: 1367px !important;
+}
+*/
+/*
+.patient_visit_page #modal_refer{
+    overflow-x: auto !important;
+}
+*/
+/*--============================End Modal style=================================--*/
+
+/*=============================
+       Right Side Content
+===============================*/
+/*================================Graph Title style==============================*/
+.patient_visit .appointment_graph_width .tabs_items_1.m_top_5 {
+    margin-top: 5px !important;
+}
+
+.patient_visit .appointment_graph_width h4 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.patient_visit .appointment_graph_width h4.section3-main-title {
+    margin: 14px 0;
+}
+
+/* .patient_visit .appointment_graph_width .appointment_pastreports h4 {
+    margin: 14px 0;
+} */
+
+.patient_visit .appointment_graph_width .border_radius_6 {
+    /* border-radius: 6px !important; */
+}
+
+.patient_visit .appointment_graph_width .tab-content .medicine_details li {
+    font-size: 15px;
+}
+
+.patient_visit .appointment_graph_width .tab-content .medicine_details li:first-child {
+    margin-left: 15px !important;
+}
+
+/*.patient_visit .appointment_graph_width .tab-content .medicine_details li a{ padding: 7px 20px; }*/
+.patient_visit .appointment_graph_width .tab-content .pagination li a {
+    margin-top: 0px;
+}
+
+.patient_visit .appointment_graph_width .tab-content .table th.th_width_20 {
+    width: 20%;
+    font-size: 12px !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.patient_visit .appointment_graph_width .tab-content .table td.text-center {
+    text-align: center;
+}
+
+.patient_visit .appointment_graph_width .tab-content .table th.th_width_10 {
+    width: 10%;
+    font-size: 12px !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/*.patient_visit .appointment_graph_width .tab-content.m_left_25{ margin-left: 25px; }*/
+
+.patient_visit .appointment_graph_width .list-group {
+    box-shadow: none;
+}
+
+.patient_visit .appointment_graph_width .list-group .list-group-item.bk_none {
+    background-color: transparent;
+    color: #30aca5;
+    /* font-family: 'gotham_light'; */
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border: none;
+    padding: 2px 0;
+}
+
+.patient_visit .appointment_graph_width .list-group .list-group-item.bk_none p {
+    margin: 5px 0px;
+    font-size: 14px;
+    /* font-weight: 600; */
+}
+
+.patient_visit .appointment_graph_width .list-group .list-group-item .font_size_16 {
+    font-size: 12px;
+}
+
+.patient_visit .appointment_graph_width .m_left_55 {
+    margin-left: 55px;
+}
+
+.patient_visit .appointment_graph_width .background_color_4 {
+    background-color: #F2F2F2;
+    margin-bottom: 5px !important;
+    margin-top: 5px;
+}
+
+.patient_visit .appointment_graph_width .background_color_4 .panel-body {
+    padding: 8px !important;
+}
+
+.patient_visit .appointment_graph_width .background_color_4 .panel-body p {
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+.patient_visit .appointment_graph_width .display_none {
+    display: none;
+}
+
+/*================================Start Tabs==============================*/
+.patient_visit .appointment_graph_width .tabs_items_1 {
+    display: inline-block !important;
+    border: 1px #fff solid;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.patient_visit .appointment_graph_width .tabs_items_1:last-child {
+    /*    border-right: none !important;*/
+}
+
+.patient_visit .appointment_graph_width .tabs_items_1.nav-pills li {
+    margin-left: 0px;
+    width: auto;
+    float: left;
+    display: inline;
+    background-color: #fff;
+}
+
+.patient_visit .appointment_graph_width .tabs_items_1 li a {
+    border-radius: 5px;
+    color: #00DFC8 !important;
+    padding: 5px 7px;
+    font-size: 14px;
+    float: left;
+    border-right: 1px solid #fff;
+    text-transform: capitalize;
+}
+
+.patient_visit .appointment_graph_width .tabs_items_1 li.active a,
+.patient_visit .appointment_graph_width .tabs_items_1 li.active a:focus {
+    color: #ffffff !important;
+    background-color: #00DFC8 !important;
+}
+
+.patient_visit .appointment_graph_width .tabs_items_1>li>a:hover,
+.tabs_items>li>a:focus {
+    background: none;
+    text-decoration: none;
+}
+
+/*================================End Tabs==============================*/
+
+/*================================Appointment different Section==============================*/
+
+/*
+.patient_visit .appointment_graph_width .appointments_clinicalnotes .appointment_notes_width{ width: 29%; }
+.patient_visit .appointment_graph_width .appointments_clinicalnotes .appointment_tabs_width{ width: 71%; }
+*/
+
+.patient_visit .appointment_graph_width #app_clinical_notes .icon_image_right,
+.patient_visit .appointment_graph_width #commonlyprocedure .icon_image_right {
+    top: -4px;
+    right: 8px;
+}
+
+.patient_visit .appointment_graph_width #app_reports .panel-body .date_width_left,
+.patient_visit .appointment_graph_width #investigation_report .panel-body .date_width_left,
+.patient_visit .appointment_graph_width #procedure_report .panel-body .date_width_left,
+.patient_visit .appointment_graph_width #reports_pastreport .panel-body .date_width_left,
+.patient_visit .appointment_graph_width .common-class-report .panel-body .date_width_left {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    /* border-radius: 50%; */
+    line-height: 12px !important;
+    padding: 5px 3px !important;
+    border-radius: 4px;
+}
+
+.patient_visit .appointment_graph_width #app_reports .panel-body .date_width_right,
+.patient_visit .appointment_graph_width #investigation_report .panel-body .date_width_right,
+.patient_visit .appointment_graph_width #procedure_report .panel-body .date_width_right,
+.patient_visit .appointment_graph_width #reports_pastreport .panel-body .date_width_right,
+.patient_visit .appointment_graph_width .common-class-report .panel-body .date_width_right {
+    width: calc(100% - 80px);
+    /* margin-top: 6px; */
+    margin-left: 10px !important;
+}
+
+.patient_visit .appointment_graph_width #app_reports .panel-body .date_width_right .gotham_medium, 
+.patient_visit .appointment_graph_width #investigation_report .panel-body .date_width_right .gotham_medium,
+.patient_visit .appointment_graph_width #procedure_report .panel-body .date_width_right .gotham_medium,
+.patient_visit .appointment_graph_width #reports_pastreport .panel-body .date_width_right .gotham_medium, 
+.patient_visit .appointment_graph_width .common-class-report .panel-body .date_width_right .gotham_medium {
+    font-size: 14px;
+}
+
+.patient_visit .appointment_graph_width #app_reports .panel-body .date_width_right .gotham_light, 
+.patient_visit .appointment_graph_width #investigation_report .panel-body .date_width_right .gotham_light,
+.patient_visit .appointment_graph_width #procedure_report .panel-body .date_width_right .gotham_light,
+.patient_visit .appointment_graph_width #reports_pastreport .panel-body .date_width_right .gotham_light, 
+.patient_visit .appointment_graph_width .common-class-report .panel-body .date_width_right .gotham_light {
+    font-size: 12px;
+}
+
+.patient_visit .appointment_graph_width #app_reports .panel-body .date_width_left .margin_8,
+.patient_visit .appointment_graph_width #investigation_report .panel-body .date_width_left .margin_8,
+.patient_visit .appointment_graph_width #procedure_report .panel-body .date_width_left .margin_8,
+.patient_visit .appointment_graph_width #reports_pastreport .panel-body .date_width_left .margin_8,
+.patient_visit .appointment_graph_width .common-class-report .panel-body .date_width_left .margin_8 {
+    /* margin: 8px !important; */
+}
+
+.patient_visit .appointment_graph_width #app_reports .panel-body .date_width_left .margin_12,
+.patient_visit .appointment_graph_width #investigation_report .panel-body .date_width_left .margin_12,
+.patient_visit .appointment_graph_width #procedure_report .panel-body .date_width_left .margin_12,
+.patient_visit .appointment_graph_width #reports_pastreport .panel-body .date_width_left .margin_12,
+.patient_visit .appointment_graph_width .common-class-report .panel-body .date_width_left .margin_12 {
+    margin: -12px;
+}
+
+.patient_visit .appointment_graph_width #app_reports .panel-body .date_width_left p,
+.patient_visit .appointment_graph_width #investigation_report .panel-body .date_width_left p,
+.patient_visit .appointment_graph_width #procedure_report .panel-body .date_width_left p,
+.patient_visit .appointment_graph_width #reports_pastreport .panel-body .date_width_left p,
+.patient_visit .appointment_graph_width .common-class-report .panel-body .date_width_left p {
+    font-size: 14px;
+    font-weight: 700;
+    /* padding: 5px 3px !important; */
+    margin: 0 0 3px !important;
+}
+
+.appointment_width .appointment_title_container .nav-tabs.appoment_nav_tabs {
+    display: inline-block !important;
+}
+
+.appointment_width .appointment_title_container .nav-tabs .patient_nav_link {
+    border: none;
+    border-radius: 0px;
+    padding: 10px 0px 0 !important;
+    color: #68cabe !important;
+}
+
+.appointment_width .appointment_title_container .nav-tabs .m_top_7 {
+    margin-top: 7px;
+}
+
+.appointment_width .appointment_title_container .nav-tabs li.active a,
+.appointment_width .appointment_title_container .nav-tabs li.active a:hover,
+.appointment_width .appointment_title_container .nav-tabs li.active a:focus {
+    background: #D8FAF6 !important;
+    color: #30aca5 !important;
+    border-bottom: 2px #30ACA4 solid;
+}
+
+.appointment_width .appointment_title_container .nav li a:hover,
+.appointment_width .appointment_title_container .nav li a:focus {
+    color: #68cabe !important;
+    background: #D8FAF6 !important;
+}
+
+#billing .add_appointment_details .button_container.m_top_bottom {
+    margin-top: 5px;
+    margin-bottom: 35px;
+}
+
+.scroll_div {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overflow-y: scroll;
+    /* padding-right: 5px; */
+    /* Increase/decrease this value for cross-browser compatibility */
+    box-sizing: content-box;
+}
+
+.clinical_image {
+    max-height: 60px;
+    width: 54px;
+    border-radius: 4px;
+    border: 1px solid #d1d1d1;
+    margin: 4px;
+}
+
+#fullscreen_clinical_notes_modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 5000;
+    /* Sit on top */
+    padding-top: 10px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: white;
+
+}
+
+#fullscreen_clinical_notes_modal #my_img {
+    height: 80%;
+    /*width: 80%;*/
+}
+
+#fullscreen_clinical_notes_modal .fullscreen-delete-div {
+    height: 50px;
+    background-color: white;
+}
+
+#fullscreen_clinical_notes_modal .close {
+    font-size: 32px;
+    opacity: 1;
+}
+
+#fullscreen_clinical_notes_modal .fullscreen-icons {
+    padding: 10px;
+    margin: 5px;
+}
+
+#modal_report_detail .report_img {
+    max-width: 96%;
+    max-height: 98%;
+}
+
+#modal_report_detail .close {
+    font-size: 42px;
+}
+
+#modal_report_detail .date_print {
+    margin-top: 25px;
+    font-size: 20px;
+    text-align: center;
+}
+
+p {
+    word-wrap: break-word;
+}
+
+.right_icon {
+    padding: 2px 6px;
+    border: 1px solid #30ACA5;
+    border-radius: 5px;
+    margin-right: 2px;
+    margin-top: 5px;
+}
+
+.green_class {
+    color: #30ACA5;
+}
+
+
+.main_patient_div .button_container .btn_properties {
+    /* width: 14%; */
+    /* height: 32px; */
+    /* font-size: 12px; */
+}
+
+.main_patient_div .button_container {
+    margin-top: 10px;
+}
+
+
+/*
+#rx{
+    height: 400px;
+    overflow: auto;
+}
+*/
+.drug_icon {
+    height: 15px;
+    width: 15px;
+    margin: 0px 11px;
+    border-radius: 7px;
+}
+
+.drug_text {
+    font-size: 12px;
+    margin-top: 0px;
+    text-transform: capitalize;
+}
+
+/*
+#billing{
+    padding: 10px;
+}
+*/
+#billing .add_appointment_details {
+    /*    margin: 5px 0px;*/
+    /*    padding: 0px 0px 0px 10px;*/
+}
+
+#billing .selection_bx .icon_image_right_dropdown {
+    position: absolute;
+    right: -15px;
+    z-index: 2;
+    cursor: pointer;
+    top: -27px !important;
+    height: 35px;
+}
+
+#billing .selection_bx .icon_image_right_dropdown.arrow-up-custom {
+    top: -29px !important;
+}
+
+#billing .main_payment_div {
+    /* height: 300px; */
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#billing .no_data_found_pricing {
+    background-color: white;
+    padding: 5px;
+    font-size: 13px;
+    border: 1px solid #d1d1d1;
+}
+
+#billing .multiple_selection_box .chosen-choices {
+    height: auto !important;
+}
+
+#billing .selection_bx .icon_image_right_dropdown2 {
+    position: absolute;
+    right: -13px;
+    z-index: 2;
+    cursor: pointer;
+    top: -30px !important;
+}
+
+#billing .common_input {
+    /*    height: 34px !important;*/
+    font-size: 14px;
+}
+
+#billing .selection_bx select {
+    /*    height: 34px !important;*/
+}
+
+#billing .form-control::-moz-placeholder {
+    font-size: 13px;
+}
+
+#billing .payment_remove_btn {
+    /*    height: 33px !important;*/
+}
+
+#billing .selection_bx .chosen-single {
+    height: 38px !important;
+}
+
+
+.kco-p-tag {
+    overflow: hidden;
+    height: 20px;
+    word-break: break-all;
+}
+
+.zoom-div {
+    position: fixed;
+    text-align: center;
+    left: 48%;
+    top: 15%;
+    z-index: 55555555;
+}
+
+.image-zoom-div {
+    margin-top: 100px;
+}
+
+.zoom-div i {
+    padding: 12px;
+    font-size: 15px;
+    color: white;
+    background: #737373;
+    border-radius: 6px;
+    margin-bottom: 180px !important;
+}
+
+#modal_report_detail .appointment_paients_padding {
+    padding: 13px 39px !important
+}
+
+.modal-custom-lg .modal-dialog {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.modal-custom-lg .modal-content {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.span-side-arrow {
+    margin-left: 8px;
+    font-size: 21px;
+    margin-top: 5px;
+}
+
+#modal_report_detail {
+    height: auto;
+    width: 100%;
+}
+
+#modal_report_detail .modal-content {
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+}
+
+#modal_report_detail .modal-dialog.modal_dialog_width {
+    width: 1367px !important;
+}
+
+#modal_report_detail .zoom-div .glyphicon-zoom-in,
+#modal_report_detail .zoom-div .glyphicon-zoom-out {
+    z-index: 55555;
+}
+
+#modal_report_detail .modal-body {
+    height: 85%;
+    overflow: auto;
+}
+
+#app_health_analytics .medicine_details li,
+#reports_healthanalytics .medicine_details li {
+    width: 115px;
+}
+
+.appointment_list_wrapper {
+    display: flex;
+    justify-content: space-between;
+    /* width: 63%;
+    margin-right: auto; */
+    min-height: calc(100vh - 71px);
+}
+
+.brLeft>tbody>tr>td {
+    border-left: 0;
+    border-right: 0;
+}
+
+.template_container li a,
+.medicine_details li a {
+    white-space: nowrap;
+}
+
+.calendar_width .pagination,
+.template_container,
+.medicine_details {
+    display: flex;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.isReceptionist .calendar_width .pagination,
+.isReceptionist .template_container,
+.isReceptionist .medicine_details {
+    justify-content: center;
+}
+
+@media(max-width:1199px) {
+    .appointment_graph_width {
+        width: 39%;
+        float: right;
+    }
+
+    .appointment_width {
+        width: 100%;
+        /* padding-left: 1%; */
+    }
+
+    .appointment_list_width {
+        width: 15%;
+        display: none;
+    }
+}
+
+@media(max-width:1024px) {
+
+    .patient_name_container,
+    .patient_description,
+    .user_image_header {
+        /* margin-right: 10px; */
+    }
+
+    .appointment_description,
+    .icon_container .bg_icon_images {
+        margin-left: 10px;
+    }
+
+    .appointment_description {
+        margin-top: 10px;
+    }
+
+    .patient_name_container {
+        width: 24%;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 10px;
+    }
+
+    .patient_description {
+        width: 44%;
+        padding-top: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .appointment_title_container {
+        height: 45px;
+    }
+
+    .appointment_title {
+        /* font-size: 18px; */
+    }
+
+    .visit_date_width {
+        width: 18%;
+    }
+
+    .calendar_width {
+        width: 61%;
+    }
+
+    .icon_container {
+        display: flex;
+        min-height: 50px;
+    }
+
+    .template_container li {
+        margin: 5px;
+        padding: 5px 7px;
+    }
+
+    .appointment_description_container {
+        width: 32%;
+    }
+
+    .template_container li:first-child,
+    .medicine_details li:first-child {
+        margin-left: 5px !important;
+    }
+
+    .medicine_details li a {
+        padding: 5px 7px;
+    }
+
+    .payment_bottom-row .col-lg-3 {
+        min-height: 90px;
+    }
+
+    .main_patient_div .button_container {
+        clear: both;
+    }
+
+    .main_patient_div .button_container:before,
+    .main_patient_div .button_container:after,
+    #addPrescriptionForm .form-group:before,
+    #addPrescriptionForm .form-group:after {
+        display: table;
+        content: "";
+    }
+
+    .main_patient_div .button_container:after,
+    #addPrescriptionForm .form-group:after {
+        clear: both;
+    }
+
+    .patient_list_width .nav-text {
+        display: block;
+    }
+
+    .patient_list_width_tablet_view .recent_list_single {
+        display: none;
+    }
+
+    .patient_list_width_tablet_view .recent_list_all {
+        display: block;
+    }
+
+    .appointment_list_width_tablet_view .appointment_header_container {
+        background-color: #fff;
+    }
+
+    .patient_list_width_tablet_view .nav-text {
+        position: absolute;
+        top: 10px;
+        vertical-align: middle;
+        width: 100%;
+        min-width: 200px;
+        padding-left: 50px !important;
+        cursor: pointer;
+        text-align: left;
+    }
+
+    .new_appointment_button {
+        /* font-size: 14px; */
+        /* height: 35px;
+        padding: 7px 10px; */
+    }
+
+    .patient_visit .appointment_graph_width .tabs_items_1 li a {
+        /* font-size: 12px; */
+    }
+
+    .table-responsive .table {
+        /* margin-bottom: 0; */
+    }
+
+    .patient_visit .appointment_graph_width .tab-content .table th.th_width_20,
+    .patient_visit .appointment_graph_width .tab-content .table tbody td {
+        /*    word-break: break-all;*/
+    }
+
+    .appointment_width .tab-content {
+        height: calc(100% - 45px);
+    }
+
+    .appointment_width #appointment_list {
+        height: 100%;
+    }
+
+    .appointment_width #appointment_list .history {
+        height: calc(100% - 10px);
+    }
+
+    .appointment_width.isReceptionist {
+        width: 100%;
+    }
+}
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1280px) 
+  and (orientation: landscape) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    .appointment_width {
+        width: calc(100% - 41px);
+    }
+    .appointment_list_width {
+        width: 42px;
+    }
+}
+
+.create_health_custom .common_checbox [type="checkbox"]:checked+label,
+.create_health_custom .common_checbox [type="checkbox"]:not(:checked)+label {
+    vertical-align: top;
+}
+
+.drug-color {
+    width: 50%;
+    margin: 5px 0;
+}
+
+#appointment_list>.common_border {
+    border-left: 0 !important;
+    border-right: 0 !important;
+}
+
+.fnone {
+    float: none !important;
+}
+
+.appointment_graph_width>div>.tab-content>div {
+    height: calc(100vh - 170px);
+    overflow-y: auto;
+}
+
+.height_110 {height: calc(113vh - 170px) !important;}
+
+.appointments_vitals .tab-content .table td:not(.font_color_1) {
+    font-size: 14px;
+}
+
+@media(min-width:1024px) {
+    .navbar-collapse.collapse {
+        height: 70px !important;
+    }
+}
+
+[slim-scroll]>div+div>div,
+[data-slim-scroll]>div+div>div {
+    background-color: #30aca5;
+}
+
+.model_previous_btn {
+	position: fixed;
+	text-align: center;
+	left: 1%;
+	top: 50%;
+	z-index: 55555555;
+}
+
+.model_next_btn {
+	position: fixed;
+	text-align: center;
+	left: 98%;
+	top: 50%;
+	z-index: 55555555;
+}
+.visited-patient{color: #ec891d !important;}
+.appointment-done{margin-top: 0px;}
+.appointment-done-checkbox{float: right;}
+.all-patient-link {
+    font-size: 14px;
+    color: #30aca5 !important;
+    text-decoration: underline;
+    font-weight: bold;
+}
+.pagi-btn {
+    font-size: 14px;
+    height: 25px;
+    width: 28px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    background: #fff;
+    color: #30aca5;
+    font-weight: 700;
+    border: 1px #30ACA4 solid;
+    margin-right: 3px;
+}
+.pagi-btn:hover{
+    background: #30aca5 !important;
+    color: #fff !important;
+}
+.page-active {
+    background: #30aca5 !important;
+    color: #fff !important;
+}
+.pagi-wrap{margin-bottom: 40px;}
+.totals-rows{text-align: left;}
+.pagination-wrap{text-align: right;}
+.overlap-wrap{width: 100%;position: absolute;height: 100%;z-index: 3;background-color: rgba(226, 219, 219, 0.5);}
+.disabled-wrap{position: relative;}
+.analytics-overlap{width: 99%;left: 4px;top: -5px;height: 105%;}
+.add-invoice-btn {
+    font-size: 14px;
+    height: 30px;
+    width: 100px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    background: #30aca5;
+    color: #fff;
+    font-weight: 700;
+    border: 1px #30ACA4 solid;
+    margin-right: 16px;
+    margin-top: -40px;
+    float: right;
+}
+.fa-icon-color {color: #30aca5;}
+.active-invoice {color: #30aca5 !important;}
+.invoice-date .login_input {height: 30px !important;}
+.invoice-date {
+    width: 154px;
+    float: right;
+    text-align: right;
+    margin: -40px 18px 0px 0;
+}
+.invoice-date-label {
+    float: right;
+    width: 100px;
+    margin-top: -36px;
+    margin-right: 166px;
+    color: #000;
+}
+.invoice-date .dropdown-menu {
+    top: 100%;
+    bottom: auto;
+}
+.share-email-btn {background: #30ACA4; color: #fff; z-index: 2; padding: 9px 16px; border-left: 2px solid #30ACA4;}
+.share-email-btn:hover {background: #30ACA4 !important;}
+
+.tele_consultation_video_call_box {
+    height: 100%;
+    width: 100%;
+}
+.dosage_dropdown{padding: 8px 5px;}

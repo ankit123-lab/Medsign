@@ -1,0 +1,77 @@
+#modal_add_brand {
+    overflow-x: auto;
+}
+
+.modal-content.brandcatalog_height {
+    height: auto;
+}
+
+#modal_add_brand .icon_image_right,
+.comman_css_brand .icon_image_right {
+    top: 2px !important;
+    right: 2px !important;
+}
+
+#modal_add_brand .chosen-container-single .chosen-single,
+.comman_css_brand .chosen-container-single .chosen-single {
+    /* height: 40px !important; */
+}
+
+.ui-menu {
+    z-index: 6000;
+}
+
+#modal_add_brand .position_relative,
+.comman_css_brand .position_relative {
+    color: #1d1d1d;
+    font-size: 16px;
+    background: #f1f1f1;
+}
+
+#modal_add_brand .chosen-single span,
+.comman_css_brand .chosen-single span {
+    /* font-size: 16px !important; */
+    /* padding: 6px 12px; */
+}
+
+#modal_add_brand .chosen-container-single .chosen-single,
+.comman_css_brand .chosen-container-single .chosen-single {
+    /* border: 1px solid #f1f1f1 !important; */
+}
+
+.suggestion_txt {
+    background-color: #E1E1E1;
+    margin-right: 3px;
+    padding: 9px 28px;
+    cursor: pointer !important;
+    width: auto !important;
+}
+
+.generic_div {
+    background-color: #eeeeee;
+    border-radius: 4px;
+    height: auto;
+    min-height: 45px;
+    padding: 8px 10px;
+}
+
+.custom_generic_class {
+    background-color: #e1e1e1;
+    border-radius: 5px;
+    color: black;
+    display: inline-block;
+    font-size: 13px;
+    margin: 2px 4px;
+    padding: 5px 8px;
+    text-transform: uppercase;
+}
+
+.generic_close {
+    margin-right: 10px !important;
+    font-size: 25px !important;
+}
+
+#modal_generic_details .modal-content {
+    height: 700px;
+    overflow: auto;
+}

@@ -1,0 +1,82 @@
+/* ==========================================================================
+ Common classes
+========================================================================== */
+
+
+/*==================================refer_header(r_header)========================================*/
+.r_header { border-bottom: 1px solid #d2d2d2; border-top: 1px solid #d2d2d2; }
+.r_header .medcareClinic { position: relative; }
+.r_header .medcareClinic .dropdown .btn_style
+{
+    text-transform: uppercase;
+    border-radius: 0px;    
+    padding: 22px 39px;
+}
+.btn:hover, .btn:focus, .btn.focus{ 
+    color: #ffffff; 
+}
+.tabs_items ul { margin-top: 15px; }
+.tabs_items .nav li
+{
+    border: 1px #30ACA4 solid;
+    border-radius: 5px;
+    margin-left: 0px;    
+}
+.tabs_items .nav li:last-child
+{
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.tabs_items .nav li:first-child
+{
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.tabs_items .nav li a
+{ 
+    border-radius: 4px; 
+    color: #30aca5 !important;     
+    padding: 9px 24px;   
+    font-size: 14px;
+}
+.tabs_items .nav li.active a, .tabs_items .nav li.active a:focus
+{
+    color: #ffffff !important;
+    background-color: #30aca5 !important; 
+}
+.p_left { padding-left: 5px; }
+/*================================referby_content===============================*/
+
+.table{
+    margin-bottom: 150px;
+}
+.table thead{    
+    font-size: 18px;    
+}
+.table thead tr th
+{
+    padding: 15px;
+    border-bottom-width: 1px;    
+}
+.table thead tr th.pic { width: 17%; }
+.table thead tr th.name { width: 40%; }
+.table thead tr th.referby { width: 26%; }
+.table tbody tr td
+{
+    font-size: 16px;
+    padding: 15px;    
+}
+
+/*==============================Media Query=====================================*/
+/*@media screen and(max-width: 1378px)
+{    
+    .r_header .medcareClinic{
+        position: relative;
+        width: 21.2% !important; }
+}*/
+@media screen and (max-width: 1367px)
+{
+    .r_header .medcareClinic .dropdown .btn_style { padding: 22px 25px; }
+}

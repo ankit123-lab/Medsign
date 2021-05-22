@@ -1,0 +1,225 @@
+<div class="tab-pane fade in" id="vitals">
+    <form name="addVitalForm" ng-submit="addVital(addVitalForm)" id="addVitalForm" novalidate="">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 gotham_light font_color_5 "
+             ng-if="!vital.id || common.isOpenForEdit">        
+            <div class="row" ng-class="current_appointment_date_obj.is_editable ? '' : 'disabled-wrap'">
+              <div ng-if="!current_appointment_date_obj.is_editable" class="overlap-wrap" style="width: 98%;margin-left: 10px;"></div>
+                <div class="col-lg-3 col-md-6 col-sm-3 col-xs-3">
+                    <div class="form-group">
+                        <label class="m_bottom_15">Weight(kg)</label>
+                        <input type="text" class="form-control common_input" 
+                               placeholder="Enter Reading"
+                               ng-model="vital.weight" 
+                               name="weight"                             
+                               ng-change="checkValidation(6, addVitalForm);prescriptionOnchangeFlag();"             
+                               />
+                        <p ng-show="(submitted || addVitalForm.weight.$touched) && addVitalForm.weight.$error.required" class="error" >* Required</p>
+                        <p ng-show="(submitted || addVitalForm.weight.$touched) && addVitalForm.weight.$error.pattern" class="error" >{{ vital.error}}</p>
+                    </div>
+
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-3 col-xs-3">
+                    <div class="form-group">
+                        <label class="m_bottom_15">Pulse Rate/Min</label>
+                        <input type="text" 
+                               class="form-control common_input" 
+                               placeholder="Enter Reading"
+                               ng-model="vital.pulse"
+                               name="pulse"                               
+                               ng-change="checkValidation(1, addVitalForm);prescriptionOnchangeFlag();"                               
+                               />
+                        <p ng-show="(submitted || addVitalForm.pulse.$touched) && addVitalForm.pulse.$error.required" class="error" >* Required</p>                        
+                        <p ng-show="(submitted || addVitalForm.pulse.$touched) && addVitalForm.pulse.$error.pattern && !addVitalForm.pulse.$error.required" class="error" >{{ vital.pulse_error}}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-3 col-xs-3">
+                    <div class="form-group">
+                        <label class="m_bottom_15">Resp.Rate/Min</label>
+                        <input type="text" 
+                               class="form-control common_input" 
+                               placeholder="Enter Reading"
+                               ng-model="vital.resp"
+                               name="resp"                               
+                               ng-change="checkValidation(2, addVitalForm);prescriptionOnchangeFlag();"  
+                               />
+                        <p ng-show="(submitted || addVitalForm.resp.$touched) && addVitalForm.resp.$error.required" class="error" >* Required</p>
+                        <p ng-show="(submitted || addVitalForm.resp.$touched) && addVitalForm.resp.$error.pattern && !addVitalForm.resp.$error.required" class="error" >
+                            {{ vital.resp_error}}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-3 col-xs-3">
+                    <div class="form-group">
+                        <label class="m_bottom_15">Sp0<sub>2</sub>(%)</label>
+                        <input type="text" 
+                               class="form-control common_input" 
+                               placeholder="Enter Reading"
+                               ng-model="vital.spo"
+                               name="spo"                               
+                               ng-change="checkValidation(7, addVitalForm);prescriptionOnchangeFlag();"
+
+                               />
+                        <p ng-show="(submitted || addVitalForm.spo.$touched) && addVitalForm.spo.$error.required" class="error" >* Required</p>
+                        <p ng-show="(submitted || addVitalForm.spo.$touched) && addVitalForm.spo.$error.pattern && !addVitalForm.spo.$error.required" class="error" >
+                            {{ vital.spo_error}}                            
+                        </p>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+               
+                    <div class="col-lg-6 col-md-12 col-sm-6 col-xs-6 no_padding">
+                        <div class="form-group">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m_bottom_15">Blood Pressure(mm Hg)</label>
+                            <div class="form-group col-lg-7 col-md-6 col-sm-6 col-xs-6">
+                                <input type="text" 
+                                       class="form-control common_input pull-left" 
+                                       placeholder="Systolic"
+                                       style="width: 89%"
+                                       ng-model="vital.systolic"
+                                       name="systolic"                                       
+                                       ng-change="checkValidation(3, addVitalForm);prescriptionOnchangeFlag();"  
+                                       />    
+                                <span class="pull-left span-side-arrow">/</span>
+                                <div class="clearfix"></div>
+                                <p ng-show="(submitted || addVitalForm.systolic.$touched) && addVitalForm.systolic.$error.required" class="error" >* Required</p>
+                                <p ng-show="(submitted || addVitalForm.systolic.$touched) && addVitalForm.systolic.$error.pattern && !addVitalForm.systolic.$error.required" class="error" >
+                                    {{ vital.sys_error}}
+                                </p>
+                            </div>
+                            <div class="form-group col-lg-5 col-md-6 col-sm-6 col-xs-6">
+                                <input type="text" 
+                                       class="form-control common_input" 
+                                       placeholder="Diastolic" 
+                                       ng-model="vital.diastolic"
+                                       name="diastolic"                                       
+                                       ng-change="checkValidation(4, addVitalForm);prescriptionOnchangeFlag();"  
+                                       />    
+                                <!-- <label class="float_right font_color_1 cursor_pointer" ng-if="!vital.standing" ng-click="vital.standing = true;">Sitting</label>
+                                <label class="float_right font_color_1 cursor_pointer" ng-if="vital.standing" ng-click="vital.standing = false;">Standing</label>
+                                 -->
+                                <a href="" ng-if="vital.standing == type.id" class="dropdown-toggle" data-toggle="dropdown" ng-repeat="type in vital_bloodpressure_predefine">
+                                    <label class="float_right font_color_1 cursor_pointer title3">
+                                        {{ type.name}}
+                                    </label>
+                                </a>
+                                <ul class="dropdown-menu open-right title3">             
+                                    <li ng-repeat-start="type in vital_bloodpressure_predefine" 
+                                    ng-click="vital.standing = type.id">
+                                        <a href="" >{{ type.name}}</a></li>
+                                    <li class='divider' ng-repeat-end></li>
+                                </ul>
+                                <p ng-show="(submitted || addVitalForm.diastolic.$touched) && addVitalForm.diastolic.$error.required" class="error" >* Required</p>
+                                <p ng-show="(submitted || addVitalForm.diastolic.$touched) && addVitalForm.diastolic.$error.pattern && !addVitalForm.diastolic.$error.required" class="error" >
+                                    {{ vital.dis_error}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-12 col-sm-3 col-xs-3">
+                        <div class="form-group">
+                            <label class="m_bottom_15">Temperature
+                                <span class="font_color_1 cursor_pointer" ng-if="!vital.celsuis" ng-click="vital.celsuis = true;changeFCValue(1);checkValidation(5, addVitalForm)"> (&#8457;)</span>
+                                <span class="font_color_1 cursor_pointer" ng-if="vital.celsuis" ng-click="vital.celsuis = false;changeFCValue(2);checkValidation(5, addVitalForm)"> (&#8451;)</span>                                
+                            </label>
+                            <input type="text"
+                                   class="form-control common_input" 
+                                   placeholder="Enter Reading"
+                                   ng-model="vital.temp"
+                                   name="temp"                                   
+                                   ng-change="checkValidation(5, addVitalForm);prescriptionOnchangeFlag();"  
+                                   />
+                            <a href="" class="dropdown-toggle" ng-if="vital.teperature_taken_id == type.id"
+                               data-toggle="dropdown" ng-repeat="type in tempearture_taken">
+                                <label class="float_right font_color_1 cursor_pointer title3"> 
+                                    {{ type.name}}
+                                </label>
+                            </a>
+                            <ul class="dropdown-menu open-right title3">             
+                                <li ng-repeat-start="type in tempearture_taken" 
+                                    ng-click="vital.teperature_taken_id = type.id" >
+                                    <a href="" >{{ type.name}}</a></li>
+                                <li class='divider' ng-repeat-end></li>
+                            </ul>
+                            <br>
+                            <p ng-show="(submitted || addVitalForm.temp.$touched) && addVitalForm.temp.$error.required" class="error" >*Required</p>
+                            <p ng-show="(submitted || addVitalForm.temp.$touched) && addVitalForm.temp.$error.pattern && !addVitalForm.temp.$error.required" class="error" >
+                                {{ vital.temp_error}}
+                            </p>
+                        </div>
+
+
+                    </div>
+                
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="button_container">
+                <input ng-if="current_appointment_date_obj.is_editable" type="submit" value="Save" class="new_common_button btn_properties" />
+                <input ng-if="current_appointment_date_obj.is_editable" type="button" value="Cancel" class="new_common_button_1 btn_properties" ng-click="cancelBtnRX()"/>
+                <a href="" class="pull-right" ng-if="checkPermission(VITAL_MODULE, ADD)">
+              <input type="button" style="padding: 0 15px;height: 32px;" value="Add Previous Vitals" name="btn_previous_vitals" class="new_common_button no_top_margin" id="btn_previous_vitals" ng-click="getPreviousVital()" data-toggle="modal" data-target="#modal_patient_previous_vitals">
+            </a>
+            </div>
+        </div>
+    </form>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 font_color_7" ng-if="vital.id && !common.isOpenForEdit && role[VITAL_MODULE][VIEW] == 'on'">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <p>Weight(kg)</p>
+                    <p class="font_size_18 gotham_light title3">{{vital.weight}}</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <p>Pulse(Rate/Min)</p>
+                    <p class="font_size_18 gotham_light title3">{{vital.pulse}}</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <p>Resp.(Rate/Min)</p>
+                    <p class="font_size_18 gotham_light title3">{{vital.resp}}</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <p>Sp0<sub>2</sub>(%)</p>
+                    <p class="font_size_18 gotham_light title3">{{vital.spo}}</p>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <div class="form-group">
+                        <p>Blood pressure(mm Hg)</p>
+                        <p class="font_size_18 gotham_light title3">{{vital.systolic}}<span ng-if="vital.systolic">/</span>{{vital.diastolic}}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <div class="form-group">
+                        <p>Temperature
+                            <span class="font_color_1" ng-if="!vital.celsuis"> (&#8457;)</span>
+                            <span class="font_color_1"  ng-if="vital.celsuis"> (&#8451;)</span></p>
+                        <p class="font_size_18 gotham_light title3">{{vital.temp}}</p>
+                    </div>
+                </div>
+            
+        </div>
+        <div class="clearfix"></div>
+        <div class="button_container">
+            <input type="button" value="Edit" ng-if="current_appointment_date_obj.is_editable && role[VITAL_MODULE][EDIT] == 'on'" class="new_common_button btn_properties" ng-click="openEditForm(1)" />            
+            <input type="button" value="Remove" ng-if="current_appointment_date_obj.is_editable && role[VITAL_MODULE][DELETE] == 'on'" class="new_common_button btn_properties" ng-click="removeVital()"  />
+            <a href="" class="pull-right" ng-if="checkPermission(VITAL_MODULE, ADD)">
+              <input type="button" style="padding: 0 15px;height: 32px;" value="Add Previous Vitals" name="btn_previous_vitals" class="new_common_button no_top_margin" id="btn_previous_vitals" data-toggle="modal" ng-click="getPreviousVital()" data-target="#modal_patient_previous_vitals">
+            </a>           
+        </div>
+    </div>
+	
+    <div ng-if="!(checkPermission(VITAL_MODULE, VIEW))" class="text-center gotham_book font_size_20 m_top_20">
+        <div class="unauthorised-css">{{app.unauthorised_msg}}</div>
+    </div>
+</div>
