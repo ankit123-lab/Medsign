@@ -17,4 +17,3 @@ hooks:
   ValidateService:
     - location: /cicd/validate_service.sh
       runas: root
-file_exists_behavior: OVERWRITE
